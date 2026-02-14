@@ -1,0 +1,7 @@
+.pageTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin: var(--spacing-lg) 0;
+}

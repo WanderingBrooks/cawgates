@@ -22,7 +22,7 @@ const createEventWithMatches = async (
   redirect(`/events/${event.id}`);
 };
 
-const deleteEvent = async (eventId: string) => {
+const deleteEventAndMatches = async (eventId: string) => {
   await prisma.event.delete({
     where: {
       id: eventId,
@@ -32,4 +32,4 @@ const deleteEvent = async (eventId: string) => {
   redirect(`/events`);
 };
 
-export { createEventWithMatches, deleteEvent };
+export { createEventWithMatches, deleteEventAndMatches };

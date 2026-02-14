@@ -9,12 +9,13 @@
 
 - Use const arrow functions: `const MyComponent = () => {}`
 - Respect the ESLint configuration
+- Always use objects for function parameters. Prefer `({ index }: { index: number }) => {}` over `(index: number) => {}`
 
 ## UI & Styling
 
-- Use Tailwind CSS utilities for styling
-- Use Shadcn/ui components when available
-- Import Shadcn/ui components from `@/components/ui/`
+- Use CSS modules for stylin
+- When giving an element multiple classes uses the cn util function, instead of combing the classes in a string. Prefer `className={cn(lasses.input, className)}` over `className={`${classes.input} ${className}`}`
+- Always use css variables in `@/app/globals.css` for colors and spacing.
 
 ## File Organization
 

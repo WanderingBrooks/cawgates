@@ -1,0 +1,8 @@
+.button {
+  padding: var(--spacing-sm) var(--spacing-xl);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
