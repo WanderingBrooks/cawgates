@@ -5,7 +5,6 @@ import Page from '@/components/page/page';
 import classes from '../events.module.css';
 import Button from '@/components/button';
 import DeleteEventButton from './delete-event-button';
-import SpaceChildrenVertically from '@/components/space-children-vertically';
 
 const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
@@ -52,7 +51,12 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
         </table>
       )}
 
-      <DeleteEventButton eventId={id} />
+      <div className={classes.pageTitle}>
+        <Link href={`/events/${id}/edit`}>
+          <Button>Edit Event</Button>
+        </Link>
+        <DeleteEventButton eventId={id} />
+      </div>
     </Page>
   );
 };

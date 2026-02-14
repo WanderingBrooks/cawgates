@@ -1,25 +1,18 @@
-'use client';
-
+import Link from 'next/link';
+import { prisma } from '@/lib/prisma';
 import Page from '@/components/page/page';
 import Button from '@/components/button';
-import Input from '@/components/input';
-import useCreateEventWithMatches from './useCreateEventWithMatches';
-import { Card, CardTitle, CardContent } from '@/components/card';
-
+import EventForm from '../event-form';
 import classes from '../events.module.css';
-import Link from 'next/link';
-import SpaceChildrenVertically from '@/components/space-children-vertically';
 
-const CreateEventPage = () => {
-  const {
-    eventData,
-    matches,
-    handleEventChange,
-    handleMatchChange,
-    addMatch,
-    removeMatch,
-    handleSubmit,
-  } = useCreateEventWithMatches();
+const CreateEventPage = async () => {
+  const matches = await prisma.match.findMany({
+    select: { opponentArchetype: true },
+    distinct: ['opponentArchetype'],
+    orderBy: { opponentArchetype: 'asc' },
+  });
+
+  const archetypes = matches.map(match => match.opponentArchetype);
 
   return (
     <Page>
@@ -30,100 +23,7 @@ const CreateEventPage = () => {
         </Link>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <SpaceChildrenVertically>
-          <Input
-            type="text"
-            id="eventName"
-            name="eventName"
-            label="Event Name *"
-            value={eventData.eventName}
-            onChange={handleEventChange}
-            required
-          />
-          <Input
-            type="date"
-            id="eventDate"
-            name="eventDate"
-            label="Event Date *"
-            value={eventData.eventDate}
-            onChange={handleEventChange}
-            required
-          />
-          <Input
-            id="notes"
-            name="notes"
-            label="Notes"
-            value={eventData.notes}
-            onChange={handleEventChange}
-            rows={4}
-            isMultiline
-          />
-
-          {matches.map((match, index) => (
-            <Card key={index}>
-              <CardTitle>
-                <h3>Match {index + 1}</h3>
-                <Button
-                  disabled={matches.length <= 1}
-                  onClick={() => removeMatch(index)}
-                >
-                  Remove
-                </Button>
-              </CardTitle>
-              <CardContent>
-                <Input
-                  type="text"
-                  id={`opponent-${index}`}
-                  label="Opponent Archetype *"
-                  value={match.opponentArchetype}
-                  onChange={e =>
-                    handleMatchChange({
-                      index,
-                      field: 'opponentArchetype',
-                      value: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <Input
-                  type="number"
-                  id={`wins-${index}`}
-                  label="Wins *"
-                  value={match.wins}
-                  onChange={e =>
-                    handleMatchChange({
-                      index,
-                      field: 'wins',
-                      value: parseInt(e.target.value) || 0,
-                    })
-                  }
-                  min="0"
-                  required
-                />
-                <Input
-                  type="number"
-                  id={`losses-${index}`}
-                  label="Losses *"
-                  value={match.losses}
-                  onChange={e =>
-                    handleMatchChange({
-                      index,
-                      field: 'losses',
-                      value: parseInt(e.target.value) || 0,
-                    })
-                  }
-                  min="0"
-                  required
-                />
-              </CardContent>
-            </Card>
-          ))}
-
-          <Button onClick={addMatch}>Add Match</Button>
-          <Button type="submit">Create Event</Button>
-        </SpaceChildrenVertically>
-      </form>
+      <EventForm archetypes={archetypes} mode="create" />
     </Page>
   );
 };

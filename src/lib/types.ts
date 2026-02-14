@@ -5,6 +5,7 @@ type EventFormData = {
 };
 
 type MatchData = {
+  id?: string;
   opponentArchetype: string;
   wins: number;
   losses: number;
