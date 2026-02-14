@@ -2,6 +2,17 @@
 
 import { useState } from 'react';
 import { createEventWithMatches } from '@/app/actions/events';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 const CreateEventPage = () => {
   const [matches, setMatches] = useState([
@@ -30,114 +41,134 @@ const CreateEventPage = () => {
   };
 
   return (
-    <form action={handleSubmit} className="space-y-4 p-4">
-      <div>
-        <label htmlFor="eventName" className="block font-semibold">
-          Event Name
-        </label>
-        <input
-          id="eventName"
-          type="text"
-          name="eventName"
-          placeholder="Event Name"
-          className="border px-2 py-1 rounded w-full"
-          required
-        />
-      </div>
-
-      <div>
-        <label htmlFor="eventDate" className="block font-semibold">
-          Event Date
-        </label>
-        <input
-          id="eventDate"
-          type="datetime-local"
-          name="eventDate"
-          className="border px-2 py-1 rounded w-full"
-          required
-        />
-      </div>
-
-      <div>
-        <label htmlFor="notes" className="block font-semibold">
-          Notes
-        </label>
-        <textarea
-          id="notes"
-          name="notes"
-          placeholder="Notes"
-          className="border px-2 py-1 rounded w-full"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <h3 className="font-semibold">Matches</h3>
-        {matches.map((match, index) => (
-          <div key={index} className="border p-3 rounded space-y-2">
-            <input
-              type="text"
-              placeholder="Opponent Deck"
-              value={match.opponentDeck}
-              onChange={e => {
-                const updated = [...matches];
-                updated[index].opponentDeck = e.target.value;
-                setMatches(updated);
-              }}
-              className="border px-2 py-1 rounded w-full"
-              required
-            />
-            <div className="flex gap-2">
-              <input
-                type="number"
-                placeholder="Wins"
-                value={match.wins}
-                onChange={e => {
-                  const updated = [...matches];
-                  updated[index].wins = parseInt(e.target.value) || 0;
-                  setMatches(updated);
-                }}
-                className="border px-2 py-1 rounded flex-1"
-              />
-              <input
-                type="number"
-                placeholder="Losses"
-                value={match.losses}
-                onChange={e => {
-                  const updated = [...matches];
-                  updated[index].losses = parseInt(e.target.value) || 0;
-                  setMatches(updated);
-                }}
-                className="border px-2 py-1 rounded flex-1"
+    <div className="max-w-2xl mx-auto p-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>Create Event</CardTitle>
+          <CardDescription>Add event details and match results</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="eventName">Event Name</Label>
+              <Input
+                id="eventName"
+                type="text"
+                name="eventName"
+                placeholder="Enter event name"
+                required
               />
             </div>
-            {matches.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeMatch(index)}
-                className="bg-red-500 text-white px-2 py-1 rounded"
-              >
-                Remove Match
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
 
-      <button
-        type="button"
-        onClick={addMatch}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Add Match
-      </button>
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
-      >
-        {isLoading ? 'Creating...' : 'Create Event'}
-      </button>
-    </form>
+            <div className="space-y-2">
+              <Label htmlFor="eventDate">Event Date & Time</Label>
+              <Input
+                id="eventDate"
+                type="datetime-local"
+                name="eventDate"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="notes">Notes</Label>
+              <Textarea
+                id="notes"
+                name="notes"
+                placeholder="Add any notes about this event"
+              />
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-lg">Matches</h3>
+                <Button
+                  type="button"
+                  onClick={addMatch}
+                  variant="outline"
+                  size="sm"
+                >
+                  + Add Match
+                </Button>
+              </div>
+
+              {matches.map((match, index) => (
+                <Card key={index} className="bg-muted">
+                  <CardContent className="pt-6 space-y-4">
+                    <div>
+                      <Label htmlFor={`deck-${index}`}>Opponent Deck</Label>
+                      <Input
+                        id={`deck-${index}`}
+                        type="text"
+                        placeholder="Opponent Deck"
+                        value={match.opponentDeck}
+                        onChange={e => {
+                          const updated = [...matches];
+                          updated[index].opponentDeck = e.target.value;
+                          setMatches(updated);
+                        }}
+                        required
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label htmlFor={`wins-${index}`}>Wins</Label>
+                        <Input
+                          id={`wins-${index}`}
+                          type="number"
+                          placeholder="0"
+                          value={match.wins}
+                          onChange={e => {
+                            const updated = [...matches];
+                            updated[index].wins = parseInt(e.target.value) || 0;
+                            setMatches(updated);
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`losses-${index}`}>Losses</Label>
+                        <Input
+                          id={`losses-${index}`}
+                          type="number"
+                          placeholder="0"
+                          value={match.losses}
+                          onChange={e => {
+                            const updated = [...matches];
+                            updated[index].losses =
+                              parseInt(e.target.value) || 0;
+                            setMatches(updated);
+                          }}
+                        />
+                      </div>
+                    </div>
+                    {matches.length > 1 && (
+                      <Button
+                        type="button"
+                        onClick={() => removeMatch(index)}
+                        variant="destructive"
+                        size="sm"
+                        className="w-full"
+                      >
+                        Remove Match
+                      </Button>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full"
+              size="lg"
+            >
+              {isLoading ? 'Creating...' : 'Create Event'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
