@@ -2,6 +2,7 @@
   "name": "cawgates",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,6 +10,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.4.0",
     "@prisma/client": "^7.4.0",
     "next": "16.1.6",
     "prisma": "^7.4.0",
