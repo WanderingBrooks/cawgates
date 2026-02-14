@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Page } from '@/components/ui/page';
+import Markdown from 'react-markdown';
 
 interface EventPageProps {
   params: Promise<{
@@ -43,8 +44,8 @@ const EventPage = async ({ params }: EventPageProps) => {
   return (
     <Page>
       <div className="p-4 max-w-2xl mx-auto space-y-6">
-        <Link href="/events/create">
-          <Button variant="outline">← Create New Event</Button>
+        <Link href="/events">
+          <Button variant="outline">← Back to my events</Button>
         </Link>
         <Card>
           <CardHeader>
@@ -58,9 +59,7 @@ const EventPage = async ({ params }: EventPageProps) => {
           </CardHeader>
           <CardContent className="space-y-4">
             {event.notes && (
-              <p className="text-sm">
-                <strong>Notes:</strong> {event.notes}
-              </p>
+              <p className="whitespace-pre-line">{event.notes}</p>
             )}
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center">

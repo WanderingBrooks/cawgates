@@ -42,7 +42,7 @@ const EventsPage = async () => {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 gap-4">
+          <div className="flex flex-col gap-4">
             {events.map(event => {
               const totalWins = event.matches.reduce(
                 (sum, match) => sum + match.wins,
@@ -71,12 +71,7 @@ const EventsPage = async () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      {event.notes && (
-                        <p className="text-sm text-muted-foreground line-clamp-2">
-                          {event.notes}
-                        </p>
-                      )}
-                      <div className="grid grid-cols-3 gap-2 text-center text-sm">
+                      <div className="flex gap-2 text-sm">
                         <div>
                           <p className="text-xs text-muted-foreground">
                             Record

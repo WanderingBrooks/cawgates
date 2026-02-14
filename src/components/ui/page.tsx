@@ -16,7 +16,7 @@ const Page = ({
         className,
       )}
     >
-      {children}
+      <div className="max-w-full md:max-w-xl">{children}</div>
     </div>
   );
 };
