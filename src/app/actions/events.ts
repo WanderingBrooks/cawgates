@@ -2,26 +2,19 @@
 
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
+import { EventFormData, MatchData } from '@/lib/types';
 
 const createEventWithMatches = async (
-  formData: FormData,
-  matches: Array<{ opponentArchetype: string; wins: number; losses: number }>,
+  eventData: EventFormData,
+  matches: MatchData[],
 ) => {
-  const eventName = formData.get('eventName') as string;
-  const eventDate = new Date(formData.get('eventDate') as string);
-  const notes = formData.get('notes') as string;
-
   const event = await prisma.event.create({
     data: {
-      name: eventName,
-      date: eventDate,
-      notes,
+      name: eventData.eventName,
+      date: new Date(eventData.eventDate),
+      notes: eventData.notes,
       matches: {
-        create: matches.map(match => ({
-          opponentArchetype: match.opponentArchetype,
-          wins: match.wins,
-          losses: match.losses,
-        })),
+        create: matches,
       },
     },
   });

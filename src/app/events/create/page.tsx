@@ -13,9 +13,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { EventFormData, MatchData } from '@/lib/types';
 
 const CreateEventPage = () => {
-  const [matches, setMatches] = useState([
+  const [eventData, setEventData] = useState<EventFormData>({
+    eventName: '',
+    eventDate: '',
+    notes: '',
+  });
+
+  const [matches, setMatches] = useState<MatchData[]>([
     { opponentArchetype: '', wins: 0, losses: 0 },
   ]);
 
@@ -29,11 +36,12 @@ const CreateEventPage = () => {
     setMatches(matches.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsLoading(true);
 
     try {
-      await createEventWithMatches(formData, matches);
+      await createEventWithMatches(eventData, matches);
     } catch (error) {
       console.error('Failed to create event:', error);
       setIsLoading(false);
@@ -48,14 +56,17 @@ const CreateEventPage = () => {
           <CardDescription>Add event details and match results</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="eventName">Event Name</Label>
               <Input
                 id="eventName"
                 type="text"
-                name="eventName"
                 placeholder="Enter event name"
+                value={eventData.eventName}
+                onChange={e =>
+                  setEventData({ ...eventData, eventName: e.target.value })
+                }
                 required
               />
             </div>
@@ -65,7 +76,10 @@ const CreateEventPage = () => {
               <Input
                 id="eventDate"
                 type="datetime-local"
-                name="eventDate"
+                value={eventData.eventDate}
+                onChange={e =>
+                  setEventData({ ...eventData, eventDate: e.target.value })
+                }
                 required
               />
             </div>
@@ -74,8 +88,11 @@ const CreateEventPage = () => {
               <Label htmlFor="notes">Notes</Label>
               <Textarea
                 id="notes"
-                name="notes"
                 placeholder="Add any notes about this event"
+                value={eventData.notes}
+                onChange={e =>
+                  setEventData({ ...eventData, notes: e.target.value })
+                }
               />
             </div>
 
