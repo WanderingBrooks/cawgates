@@ -24,13 +24,13 @@ model Event {
 }
 
 model Match {
-  id           String   @id @default(uuid())
-  eventId      String
-  opponentDeck String
-  wins         Int
-  losses       Int
-  journalEntry String?
-  createdAt    DateTime @default(now())
+  id                String   @id @default(uuid())
+  eventId           String
+  opponentArchetype String
+  wins              Int
+  losses            Int
+  journalEntry      String?
+  createdAt         DateTime @default(now())
 
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }

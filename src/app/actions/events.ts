@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 
 const createEventWithMatches = async (
   formData: FormData,
-  matches: Array<{ opponentDeck: string; wins: number; losses: number }>,
+  matches: Array<{ opponentArchetype: string; wins: number; losses: number }>,
 ) => {
   const eventName = formData.get('eventName') as string;
   const eventDate = new Date(formData.get('eventDate') as string);
@@ -18,7 +18,7 @@ const createEventWithMatches = async (
       notes,
       matches: {
         create: matches.map(match => ({
-          opponentDeck: match.opponentDeck,
+          opponentArchetype: match.opponentArchetype,
           wins: match.wins,
           losses: match.losses,
         })),

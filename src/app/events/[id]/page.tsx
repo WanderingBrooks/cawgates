@@ -98,7 +98,7 @@ const EventPage = async ({ params }: EventPageProps) => {
                     <div>
                       <p className="font-semibold">Match {index + 1}</p>
                       <p className="text-sm text-muted-foreground">
-                        {match.opponentDeck}
+                        {match.opponentArchetype}
                       </p>
                     </div>
                     <div className="text-right">

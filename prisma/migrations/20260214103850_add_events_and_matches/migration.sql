@@ -13,7 +13,7 @@ CREATE TABLE "Event" (
 CREATE TABLE "Match" (
     "id" TEXT NOT NULL,
     "eventId" TEXT NOT NULL,
-    "opponentDeck" TEXT NOT NULL,
+    "opponentArchetype" TEXT NOT NULL,
     "wins" INTEGER NOT NULL,
     "losses" INTEGER NOT NULL,
     "journalEntry" TEXT,

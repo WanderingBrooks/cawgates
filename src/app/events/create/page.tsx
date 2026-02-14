@@ -16,13 +16,13 @@ import {
 
 const CreateEventPage = () => {
   const [matches, setMatches] = useState([
-    { opponentDeck: '', wins: 0, losses: 0 },
+    { opponentArchetype: '', wins: 0, losses: 0 },
   ]);
 
   const [isLoading, setIsLoading] = useState(false);
 
   const addMatch = () => {
-    setMatches([...matches, { opponentDeck: '', wins: 0, losses: 0 }]);
+    setMatches([...matches, { opponentArchetype: '', wins: 0, losses: 0 }]);
   };
 
   const removeMatch = (index: number) => {
@@ -101,10 +101,10 @@ const CreateEventPage = () => {
                         id={`deck-${index}`}
                         type="text"
                         placeholder="Opponent Deck"
-                        value={match.opponentDeck}
+                        value={match.opponentArchetype}
                         onChange={e => {
                           const updated = [...matches];
-                          updated[index].opponentDeck = e.target.value;
+                          updated[index].opponentArchetype = e.target.value;
                           setMatches(updated);
                         }}
                         required
@@ -134,8 +134,10 @@ const CreateEventPage = () => {
                           value={match.losses}
                           onChange={e => {
                             const updated = [...matches];
+
                             updated[index].losses =
                               parseInt(e.target.value) || 0;
+
                             setMatches(updated);
                           }}
                         />
