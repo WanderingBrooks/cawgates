@@ -12,3 +12,25 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Event {
+  id        String   @id @default(uuid())
+  name      String?
+  date      DateTime
+  notes     String?
+  createdAt DateTime @default(now())
+
+  matches   Match[]
+}
+
+model Match {
+  id           String   @id @default(uuid())
+  eventId      String
+  opponentDeck String
+  wins         Int
+  losses       Int
+  journalEntry String?
+  createdAt    DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
