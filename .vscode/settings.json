@@ -1,0 +1,24 @@
+{
+  // === Formatting ===
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // === ESLint ===
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // Ensure ESLint runs on TS/JS
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
+  // Use project version of prettier
+  "prettier.requireConfig": true,
+
+  // Make sure TS uses workspace version
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
