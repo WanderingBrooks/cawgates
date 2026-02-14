@@ -3,8 +3,7 @@ import { prisma } from '@/lib/prisma';
 import Page from '@/components/page/page';
 import { Card, CardTitle, CardContent } from '@/components/card';
 import Button from '@/components/button';
-import SpaceChildrenVertically from '@/components/space-children-vertically';
-import classes from './events.module.css';
+import classes from '../app.module.css';
 
 const EventsPage = async () => {
   const events = await prisma.event.findMany({

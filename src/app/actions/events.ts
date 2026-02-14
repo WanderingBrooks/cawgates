@@ -48,7 +48,9 @@ const updateEventWithMatches = async (
 
   const existingMatchIds = existingEvent.matches.map(m => m.id);
   const newMatchIds = matches.filter(m => m.id).map(m => m.id!);
-  const matchesToDelete = existingMatchIds.filter(id => !newMatchIds.includes(id));
+  const matchesToDelete = existingMatchIds.filter(
+    id => !newMatchIds.includes(id),
+  );
 
   await prisma.event.update({
     where: { id: eventId },
@@ -80,4 +82,8 @@ const updateEventWithMatches = async (
   redirect(`/events/${eventId}`);
 };
 
-export { createEventWithMatches, deleteEventAndMatches, updateEventWithMatches };
+export {
+  createEventWithMatches,
+  deleteEventAndMatches,
+  updateEventWithMatches,
+};

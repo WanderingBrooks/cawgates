@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import Page from '@/components/page/page';
 import Button from '@/components/button';
 import EventForm from '../event-form';
-import classes from '../events.module.css';
+import classes from '../../app.module.css';
 
 const CreateEventPage = async () => {
   const matches = await prisma.match.findMany({

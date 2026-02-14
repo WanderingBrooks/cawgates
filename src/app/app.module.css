@@ -1,7 +1,11 @@
-.pageTitle {
+.flexRowBetween {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.pageTitle {
+  composes: flexRowBetween;
 
   margin: var(--spacing-lg) 0;
 }

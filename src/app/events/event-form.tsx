@@ -113,6 +113,8 @@ const EventForm = ({
             </CardContent>
           </Card>
         ))}
+        <Button onClick={addMatch}>Add Match</Button>
+
         <Input
           id="notes"
           name="notes"
@@ -122,7 +124,6 @@ const EventForm = ({
           rows={4}
           isMultiline
         />
-        <Button onClick={addMatch}>Add Match</Button>
         <Button type="submit">
           {mode === 'create' ? 'Create Event' : 'Save Changes'}
         </Button>

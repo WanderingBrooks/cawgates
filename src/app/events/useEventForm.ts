@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { createEventWithMatches, updateEventWithMatches } from '@/app/actions/events';
+import {
+  createEventWithMatches,
+  updateEventWithMatches,
+} from '@/app/actions/events';
 import { EventFormData, MatchData } from '@/lib/types';
 
 type UseEventFormProps = {

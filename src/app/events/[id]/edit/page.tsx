@@ -4,10 +4,14 @@ import { prisma } from '@/lib/prisma';
 import Page from '@/components/page/page';
 import Button from '@/components/button';
 import EventForm from '../../event-form';
-import classes from '../../events.module.css';
+import classes from '../../../app.module.css';
 import { EventFormData, MatchData } from '@/lib/types';
 
-const EditEventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+const EditEventPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
   const { id } = await params;
 
   const event = await prisma.event.findUnique({

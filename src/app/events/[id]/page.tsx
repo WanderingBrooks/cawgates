@@ -2,9 +2,10 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import Page from '@/components/page/page';
-import classes from '../events.module.css';
+import classes from '../../app.module.css';
 import Button from '@/components/button';
 import DeleteEventButton from './delete-event-button';
+import Markdown from 'react-markdown';
 
 const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
@@ -27,14 +28,13 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
         </Link>
       </div>
       <p>{new Date(event.date).toLocaleDateString()}</p>
-      {event.notes && <p>{event.notes}</p>}
       {event.matches.length === 0 ? (
         <p>No matches found</p>
       ) : (
         <table>
           <thead>
             <tr>
-              <th>Opponent Archetype</th>
+              <th>Archetype</th>
               <th>Wins</th>
               <th>Losses</th>
             </tr>
@@ -50,8 +50,9 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
           </tbody>
         </table>
       )}
+      {event.notes && <Markdown>{event.notes}</Markdown>}
 
-      <div className={classes.pageTitle}>
+      <div className={classes.flexRowBetween}>
         <Link href={`/events/${id}/edit`}>
           <Button>Edit Event</Button>
         </Link>
