@@ -2,9 +2,12 @@
 
 :root {
   /* Colors */
-  --color-primary: #5b7a9d;
-  --color-background: #f5f1e8;
-  --color-input-bg: #f0ece3;
+  --color-background: #f4efe6;
+  --color-input-bg: #fbfaf7;
+  --color-primary: #4a6fa5;
+  --color-primary-dark: #2f4e7a;
+  --color-border: #d8d2c5;
+  --color-text: #2a2a2a;
 
   /* Status Colors */
   --color-error-bg: #fee2e2;
@@ -25,7 +28,7 @@
 body {
   font-family: var(--font-family);
   background-color: var(--color-background);
-  color: var(--color-primary);
+  color: var(--color-text);
 
   overflow: auto;
   padding: 0;
@@ -34,6 +37,10 @@ body {
 
 a {
   color: var(--color-primary);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
 }
 
 p,
@@ -51,5 +58,5 @@ th,
 td {
   padding: var(--spacing-sm);
   text-align: left;
-  border: 1px solid var(--color-primary);
+  border: 1px solid var(--color-border);
 }
