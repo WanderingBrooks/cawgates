@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
-import { Page, Button } from '@/components';
+import { Page, Button, MatchTable } from '@/components';
 import classes from '../../app.module.css';
 import DeleteEventButton from './DeleteEventButton';
 import Markdown from 'react-markdown';
@@ -21,6 +21,13 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
     notFound();
   }
 
+  const tableRows = event.matches.map(match => ({
+    key: match.id,
+    archetype: match.opponentArchetype,
+    wins: match.wins,
+    losses: match.losses,
+  }));
+
   return (
     <Page>
       <div className={classes.pageTitle}>
@@ -30,28 +37,16 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
         </Link>
       </div>
       <p>{new Date(event.date).toLocaleDateString()}</p>
-      {event.matches.length === 0 ? (
-        <p>{tEvents('noMatches')}</p>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>{tHome('archetype')}</th>
-              <th>{tHome('wins')}</th>
-              <th>{tHome('losses')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {event.matches.map(match => (
-              <tr key={match.id}>
-                <td>{match.opponentArchetype}</td>
-                <td>{match.wins}</td>
-                <td>{match.losses}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <MatchTable
+        rows={tableRows}
+        emptyMessage={tEvents('noMatches')}
+        labels={{
+          archetype: tHome('archetype'),
+          wins: tHome('wins'),
+          losses: tHome('losses'),
+          winRate: tHome('winRate'),
+        }}
+      />
       {event.notes && <Markdown>{event.notes}</Markdown>}
 
       <div className={classes.flexRowBetween}>

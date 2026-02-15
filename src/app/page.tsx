@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
-import { Page, Button } from '@/components';
+import { Page, Button, MatchTable } from '@/components';
 import classes from './app.module.css';
 
 const HomePage = async () => {
@@ -35,6 +35,13 @@ const HomePage = async () => {
     ([, a], [, b]) => b.wins + b.losses - (a.wins + a.losses),
   );
 
+  const tableRows = sortedArchetypes.map(([archetype, stats]) => ({
+    key: archetype,
+    archetype,
+    wins: stats.wins,
+    losses: stats.losses,
+  }));
+
   return (
     <Page>
       <div className={classes.pageTitle}>
@@ -44,37 +51,17 @@ const HomePage = async () => {
         </Link>
       </div>
 
-      {sortedArchetypes.length === 0 ? (
-        <p>{t('noMatches')}</p>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>{t('archetype')}</th>
-              <th>{t('wins')}</th>
-              <th>{t('losses')}</th>
-              <th>{t('winRate')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedArchetypes.map(([archetype, stats]) => {
-              const total = stats.wins + stats.losses;
-
-              const winRate =
-                total > 0 ? ((stats.wins / total) * 100).toFixed(1) : '0.0';
-
-              return (
-                <tr key={archetype}>
-                  <td>{archetype}</td>
-                  <td>{stats.wins}</td>
-                  <td>{stats.losses}</td>
-                  <td>{winRate}%</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      )}
+      <MatchTable
+        rows={tableRows}
+        showWinRate
+        emptyMessage={t('noMatches')}
+        labels={{
+          archetype: t('archetype'),
+          wins: t('wins'),
+          losses: t('losses'),
+          winRate: t('winRate'),
+        }}
+      />
     </Page>
   );
 };
