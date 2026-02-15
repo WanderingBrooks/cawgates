@@ -3,6 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { registerUserSchema } from '@/lib/types';
+import { createSession } from '@/lib/session';
 import bcrypt from 'bcrypt';
 
 export type ActionResult = {
@@ -52,12 +53,19 @@ const registerUser = async (
     const hashedPassword = await bcrypt.hash(result.data.password, SALT_ROUNDS);
 
     // Create user
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         email: result.data.email,
         username: result.data.username,
         password: hashedPassword,
       },
+    });
+
+    // Create session to auto-login user
+    await createSession({
+      userId: user.id,
+      email: user.email,
+      username: user.username,
     });
   } catch (error) {
     console.error('Error registering user:', error);

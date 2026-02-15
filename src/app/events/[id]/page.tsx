@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
+import { getUser } from '@/lib/session';
 import {
   Page,
   Button,
@@ -14,11 +15,16 @@ import Markdown from 'react-markdown';
 
 const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const t = await getTranslations('event');
+  const user = await getUser();
+
+  if (!user) {
+    return null; // Middleware will redirect
+  }
 
   const { id } = await params;
 
   const event = await prisma.event.findUnique({
-    where: { id },
+    where: { id, userId: user.userId },
     include: { matches: true },
   });
 

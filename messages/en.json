@@ -59,6 +59,13 @@
     "submit": "Create Account",
     "submitting": "Creating Account..."
   },
+  "login": {
+    "title": "Login",
+    "email": "Email *",
+    "password": "Password *",
+    "submit": "Login",
+    "submitting": "Logging in..."
+  },
   "matchTable": {
     "archetype": "Archetype",
     "wins": "Wins",
@@ -68,5 +75,9 @@
   },
   "breadcrumbs": {
     "home": "/"
+  },
+  "header": {
+    "logout": "Logout",
+    "welcomeUser": "Welcome, {username}"
   }
 }

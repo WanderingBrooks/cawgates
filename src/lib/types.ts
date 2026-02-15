@@ -51,7 +51,20 @@ const registerUserSchema = z
     path: ['confirmPassword'],
   });
 
+// Schema for user login
+const loginSchema = z.object({
+  email: z.string().email('Invalid email address').trim().toLowerCase(),
+  password: z.string().min(1, 'Password is required'),
+});
+
 // Exported types inferred from Zod schemas
 export type RegisterUserInput = z.infer<typeof registerUserSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;
 
-export { matchSchema, createEventSchema, updateEventSchema, registerUserSchema };
+export {
+  matchSchema,
+  createEventSchema,
+  updateEventSchema,
+  registerUserSchema,
+  loginSchema,
+};

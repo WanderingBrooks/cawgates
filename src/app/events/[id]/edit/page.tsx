@@ -5,6 +5,7 @@ import { Page, Button, PageTitle } from '@/components';
 import EventForm from '../../EventForm';
 import { EventFormData, MatchInput } from '@/lib/types';
 import { getTranslations } from 'next-intl/server';
+import { getUser } from '@/lib/session';
 
 const EditEventPage = async ({
   params,
@@ -12,11 +13,16 @@ const EditEventPage = async ({
   params: Promise<{ id: string }>;
 }) => {
   const t = await getTranslations('editEvent');
+  const user = await getUser();
+
+  if (!user) {
+    return null; // Middleware will redirect
+  }
 
   const { id } = await params;
 
   const event = await prisma.event.findUnique({
-    where: { id },
+    where: { id, userId: user.userId },
     include: { matches: true },
   });
 

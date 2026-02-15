@@ -19,6 +19,8 @@ model User {
   username  String
   password  String
   createdAt DateTime @default(now())
+
+  events Event[]
 }
 
 model Event {
@@ -26,9 +28,11 @@ model Event {
   name      String
   date      DateTime
   notes     String?
+  userId    String
   createdAt DateTime @default(now())
 
-  matches   Match[]
+  matches Match[]
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Match {

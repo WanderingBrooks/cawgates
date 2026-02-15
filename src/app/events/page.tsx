@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
+import { getUser } from '@/lib/session';
 import {
   Page,
   Card,
@@ -12,8 +13,14 @@ import {
 
 const EventsPage = async () => {
   const t = await getTranslations('events');
+  const user = await getUser();
+
+  if (!user) {
+    return null; // Middleware will redirect
+  }
 
   const events = await prisma.event.findMany({
+    where: { userId: user.userId },
     orderBy: { date: 'desc' },
     include: { _count: { select: { matches: true } } },
   });

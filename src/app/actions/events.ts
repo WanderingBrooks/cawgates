@@ -3,6 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { createEventSchema, updateEventSchema } from '@/lib/types';
+import { getUser } from '@/lib/session';
 
 export type ActionResult = {
   success: boolean;
@@ -55,6 +56,16 @@ const createEventWithMatches = async (
   let eventId: string;
 
   try {
+    // Get current user
+    const user = await getUser();
+
+    if (!user) {
+      return {
+        success: false,
+        error: 'You must be logged in to create an event',
+      };
+    }
+
     // Parse FormData
     const matches = parseMatches(formData);
 
@@ -85,6 +96,7 @@ const createEventWithMatches = async (
         name: validated.eventName,
         date: new Date(validated.eventDate),
         notes: validated.notes,
+        userId: user.userId,
         matches: {
           create: validated.matches.map(m => ({
             opponentArchetype: m.opponentArchetype,
@@ -112,6 +124,35 @@ const deleteEventAndMatches = async (
   eventId: string,
 ): Promise<ActionResult> => {
   try {
+    // Get current user
+    const user = await getUser();
+
+    if (!user) {
+      return {
+        success: false,
+        error: 'You must be logged in to delete an event',
+      };
+    }
+
+    // Check event ownership
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+    });
+
+    if (!event) {
+      return {
+        success: false,
+        error: 'Event not found',
+      };
+    }
+
+    if (event.userId !== user.userId) {
+      return {
+        success: false,
+        error: 'You do not have permission to delete this event',
+      };
+    }
+
     await prisma.event.delete({
       where: {
         id: eventId,
@@ -136,6 +177,16 @@ const updateEventWithMatches = async (
   let eventId: string;
 
   try {
+    // Get current user
+    const user = await getUser();
+
+    if (!user) {
+      return {
+        success: false,
+        error: 'You must be logged in to update an event',
+      };
+    }
+
     // Parse FormData
     const matches = parseMatches(formData);
 
@@ -169,6 +220,14 @@ const updateEventWithMatches = async (
 
     if (!existingEvent) {
       return { success: false, error: 'Event not found' };
+    }
+
+    // Verify ownership
+    if (existingEvent.userId !== user.userId) {
+      return {
+        success: false,
+        error: 'You do not have permission to edit this event',
+      };
     }
 
     const existingMatchIds = existingEvent.matches.map(m => m.id);
