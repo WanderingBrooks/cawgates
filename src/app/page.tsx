@@ -1,10 +1,13 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
+import { getTranslations } from 'next-intl/server';
 import Page from '@/components/page/page';
 import Button from '@/components/button';
 import classes from './app.module.css';
 
 const HomePage = async () => {
+  const t = await getTranslations('home');
+
   const matches = await prisma.match.findMany({
     select: {
       opponentArchetype: true,
@@ -36,22 +39,22 @@ const HomePage = async () => {
   return (
     <Page>
       <div className={classes.pageTitle}>
-        <h1>Match Records</h1>
+        <h1>{t('title')}</h1>
         <Link href="/events">
-          <Button>View Events</Button>
+          <Button>{t('viewEvents')}</Button>
         </Link>
       </div>
 
       {sortedArchetypes.length === 0 ? (
-        <p>No matches recorded yet</p>
+        <p>{t('noMatches')}</p>
       ) : (
         <table>
           <thead>
             <tr>
-              <th>Archetype</th>
-              <th>Wins</th>
-              <th>Losses</th>
-              <th>Win Rate</th>
+              <th>{t('archetype')}</th>
+              <th>{t('wins')}</th>
+              <th>{t('losses')}</th>
+              <th>{t('winRate')}</th>
             </tr>
           </thead>
           <tbody>

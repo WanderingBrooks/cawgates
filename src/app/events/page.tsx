@@ -1,11 +1,14 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
+import { getTranslations } from 'next-intl/server';
 import Page from '@/components/page/page';
 import { Card, CardTitle, CardContent } from '@/components/card';
 import Button from '@/components/button';
 import classes from '../app.module.css';
 
 const EventsPage = async () => {
+  const t = await getTranslations('events');
+
   const events = await prisma.event.findMany({
     orderBy: { date: 'desc' },
     include: { _count: { select: { matches: true } } },
@@ -14,14 +17,14 @@ const EventsPage = async () => {
   return (
     <Page>
       <div className={classes.pageTitle}>
-        <h1>Events</h1>
+        <h1>{t('title')}</h1>
         <Link href="/events/create">
-          <Button>Create Event</Button>
+          <Button>{t('createEvent')}</Button>
         </Link>
       </div>
 
       {events.length === 0 ? (
-        <p>No events found</p>
+        <p>{t('noEvents')}</p>
       ) : (
         events.map(event => (
           <Link key={event.id} href={`/events/${event.id}`}>
@@ -31,7 +34,7 @@ const EventsPage = async () => {
                 <span>{new Date(event.date).toLocaleDateString()}</span>
               </CardTitle>
               <CardContent>
-                <p>{event._count.matches} matche(s)</p>
+                <p>{t('matchCount')}: {event._count.matches}</p>
               </CardContent>
             </Card>
           </Link>

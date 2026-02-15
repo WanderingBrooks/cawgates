@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
+import { getTranslations } from 'next-intl/server';
 import Page from '@/components/page/page';
 import classes from '../../app.module.css';
 import Button from '@/components/button';
@@ -8,6 +9,8 @@ import DeleteEventButton from './delete-event-button';
 import Markdown from 'react-markdown';
 
 const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const tEvents = await getTranslations('events');
+  const tHome = await getTranslations('home');
   const { id } = await params;
 
   const event = await prisma.event.findUnique({
@@ -24,19 +27,19 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
       <div className={classes.pageTitle}>
         <h1>{event.name}</h1>
         <Link href="/events">
-          <Button>Back to Events</Button>
+          <Button>{tEvents('title')}</Button>
         </Link>
       </div>
       <p>{new Date(event.date).toLocaleDateString()}</p>
       {event.matches.length === 0 ? (
-        <p>No matches found</p>
+        <p>{tEvents('noMatches')}</p>
       ) : (
         <table>
           <thead>
             <tr>
-              <th>Archetype</th>
-              <th>Wins</th>
-              <th>Losses</th>
+              <th>{tHome('archetype')}</th>
+              <th>{tHome('wins')}</th>
+              <th>{tHome('losses')}</th>
             </tr>
           </thead>
           <tbody>
@@ -54,7 +57,7 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       <div className={classes.flexRowBetween}>
         <Link href={`/events/${id}/edit`}>
-          <Button>Edit Event</Button>
+          <Button>{tEvents('edit')}</Button>
         </Link>
         <DeleteEventButton eventId={id} />
       </div>

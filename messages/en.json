@@ -13,21 +13,24 @@
     "createEvent": "Create Event",
     "matchCount": "Match Count",
     "noEvents": "No events yet",
+    "noMatches": "No matches found",
     "edit": "Edit",
     "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this event?",
     "viewMatches": "View Matches"
   },
   "eventForm": {
-    "eventName": "Event Name",
-    "eventDate": "Event Date",
+    "eventName": "Event Name *",
+    "eventDate": "Event Date *",
     "notes": "Notes",
     "addMatch": "Add Match",
     "removeMatch": "Remove",
-    "opponentArchetype": "Archetype",
+    "opponentArchetype": "Opponent Archetype *",
     "addNewArchetype": "Add New",
     "createEvent": "Create Event",
-    "updateEvent": "Update Event",
-    "wins": "Wins",
-    "losses": "Losses"
+    "updateEvent": "Save Changes",
+    "wins": "Wins *",
+    "losses": "Losses *",
+    "matchLabel": "Match"
   }
 }

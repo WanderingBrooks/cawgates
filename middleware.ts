@@ -1,11 +1,14 @@
 import createMiddleware from 'next-intl/middleware';
 
-export default createMiddleware({
+const middleware = createMiddleware({
   locales: ['en'],
   defaultLocale: 'en',
-  localePrefix: 'never', // URLs don't include locale prefix
+  localePrefix: 'never',
 });
 
-export const config = {
+const config = {
   matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
 };
+
+export default middleware;
+export { config };

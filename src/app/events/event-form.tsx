@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import Button from '@/components/button';
 import Input from '@/components/input';
 import DatalistInput from '@/components/datalist-input';
@@ -23,6 +24,8 @@ const EventForm = ({
   initialEventData,
   initialMatches,
 }: EventFormProps) => {
+  const t = useTranslations('eventForm');
+
   const {
     eventData,
     matches,
@@ -40,7 +43,7 @@ const EventForm = ({
           type="text"
           id="eventName"
           name="eventName"
-          label="Event Name *"
+          label={t('eventName')}
           value={eventData.eventName}
           onChange={handleEventChange}
           required
@@ -49,7 +52,7 @@ const EventForm = ({
           type="date"
           id="eventDate"
           name="eventDate"
-          label="Event Date *"
+          label={t('eventDate')}
           value={eventData.eventDate}
           onChange={handleEventChange}
           required
@@ -57,18 +60,18 @@ const EventForm = ({
         {matches.map((match: MatchData, index: number) => (
           <Card key={match.id || index}>
             <CardTitle>
-              <h3>Match {index + 1}</h3>
+              <h3>{t('matchLabel')} {index + 1}</h3>
               <Button
                 disabled={matches.length <= 1}
                 onClick={() => removeMatch(index)}
               >
-                Remove
+                {t('removeMatch')}
               </Button>
             </CardTitle>
             <CardContent>
               <DatalistInput
                 id={`opponent-${index}`}
-                label="Opponent Archetype *"
+                label={t('opponentArchetype')}
                 value={match.opponentArchetype}
                 onChange={e =>
                   handleMatchChange({
@@ -83,7 +86,7 @@ const EventForm = ({
               <Input
                 type="number"
                 id={`wins-${index}`}
-                label="Wins *"
+                label={t('wins')}
                 value={match.wins}
                 onChange={e =>
                   handleMatchChange({
@@ -98,7 +101,7 @@ const EventForm = ({
               <Input
                 type="number"
                 id={`losses-${index}`}
-                label="Losses *"
+                label={t('losses')}
                 value={match.losses}
                 onChange={e =>
                   handleMatchChange({
@@ -113,19 +116,19 @@ const EventForm = ({
             </CardContent>
           </Card>
         ))}
-        <Button onClick={addMatch}>Add Match</Button>
+        <Button onClick={addMatch}>{t('addMatch')}</Button>
 
         <Input
           id="notes"
           name="notes"
-          label="Notes"
+          label={t('notes')}
           value={eventData.notes}
           onChange={handleEventChange}
           rows={4}
           isMultiline
         />
         <Button type="submit">
-          {mode === 'create' ? 'Create Event' : 'Save Changes'}
+          {mode === 'create' ? t('createEvent') : t('updateEvent')}
         </Button>
       </SpaceChildrenVertically>
     </form>
