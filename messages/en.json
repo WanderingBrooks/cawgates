@@ -1,0 +1,33 @@
+{
+  "home": {
+    "title": "Match Records",
+    "viewEvents": "View Events",
+    "noMatches": "No matches recorded yet",
+    "archetype": "Archetype",
+    "wins": "Wins",
+    "losses": "Losses",
+    "winRate": "Win Rate"
+  },
+  "events": {
+    "title": "Events",
+    "createEvent": "Create Event",
+    "matchCount": "Match Count",
+    "noEvents": "No events yet",
+    "edit": "Edit",
+    "delete": "Delete",
+    "viewMatches": "View Matches"
+  },
+  "eventForm": {
+    "eventName": "Event Name",
+    "eventDate": "Event Date",
+    "notes": "Notes",
+    "addMatch": "Add Match",
+    "removeMatch": "Remove",
+    "opponentArchetype": "Archetype",
+    "addNewArchetype": "Add New",
+    "createEvent": "Create Event",
+    "updateEvent": "Update Event",
+    "wins": "Wins",
+    "losses": "Losses"
+  }
+}
