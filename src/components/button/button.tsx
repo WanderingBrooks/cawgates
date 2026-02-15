@@ -7,6 +7,7 @@ type ButtonProps = {
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   className?: string;
+  variant: 'primary' | 'secondary';
 };
 
 const Button = ({
@@ -15,13 +16,14 @@ const Button = ({
   type = 'button',
   disabled = false,
   className = '',
+  variant,
 }: ButtonProps) => {
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={cn(classes.button, className)}
+      className={cn(classes.button, variant && classes[variant], className)}
     >
       {children}
     </button>

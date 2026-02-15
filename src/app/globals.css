@@ -2,13 +2,12 @@
 
 :root {
   /* Colors */
-  --color-primary: #4f46e5;
-  --color-background: #f8f5e1;
-  --color-background-dark: #ccc;
-  --color-text: #111111;
-
-  /* Text Colors */
-  --text-link-hover: #3730a3;
+  --color-background: #f4efe6;
+  --color-input-bg: #fbfaf7;
+  --color-primary: #4a6fa5;
+  --color-primary-dark: #2f4e7a;
+  --color-border: #d8d2c5;
+  --color-text: #2a2a2a;
 
   /* Status Colors */
   --color-error-bg: #fee2e2;
@@ -36,12 +35,12 @@ body {
   margin: 0;
 }
 
-a:visited {
-  color: inherit;
+a {
+  color: var(--color-primary);
 }
 
 a:hover {
-  color: var(--text-link-hover);
+  color: var(--color-primary-dark);
 }
 
 p,
@@ -59,5 +58,5 @@ th,
 td {
   padding: var(--spacing-sm);
   text-align: left;
-  border: 1px solid var(--color-background-dark);
+  border: 1px solid var(--color-border);
 }
