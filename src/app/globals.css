@@ -6,6 +6,7 @@
   --color-background: #f8f5e1;
   --color-background-dark: #ccc;
   --color-text: #111111;
+  --text-link-hover: #3730a3;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -31,6 +32,10 @@ body {
 
 a:visited {
   color: inherit;
+}
+
+a:hover {
+  color: var(--text-link-hover);
 }
 
 p,

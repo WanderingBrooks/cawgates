@@ -45,5 +45,8 @@
     "losses": "Losses",
     "winRate": "Win Rate",
     "noMatches": "No matches found"
+  },
+  "breadcrumbs": {
+    "home": "/"
   }
 }

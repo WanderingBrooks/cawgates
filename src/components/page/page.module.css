@@ -3,7 +3,8 @@
   padding-bottom: var(--spacing-xxl);
 
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .pageContent {

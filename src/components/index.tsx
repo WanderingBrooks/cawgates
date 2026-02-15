@@ -1,3 +1,4 @@
+import Breadcrumb from './Breadcrumb';
 import Button from './Button';
 import { Card, CardContent, CardTitle } from './Card';
 import DataList from './DataList';
@@ -9,6 +10,7 @@ import PageTitle from './PageTitle';
 import SpaceChildrenVertically from './SpaceChildrenVertically';
 
 export {
+  Breadcrumb,
   Button,
   Card,
   CardContent,
