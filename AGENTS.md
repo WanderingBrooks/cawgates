@@ -29,7 +29,13 @@ const greet = (user: User) => {};
 const calculate = (index: number, isActive: boolean) => {};
 
 // ✅ Good
-const calculate = ({ index, isActive }: { index: number; isActive: boolean }) => {};
+const calculate = ({
+  index,
+  isActive,
+}: {
+  index: number;
+  isActive: boolean;
+}) => {};
 ```
 
 ## UI & Styling
@@ -48,19 +54,26 @@ const calculate = ({ index, isActive }: { index: number; isActive: boolean }) =>
 
 ## Internationalization
 
-- **Never hardcode text directly in components**
-- Always use translations from `messages/en.json`
+- **CRITICAL: NEVER hardcode ANY text in components**
+- This includes: button labels, error messages, loading states, placeholders, aria-labels, etc.
+- ALL user-facing text MUST come from `messages/en.json`
 - Use `useTranslations()` hook in client components
 - Use `getTranslations()` in server components
-- Add new translation keys to `messages/en.json` when adding text to the UI
+- Add new translation keys to `messages/en.json` before writing the component code
 
 ```tsx
-// ❌ Bad - hardcoded text
+// ❌ Bad - ANY hardcoded text is forbidden
 <Button>Click me</Button>
+<span>Loading...</span>
+<div>Error: {error}</div>
+{pending ? 'Saving...' : 'Save'}
 
-// ✅ Good - using translations
+// ✅ Good - ALL text from translations
 const t = useTranslations('myComponent');
 <Button>{t('clickMe')}</Button>
+<span>{t('loading')}</span>
+<div>{t('error')}: {error}</div>
+{pending ? t('saving') : t('save')}
 ```
 
 ## File Organization
