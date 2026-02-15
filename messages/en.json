@@ -50,6 +50,15 @@
   "errorMessage": {
     "message": "<strong>Error:</strong> {error}"
   },
+  "register": {
+    "title": "Create Account",
+    "email": "Email *",
+    "username": "Username *",
+    "password": "Password *",
+    "confirmPassword": "Confirm Password *",
+    "submit": "Create Account",
+    "submitting": "Creating Account..."
+  },
   "matchTable": {
     "archetype": "Archetype",
     "wins": "Wins",

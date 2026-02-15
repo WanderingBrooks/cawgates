@@ -38,4 +38,20 @@ export type EventFormData = Pick<
   'eventName' | 'eventDate' | 'notes'
 >;
 
-export { matchSchema, createEventSchema, updateEventSchema };
+// Schema for user registration
+const registerUserSchema = z
+  .object({
+    email: z.string().email('Invalid email address').trim().toLowerCase(),
+    username: z.string().min(3, 'Username must be at least 3 characters').trim(),
+    password: z.string().min(8, 'Password must be at least 8 characters'),
+    confirmPassword: z.string(),
+  })
+  .refine(data => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
+
+// Exported types inferred from Zod schemas
+export type RegisterUserInput = z.infer<typeof registerUserSchema>;
+
+export { matchSchema, createEventSchema, updateEventSchema, registerUserSchema };
