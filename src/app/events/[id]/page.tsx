@@ -47,7 +47,7 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
       {event.notes && <Markdown>{event.notes}</Markdown>}
       <FlexRowBetween>
         <Link href={`/events/${id}/edit`}>
-          <Button>{t('edit')}</Button>
+          <Button variant="primary">{t('edit')}</Button>
         </Link>
         <DeleteEventButton eventId={id} />
       </FlexRowBetween>

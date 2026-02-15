@@ -32,7 +32,7 @@ const SubmitButton = () => {
   const t = useTranslations('eventForm');
 
   return (
-    <Button type="submit" disabled={pending}>
+    <Button type="submit" disabled={pending} variant="primary">
       {pending ? t('saving') : t('saveEvent')}
     </Button>
   );
@@ -145,6 +145,7 @@ const EventForm = ({
                 {t('matchLabel')} {index + 1}
               </h3>
               <Button
+                variant="secondary"
                 disabled={matches.length <= 1}
                 onClick={() => removeMatch(index)}
               >
@@ -201,7 +202,9 @@ const EventForm = ({
             </CardContent>
           </Card>
         ))}
-        <Button onClick={addMatch}>{t('addMatch')}</Button>
+        <Button onClick={addMatch} variant="primary">
+          {t('addMatch')}
+        </Button>
 
         <Input
           id="notes"
@@ -215,7 +218,7 @@ const EventForm = ({
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween>
           <Link href={mode === 'create' ? '/events' : `/events/${eventId}`}>
-            <Button>{t('cancel')}</Button>
+            <Button variant="secondary">{t('cancel')}</Button>
           </Link>
           <SubmitButton />
         </FlexRowBetween>

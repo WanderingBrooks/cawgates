@@ -29,7 +29,7 @@ const DeleteEventButton = ({ eventId }: { eventId: string }) => {
   return (
     <>
       {error && <ErrorMessage error={error} />}
-      <Button onClick={handleDelete} disabled={isDeleting}>
+      <Button onClick={handleDelete} disabled={isDeleting} variant="secondary">
         {isDeleting ? t('deleting') : t('delete')}
       </Button>
     </>

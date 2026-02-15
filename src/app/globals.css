@@ -2,13 +2,9 @@
 
 :root {
   /* Colors */
-  --color-primary: #4f46e5;
-  --color-background: #f8f5e1;
-  --color-background-dark: #ccc;
-  --color-text: #111111;
-
-  /* Text Colors */
-  --text-link-hover: #3730a3;
+  --color-primary: #5b7a9d;
+  --color-background: #f5f1e8;
+  --color-input-bg: #f0ece3;
 
   /* Status Colors */
   --color-error-bg: #fee2e2;
@@ -29,19 +25,15 @@
 body {
   font-family: var(--font-family);
   background-color: var(--color-background);
-  color: var(--color-text);
+  color: var(--color-primary);
 
   overflow: auto;
   padding: 0;
   margin: 0;
 }
 
-a:visited {
-  color: inherit;
-}
-
-a:hover {
-  color: var(--text-link-hover);
+a {
+  color: var(--color-primary);
 }
 
 p,
@@ -59,5 +51,5 @@ th,
 td {
   padding: var(--spacing-sm);
   text-align: left;
-  border: 1px solid var(--color-background-dark);
+  border: 1px solid var(--color-primary);
 }

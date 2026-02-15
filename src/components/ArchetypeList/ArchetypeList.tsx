@@ -94,7 +94,7 @@ const ArchetypeList = ({
             className={className}
             placeholder={t('enterNewArchetype')}
           />
-          <Button type="button" onClick={handleCancel}>
+          <Button type="button" onClick={handleCancel} variant="secondary">
             {t('cancel')}
           </Button>
         </div>

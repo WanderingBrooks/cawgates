@@ -13,10 +13,7 @@
 }
 
 .breadcrumbLink {
-  text-decoration: none;
-}
-
-.breadcrumbLink:hover {
+  color: var(--color-primary);
   text-decoration: underline;
 }
 

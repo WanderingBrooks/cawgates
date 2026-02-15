@@ -21,7 +21,9 @@ const PageTitle = ({ title, className }: PageTitleProps) => {
   return (
     <div className={cn(classes.pageTitle, className)}>
       <h1>{title}</h1>
-      <Button onClick={handleLogout}>{t('logout')}</Button>
+      <Button onClick={handleLogout} variant="secondary">
+        {t('logout')}
+      </Button>
     </div>
   );
 };

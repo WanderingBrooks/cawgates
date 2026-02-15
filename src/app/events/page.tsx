@@ -29,7 +29,7 @@ const EventsPage = async () => {
     <Page>
       <PageTitle title={t('title')} />
       <Link href="/events/create">
-        <Button>{t('createEvent')}</Button>
+        <Button variant="primary">{t('createEvent')}</Button>
       </Link>
 
       {events.length === 0 ? (
