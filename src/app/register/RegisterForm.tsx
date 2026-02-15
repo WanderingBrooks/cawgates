@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { registerUser, type ActionResult } from '@/app/actions/users';
@@ -35,6 +35,18 @@ const RegisterForm = () => {
     null,
   );
 
+  const [formData, setFormData] = useState({
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   return (
     <form action={formAction}>
       <SpaceChildrenVertically>
@@ -43,6 +55,8 @@ const RegisterForm = () => {
           id="email"
           name="email"
           label={t('email')}
+          value={formData.email}
+          onChange={handleChange}
           required
           autoComplete="email"
         />
@@ -51,6 +65,8 @@ const RegisterForm = () => {
           id="username"
           name="username"
           label={t('username')}
+          value={formData.username}
+          onChange={handleChange}
           required
           autoComplete="username"
         />
@@ -59,6 +75,8 @@ const RegisterForm = () => {
           id="password"
           name="password"
           label={t('password')}
+          value={formData.password}
+          onChange={handleChange}
           required
           autoComplete="new-password"
         />
@@ -67,6 +85,8 @@ const RegisterForm = () => {
           id="confirmPassword"
           name="confirmPassword"
           label={t('confirmPassword')}
+          value={formData.confirmPassword}
+          onChange={handleChange}
           required
           autoComplete="new-password"
         />
