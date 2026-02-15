@@ -29,7 +29,8 @@
     "wins": "Wins *",
     "losses": "Losses *",
     "matchLabel": "Match",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "cancel": "Cancel"
   },
   "event": {
     "viewEvents": "View Events",
@@ -64,7 +65,8 @@
     "email": "Email *",
     "password": "Password *",
     "submit": "Login",
-    "submitting": "Logging in..."
+    "submitting": "Logging in...",
+    "clickHereToRegister": "Don't have an account? Click here to register."
   },
   "matchTable": {
     "archetype": "Archetype",
@@ -76,8 +78,7 @@
   "breadcrumbs": {
     "home": "/"
   },
-  "header": {
-    "logout": "Logout",
-    "welcomeUser": "Welcome, {username}"
+  "pageTitle": {
+    "logout": "Logout"
   }
 }

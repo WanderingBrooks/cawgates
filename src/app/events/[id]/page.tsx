@@ -14,7 +14,6 @@ import DeleteEventButton from './DeleteEventButton';
 import Markdown from 'react-markdown';
 
 const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const t = await getTranslations('event');
   const user = await getUser();
 
   if (!user) {
@@ -22,6 +21,7 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   }
 
   const { id } = await params;
+  const t = await getTranslations('event');
 
   const event = await prisma.event.findUnique({
     where: { id, userId: user.userId },
@@ -41,12 +41,7 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <Page>
-      <PageTitle>
-        <h1>{event.name}</h1>
-        <Link href="/events">
-          <Button>{t('viewEvents')}</Button>
-        </Link>
-      </PageTitle>
+      <PageTitle title={event.name} />
       <p>{new Date(event.date).toLocaleDateString()}</p>
       <MatchTable rows={tableRows} />
       {event.notes && <Markdown>{event.notes}</Markdown>}

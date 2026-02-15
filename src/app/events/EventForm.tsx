@@ -17,8 +17,10 @@ import {
   ErrorMessage,
   Input,
   SpaceChildrenVertically,
+  FlexRowBetween,
 } from '@/components';
 import { EventFormData, MatchInput } from '@/lib/types';
+import Link from 'next/link';
 
 /**
  * SubmitButton must be a separate component because useFormStatus() requires
@@ -211,7 +213,12 @@ const EventForm = ({
           isMultiline
         />
         {state?.error && <ErrorMessage error={state.error} />}
-        <SubmitButton />
+        <FlexRowBetween>
+          <Link href={mode === 'create' ? '/events' : `/events/${eventId}`}>
+            <Button>{t('cancel')}</Button>
+          </Link>
+          <SubmitButton />
+        </FlexRowBetween>
       </SpaceChildrenVertically>
     </form>
   );

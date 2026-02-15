@@ -1,17 +1,10 @@
 import { prisma } from '@/lib/prisma';
-import { getUser } from '@/lib/session';
 
-const getMatchStatistics = async () => {
-  const user = await getUser();
-
-  if (!user) {
-    return [];
-  }
-
+const getMatchStatistics = async ({ userId }: { userId: string }) => {
   const matches = await prisma.match.findMany({
     where: {
       event: {
-        userId: user.userId,
+        userId: userId,
       },
     },
     select: {

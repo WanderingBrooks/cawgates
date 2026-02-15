@@ -7,9 +7,7 @@ const RegisterPage = async () => {
 
   return (
     <Page>
-      <PageTitle>
-        <h1>{t('title')}</h1>
-      </PageTitle>
+      <PageTitle title={t('title')} />
       <RegisterForm />
     </Page>
   );

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
+
 import { prisma } from '@/lib/prisma';
-import { Page, Button, PageTitle } from '@/components';
+import { Page, PageTitle } from '@/components';
 import EventForm from '../../EventForm';
 import { EventFormData, MatchInput } from '@/lib/types';
 import { getTranslations } from 'next-intl/server';
@@ -12,7 +12,6 @@ const EditEventPage = async ({
 }: {
   params: Promise<{ id: string }>;
 }) => {
-  const t = await getTranslations('editEvent');
   const user = await getUser();
 
   if (!user) {
@@ -20,6 +19,7 @@ const EditEventPage = async ({
   }
 
   const { id } = await params;
+  const t = await getTranslations('editEvent');
 
   const event = await prisma.event.findUnique({
     where: { id, userId: user.userId },
@@ -45,13 +45,7 @@ const EditEventPage = async ({
 
   return (
     <Page>
-      <PageTitle>
-        <h1>{t('title')}</h1>
-        <Link href={`/events/${id}`}>
-          <Button>{t('backToEvent')}</Button>
-        </Link>
-      </PageTitle>
-
+      <PageTitle title={t('title')} />
       <EventForm
         mode="edit"
         eventId={id}

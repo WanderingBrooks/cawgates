@@ -4,7 +4,6 @@ import Button from './Button';
 import { Card, CardContent, CardTitle } from './Card';
 import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
-import Header from './Header';
 import Input from './Input';
 import MatchTable from './MatchTable';
 import Page from './Page';
@@ -20,7 +19,6 @@ export {
   CardTitle,
   ErrorMessage,
   FlexRowBetween,
-  Header,
   Input,
   MatchTable,
   Page,

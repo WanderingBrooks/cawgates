@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { login, type ActionResult } from '@/app/actions/auth';
@@ -10,6 +10,7 @@ import {
   Input,
   SpaceChildrenVertically,
 } from '@/components';
+import Link from 'next/link';
 
 /**
  * SubmitButton must be a separate component because useFormStatus() requires
@@ -35,6 +36,16 @@ const LoginForm = () => {
     null,
   );
 
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   return (
     <form action={formAction}>
       <SpaceChildrenVertically>
@@ -43,6 +54,8 @@ const LoginForm = () => {
           id="email"
           name="email"
           label={t('email')}
+          value={formData.email}
+          onChange={handleChange}
           required
           autoComplete="email"
         />
@@ -51,11 +64,14 @@ const LoginForm = () => {
           id="password"
           name="password"
           label={t('password')}
+          value={formData.password}
+          onChange={handleChange}
           required
           autoComplete="current-password"
         />
         {state?.error && <ErrorMessage error={state.error} />}
         <SubmitButton />
+        <Link href="/register">{t('clickHereToRegister')}</Link>
       </SpaceChildrenVertically>
     </form>
   );
