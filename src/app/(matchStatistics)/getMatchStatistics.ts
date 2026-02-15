@@ -1,7 +1,12 @@
 import { prisma } from '@/lib/prisma';
 
-const getMatchStatistics = async () => {
+const getMatchStatistics = async ({ userId }: { userId: string }) => {
   const matches = await prisma.match.findMany({
+    where: {
+      event: {
+        userId: userId,
+      },
+    },
     select: {
       opponentArchetype: true,
       wins: true,

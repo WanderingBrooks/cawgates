@@ -13,14 +13,26 @@ datasource db {
   provider = "postgresql"
 }
 
-model Event {
+model User {
   id        String   @id @default(uuid())
-  name      String?
-  date      DateTime
-  notes     String?
+  email     String   @unique
+  username  String
+  password  String
   createdAt DateTime @default(now())
 
-  matches   Match[]
+  events Event[]
+}
+
+model Event {
+  id        String   @id @default(uuid())
+  name      String
+  date      DateTime
+  notes     String?
+  userId    String
+  createdAt DateTime @default(now())
+
+  matches Match[]
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Match {

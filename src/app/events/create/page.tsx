@@ -1,6 +1,5 @@
-import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { Page, Button, PageTitle } from '@/components';
+import { Page, PageTitle } from '@/components';
 import EventForm from '../EventForm';
 
 const CreateEventPage = async () => {
@@ -8,13 +7,7 @@ const CreateEventPage = async () => {
 
   return (
     <Page>
-      <PageTitle>
-        <h1>{t('title')}</h1>
-        <Link href="/events">
-          <Button>{t('viewEvents')}</Button>
-        </Link>
-      </PageTitle>
-
+      <PageTitle title={t('title')} />
       <EventForm mode="create" />
     </Page>
   );

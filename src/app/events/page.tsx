@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
+import { getUser } from '@/lib/session';
 import {
   Page,
   Card,
@@ -12,20 +13,24 @@ import {
 
 const EventsPage = async () => {
   const t = await getTranslations('events');
+  const user = await getUser();
+
+  if (!user) {
+    return null; // Middleware will redirect
+  }
 
   const events = await prisma.event.findMany({
+    where: { userId: user.userId },
     orderBy: { date: 'desc' },
     include: { _count: { select: { matches: true } } },
   });
 
   return (
     <Page>
-      <PageTitle>
-        <h1>{t('title')}</h1>
-        <Link href="/events/create">
-          <Button>{t('createEvent')}</Button>
-        </Link>
-      </PageTitle>
+      <PageTitle title={t('title')} />
+      <Link href="/events/create">
+        <Button>{t('createEvent')}</Button>
+      </Link>
 
       {events.length === 0 ? (
         <p>{t('noEvents')}</p>
