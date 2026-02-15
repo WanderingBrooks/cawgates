@@ -1,9 +1,8 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import { Page, Button } from '@/components';
+import { Page, Button, PageTitle } from '@/components';
 import EventForm from '../../EventForm';
-import classes from '../../../app.module.css';
 import { EventFormInputData, MatchInputData } from '@/lib/types';
 import { getTranslations } from 'next-intl/server';
 
@@ -48,12 +47,12 @@ const EditEventPage = async ({
 
   return (
     <Page>
-      <div className={classes.pageTitle}>
+      <PageTitle>
         <h1>{t('title')}</h1>
         <Link href={`/events/${id}`}>
           <Button>{t('backToEvent')}</Button>
         </Link>
-      </div>
+      </PageTitle>
 
       <EventForm
         archetypes={archetypes}

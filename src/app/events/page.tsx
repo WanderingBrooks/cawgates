@@ -1,8 +1,14 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
-import { Page, Card, CardTitle, CardContent, Button } from '@/components';
-import classes from '../app.module.css';
+import {
+  Page,
+  Card,
+  CardTitle,
+  CardContent,
+  Button,
+  PageTitle,
+} from '@/components';
 
 const EventsPage = async () => {
   const t = await getTranslations('events');
@@ -14,12 +20,12 @@ const EventsPage = async () => {
 
   return (
     <Page>
-      <div className={classes.pageTitle}>
+      <PageTitle>
         <h1>{t('title')}</h1>
         <Link href="/events/create">
           <Button>{t('createEvent')}</Button>
         </Link>
-      </div>
+      </PageTitle>
 
       {events.length === 0 ? (
         <p>{t('noEvents')}</p>

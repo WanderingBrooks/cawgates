@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
-import { Page, Button, MatchTable } from '@/components';
-import classes from './app.module.css';
+import { Page, Button, MatchTable, PageTitle } from '@/components';
 
 const HomePage = async () => {
   const t = await getTranslations('home');
@@ -44,12 +43,12 @@ const HomePage = async () => {
 
   return (
     <Page>
-      <div className={classes.pageTitle}>
+      <PageTitle>
         <h1>{t('title')}</h1>
         <Link href="/events">
           <Button>{t('viewEvents')}</Button>
         </Link>
-      </div>
+      </PageTitle>
 
       <MatchTable rows={tableRows} showWinRate />
     </Page>
