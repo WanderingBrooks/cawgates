@@ -9,7 +9,7 @@ const DeleteEventButton = ({ eventId }: { eventId: string }) => {
 
   const handleDelete = async () => {
     if (confirm(t('deleteConfirm'))) {
-      await deleteEventAndMatches(eventId);
+      await deleteEventAndMatches({ eventId });
     }
   };
 

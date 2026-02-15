@@ -71,9 +71,9 @@ const useEventForm = ({
     e.preventDefault();
 
     if (mode === 'create') {
-      await createEventWithMatches(eventData, matches);
+      await createEventWithMatches({ eventData, matches });
     } else if (mode === 'edit' && eventId) {
-      await updateEventWithMatches(eventId, eventData, matches);
+      await updateEventWithMatches({ eventId, eventData, matches });
     }
   };
 

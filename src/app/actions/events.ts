@@ -4,10 +4,13 @@ import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { EventFormInputData, MatchInputData } from '@/lib/types';
 
-const createEventWithMatches = async (
-  eventData: EventFormInputData,
-  matches: MatchInputData[],
-) => {
+const createEventWithMatches = async ({
+  eventData,
+  matches,
+}: {
+  eventData: EventFormInputData;
+  matches: MatchInputData[];
+}) => {
   const event = await prisma.event.create({
     data: {
       name: eventData.eventName,
@@ -22,7 +25,7 @@ const createEventWithMatches = async (
   redirect(`/events/${event.id}`);
 };
 
-const deleteEventAndMatches = async (eventId: string) => {
+const deleteEventAndMatches = async ({ eventId }: { eventId: string }) => {
   await prisma.event.delete({
     where: {
       id: eventId,
@@ -32,11 +35,15 @@ const deleteEventAndMatches = async (eventId: string) => {
   redirect(`/events`);
 };
 
-const updateEventWithMatches = async (
-  eventId: string,
-  eventData: EventFormInputData,
-  matches: MatchInputData[],
-) => {
+const updateEventWithMatches = async ({
+  eventId,
+  eventData,
+  matches,
+}: {
+  eventId: string;
+  eventData: EventFormInputData;
+  matches: MatchInputData[];
+}) => {
   const existingEvent = await prisma.event.findUnique({
     where: { id: eventId },
     include: { matches: true },
