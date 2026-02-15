@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { createEventWithMatches } from '@/app/actions/events';
-import { EventFormData, MatchData } from '@/lib/types';
+import { EventFormInputData, MatchInputData } from '@/lib/types';
 
 const useCreateEventWithMatches = () => {
-  const [eventData, setEventData] = useState<EventFormData>({
+  const [eventData, setEventData] = useState<EventFormInputData>({
     eventName: '',
     eventDate: '',
     notes: '',
   });
 
-  const [matches, setMatches] = useState<MatchData[]>([
+  const [matches, setMatches] = useState<MatchInputData[]>([
     { opponentArchetype: '', wins: 0, losses: 0 },
   ]);
 
@@ -26,7 +26,7 @@ const useCreateEventWithMatches = () => {
     value,
   }: {
     index: number;
-    field: keyof MatchData;
+    field: keyof MatchInputData;
     value: string | number;
   }) => {
     setMatches(prev => {

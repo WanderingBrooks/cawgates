@@ -3,13 +3,13 @@ import {
   createEventWithMatches,
   updateEventWithMatches,
 } from '@/app/actions/events';
-import { EventFormData, MatchData } from '@/lib/types';
+import { EventFormInputData, MatchInputData } from '@/lib/types';
 
 type UseEventFormProps = {
   mode: 'create' | 'edit';
   eventId?: string;
-  initialEventData?: EventFormData;
-  initialMatches?: MatchData[];
+  initialEventData?: EventFormInputData;
+  initialMatches?: MatchInputData[];
 };
 
 const useEventForm = ({
@@ -18,7 +18,7 @@ const useEventForm = ({
   initialEventData,
   initialMatches,
 }: UseEventFormProps) => {
-  const [eventData, setEventData] = useState<EventFormData>(
+  const [eventData, setEventData] = useState<EventFormInputData>(
     initialEventData || {
       eventName: '',
       eventDate: '',
@@ -26,7 +26,7 @@ const useEventForm = ({
     },
   );
 
-  const [matches, setMatches] = useState<MatchData[]>(
+  const [matches, setMatches] = useState<MatchInputData[]>(
     initialMatches || [{ opponentArchetype: '', wins: 0, losses: 0 }],
   );
 
@@ -44,7 +44,7 @@ const useEventForm = ({
     value,
   }: {
     index: number;
-    field: keyof MatchData;
+    field: keyof MatchInputData;
     value: string | number;
   }) => {
     setMatches(prev => {

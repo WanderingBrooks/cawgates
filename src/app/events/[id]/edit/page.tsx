@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { Page, Button } from '@/components';
 import EventForm from '../../EventForm';
 import classes from '../../../app.module.css';
-import { EventFormData, MatchData } from '@/lib/types';
+import { EventFormInputData, MatchInputData } from '@/lib/types';
 
 const EditEventPage = async ({
   params,
@@ -30,13 +30,13 @@ const EditEventPage = async ({
 
   const archetypes = allMatches.map(match => match.opponentArchetype);
 
-  const initialEventData: EventFormData = {
+  const initialEventData: EventFormInputData = {
     eventName: event.name || '',
     eventDate: event.date.toISOString().split('T')[0],
     notes: event.notes || '',
   };
 
-  const initialMatches: MatchData[] = event.matches.map(match => ({
+  const initialMatches: MatchInputData[] = event.matches.map(match => ({
     id: match.id,
     opponentArchetype: match.opponentArchetype,
     wins: match.wins,

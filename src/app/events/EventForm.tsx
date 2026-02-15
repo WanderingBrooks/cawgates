@@ -11,14 +11,14 @@ import {
   DataList,
   SpaceChildrenVertically,
 } from '@/components';
-import { EventFormData, MatchData } from '@/lib/types';
+import { EventFormInputData, MatchInputData } from '@/lib/types';
 
 type EventFormProps = {
   archetypes: string[];
   mode: 'create' | 'edit';
   eventId?: string;
-  initialEventData?: EventFormData;
-  initialMatches?: MatchData[];
+  initialEventData?: EventFormInputData;
+  initialMatches?: MatchInputData[];
 };
 
 const EventForm = ({
@@ -61,7 +61,7 @@ const EventForm = ({
           onChange={handleEventChange}
           required
         />
-        {matches.map((match: MatchData, index: number) => (
+        {matches.map((match: MatchInputData, index: number) => (
           <Card key={match.id || index}>
             <CardTitle>
               <h3>
