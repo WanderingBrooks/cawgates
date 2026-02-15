@@ -6,7 +6,13 @@
   --color-background: #f8f5e1;
   --color-background-dark: #ccc;
   --color-text: #111111;
+
+  /* Text Colors */
   --text-link-hover: #3730a3;
+
+  /* Status Colors */
+  --color-error-bg: #fee2e2;
+  --color-error-text: #991b1b;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -15,6 +21,9 @@
   --spacing-lg: 1rem;
   --spacing-xl: 1.5rem;
   --spacing-xxl: 2rem;
+
+  /* Design */
+  --border-radius: 0.5rem;
 
   /* Typography */
   --font-family: 'Courier New', monospace;

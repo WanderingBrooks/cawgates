@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { Page, Button, PageTitle } from '@/components';
 import EventForm from '../../EventForm';
-import { EventFormInputData, MatchInputData } from '@/lib/types';
+import { EventFormData, MatchInput } from '@/lib/types';
 import { getTranslations } from 'next-intl/server';
 
 const EditEventPage = async ({
@@ -24,21 +24,13 @@ const EditEventPage = async ({
     notFound();
   }
 
-  const allMatches = await prisma.match.findMany({
-    select: { opponentArchetype: true },
-    distinct: ['opponentArchetype'],
-    orderBy: { opponentArchetype: 'asc' },
-  });
-
-  const archetypes = allMatches.map(match => match.opponentArchetype);
-
-  const initialEventData: EventFormInputData = {
+  const initialEventData: EventFormData = {
     eventName: event.name || '',
     eventDate: event.date.toISOString().split('T')[0],
     notes: event.notes || '',
   };
 
-  const initialMatches: MatchInputData[] = event.matches.map(match => ({
+  const initialMatches: MatchInput[] = event.matches.map(match => ({
     id: match.id,
     opponentArchetype: match.opponentArchetype,
     wins: match.wins,
@@ -55,7 +47,6 @@ const EditEventPage = async ({
       </PageTitle>
 
       <EventForm
-        archetypes={archetypes}
         mode="edit"
         eventId={id}
         initialEventData={initialEventData}

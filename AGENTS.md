@@ -41,8 +41,20 @@ const calculate = ({
 ## UI & Styling
 
 - Use CSS modules for styling
+- **NEVER use inline `style` attribute** - always create a CSS module class
+- If a component doesn't have a CSS module file, create one
 - Use the `cn` util function when combining multiple classes
 - Always use CSS variables from `@/app/globals.css` for colors and spacing
+
+```tsx
+// ❌ Bad - inline styles
+<div style={{ color: 'red', padding: '8px' }} />
+<p style={{ color: 'var(--color-error-text)' }}>{error}</p>
+
+// ✅ Good - CSS module class
+<div className={classes.container} />
+<p className={classes.error}>{error}</p>
+```
 
 ```tsx
 // ❌ Bad - string concatenation

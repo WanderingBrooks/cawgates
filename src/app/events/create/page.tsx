@@ -1,19 +1,10 @@
 import Link from 'next/link';
-import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
 import { Page, Button, PageTitle } from '@/components';
 import EventForm from '../EventForm';
 
 const CreateEventPage = async () => {
   const t = await getTranslations('createEvent');
-
-  const matches = await prisma.match.findMany({
-    select: { opponentArchetype: true },
-    distinct: ['opponentArchetype'],
-    orderBy: { opponentArchetype: 'asc' },
-  });
-
-  const archetypes = matches.map(match => match.opponentArchetype);
 
   return (
     <Page>
@@ -24,7 +15,7 @@ const CreateEventPage = async () => {
         </Link>
       </PageTitle>
 
-      <EventForm archetypes={archetypes} mode="create" />
+      <EventForm mode="create" />
     </Page>
   );
 };

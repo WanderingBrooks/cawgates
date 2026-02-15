@@ -1,28 +1,49 @@
 'use client';
 
+import { useActionState, useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
-import useEventForm from './useEventForm';
 import {
+  createEventWithMatches,
+  updateEventWithMatches,
+  type ActionResult,
+} from '@/app/actions/events';
+import {
+  ArchetypeList,
   Card,
   CardTitle,
   CardContent,
   Button,
+  ErrorMessage,
   Input,
-  DataList,
   SpaceChildrenVertically,
 } from '@/components';
-import { EventFormInputData, MatchInputData } from '@/lib/types';
+import { EventFormData, MatchInput } from '@/lib/types';
+
+/**
+ * SubmitButton must be a separate component because useFormStatus() requires
+ * being called from within a <form> context (as a child of the form element).
+ * It cannot be called directly in EventForm since that component renders the form itself.
+ */
+const SubmitButton = () => {
+  const { pending } = useFormStatus();
+  const t = useTranslations('eventForm');
+
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? t('saving') : t('saveEvent')}
+    </Button>
+  );
+};
 
 type EventFormProps = {
-  archetypes: string[];
   mode: 'create' | 'edit';
   eventId?: string;
-  initialEventData?: EventFormInputData;
-  initialMatches?: MatchInputData[];
+  initialEventData?: EventFormData;
+  initialMatches?: MatchInput[];
 };
 
 const EventForm = ({
-  archetypes,
   mode,
   eventId,
   initialEventData,
@@ -30,19 +51,66 @@ const EventForm = ({
 }: EventFormProps) => {
   const t = useTranslations('eventForm');
 
-  const {
-    eventData,
-    matches,
-    handleEventChange,
-    handleMatchChange,
-    addMatch,
-    removeMatch,
-    handleSubmit,
-  } = useEventForm({ mode, eventId, initialEventData, initialMatches });
+  const action =
+    mode === 'create' ? createEventWithMatches : updateEventWithMatches;
+
+  const [state, formAction] = useActionState<ActionResult | null, FormData>(
+    action,
+    null,
+  );
+
+  // Inline state management
+  const [eventData, setEventData] = useState<EventFormData>(
+    initialEventData || {
+      eventName: '',
+      eventDate: '',
+      notes: '',
+    },
+  );
+
+  const [matches, setMatches] = useState<MatchInput[]>(
+    initialMatches || [{ opponentArchetype: '', wins: 0, losses: 0 }],
+  );
+
+  const handleEventChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setEventData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleMatchChange = ({
+    index,
+    field,
+    value,
+  }: {
+    index: number;
+    field: keyof MatchInput;
+    value: string | number;
+  }) => {
+    setMatches(prev => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  const addMatch = () => {
+    setMatches(prev => [
+      ...prev,
+      { opponentArchetype: '', wins: 0, losses: 0 },
+    ]);
+  };
+
+  const removeMatch = (index: number) => {
+    setMatches(prev => prev.filter((_, i) => i !== index));
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form action={formAction}>
       <SpaceChildrenVertically>
+        <input type="hidden" name="eventId" value={eventId} />
+
         <Input
           type="text"
           id="eventName"
@@ -61,8 +129,15 @@ const EventForm = ({
           onChange={handleEventChange}
           required
         />
-        {matches.map((match: MatchInputData, index: number) => (
+        {matches.map((match: MatchInput, index: number) => (
           <Card key={match.id || index}>
+            {match.id && (
+              <input
+                type="hidden"
+                name={`matches[${index}].id`}
+                value={match.id}
+              />
+            )}
             <CardTitle>
               <h3>
                 {t('matchLabel')} {index + 1}
@@ -75,8 +150,9 @@ const EventForm = ({
               </Button>
             </CardTitle>
             <CardContent>
-              <DataList
+              <ArchetypeList
                 id={`opponent-${index}`}
+                name={`matches[${index}].opponentArchetype`}
                 label={t('opponentArchetype')}
                 value={match.opponentArchetype}
                 onChange={e =>
@@ -86,12 +162,12 @@ const EventForm = ({
                     value: e.target.value,
                   })
                 }
-                options={archetypes}
                 required
               />
               <Input
                 type="number"
                 id={`wins-${index}`}
+                name={`matches[${index}].wins`}
                 label={t('wins')}
                 value={match.wins}
                 onChange={e =>
@@ -107,6 +183,7 @@ const EventForm = ({
               <Input
                 type="number"
                 id={`losses-${index}`}
+                name={`matches[${index}].losses`}
                 label={t('losses')}
                 value={match.losses}
                 onChange={e =>
@@ -133,9 +210,8 @@ const EventForm = ({
           rows={4}
           isMultiline
         />
-        <Button type="submit">
-          {mode === 'create' ? t('createEvent') : t('updateEvent')}
-        </Button>
+        {state?.error && <ErrorMessage error={state.error} />}
+        <SubmitButton />
       </SpaceChildrenVertically>
     </form>
   );

@@ -1,7 +1,8 @@
+import ArchetypeList from './ArchetypeList';
 import Breadcrumb from './Breadcrumb';
 import Button from './Button';
 import { Card, CardContent, CardTitle } from './Card';
-import DataList from './DataList';
+import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
 import Input from './Input';
 import MatchTable from './MatchTable';
@@ -10,12 +11,13 @@ import PageTitle from './PageTitle';
 import SpaceChildrenVertically from './SpaceChildrenVertically';
 
 export {
+  ArchetypeList,
   Breadcrumb,
   Button,
   Card,
   CardContent,
   CardTitle,
-  DataList,
+  ErrorMessage,
   FlexRowBetween,
   Input,
   MatchTable,

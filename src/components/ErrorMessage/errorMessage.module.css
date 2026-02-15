@@ -1,0 +1,7 @@
+.error {
+  padding: var(--spacing-md);
+  background-color: var(--color-error-bg);
+  color: var(--color-error-text);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-md);
+}

@@ -1,34 +1,53 @@
 'use client';
 
-import { useState } from 'react';
-import classes from './dataList.module.css';
+import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { getOpponentArchetypes } from '@/app/actions/archetypes';
+import classes from './archetypeList.module.css';
 import { cn } from '@/lib/utils';
 import { Button, Input } from '../';
 
-type DatalistInputProps = {
+type ArchetypeListProps = {
   label?: string;
-  options: string[];
   id?: string;
+  name?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   className?: string;
 };
 
-const DatalistInput = ({
+const ArchetypeList = ({
   className = '',
   label,
-  options,
   id,
+  name,
   value,
   onChange,
   required,
-}: DatalistInputProps) => {
+}: ArchetypeListProps) => {
+  const t = useTranslations('archetypeList');
   const ADD_NEW_VALUE = '__ADD_NEW__';
 
-  const [isAddingNew, setIsAddingNew] = useState(
-    !options.includes(value) && value !== '',
-  );
+  const [archetypes, setArchetypes] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAddingNew, setIsAddingNew] = useState(false);
+
+  useEffect(() => {
+    const loadArchetypes = async () => {
+      const data = await getOpponentArchetypes();
+
+      setArchetypes(data);
+      setIsLoading(false);
+
+      // If current value is not in options and not empty, switch to add new mode
+      if (value && !data.includes(value)) {
+        setIsAddingNew(true);
+      }
+    };
+
+    loadArchetypes();
+  }, [value]);
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value === ADD_NEW_VALUE) {
@@ -50,6 +69,16 @@ const DatalistInput = ({
     }
   };
 
+  const handleCancel = () => {
+    setIsAddingNew(false);
+
+    const syntheticEvent = {
+      target: { value: '' },
+    } as React.ChangeEvent<HTMLInputElement>;
+
+    onChange(syntheticEvent);
+  };
+
   return (
     <div className={classes.inputContainer}>
       {label && <label htmlFor={id}>{label}</label>}
@@ -58,46 +87,40 @@ const DatalistInput = ({
           <Input
             type="text"
             id={id}
+            name={name}
             value={value}
             onChange={onChange}
             required={required}
             className={className}
-            placeholder="Enter new archetype..."
+            placeholder={t('enterNewArchetype')}
           />
-          <Button
-            type="button"
-            onClick={() => {
-              setIsAddingNew(false);
-
-              const syntheticEvent = {
-                target: { value: '' },
-              } as React.ChangeEvent<HTMLInputElement>;
-
-              onChange(syntheticEvent);
-            }}
-          >
-            Cancel
+          <Button type="button" onClick={handleCancel}>
+            {t('cancel')}
           </Button>
         </div>
       ) : (
         <select
           id={id}
+          name={name}
           value={value}
           onChange={handleSelectChange}
           required={required}
+          disabled={isLoading}
           className={cn(classes.select, className)}
         >
-          <option value="">Select an archetype...</option>
-          {options.map(option => (
+          <option value="">
+            {isLoading ? t('loading') : t('selectArchetype')}
+          </option>
+          {archetypes.map(option => (
             <option key={option} value={option}>
               {option}
             </option>
           ))}
-          <option value={ADD_NEW_VALUE}>+ Add New...</option>
+          <option value={ADD_NEW_VALUE}>{t('addNew')}</option>
         </select>
       )}
     </div>
   );
 };
 
-export default DatalistInput;
+export default ArchetypeList;
