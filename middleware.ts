@@ -6,9 +6,8 @@ const middleware = createMiddleware({
   localePrefix: 'never',
 });
 
-const config = {
+export default middleware;
+
+export const config = {
   matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
 };
-
-export default middleware;
-export { config };

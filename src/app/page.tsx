@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
-import Page from '@/components/page/page';
-import Button from '@/components/button';
+import { Page, Button } from '@/components';
 import classes from './app.module.css';
 
 const HomePage = async () => {

@@ -1,4 +1,4 @@
-import SpaceChildrenVertically from '@/components/space-children-vertically';
+import SpaceChildrenVertically from '@/components/SpaceChildrenVertically';
 
 type CardContentProps = {
   children: React.ReactNode;

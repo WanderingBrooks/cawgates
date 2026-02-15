@@ -1,9 +1,7 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
-import Page from '@/components/page/page';
-import { Card, CardTitle, CardContent } from '@/components/card';
-import Button from '@/components/button';
+import { Page, Card, CardTitle, CardContent, Button } from '@/components';
 import classes from '../app.module.css';
 
 const EventsPage = async () => {
@@ -34,7 +32,9 @@ const EventsPage = async () => {
                 <span>{new Date(event.date).toLocaleDateString()}</span>
               </CardTitle>
               <CardContent>
-                <p>{t('matchCount')}: {event._count.matches}</p>
+                <p>
+                  {t('matchCount')}: {event._count.matches}
+                </p>
               </CardContent>
             </Card>
           </Link>

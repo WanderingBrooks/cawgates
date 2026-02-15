@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
-import Page from '@/components/page/page';
-import Button from '@/components/button';
-import EventForm from '../event-form';
+import { Page, Button } from '@/components';
+import EventForm from '../EventForm';
 import classes from '../../app.module.css';
 
 const CreateEventPage = async () => {

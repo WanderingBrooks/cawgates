@@ -1,4 +1,4 @@
-import classes from './space-children-vertically.module.css';
+import classes from './spaceChildrenVertically.module.css';
 import { cn } from '@/lib/utils';
 
 type SpaceChildrenVerticallyProps = {

@@ -1,10 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import classes from './datalist-input.module.css';
+import classes from './dataList.module.css';
 import { cn } from '@/lib/utils';
-import Button from '../button';
-import Input from '../input';
+import { Button, Input } from '../';
 
 type DatalistInputProps = {
   label?: string;

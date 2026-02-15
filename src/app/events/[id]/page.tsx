@@ -2,10 +2,9 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
-import Page from '@/components/page/page';
+import { Page, Button } from '@/components';
 import classes from '../../app.module.css';
-import Button from '@/components/button';
-import DeleteEventButton from './delete-event-button';
+import DeleteEventButton from './DeleteEventButton';
 import Markdown from 'react-markdown';
 
 const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {

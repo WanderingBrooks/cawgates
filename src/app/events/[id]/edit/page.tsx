@@ -1,9 +1,8 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import Page from '@/components/page/page';
-import Button from '@/components/button';
-import EventForm from '../../event-form';
+import { Page, Button } from '@/components';
+import EventForm from '../../EventForm';
 import classes from '../../../app.module.css';
 import { EventFormData, MatchData } from '@/lib/types';
 

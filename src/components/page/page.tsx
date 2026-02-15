@@ -1,4 +1,4 @@
-import SpaceChildrenVertically from '../space-children-vertically';
+import SpaceChildrenVertically from '../SpaceChildrenVertically';
 import classes from './page.module.css';
 
 const Page = ({ children }: { children: React.ReactNode }) => {

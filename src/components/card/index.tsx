@@ -1,5 +1,5 @@
-import Card from './card';
-import CardTitle from './card-title';
-import CardContent from './card-content';
+import Card from './Card';
+import CardTitle from './CardTitle';
+import CardContent from './CardContent';
 
 export { Card, CardTitle, CardContent };

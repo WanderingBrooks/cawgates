@@ -1,13 +1,35 @@
 'use client';
 
-import Button from '@/components/button';
-import Input from '@/components/input';
-import DatalistInput from '@/components/datalist-input';
-import useCreateEventWithMatches from './useCreateEventWithMatches';
-import { Card, CardTitle, CardContent } from '@/components/card';
-import SpaceChildrenVertically from '@/components/space-children-vertically';
+import { useTranslations } from 'next-intl';
+import useEventForm from './useEventForm';
+import {
+  Card,
+  CardTitle,
+  CardContent,
+  Button,
+  Input,
+  DataList,
+  SpaceChildrenVertically,
+} from '@/components';
+import { EventFormData, MatchData } from '@/lib/types';
 
-const CreateEventForm = ({ archetypes }: { archetypes: string[] }) => {
+type EventFormProps = {
+  archetypes: string[];
+  mode: 'create' | 'edit';
+  eventId?: string;
+  initialEventData?: EventFormData;
+  initialMatches?: MatchData[];
+};
+
+const EventForm = ({
+  archetypes,
+  mode,
+  eventId,
+  initialEventData,
+  initialMatches,
+}: EventFormProps) => {
+  const t = useTranslations('eventForm');
+
   const {
     eventData,
     matches,
@@ -16,7 +38,7 @@ const CreateEventForm = ({ archetypes }: { archetypes: string[] }) => {
     addMatch,
     removeMatch,
     handleSubmit,
-  } = useCreateEventWithMatches();
+  } = useEventForm({ mode, eventId, initialEventData, initialMatches });
 
   return (
     <form onSubmit={handleSubmit}>
@@ -25,7 +47,7 @@ const CreateEventForm = ({ archetypes }: { archetypes: string[] }) => {
           type="text"
           id="eventName"
           name="eventName"
-          label="Event Name *"
+          label={t('eventName')}
           value={eventData.eventName}
           onChange={handleEventChange}
           required
@@ -34,26 +56,28 @@ const CreateEventForm = ({ archetypes }: { archetypes: string[] }) => {
           type="date"
           id="eventDate"
           name="eventDate"
-          label="Event Date *"
+          label={t('eventDate')}
           value={eventData.eventDate}
           onChange={handleEventChange}
           required
         />
-        {matches.map((match, index) => (
-          <Card key={index}>
+        {matches.map((match: MatchData, index: number) => (
+          <Card key={match.id || index}>
             <CardTitle>
-              <h3>Match {index + 1}</h3>
+              <h3>
+                {t('matchLabel')} {index + 1}
+              </h3>
               <Button
                 disabled={matches.length <= 1}
                 onClick={() => removeMatch(index)}
               >
-                Remove
+                {t('removeMatch')}
               </Button>
             </CardTitle>
             <CardContent>
-              <DatalistInput
+              <DataList
                 id={`opponent-${index}`}
-                label="Opponent Archetype *"
+                label={t('opponentArchetype')}
                 value={match.opponentArchetype}
                 onChange={e =>
                   handleMatchChange({
@@ -68,7 +92,7 @@ const CreateEventForm = ({ archetypes }: { archetypes: string[] }) => {
               <Input
                 type="number"
                 id={`wins-${index}`}
-                label="Wins *"
+                label={t('wins')}
                 value={match.wins}
                 onChange={e =>
                   handleMatchChange({
@@ -83,7 +107,7 @@ const CreateEventForm = ({ archetypes }: { archetypes: string[] }) => {
               <Input
                 type="number"
                 id={`losses-${index}`}
-                label="Losses *"
+                label={t('losses')}
                 value={match.losses}
                 onChange={e =>
                   handleMatchChange({
@@ -98,20 +122,23 @@ const CreateEventForm = ({ archetypes }: { archetypes: string[] }) => {
             </CardContent>
           </Card>
         ))}
+        <Button onClick={addMatch}>{t('addMatch')}</Button>
+
         <Input
           id="notes"
           name="notes"
-          label="Notes"
+          label={t('notes')}
           value={eventData.notes}
           onChange={handleEventChange}
           rows={4}
           isMultiline
         />
-        <Button onClick={addMatch}>Add Match</Button>
-        <Button type="submit">Create Event</Button>
+        <Button type="submit">
+          {mode === 'create' ? t('createEvent') : t('updateEvent')}
+        </Button>
       </SpaceChildrenVertically>
     </form>
   );
 };
 
-export default CreateEventForm;
+export default EventForm;
