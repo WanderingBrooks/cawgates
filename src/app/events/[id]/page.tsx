@@ -41,7 +41,7 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <Page>
-      <PageTitle title={event.name} />
+      <PageTitle title={event.name} showLogout />
       <p>{new Date(event.date).toLocaleDateString()}</p>
       <MatchTable rows={tableRows} />
       {event.notes && <Markdown>{event.notes}</Markdown>}

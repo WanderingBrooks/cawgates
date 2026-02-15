@@ -7,7 +7,7 @@ const CreateEventPage = async () => {
 
   return (
     <Page>
-      <PageTitle title={t('title')} />
+      <PageTitle title={t('title')} showLogout />
       <EventForm mode="create" />
     </Page>
   );

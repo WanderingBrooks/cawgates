@@ -16,7 +16,7 @@ const MatchStatistics = async () => {
 
   return (
     <Page>
-      <PageTitle title={t('title')} />
+      <PageTitle title={t('title')} showLogout />
 
       <Link href="/events">
         <Button variant="primary">{t('viewEvents')}</Button>

@@ -22,7 +22,7 @@ const SubmitButton = () => {
   const t = useTranslations('login');
 
   return (
-    <Button type="submit" disabled={pending}>
+    <Button type="submit" disabled={pending} variant="primary">
       {pending ? t('submitting') : t('submit')}
     </Button>
   );

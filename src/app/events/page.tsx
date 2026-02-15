@@ -27,7 +27,7 @@ const EventsPage = async () => {
 
   return (
     <Page>
-      <PageTitle title={t('title')} />
+      <PageTitle title={t('title')} showLogout />
       <Link href="/events/create">
         <Button variant="primary">{t('createEvent')}</Button>
       </Link>

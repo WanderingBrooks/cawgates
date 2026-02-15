@@ -21,7 +21,7 @@ const SubmitButton = () => {
   const t = useTranslations('register');
 
   return (
-    <Button type="submit" disabled={pending}>
+    <Button type="submit" disabled={pending} variant="primary">
       {pending ? t('submitting') : t('submit')}
     </Button>
   );

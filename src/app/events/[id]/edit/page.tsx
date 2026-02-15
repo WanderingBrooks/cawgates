@@ -45,7 +45,7 @@ const EditEventPage = async ({
 
   return (
     <Page>
-      <PageTitle title={t('title')} />
+      <PageTitle title={t('title')} showLogout />
       <EventForm
         mode="edit"
         eventId={id}
