@@ -51,17 +51,7 @@ const HomePage = async () => {
         </Link>
       </div>
 
-      <MatchTable
-        rows={tableRows}
-        showWinRate
-        emptyMessage={t('noMatches')}
-        labels={{
-          archetype: t('archetype'),
-          wins: t('wins'),
-          losses: t('losses'),
-          winRate: t('winRate'),
-        }}
-      />
+      <MatchTable rows={tableRows} showWinRate />
     </Page>
   );
 };

@@ -32,9 +32,7 @@ const EventsPage = async () => {
                 <span>{new Date(event.date).toLocaleDateString()}</span>
               </CardTitle>
               <CardContent>
-                <p>
-                  {t('matchCount')}: {event._count.matches}
-                </p>
+                <p>{t('matchCount', { count: event._count.matches })}</p>
               </CardContent>
             </Card>
           </Link>

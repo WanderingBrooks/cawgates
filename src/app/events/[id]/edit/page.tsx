@@ -5,12 +5,15 @@ import { Page, Button } from '@/components';
 import EventForm from '../../EventForm';
 import classes from '../../../app.module.css';
 import { EventFormInputData, MatchInputData } from '@/lib/types';
+import { getTranslations } from 'next-intl/server';
 
 const EditEventPage = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
+  const t = await getTranslations('editEvent');
+
   const { id } = await params;
 
   const event = await prisma.event.findUnique({
@@ -46,9 +49,9 @@ const EditEventPage = async ({
   return (
     <Page>
       <div className={classes.pageTitle}>
-        <h1>Edit Event</h1>
+        <h1>{t('title')}</h1>
         <Link href={`/events/${id}`}>
-          <Button>Cancel</Button>
+          <Button>{t('backToEvent')}</Button>
         </Link>
       </div>
 

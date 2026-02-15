@@ -6,7 +6,7 @@ import EventForm from '../EventForm';
 import classes from '../../app.module.css';
 
 const CreateEventPage = async () => {
-  const t = await getTranslations('events');
+  const t = await getTranslations('createEvent');
 
   const matches = await prisma.match.findMany({
     select: { opponentArchetype: true },
@@ -19,9 +19,9 @@ const CreateEventPage = async () => {
   return (
     <Page>
       <div className={classes.pageTitle}>
-        <h1>{t('createEvent')}</h1>
+        <h1>{t('title')}</h1>
         <Link href="/events">
-          <Button>{t('title')}</Button>
+          <Button>{t('viewEvents')}</Button>
         </Link>
       </div>
 

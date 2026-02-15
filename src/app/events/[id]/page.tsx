@@ -8,8 +8,8 @@ import DeleteEventButton from './DeleteEventButton';
 import Markdown from 'react-markdown';
 
 const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const tEvents = await getTranslations('events');
-  const tHome = await getTranslations('home');
+  const t = await getTranslations('event');
+
   const { id } = await params;
 
   const event = await prisma.event.findUnique({
@@ -33,25 +33,15 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
       <div className={classes.pageTitle}>
         <h1>{event.name}</h1>
         <Link href="/events">
-          <Button>{tEvents('title')}</Button>
+          <Button>{t('viewEvents')}</Button>
         </Link>
       </div>
       <p>{new Date(event.date).toLocaleDateString()}</p>
-      <MatchTable
-        rows={tableRows}
-        emptyMessage={tEvents('noMatches')}
-        labels={{
-          archetype: tHome('archetype'),
-          wins: tHome('wins'),
-          losses: tHome('losses'),
-          winRate: tHome('winRate'),
-        }}
-      />
+      <MatchTable rows={tableRows} />
       {event.notes && <Markdown>{event.notes}</Markdown>}
-
       <div className={classes.flexRowBetween}>
         <Link href={`/events/${id}/edit`}>
-          <Button>{tEvents('edit')}</Button>
+          <Button>{t('edit')}</Button>
         </Link>
         <DeleteEventButton eventId={id} />
       </div>

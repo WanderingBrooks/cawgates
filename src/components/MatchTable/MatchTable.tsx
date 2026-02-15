@@ -1,3 +1,5 @@
+import { getTranslations } from 'next-intl/server';
+
 type MatchTableRow = {
   key: string;
   archetype: string;
@@ -8,33 +10,23 @@ type MatchTableRow = {
 type MatchTableProps = {
   rows: MatchTableRow[];
   showWinRate?: boolean;
-  emptyMessage?: string;
-  labels: {
-    archetype: string;
-    wins: string;
-    losses: string;
-    winRate: string;
-  };
 };
 
-const MatchTable = ({
-  rows,
-  showWinRate = false,
-  emptyMessage,
-  labels,
-}: MatchTableProps) => {
-  if (rows.length === 0 && emptyMessage) {
-    return <p>{emptyMessage}</p>;
+const MatchTable = async ({ rows, showWinRate = false }: MatchTableProps) => {
+  const t = await getTranslations('matchTable');
+
+  if (rows.length === 0) {
+    return <p>{t('noMatches')}</p>;
   }
 
   return (
     <table>
       <thead>
         <tr>
-          <th>{labels.archetype}</th>
-          <th>{labels.wins}</th>
-          <th>{labels.losses}</th>
-          {showWinRate && <th>{labels.winRate}</th>}
+          <th>{t('archetype')}</th>
+          <th>{t('wins')}</th>
+          <th>{t('losses')}</th>
+          {showWinRate && <th>{t('winRate')}</th>}
         </tr>
       </thead>
       <tbody>

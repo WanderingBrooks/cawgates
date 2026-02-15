@@ -5,7 +5,7 @@ import { deleteEventAndMatches } from '@/app/actions/events';
 import { Button } from '@/components';
 
 const DeleteEventButton = ({ eventId }: { eventId: string }) => {
-  const t = useTranslations('events');
+  const t = useTranslations('deleteEventButton');
 
   const handleDelete = async () => {
     if (confirm(t('deleteConfirm'))) {

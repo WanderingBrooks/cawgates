@@ -1,23 +1,21 @@
 {
   "home": {
     "title": "Match Records",
-    "viewEvents": "View Events",
-    "noMatches": "No matches recorded yet",
-    "archetype": "Archetype",
-    "wins": "Wins",
-    "losses": "Losses",
-    "winRate": "Win Rate"
+    "viewEvents": "View Events"
   },
   "events": {
     "title": "Events",
     "createEvent": "Create Event",
-    "matchCount": "Match Count",
-    "noEvents": "No events yet",
-    "noMatches": "No matches found",
-    "edit": "Edit",
-    "delete": "Delete",
-    "deleteConfirm": "Are you sure you want to delete this event?",
-    "viewMatches": "View Matches"
+    "matchCount": "Match Count: {count}",
+    "noEvents": "No events yet"
+  },
+  "createEvent": {
+    "title": "Create New Event",
+    "viewEvents": "View Events"
+  },
+  "editEvent": {
+    "title": "Edit Event",
+    "backToEvent": "Back to event"
   },
   "eventForm": {
     "eventName": "Event Name *",
@@ -32,5 +30,20 @@
     "wins": "Wins *",
     "losses": "Losses *",
     "matchLabel": "Match"
+  },
+  "event": {
+    "viewEvents": "View Events",
+    "edit": "Edit"
+  },
+  "deleteEventButton": {
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this event?"
+  },
+  "matchTable": {
+    "archetype": "Archetype",
+    "wins": "Wins",
+    "losses": "Losses",
+    "winRate": "Win Rate",
+    "noMatches": "No matches found"
   }
 }
