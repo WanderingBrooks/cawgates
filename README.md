@@ -45,10 +45,7 @@ A Magic: The Gathering match tracker. Track your tournament events, record match
 
 ## Production
 
-The app is currently deployed at **[https://cawgates.제이슨.com](https://cawgates.제이슨.com)** and running on [Render.com](https://render.com).
+The app is currently deployed at **[cawgates.ajasonb.com](https://cawgates.ajasonb.com/)** and running on [Vercel](https://vercel.com) with a [Supabase](https://supabase.com) postgres instance.
 
-## Future Improvements
-
-1. Make a table for user_defined_archetypes. Make it possible to view / edit archetypes as a seperate entity
-2. Make it possible to view all matches / events where you played against an archetype
-3. Make it possible for a user to track events for different archetypes they play. That should be the first thing they chose when coming into the app. What archetype do they want to view / Add an event for?
+Migrations are run through a github action which is run before the deployment to Vercel. Migrations are thus written
+to be backwards compatible to the previous deployment.
