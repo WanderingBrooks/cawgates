@@ -14,6 +14,11 @@ jobs:
       group: prisma-migrate
       cancel-in-progress: false
 
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      NODE_ENV: production
+      JWT_SECRET: zyxwvutsrqponmlkjihgfedcbaabcdefghijklmnopqrstuvwxyzs
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -29,7 +34,3 @@ jobs:
 
       - name: Run Prisma Migrations
         run: npx prisma migrate deploy
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          NODE_ENV: ${{ secrets.NODE_ENV }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
