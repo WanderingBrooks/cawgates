@@ -1,0 +1,1 @@
+We need to make username a unique column and add a safety check to registerUser to finish this.

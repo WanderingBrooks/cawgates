@@ -17,7 +17,7 @@ const login = async (
 ): Promise<ActionResult> => {
   try {
     const data = {
-      email: formData.get('email') as string,
+      username: formData.get('username') as string,
       password: formData.get('password') as string,
     };
 
@@ -33,15 +33,15 @@ const login = async (
       };
     }
 
-    // Find user by email
+    // Find user by username
     const user = await prisma.user.findUnique({
-      where: { email: result.data.email },
+      where: { username: result.data.username },
     });
 
     if (!user) {
       return {
         success: false,
-        error: 'Invalid email or password',
+        error: 'Invalid username or password',
       };
     }
 

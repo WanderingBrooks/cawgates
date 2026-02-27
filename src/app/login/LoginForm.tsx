@@ -37,7 +37,7 @@ const LoginForm = () => {
   );
 
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
 
@@ -50,11 +50,11 @@ const LoginForm = () => {
     <form action={formAction}>
       <SpaceChildrenVertically>
         <Input
-          type="email"
-          id="email"
-          name="email"
-          label={t('email')}
-          value={formData.email}
+          type="username"
+          id="username"
+          name="username"
+          label={t('username')}
+          value={formData.username}
           onChange={handleChange}
           required
           autoComplete="email"
