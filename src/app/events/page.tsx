@@ -25,25 +25,6 @@ const EventsPage = async () => {
     include: { matches: true },
   });
 
-  const record = events
-    .flatMap(event => event.matches)
-    .reduce(
-      (recordSoFar, match) => {
-        const copyOfRecordSoFar = { ...recordSoFar };
-
-        if (match.wins > match.losses) {
-          copyOfRecordSoFar.wins += 1;
-        } else if (match.losses > match.wins) {
-          copyOfRecordSoFar.losses += 1;
-        } else {
-          copyOfRecordSoFar.ties += 1;
-        }
-
-        return copyOfRecordSoFar;
-      },
-      { wins: 0, losses: 0, ties: 0 },
-    );
-
   return (
     <Page>
       <PageTitle title={t('title')} showLogout />
@@ -54,19 +35,38 @@ const EventsPage = async () => {
       {events.length === 0 ? (
         <p>{t('noEvents')}</p>
       ) : (
-        events.map(event => (
-          <Link key={event.id} href={`/events/${event.id}`}>
-            <Card>
-              <CardTitle>
-                <h2>{event.name}</h2>
-                <span>{new Date(event.date).toLocaleDateString()}</span>
-              </CardTitle>
-              <CardContent>
-                <p>{t('record', record)}</p>
-              </CardContent>
-            </Card>
-          </Link>
-        ))
+        events.map(event => {
+          const record = event.matches.reduce(
+            (recordSoFar, match) => {
+              const copyOfRecordSoFar = { ...recordSoFar };
+
+              if (match.wins > match.losses) {
+                copyOfRecordSoFar.wins += 1;
+              } else if (match.losses > match.wins) {
+                copyOfRecordSoFar.losses += 1;
+              } else {
+                copyOfRecordSoFar.ties += 1;
+              }
+
+              return copyOfRecordSoFar;
+            },
+            { wins: 0, losses: 0, ties: 0 },
+          );
+
+          return (
+            <Link key={event.id} href={`/events/${event.id}`}>
+              <Card>
+                <CardTitle>
+                  <h2>{event.name}</h2>
+                  <span>{new Date(event.date).toLocaleDateString()}</span>
+                </CardTitle>
+                <CardContent>
+                  <p>{t('record', record)}</p>
+                </CardContent>
+              </Card>
+            </Link>
+          );
+        })
       )}
     </Page>
   );
