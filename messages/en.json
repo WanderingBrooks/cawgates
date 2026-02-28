@@ -6,7 +6,7 @@
   "events": {
     "title": "Events",
     "createEvent": "Create Event",
-    "matchCount": "Match Count: {count}",
+    "record": "{wins} - {losses} - {ties}",
     "noEvents": "No events yet"
   },
   "createEvent": {
