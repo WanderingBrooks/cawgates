@@ -32,6 +32,12 @@ export type MatchInput = z.infer<typeof matchSchema>;
 export type CreateEventInput = z.infer<typeof createEventSchema>;
 export type UpdateEventInput = z.infer<typeof updateEventSchema>;
 
+// Form state type that allows empty strings for wins/losses during input
+export type MatchInputForm = Omit<MatchInput, 'wins' | 'losses'> & {
+  wins: number | '';
+  losses: number | '';
+};
+
 // Helper type for event form data (event fields only, no matches)
 export type EventFormData = Pick<
   CreateEventInput,
