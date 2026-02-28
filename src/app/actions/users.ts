@@ -37,16 +37,29 @@ const registerUser = async (
       };
     }
 
-    // Check if email already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email: result.data.email },
+    // Check if email or username already exists
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [{ email: result.data.email }, { username: result.data.username }],
+      },
     });
 
     if (existingUser) {
-      return {
-        success: false,
-        error: 'Email already registered',
-      };
+      if (existingUser.email === result.data.email) {
+        return {
+          success: false,
+          error:
+            'An account with that email already exists. Please log in instead.',
+        };
+      }
+
+      if (existingUser.username === result.data.username) {
+        return {
+          success: false,
+          error:
+            'An account with that username already exists. Please choose a different username.',
+        };
+      }
     }
 
     // Hash password
