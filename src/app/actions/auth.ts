@@ -54,7 +54,7 @@ const login = async (
     if (!isPasswordValid) {
       return {
         success: false,
-        error: 'Invalid email or password',
+        error: 'Invalid username or password',
       };
     }
 
