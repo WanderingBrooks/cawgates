@@ -19,7 +19,7 @@ import {
   SpaceChildrenVertically,
   FlexRowBetween,
 } from '@/components';
-import { EventFormData, MatchInput } from '@/lib/types';
+import { EventFormData, MatchInput, MatchInputForm } from '@/lib/types';
 import Link from 'next/link';
 
 /**
@@ -70,8 +70,12 @@ const EventForm = ({
     },
   );
 
-  const [matches, setMatches] = useState<MatchInput[]>(
-    initialMatches || [{ opponentArchetype: '', wins: 0, losses: 0 }],
+  const [matches, setMatches] = useState<MatchInputForm[]>(
+    initialMatches?.map(m => ({
+      ...m,
+      wins: m.wins as number | '',
+      losses: m.losses as number | '',
+    })) || [{ opponentArchetype: '', wins: '', losses: '' }],
   );
 
   const handleEventChange = (
@@ -87,7 +91,7 @@ const EventForm = ({
     value,
   }: {
     index: number;
-    field: keyof MatchInput;
+    field: keyof MatchInputForm;
     value: string | number;
   }) => {
     setMatches(prev => {
@@ -100,7 +104,7 @@ const EventForm = ({
   const addMatch = () => {
     setMatches(prev => [
       ...prev,
-      { opponentArchetype: '', wins: 0, losses: 0 },
+      { opponentArchetype: '', wins: '', losses: '' },
     ]);
   };
 
@@ -131,8 +135,8 @@ const EventForm = ({
           onChange={handleEventChange}
           required
         />
-        {matches.map((match: MatchInput, index: number) => (
-          <Card key={match.id || index}>
+        {matches.map((match: MatchInputForm, index: number) => (
+          <Card key={match.id ? `id-${match.id}` : `index-${index}`}>
             {match.id && (
               <input
                 type="hidden"
@@ -177,10 +181,12 @@ const EventForm = ({
                   handleMatchChange({
                     index,
                     field: 'wins',
-                    value: parseInt(e.target.value) || 0,
+                    value:
+                      e.target.value === ''
+                        ? ''
+                        : parseInt(e.target.value, 10) || 0,
                   })
                 }
-                min="0"
                 required
               />
               <Input
@@ -193,10 +199,12 @@ const EventForm = ({
                   handleMatchChange({
                     index,
                     field: 'losses',
-                    value: parseInt(e.target.value) || 0,
+                    value:
+                      e.target.value === ''
+                        ? ''
+                        : parseInt(e.target.value, 10) || 0,
                   })
                 }
-                min="0"
                 required
               />
             </CardContent>
