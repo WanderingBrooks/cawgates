@@ -57,7 +57,7 @@ const LoginForm = () => {
           value={formData.username}
           onChange={handleChange}
           required
-          autoComplete="email"
+          autoComplete="username"
         />
         <Input
           type="password"
