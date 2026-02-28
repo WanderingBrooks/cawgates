@@ -22,8 +22,27 @@ const EventsPage = async () => {
   const events = await prisma.event.findMany({
     where: { userId: user.userId },
     orderBy: { date: 'desc' },
-    include: { _count: { select: { matches: true } } },
+    include: { matches: true },
   });
+
+  const record = events
+    .flatMap(event => event.matches)
+    .reduce(
+      (recordSoFar, match) => {
+        const copyOfRecordSoFar = { ...recordSoFar };
+
+        if (match.wins > match.losses) {
+          copyOfRecordSoFar.wins += 1;
+        } else if (match.losses > match.wins) {
+          copyOfRecordSoFar.losses += 1;
+        } else {
+          copyOfRecordSoFar.ties += 1;
+        }
+
+        return copyOfRecordSoFar;
+      },
+      { wins: 0, losses: 0, ties: 0 },
+    );
 
   return (
     <Page>
@@ -43,7 +62,7 @@ const EventsPage = async () => {
                 <span>{new Date(event.date).toLocaleDateString()}</span>
               </CardTitle>
               <CardContent>
-                <p>{t('matchCount', { count: event._count.matches })}</p>
+                <p>{t('record', record)}</p>
               </CardContent>
             </Card>
           </Link>
