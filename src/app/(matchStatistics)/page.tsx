@@ -21,7 +21,7 @@ const MatchStatistics = async () => {
       <Link href="/events">
         <Button variant="primary">{t('viewEvents')}</Button>
       </Link>
-      <MatchTable rows={matchStatistics} showWinRate />
+      <MatchTable rows={matchStatistics} />
     </Page>
   );
 };
