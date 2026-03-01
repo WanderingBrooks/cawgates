@@ -19,7 +19,7 @@ const getMatchStatistics = async ({ userId }: { userId: string }) => {
       const archetype = match.opponentArchetype;
 
       if (!acc[archetype]) {
-        acc[archetype] = { wins: 0, losses: 0 };
+        acc[archetype] = { wins: 0, losses: 0, winRate: 0 };
       }
 
       acc[archetype].wins += match.wins;
@@ -27,11 +27,36 @@ const getMatchStatistics = async ({ userId }: { userId: string }) => {
 
       return acc;
     },
-    {} as Record<string, { wins: number; losses: number }>,
+    {} as Record<string, { wins: number; losses: number; winRate: number }>,
   );
 
+  // Compute winRate once per archetype.
+  for (const stats of Object.values(archetypeStats)) {
+    const total = stats.wins + stats.losses;
+
+    stats.winRate = total === 0 ? 0 : stats.wins / total;
+  }
+
+  // Sort order:
+  // 1) Total games played (wins + losses) descending — more data first.
+  // 2) Win rate descending for ties in total games (wins/total).
+  // 3) Alphabetical ascending fallback for deterministic ordering.
+  // Note: win rate guards against division-by-zero when total is 0.
   const sortedArchetypes = Object.entries(archetypeStats).sort(
-    ([, a], [, b]) => b.wins + b.losses - (a.wins + a.losses),
+    ([aName, aStats], [bName, bStats]) => {
+      const aTotal = aStats.wins + aStats.losses;
+      const bTotal = bStats.wins + bStats.losses;
+
+      if (bTotal !== aTotal) {
+        return bTotal - aTotal;
+      }
+
+      if (bStats.winRate !== aStats.winRate) {
+        return bStats.winRate - aStats.winRate;
+      }
+
+      return aName.localeCompare(bName);
+    },
   );
 
   const matchStatistics = sortedArchetypes.map(([archetype, stats]) => ({
@@ -39,6 +64,7 @@ const getMatchStatistics = async ({ userId }: { userId: string }) => {
     archetype,
     wins: stats.wins,
     losses: stats.losses,
+    winRate: stats.winRate,
   }));
 
   return matchStatistics;

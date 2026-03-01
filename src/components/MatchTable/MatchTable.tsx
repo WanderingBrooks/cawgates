@@ -5,19 +5,21 @@ type MatchTableRow = {
   archetype: string;
   wins: number;
   losses: number;
+  winRate?: number;
 };
 
 type MatchTableProps = {
   rows: MatchTableRow[];
-  showWinRate?: boolean;
 };
 
-const MatchTable = async ({ rows, showWinRate = false }: MatchTableProps) => {
+const MatchTable = async ({ rows }: MatchTableProps) => {
   const t = await getTranslations('matchTable');
 
   if (rows.length === 0) {
     return <p>{t('noMatches')}</p>;
   }
+
+  const atLeastOneMatchHasWinRate = rows.some(row => row.winRate !== undefined);
 
   return (
     <table>
@@ -26,22 +28,19 @@ const MatchTable = async ({ rows, showWinRate = false }: MatchTableProps) => {
           <th>{t('archetype')}</th>
           <th>{t('wins')}</th>
           <th>{t('losses')}</th>
-          {showWinRate && <th>{t('winRate')}</th>}
+          {atLeastOneMatchHasWinRate && <th>{t('winRate')}</th>}
         </tr>
       </thead>
       <tbody>
         {rows.map(row => {
-          const total = row.wins + row.losses;
-
-          const winRate =
-            total > 0 ? ((row.wins / total) * 100).toFixed(1) : '0.0';
+          const winRate = ((row.winRate ?? 0) * 100).toFixed(1);
 
           return (
             <tr key={row.key}>
               <td>{row.archetype}</td>
               <td>{row.wins}</td>
               <td>{row.losses}</td>
-              {showWinRate && <td>{winRate}%</td>}
+              {atLeastOneMatchHasWinRate && <td>{winRate}%</td>}
             </tr>
           );
         })}
