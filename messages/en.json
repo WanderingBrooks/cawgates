@@ -80,5 +80,8 @@
   },
   "pageTitle": {
     "logout": "Logout"
+  },
+  "loader": {
+    "title": "Loading..."
   }
 }
