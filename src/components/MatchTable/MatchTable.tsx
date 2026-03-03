@@ -6,6 +6,7 @@ type MatchTableRow = {
   wins: number;
   losses: number;
   winRate?: number;
+  total?: number;
 };
 
 type MatchTableProps = {
@@ -20,6 +21,7 @@ const MatchTable = async ({ rows }: MatchTableProps) => {
   }
 
   const atLeastOneMatchHasWinRate = rows.some(row => row.winRate !== undefined);
+  const atLeastOneMatchHasTotal = rows.some(row => row.total !== undefined);
 
   return (
     <table>
@@ -29,6 +31,7 @@ const MatchTable = async ({ rows }: MatchTableProps) => {
           <th>{t('wins')}</th>
           <th>{t('losses')}</th>
           {atLeastOneMatchHasWinRate && <th>{t('winRate')}</th>}
+          {atLeastOneMatchHasTotal && <th>{t('totalGames')}</th>}
         </tr>
       </thead>
       <tbody>
@@ -40,7 +43,10 @@ const MatchTable = async ({ rows }: MatchTableProps) => {
               <td>{row.archetype}</td>
               <td>{row.wins}</td>
               <td>{row.losses}</td>
-              {atLeastOneMatchHasWinRate && <td>{winRate}%</td>}
+              {atLeastOneMatchHasWinRate && (
+                <td>{t('winRateValue', { winRate })}</td>
+              )}
+              {atLeastOneMatchHasTotal && <td>{row.total}</td>}
             </tr>
           );
         })}

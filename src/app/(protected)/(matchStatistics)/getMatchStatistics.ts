@@ -19,22 +19,24 @@ const getMatchStatistics = async ({ userId }: { userId: string }) => {
       const archetype = match.opponentArchetype;
 
       if (!acc[archetype]) {
-        acc[archetype] = { wins: 0, losses: 0, winRate: 0 };
+        acc[archetype] = { wins: 0, losses: 0, winRate: 0, total: 0 };
       }
 
       acc[archetype].wins += match.wins;
       acc[archetype].losses += match.losses;
+      acc[archetype].total += match.losses + match.wins;
 
       return acc;
     },
-    {} as Record<string, { wins: number; losses: number; winRate: number }>,
+    {} as Record<
+      string,
+      { wins: number; losses: number; winRate: number; total: number }
+    >,
   );
 
   // Compute winRate once per archetype.
   for (const stats of Object.values(archetypeStats)) {
-    const total = stats.wins + stats.losses;
-
-    stats.winRate = total === 0 ? 0 : stats.wins / total;
+    stats.winRate = stats.total === 0 ? 0 : stats.wins / stats.total;
   }
 
   // Sort order:
@@ -65,6 +67,7 @@ const getMatchStatistics = async ({ userId }: { userId: string }) => {
     wins: stats.wins,
     losses: stats.losses,
     winRate: stats.winRate,
+    total: stats.total,
   }));
 
   return matchStatistics;
