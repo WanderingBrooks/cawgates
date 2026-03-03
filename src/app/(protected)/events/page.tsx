@@ -2,14 +2,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
 import { getUser } from '@/lib/session';
-import {
-  Page,
-  Card,
-  CardTitle,
-  CardContent,
-  Button,
-  PageTitle,
-} from '@/components';
+import { Card, CardTitle, CardContent, Button, PageTitle } from '@/components';
 
 const EventsPage = async () => {
   const t = await getTranslations('events');
@@ -26,7 +19,7 @@ const EventsPage = async () => {
   });
 
   return (
-    <Page>
+    <>
       <PageTitle title={t('title')} showLogout />
       <Link href="/events/create">
         <Button variant="primary">{t('createEvent')}</Button>
@@ -68,7 +61,7 @@ const EventsPage = async () => {
           );
         })
       )}
-    </Page>
+    </>
   );
 };
 

@@ -6,7 +6,6 @@ import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
 import Input from './Input';
 import MatchTable from './MatchTable';
-import Page from './Page';
 import PageTitle from './PageTitle';
 import SpaceChildrenVertically from './SpaceChildrenVertically';
 
@@ -21,7 +20,6 @@ export {
   FlexRowBetween,
   Input,
   MatchTable,
-  Page,
   PageTitle,
   SpaceChildrenVertically,
 };
