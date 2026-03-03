@@ -1,5 +1,5 @@
 {
-  "home": {
+  "matchStatistics": {
     "title": "Match Records",
     "viewEvents": "View Events"
   },
@@ -76,9 +76,6 @@
     "winRateValue": "{winRate}%",
     "totalGames": "Total Games",
     "noMatches": "No matches found"
-  },
-  "breadcrumbs": {
-    "home": "/"
   },
   "pageTitle": {
     "logout": "Logout"

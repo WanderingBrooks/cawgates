@@ -11,7 +11,7 @@ const MatchStatistics = async () => {
     return null; // Middleware will redirect
   }
 
-  const t = await getTranslations('home');
+  const t = await getTranslations('matchStatistics');
   const matchStatistics = await getMatchStatistics({ userId: user.userId });
 
   return (
