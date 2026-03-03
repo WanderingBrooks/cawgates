@@ -81,7 +81,7 @@
   "pageTitle": {
     "logout": "Logout"
   },
-  "loader": {
+  "loading": {
     "title": "Loading..."
   }
 }
