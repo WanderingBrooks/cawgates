@@ -73,6 +73,8 @@
     "wins": "Wins",
     "losses": "Losses",
     "winRate": "Win Rate",
+    "winRateValue": "{winRate}%",
+    "totalGames": "Total Games",
     "noMatches": "No matches found"
   },
   "breadcrumbs": {
