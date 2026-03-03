@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { getLocale } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { Page } from '@/components';
 
 const metadata: Metadata = { title: 'Cawgates' };
 
@@ -19,7 +20,7 @@ const RootLayout = async ({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <Page>{children}</Page>
         </NextIntlClientProvider>
       </body>
     </html>

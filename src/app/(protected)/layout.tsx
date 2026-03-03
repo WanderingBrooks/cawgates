@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 import { getUser } from '@/lib/session';
-import { Page } from '@/components';
 
 const ProtectedLayout = async ({ children }: { children: React.ReactNode }) => {
   const user = await getUser();
@@ -9,7 +8,7 @@ const ProtectedLayout = async ({ children }: { children: React.ReactNode }) => {
     redirect('/login');
   }
 
-  return <Page>{children}</Page>;
+  return <>{children}</>;
 };
 
 export default ProtectedLayout;

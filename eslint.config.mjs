@@ -79,6 +79,18 @@ const eslintConfig = defineConfig([
             'Do not access environment variables from process.env. Import them from /lib/env.',
         },
       ],
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@/components/Page', // <-- replace with the real import path you use (e.g. 'src/components/Page' or '@/app/Page')
+              message:
+                'Importing Page is disallowed except from the root layout (src/app/layout.tsx).',
+            },
+          ],
+        },
+      ],
     },
   },
 
