@@ -8,6 +8,7 @@ import Input from './Input';
 import MatchTable from './MatchTable';
 import PageTitle from './PageTitle';
 import SpaceChildrenVertically from './SpaceChildrenVertically';
+import Loading from './Loading';
 
 export {
   ArchetypeList,
@@ -22,4 +23,5 @@ export {
   MatchTable,
   PageTitle,
   SpaceChildrenVertically,
+  Loading,
 };
