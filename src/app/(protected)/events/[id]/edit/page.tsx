@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import { prisma } from '@/lib/prisma';
-import { Page, PageTitle } from '@/components';
+import { PageTitle } from '@/components';
 import EventForm from '../../EventForm';
 import { EventFormData, MatchInput } from '@/lib/types';
 import { getTranslations } from 'next-intl/server';
@@ -44,7 +44,7 @@ const EditEventPage = async ({
   }));
 
   return (
-    <Page>
+    <>
       <PageTitle title={t('title')} showLogout />
       <EventForm
         mode="edit"
@@ -52,7 +52,7 @@ const EditEventPage = async ({
         initialEventData={initialEventData}
         initialMatches={initialMatches}
       />
-    </Page>
+    </>
   );
 };
 
