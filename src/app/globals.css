@@ -23,6 +23,10 @@
 
   /* Typography */
   --font-family: 'Courier New', monospace;
+
+  /* Page */
+  --page-width-desktop: 92.5vw;
+  --page-width-mobile: 50vw;
 }
 
 body {

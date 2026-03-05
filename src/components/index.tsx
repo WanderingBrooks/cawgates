@@ -8,6 +8,7 @@ import Input from './Input';
 import MatchTable from './MatchTable';
 import PageTitle from './PageTitle';
 import SpaceChildrenVertically from './SpaceChildrenVertically';
+import DialogTextInput from './DialogTextInput';
 import Loading from './Loading';
 
 export {
@@ -17,6 +18,7 @@ export {
   Card,
   CardContent,
   CardTitle,
+  DialogTextInput,
   ErrorMessage,
   FlexRowBetween,
   Input,

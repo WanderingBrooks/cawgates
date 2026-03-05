@@ -21,6 +21,8 @@
     "eventName": "Event Name *",
     "eventDate": "Event Date *",
     "notes": "Notes",
+    "openNotes": "Open notes",
+    "closeNotes": "Close notes",
     "addMatch": "Add Match",
     "removeMatch": "Remove",
     "opponentArchetype": "Opponent Archetype *",

@@ -18,6 +18,7 @@ import {
   Input,
   SpaceChildrenVertically,
   FlexRowBetween,
+  DialogTextInput,
 } from '@/components';
 import { EventFormData, MatchInput, MatchInputForm } from '@/lib/types';
 import Link from 'next/link';
@@ -135,6 +136,15 @@ const EventForm = ({
           onChange={handleEventChange}
           required
         />
+        <DialogTextInput
+          id="notes"
+          name="notes"
+          label={t('notes')}
+          value={eventData.notes}
+          onChange={handleEventChange}
+          openButtonLabel={t('openNotes')}
+          closeButtonLabel={t('closeNotes')}
+        />
         {matches.map((match: MatchInputForm, index: number) => (
           <Card key={match.id ? `id-${match.id}` : `index-${index}`}>
             {match.id && (
@@ -190,6 +200,7 @@ const EventForm = ({
                 required
               />
               <Input
+                required
                 type="number"
                 id={`losses-${index}`}
                 name={`matches[${index}].losses`}
@@ -205,24 +216,16 @@ const EventForm = ({
                         : parseInt(e.target.value, 10) || 0,
                   })
                 }
-                required
               />
+              {index === matches.length - 1 && (
+                <Button onClick={addMatch} variant="primary">
+                  {t('addMatch')}
+                </Button>
+              )}
             </CardContent>
           </Card>
         ))}
-        <Button onClick={addMatch} variant="primary">
-          {t('addMatch')}
-        </Button>
 
-        <Input
-          id="notes"
-          name="notes"
-          label={t('notes')}
-          value={eventData.notes}
-          onChange={handleEventChange}
-          rows={4}
-          isMultiline
-        />
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween>
           <Link href={mode === 'create' ? '/events' : `/events/${eventId}`}>
