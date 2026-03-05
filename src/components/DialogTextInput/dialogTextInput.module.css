@@ -1,6 +1,6 @@
 .dialogContainer {
   opacity: 0;
-  z-index: 2;
+  z-index: var(--z-index-dialog);
   pointer-events: none;
 
   top: 0;

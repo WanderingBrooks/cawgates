@@ -27,6 +27,9 @@
   /* Page */
   --page-width-desktop: 92.5vw;
   --page-width-mobile: 50vw;
+
+  /* Z-Index */
+  --z-index-dialog: 2;
 }
 
 body {
