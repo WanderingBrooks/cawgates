@@ -23,7 +23,7 @@ const DialogTextInput = ({
 
   return (
     <>
-      {label && <label htmlFor={inputProps.id}>{label}</label>}
+      <label htmlFor={inputProps.id}>{label}</label>
       <Button onClick={() => setIsOpen(true)} variant="secondary">
         {openButtonLabel}
       </Button>
