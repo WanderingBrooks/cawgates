@@ -19,7 +19,7 @@ const EventPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const event = await prisma.event.findUnique({
     where: { id, userId: user.userId },
-    include: { matches: true },
+    include: { matches: { orderBy: { order: 'asc' } } },
   });
 
   if (!event) {

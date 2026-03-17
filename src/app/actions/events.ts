@@ -98,7 +98,8 @@ const createEventWithMatches = async (
         notes: validated.notes,
         userId: user.userId,
         matches: {
-          create: validated.matches.map(m => ({
+          create: validated.matches.map((m, index) => ({
+            order: index,
             opponentArchetype: m.opponentArchetype,
             wins: m.wins,
             losses: m.losses,
@@ -215,7 +216,7 @@ const updateEventWithMatches = async (
 
     const existingEvent = await prisma.event.findUnique({
       where: { id: validated.eventId },
-      include: { matches: true },
+      include: { matches: { orderBy: { order: 'asc' } } },
     });
 
     if (!existingEvent) {
@@ -248,14 +249,16 @@ const updateEventWithMatches = async (
           deleteMany: {
             id: { in: matchesToDelete },
           },
-          upsert: validated.matches.map(match => ({
+          upsert: validated.matches.map((match, index) => ({
             where: { id: match.id || 'new' },
             create: {
+              order: index,
               opponentArchetype: match.opponentArchetype,
               wins: match.wins,
               losses: match.losses,
             },
             update: {
+              order: index,
               opponentArchetype: match.opponentArchetype,
               wins: match.wins,
               losses: match.losses,
