@@ -7,14 +7,21 @@
     "viewDetails": "View stats and events"
   },
   "createArchetype": {
-    "title": "Create Archetype",
-    "name": "Archetype Name *",
-    "save": "Create",
-    "saving": "Creating...",
-    "cancel": "Cancel"
+    "title": "Create Archetype"
   },
   "archetypePage": {
-    "viewEvents": "View Events"
+    "viewEvents": "View Events",
+    "edit": "Rename"
+  },
+  "archetypeForm": {
+    "name": "Archetype Name *",
+    "create": "Create",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel"
+  },
+  "editArchetype": {
+    "title": "Rename Archetype"
   },
   "deleteArchetypeButton": {
     "delete": "Delete Archetype",

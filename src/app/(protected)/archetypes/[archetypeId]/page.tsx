@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
-import { MatchTable, PageTitle, Button } from '@/components';
+import { MatchTable, PageTitle, Button, FlexRowBetween } from '@/components';
 import getMatchStatistics from './getMatchStatistics';
 import DeleteArchetypeButton from './DeleteArchetypeButton';
 
@@ -41,7 +41,12 @@ const ArchetypePage = async ({
 
       <MatchTable rows={matchStatistics} />
 
-      <DeleteArchetypeButton archetypeId={archetypeId} />
+      <FlexRowBetween>
+        <Link href={`/archetypes/${archetypeId}/edit`}>
+          <Button variant="primary">{t('edit')}</Button>
+        </Link>
+        <DeleteArchetypeButton archetypeId={archetypeId} />
+      </FlexRowBetween>
     </>
   );
 };

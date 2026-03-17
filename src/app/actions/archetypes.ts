@@ -56,6 +56,42 @@ const createArchetype = async (
   redirect(`/archetypes/${archetype.id}`);
 };
 
+const updateArchetype = async (
+  _prevState: ArchetypeActionResult | null,
+  formData: FormData,
+): Promise<ArchetypeActionResult> => {
+  const user = await getUser();
+
+  if (!user) {
+    return { success: false, error: 'You must be logged in' };
+  }
+
+  const archetypeId = formData.get('archetypeId') as string;
+
+  const result = createArchetypeSchema.safeParse({
+    name: formData.get('name') as string,
+  });
+
+  if (!result.success) {
+    return { success: false, error: result.error.issues[0].message };
+  }
+
+  const archetype = await prisma.archetype.findUnique({
+    where: { id: archetypeId },
+  });
+
+  if (!archetype || archetype.userId !== user.userId) {
+    return { success: false, error: 'Archetype not found' };
+  }
+
+  await prisma.archetype.update({
+    where: { id: archetypeId },
+    data: { name: result.data.name },
+  });
+
+  redirect(`/archetypes/${archetypeId}`);
+};
+
 const deleteArchetype = async (
   archetypeId: string,
 ): Promise<ArchetypeActionResult> => {
@@ -107,4 +143,4 @@ const getOpponentArchetypes = async (archetypeId: string): Promise<string[]> => 
   }
 };
 
-export { getUserArchetypes, createArchetype, deleteArchetype, getOpponentArchetypes };
+export { getUserArchetypes, createArchetype, updateArchetype, deleteArchetype, getOpponentArchetypes };

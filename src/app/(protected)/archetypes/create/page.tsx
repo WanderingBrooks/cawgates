@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { getUser } from '@/lib/session';
 import { PageTitle } from '@/components';
-import CreateArchetypeForm from './CreateArchetypeForm';
+import ArchetypeForm from '../ArchetypeForm';
 
 const CreateArchetypePage = async () => {
   const t = await getTranslations('createArchetype');
@@ -14,7 +14,7 @@ const CreateArchetypePage = async () => {
   return (
     <>
       <PageTitle title={t('title')} showLogout />
-      <CreateArchetypeForm />
+      <ArchetypeForm mode="create" />
     </>
   );
 };
