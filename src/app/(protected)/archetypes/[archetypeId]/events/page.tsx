@@ -1,10 +1,15 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
 import { getUser } from '@/lib/session';
 import { Card, CardTitle, CardContent, Button, PageTitle } from '@/components';
 
-const EventsPage = async () => {
+const EventsPage = async ({
+  params,
+}: {
+  params: Promise<{ archetypeId: string }>;
+}) => {
   const t = await getTranslations('events');
   const user = await getUser();
 
@@ -12,16 +17,26 @@ const EventsPage = async () => {
     return null; // Middleware will redirect
   }
 
+  const { archetypeId } = await params;
+
+  const archetype = await prisma.archetype.findUnique({
+    where: { id: archetypeId },
+  });
+
+  if (!archetype || archetype.userId !== user.userId) {
+    notFound();
+  }
+
   const events = await prisma.event.findMany({
-    where: { userId: user.userId },
+    where: { archetypeId },
     orderBy: { date: 'desc' },
     include: { matches: true },
   });
 
   return (
     <>
-      <PageTitle title={t('title')} showLogout />
-      <Link href="/events/create">
+      <PageTitle title={`${archetype.name} — ${t('title')}`} showLogout />
+      <Link href={`/archetypes/${archetypeId}/events/create`}>
         <Button variant="primary">{t('createEvent')}</Button>
       </Link>
 
@@ -47,7 +62,7 @@ const EventsPage = async () => {
           );
 
           return (
-            <Link key={event.id} href={`/events/${event.id}`}>
+            <Link key={event.id} href={`/archetypes/${archetypeId}/events/${event.id}`}>
               <Card>
                 <CardTitle>
                   <h2>{event.name}</h2>

@@ -14,25 +14,35 @@ datasource db {
 }
 
 model User {
+  id         String      @id @default(uuid())
+  email      String      @unique
+  username   String      @unique
+  password   String
+  createdAt  DateTime    @default(now())
+
+  archetypes Archetype[]
+}
+
+model Archetype {
   id        String   @id @default(uuid())
-  email     String   @unique
-  username  String   @unique
-  password  String
+  name      String
+  userId    String
   createdAt DateTime @default(now())
 
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   events Event[]
 }
 
 model Event {
-  id        String   @id @default(uuid())
-  name      String
-  date      DateTime
-  notes     String?
-  userId    String
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  name        String
+  date        DateTime
+  notes       String?
+  archetypeId String
+  createdAt   DateTime @default(now())
 
-  matches Match[]
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matches   Match[]
+  archetype Archetype @relation(fields: [archetypeId], references: [id], onDelete: Cascade)
 }
 
 model Match {

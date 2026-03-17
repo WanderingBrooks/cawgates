@@ -1,10 +1,10 @@
 import { prisma } from '@/lib/prisma';
 
-const getMatchStatistics = async ({ userId }: { userId: string }) => {
+const getMatchStatistics = async ({ archetypeId }: { archetypeId: string }) => {
   const matches = await prisma.match.findMany({
     where: {
       event: {
-        userId: userId,
+        archetypeId,
       },
     },
     select: {
@@ -43,7 +43,6 @@ const getMatchStatistics = async ({ userId }: { userId: string }) => {
   // 1) Total games played (wins + losses) descending — more data first.
   // 2) Win rate descending for ties in total games (wins/total).
   // 3) Alphabetical ascending fallback for deterministic ordering.
-  // Note: win rate guards against division-by-zero when total is 0.
   const sortedArchetypes = Object.entries(archetypeStats).sort(
     ([aName, aStats], [bName, bStats]) => {
       const aTotal = aStats.wins + aStats.losses;
@@ -61,7 +60,7 @@ const getMatchStatistics = async ({ userId }: { userId: string }) => {
     },
   );
 
-  const matchStatistics = sortedArchetypes.map(([archetype, stats]) => ({
+  return sortedArchetypes.map(([archetype, stats]) => ({
     key: archetype,
     archetype,
     wins: stats.wins,
@@ -69,8 +68,6 @@ const getMatchStatistics = async ({ userId }: { userId: string }) => {
     winRate: stats.winRate,
     total: stats.total,
   }));
-
-  return matchStatistics;
 };
 
 export default getMatchStatistics;

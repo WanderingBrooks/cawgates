@@ -1,4 +1,26 @@
 {
+  "archetypes": {
+    "title": "My Archetypes",
+    "createArchetype": "Create Archetype",
+    "noArchetypes": "No archetypes yet — create one to get started",
+    "eventCount": "{count, plural, one {# event} other {# events}}",
+    "viewDetails": "View stats and events"
+  },
+  "createArchetype": {
+    "title": "Create Archetype",
+    "name": "Archetype Name *",
+    "save": "Create",
+    "saving": "Creating...",
+    "cancel": "Cancel"
+  },
+  "archetypePage": {
+    "viewEvents": "View Events"
+  },
+  "deleteArchetypeButton": {
+    "delete": "Delete Archetype",
+    "deleting": "Deleting...",
+    "deleteConfirm": "Are you sure you want to delete this archetype? All events and matches will be lost."
+  },
   "matchStatistics": {
     "title": "Match Records",
     "viewEvents": "View Events"
