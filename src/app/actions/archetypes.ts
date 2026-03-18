@@ -122,6 +122,20 @@ const deleteArchetype = async (
 
 const getOpponentArchetypes = async (archetypeId: string): Promise<string[]> => {
   try {
+    const user = await getUser();
+
+    if (!user) {
+      return [];
+    }
+
+    const archetype = await prisma.archetype.findUnique({
+      where: { id: archetypeId },
+    });
+
+    if (!archetype || archetype.userId !== user.userId) {
+      return [];
+    }
+
     const matches = await prisma.match.findMany({
       where: {
         event: { archetypeId },
