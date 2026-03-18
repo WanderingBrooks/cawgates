@@ -15,7 +15,7 @@ const EventsPage = async ({
 
   return (
     <>
-      <PageTitle title={t('title', { archetype: archetype.name })} showLogout />
+      <PageTitle title={t('title', { archetype: archetype.name })} />
       <Link href={`/archetypes/${archetypeId}/events/create`}>
         <Button variant="primary">{t('createEvent')}</Button>
       </Link>

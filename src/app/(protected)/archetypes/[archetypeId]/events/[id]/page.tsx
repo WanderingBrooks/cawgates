@@ -24,7 +24,7 @@ const EventPage = async ({
 
   return (
     <>
-      <PageTitle title={event.name} showLogout />
+      <PageTitle title={event.name} />
       <p>{new Date(event.date).toLocaleDateString()}</p>
       <MatchTable rows={tableRows} />
       {event.notes && <Markdown>{event.notes}</Markdown>}

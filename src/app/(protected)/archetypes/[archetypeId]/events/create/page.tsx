@@ -15,7 +15,7 @@ const CreateEventPage = async ({
 
   return (
     <>
-      <PageTitle title={t('title')} showLogout />
+      <PageTitle title={t('title')} />
       <EventForm mode="create" archetypeId={archetypeId} />
     </>
   );

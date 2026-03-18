@@ -1,5 +1,4 @@
 import ArchetypeList from './ArchetypeList';
-import Breadcrumb from './Breadcrumb';
 import Button from './Button';
 import { Card, CardContent, CardTitle } from './Card';
 import ErrorMessage from './ErrorMessage';
@@ -13,7 +12,6 @@ import Loading from './Loading';
 
 export {
   ArchetypeList,
-  Breadcrumb,
   Button,
   Card,
   CardContent,

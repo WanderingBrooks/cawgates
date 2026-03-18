@@ -110,6 +110,13 @@
   "pageTitle": {
     "logout": "Logout"
   },
+  "navMenu": {
+    "menu": "Menu",
+    "archetypes": "Archetypes",
+    "events": "Events",
+    "matchStatistics": "Match Statistics",
+    "logout": "Logout"
+  },
   "loading": {
     "title": "Loading..."
   }

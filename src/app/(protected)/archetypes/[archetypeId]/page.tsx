@@ -19,7 +19,7 @@ const ArchetypePage = async ({
 
   return (
     <>
-      <PageTitle title={archetype.name} showLogout />
+      <PageTitle title={archetype.name} />
 
       <Link href={`/archetypes/${archetypeId}/events`}>
         <Button variant="primary">{t('viewEvents')}</Button>

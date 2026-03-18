@@ -1,22 +1,22 @@
 import { cn } from '@/lib/utils';
 import classes from './pageTitle.module.css';
-import LogoutButton from './LogoutButton';
+import NavMenu from '../NavMenu/NavMenu';
 
 type PageTitleProps = {
   title: string;
   className?: string;
-  showLogout?: boolean;
+  disableMenu?: boolean;
 };
 
 const PageTitle = ({
   title,
   className,
-  showLogout = false,
+  disableMenu = false,
 }: PageTitleProps) => {
   return (
     <div className={cn(classes.pageTitle, className)}>
       <h1>{title}</h1>
-      {showLogout && <LogoutButton />}
+      <NavMenu disabled={disableMenu} />
     </div>
   );
 };

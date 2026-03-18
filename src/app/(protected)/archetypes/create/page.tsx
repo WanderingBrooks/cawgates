@@ -7,7 +7,7 @@ const CreateArchetypePage = async () => {
 
   return (
     <>
-      <PageTitle title={t('title')} showLogout />
+      <PageTitle title={t('title')} />
       <ArchetypeForm mode="create" />
     </>
   );
