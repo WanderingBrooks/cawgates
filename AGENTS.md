@@ -88,6 +88,22 @@ const t = useTranslations('myComponent');
 {pending ? t('saving') : t('save')}
 ```
 
+## Data Access
+
+- **NEVER query Prisma directly in page components** — always use the Data Access Layer (`src/lib/dal.ts`)
+- The DAL functions handle both data fetching and authorisation together, so they cannot be accidentally separated
+- When adding a new resource, add a corresponding DAL function that verifies ownership before returning data
+- If you need a new DAL function at a deeper nesting level, compose it on top of the parent-level function (e.g. `getEventForUser` calls `getArchetypeForUser` internally)
+
+```typescript
+// ❌ Bad - direct Prisma query in a page, auth check can be forgotten
+const archetype = await prisma.archetype.findUnique({ where: { id: archetypeId } });
+if (!archetype || archetype.userId !== user.userId) notFound();
+
+// ✅ Good - DAL function enforces auth automatically
+const { archetype } = await getArchetypeForUser({ archetypeId });
+```
+
 ## File Organization
 
 - Keep shared types in `src/lib/types.ts`
