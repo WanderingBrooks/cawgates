@@ -12,7 +12,7 @@ const EditEventPage = async ({
   const { archetypeId, id } = await params;
   const t = await getTranslations('editEvent');
 
-  const { event } = await getEventForUser(archetypeId, id);
+  const { event } = await getEventForUser({ archetypeId, eventId: id });
 
   const initialEventData: EventFormData = {
     eventName: event.name || '',

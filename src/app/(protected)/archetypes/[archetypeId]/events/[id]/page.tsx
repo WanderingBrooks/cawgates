@@ -13,7 +13,7 @@ const EventPage = async ({
   const { archetypeId, id } = await params;
   const t = await getTranslations('event');
 
-  const { event } = await getEventForUser(archetypeId, id);
+  const { event } = await getEventForUser({ archetypeId, eventId: id });
 
   const tableRows = event.matches.map(match => ({
     key: match.id,
