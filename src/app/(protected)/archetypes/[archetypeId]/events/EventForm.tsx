@@ -232,7 +232,13 @@ const EventForm = ({
 
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween>
-          <Link href={mode === 'create' ? `/archetypes/${archetypeId}/events` : `/archetypes/${archetypeId}/events/${eventId}`}>
+          <Link
+            href={
+              mode === 'create'
+                ? `/archetypes/${archetypeId}/events`
+                : `/archetypes/${archetypeId}/events/${eventId}`
+            }
+          >
             <Button variant="secondary">{t('cancel')}</Button>
           </Link>
           <SubmitButton />

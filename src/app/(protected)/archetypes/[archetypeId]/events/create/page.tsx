@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { getUser } from '@/lib/session';
 import { prisma } from '@/lib/prisma';
 import { PageTitle } from '@/components';
-import EventForm from '../../../../events/EventForm';
+import EventForm from '../EventForm';
 
 const CreateEventPage = async ({
   params,

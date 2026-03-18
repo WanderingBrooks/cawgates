@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { PageTitle } from '@/components';
-import EventForm from '../../../../../events/EventForm';
+import EventForm from '../../EventForm';
 import { EventFormData, MatchInput } from '@/lib/types';
 import { getTranslations } from 'next-intl/server';
 import { getUser } from '@/lib/session';
