@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { getUser } from '@/lib/session';
 import { getUserArchetypes } from '@/app/actions/archetypes';
-import { Button, Card, CardTitle, CardContent, PageTitle } from '@/components';
+import { Button, Card, CardTitle, PageTitle } from '@/components';
 
 const ArchetypesPage = async () => {
   const t = await getTranslations('archetypes');
@@ -29,11 +29,10 @@ const ArchetypesPage = async () => {
             <Card>
               <CardTitle>
                 <h2>{archetype.name}</h2>
-                <span>{t('eventCount', { count: archetype._count.events })}</span>
+                <span>
+                  {t('eventCount', { count: archetype._count.events })}
+                </span>
               </CardTitle>
-              <CardContent>
-                <p>{t('viewDetails')}</p>
-              </CardContent>
             </Card>
           </Link>
         ))

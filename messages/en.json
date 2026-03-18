@@ -3,8 +3,7 @@
     "title": "My Archetypes",
     "createArchetype": "Create Archetype",
     "noArchetypes": "No archetypes yet — create one to get started",
-    "eventCount": "{count, plural, one {# event} other {# events}}",
-    "viewDetails": "View stats and events"
+    "eventCount": "{count, plural, one {# event} other {# events}}"
   },
   "createArchetype": {
     "title": "Create Archetype"
