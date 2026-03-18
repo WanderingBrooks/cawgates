@@ -1,16 +1,10 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { getUser } from '@/lib/session';
 import { getUserArchetypes } from '@/app/actions/archetypes';
 import { Button, Card, CardTitle, PageTitle } from '@/components';
 
 const ArchetypesPage = async () => {
   const t = await getTranslations('archetypes');
-  const user = await getUser();
-
-  if (!user) {
-    return null; // Middleware will redirect
-  }
 
   const archetypes = await getUserArchetypes();
 
