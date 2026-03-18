@@ -10,6 +10,7 @@ const matchSchema = z.object({
 
 // Schema for creating an event
 const createEventSchema = z.object({
+  archetypeId: z.string().min(1, 'Archetype ID is required'),
   eventName: z.string().min(1, 'Event name is required').trim(),
   eventDate: z.string().min(1, 'Event date is required'),
   notes: z.string().optional().default(''),
@@ -44,6 +45,14 @@ export type EventFormData = Pick<
   'eventName' | 'eventDate' | 'notes'
 >;
 
+// Schema for creating a user archetype (the user's own deck)
+const createArchetypeSchema = z.object({
+  name: z.string().min(1, 'Archetype name is required').trim(),
+});
+
+// Exported type inferred from Zod schema
+export type CreateArchetypeInput = z.infer<typeof createArchetypeSchema>;
+
 // Schema for user registration
 const registerUserSchema = z
   .object({
@@ -74,6 +83,7 @@ export {
   matchSchema,
   createEventSchema,
   updateEventSchema,
+  createArchetypeSchema,
   registerUserSchema,
   loginSchema,
 };

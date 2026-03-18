@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { Button, Input } from '../';
 
 type ArchetypeListProps = {
+  archetypeId: string;
   label?: string;
   id?: string;
   name?: string;
@@ -18,6 +19,7 @@ type ArchetypeListProps = {
 };
 
 const ArchetypeList = ({
+  archetypeId,
   className = '',
   label,
   id,
@@ -35,7 +37,7 @@ const ArchetypeList = ({
 
   useEffect(() => {
     const loadArchetypes = async () => {
-      const data = await getOpponentArchetypes();
+      const data = await getOpponentArchetypes(archetypeId);
 
       setArchetypes(data);
       setIsLoading(false);

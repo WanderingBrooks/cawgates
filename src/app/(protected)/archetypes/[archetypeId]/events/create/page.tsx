@@ -1,14 +1,22 @@
 import { getTranslations } from 'next-intl/server';
 import { PageTitle } from '@/components';
+import { getArchetypeForUser } from '@/lib/dal';
 import EventForm from '../EventForm';
 
-const CreateEventPage = async () => {
+const CreateEventPage = async ({
+  params,
+}: {
+  params: Promise<{ archetypeId: string }>;
+}) => {
   const t = await getTranslations('createEvent');
+  const { archetypeId } = await params;
+
+  await getArchetypeForUser({ archetypeId });
 
   return (
     <>
       <PageTitle title={t('title')} showLogout />
-      <EventForm mode="create" />
+      <EventForm mode="create" archetypeId={archetypeId} />
     </>
   );
 };

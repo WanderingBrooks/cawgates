@@ -41,6 +41,7 @@ const SubmitButton = () => {
 
 type EventFormProps = {
   mode: 'create' | 'edit';
+  archetypeId: string;
   eventId?: string;
   initialEventData?: EventFormData;
   initialMatches?: MatchInput[];
@@ -48,6 +49,7 @@ type EventFormProps = {
 
 const EventForm = ({
   mode,
+  archetypeId,
   eventId,
   initialEventData,
   initialMatches,
@@ -116,6 +118,7 @@ const EventForm = ({
   return (
     <form action={formAction}>
       <SpaceChildrenVertically>
+        <input type="hidden" name="archetypeId" value={archetypeId} />
         <input type="hidden" name="eventId" value={eventId} />
 
         <Input
@@ -168,6 +171,7 @@ const EventForm = ({
             </CardTitle>
             <CardContent>
               <ArchetypeList
+                archetypeId={archetypeId}
                 id={`opponent-${index}`}
                 name={`matches[${index}].opponentArchetype`}
                 label={t('opponentArchetype')}
@@ -228,7 +232,13 @@ const EventForm = ({
 
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween>
-          <Link href={mode === 'create' ? '/events' : `/events/${eventId}`}>
+          <Link
+            href={
+              mode === 'create'
+                ? `/archetypes/${archetypeId}/events`
+                : `/archetypes/${archetypeId}/events/${eventId}`
+            }
+          >
             <Button variant="secondary">{t('cancel')}</Button>
           </Link>
           <SubmitButton />
