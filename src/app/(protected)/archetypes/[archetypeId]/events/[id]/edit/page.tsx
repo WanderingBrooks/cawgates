@@ -1,33 +1,18 @@
-import { notFound } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
 import { PageTitle } from '@/components';
 import EventForm from '../../EventForm';
 import { EventFormData, MatchInput } from '@/lib/types';
 import { getTranslations } from 'next-intl/server';
-import { getUser } from '@/lib/session';
+import { getEventForUser } from '@/lib/dal';
 
 const EditEventPage = async ({
   params,
 }: {
   params: Promise<{ archetypeId: string; id: string }>;
 }) => {
-  const user = await getUser();
-
-  if (!user) {
-    return null; // Middleware will redirect
-  }
-
   const { archetypeId, id } = await params;
   const t = await getTranslations('editEvent');
 
-  const event = await prisma.event.findUnique({
-    where: { id, archetypeId },
-    include: { matches: { orderBy: { order: 'asc' } } },
-  });
-
-  if (!event) {
-    notFound();
-  }
+  const { event } = await getEventForUser(archetypeId, id);
 
   const initialEventData: EventFormData = {
     eventName: event.name || '',

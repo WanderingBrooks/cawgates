@@ -1,8 +1,6 @@
-import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { getUser } from '@/lib/session';
-import { prisma } from '@/lib/prisma';
 import { PageTitle } from '@/components';
+import { getArchetypeForUser } from '@/lib/dal';
 import EventForm from '../EventForm';
 
 const CreateEventPage = async ({
@@ -11,21 +9,9 @@ const CreateEventPage = async ({
   params: Promise<{ archetypeId: string }>;
 }) => {
   const t = await getTranslations('createEvent');
-  const user = await getUser();
-
-  if (!user) {
-    return null; // Middleware will redirect
-  }
-
   const { archetypeId } = await params;
 
-  const archetype = await prisma.archetype.findUnique({
-    where: { id: archetypeId },
-  });
-
-  if (!archetype || archetype.userId !== user.userId) {
-    notFound();
-  }
+  await getArchetypeForUser({ archetypeId });
 
   return (
     <>
