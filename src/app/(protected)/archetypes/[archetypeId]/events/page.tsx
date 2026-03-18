@@ -35,7 +35,7 @@ const EventsPage = async ({
 
   return (
     <>
-      <PageTitle title={`${archetype.name} — ${t('title')}`} showLogout />
+      <PageTitle title={t('title', { archetype: archetype.name })} showLogout />
       <Link href={`/archetypes/${archetypeId}/events/create`}>
         <Button variant="primary">{t('createEvent')}</Button>
       </Link>
@@ -62,7 +62,10 @@ const EventsPage = async ({
           );
 
           return (
-            <Link key={event.id} href={`/archetypes/${archetypeId}/events/${event.id}`}>
+            <Link
+              key={event.id}
+              href={`/archetypes/${archetypeId}/events/${event.id}`}
+            >
               <Card>
                 <CardTitle>
                   <h2>{event.name}</h2>

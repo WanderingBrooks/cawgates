@@ -32,7 +32,7 @@
     "viewEvents": "View Events"
   },
   "events": {
-    "title": "Events",
+    "title": "{archetype} - Events",
     "createEvent": "Create Event",
     "record": "{wins} - {losses} - {ties}",
     "noEvents": "No events yet"
