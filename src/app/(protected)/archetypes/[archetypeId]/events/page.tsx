@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import { prisma } from '@/lib/prisma';
 import { getTranslations } from 'next-intl/server';
 import { Card, CardTitle, CardContent, Button, PageTitle } from '@/components';
-import { getArchetypeForUser } from '@/lib/dal';
+import { getEventsForArchetype } from '@/lib/dal';
 
 const EventsPage = async ({
   params,
@@ -12,13 +11,7 @@ const EventsPage = async ({
   const t = await getTranslations('events');
   const { archetypeId } = await params;
 
-  const { archetype } = await getArchetypeForUser({ archetypeId });
-
-  const events = await prisma.event.findMany({
-    where: { archetypeId },
-    orderBy: { date: 'desc' },
-    include: { matches: true },
-  });
+  const { archetype, events } = await getEventsForArchetype({ archetypeId });
 
   return (
     <>

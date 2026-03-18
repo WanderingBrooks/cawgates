@@ -56,4 +56,20 @@ const getEventForUser = async ({
   return { user, archetype, event };
 };
 
-export { getArchetypeForUser, getEventForUser };
+const getEventsForArchetype = async ({
+  archetypeId,
+}: {
+  archetypeId: string;
+}) => {
+  const { user, archetype } = await getArchetypeForUser({ archetypeId });
+
+  const events = await prisma.event.findMany({
+    where: { archetypeId },
+    orderBy: { date: 'desc' },
+    include: { matches: true },
+  });
+
+  return { user, archetype, events };
+};
+
+export { getArchetypeForUser, getEventsForArchetype, getEventForUser };

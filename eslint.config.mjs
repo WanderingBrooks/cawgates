@@ -94,6 +94,29 @@ const eslintConfig = defineConfig([
     },
   },
 
+  {
+    files: ['**/page.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@/components/Page',
+              message:
+                'Importing Page is disallowed except from the root layout (src/app/layout.tsx).',
+            },
+            {
+              name: '@/lib/prisma',
+              message:
+                'Page components must not import Prisma directly. Use the Data Access Layer (@/lib/dal.ts) instead.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
