@@ -58,7 +58,7 @@ const NavMenu = ({ disabled = false }: NavMenuProps) => {
         <div className={classes.dropdown}>
           <Link
             href="/archetypes"
-            className={classes.item}
+            className={cn(classes.item, pathname === '/archetypes' && classes.itemActive)}
             onClick={() => setOpen(false)}
           >
             {t('archetypes')}
@@ -66,7 +66,7 @@ const NavMenu = ({ disabled = false }: NavMenuProps) => {
           {archetypeId ? (
             <Link
               href={`/archetypes/${archetypeId}`}
-              className={classes.item}
+              className={cn(classes.item, pathname === `/archetypes/${archetypeId}` && classes.itemActive)}
               onClick={() => setOpen(false)}
             >
               {t('matchStatistics')}
@@ -79,7 +79,7 @@ const NavMenu = ({ disabled = false }: NavMenuProps) => {
           {archetypeId ? (
             <Link
               href={`/archetypes/${archetypeId}/events`}
-              className={classes.item}
+              className={cn(classes.item, pathname.startsWith(`/archetypes/${archetypeId}/events`) && classes.itemActive)}
               onClick={() => setOpen(false)}
             >
               {t('events')}

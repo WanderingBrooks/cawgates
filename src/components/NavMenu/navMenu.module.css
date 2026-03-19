@@ -40,6 +40,10 @@
   background-color: var(--color-background);
 }
 
+.itemActive {
+  font-weight: bold;
+}
+
 .itemDisabled {
   color: var(--color-border);
   cursor: default;
