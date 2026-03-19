@@ -21,10 +21,6 @@ const ArchetypePage = async ({
     <>
       <PageTitle title={archetype.name} />
 
-      <Link href={`/archetypes/${archetypeId}/events`}>
-        <Button variant="primary">{t('viewEvents')}</Button>
-      </Link>
-
       <MatchTable rows={matchStatistics} />
 
       <FlexRowBetween>
