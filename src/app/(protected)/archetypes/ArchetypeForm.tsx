@@ -18,6 +18,7 @@ import {
 import Link from 'next/link';
 import DeleteArchetypeButton from './DeleteArchetypeButton';
 import classes from './archetypeForm.module.css';
+import { slugify } from '@/lib/utils';
 
 const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();
@@ -39,12 +40,6 @@ type ArchetypeFormProps =
       initialName: string;
       initialSlug: string;
     };
-
-const deriveSlug = (name: string) =>
-  name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
 
 const ArchetypeForm = (props: ArchetypeFormProps) => {
   const t = useTranslations('archetypeForm');
@@ -74,7 +69,7 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
     setName(e.target.value);
 
     if (!slugManuallyEdited) {
-      setSlug(deriveSlug(e.target.value));
+      setSlug(slugify({ name: e.target.value }));
     }
   };
 

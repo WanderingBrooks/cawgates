@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 import { createArchetypeSchema } from '@/lib/types';
-import { slugify } from '@/lib/slugify';
+import { slugify } from '@/lib/utils';
 import { redirect } from 'next/navigation';
 
 export type ArchetypeActionResult = {
