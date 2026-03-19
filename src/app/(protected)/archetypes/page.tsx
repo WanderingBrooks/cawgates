@@ -19,7 +19,7 @@ const ArchetypesPage = async () => {
         <p>{t('noArchetypes')}</p>
       ) : (
         archetypes.map(archetype => (
-          <Link key={archetype.id} href={`/archetypes/${archetype.id}`}>
+          <Link key={archetype.id} href={`/archetypes/${archetype.slug}`}>
             <Card>
               <CardTitle>
                 <h2>{archetype.name}</h2>

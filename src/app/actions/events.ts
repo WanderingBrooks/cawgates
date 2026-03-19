@@ -120,7 +120,7 @@ const createEventWithMatches = async (
     });
 
     eventId = event.id;
-    archetypeId = validated.archetypeId;
+    archetypeId = archetype.slug;
   } catch (error) {
     console.error('Failed to create event:', error);
 
@@ -169,7 +169,7 @@ const deleteEventAndMatches = async (
       };
     }
 
-    archetypeId = event.archetypeId;
+    archetypeId = event.archetype.slug;
 
     await prisma.event.delete({
       where: {
@@ -288,7 +288,7 @@ const updateEventWithMatches = async (
     });
 
     eventId = validated.eventId;
-    archetypeId = existingEvent.archetypeId;
+    archetypeId = existingEvent.archetype.slug;
   } catch (error) {
     console.error('Failed to update event:', error);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { createArchetype, updateArchetype, type ArchetypeActionResult } from '@/app/actions/archetypes';
@@ -20,7 +20,13 @@ const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
 
 type ArchetypeFormProps =
   | { mode: 'create' }
-  | { mode: 'edit'; archetypeId: string; initialName: string };
+  | { mode: 'edit'; archetypeId: string; archetypeSlug: string; initialName: string; initialSlug: string };
+
+const deriveSlug = (name: string) =>
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 
 const ArchetypeForm = (props: ArchetypeFormProps) => {
   const t = useTranslations('archetypeForm');
@@ -31,8 +37,22 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
     null,
   );
 
+  const [slug, setSlug] = useState(props.mode === 'edit' ? props.initialSlug : '');
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
+
   const cancelHref =
-    props.mode === 'create' ? '/archetypes' : `/archetypes/${props.archetypeId}`;
+    props.mode === 'create' ? '/archetypes' : `/archetypes/${props.archetypeSlug}`;
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!slugManuallyEdited) {
+      setSlug(deriveSlug(e.target.value));
+    }
+  };
+
+  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSlugManuallyEdited(true);
+    setSlug(e.target.value);
+  };
 
   return (
     <form action={formAction}>
@@ -46,6 +66,16 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
           name="name"
           label={t('name')}
           defaultValue={props.mode === 'edit' ? props.initialName : ''}
+          onChange={handleNameChange}
+          required
+        />
+        <Input
+          type="text"
+          id="slug"
+          name="slug"
+          label={t('slug')}
+          value={slug}
+          onChange={handleSlugChange}
           required
         />
         {state?.error && <ErrorMessage error={state.error} />}

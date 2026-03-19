@@ -15,6 +15,7 @@
   },
   "archetypeForm": {
     "name": "Archetype Name *",
+    "slug": "URL Slug *",
     "create": "Create",
     "save": "Save",
     "saving": "Saving...",

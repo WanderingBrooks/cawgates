@@ -3,6 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 import { createArchetypeSchema } from '@/lib/types';
+import { slugify } from '@/lib/slugify';
 import { redirect } from 'next/navigation';
 
 export type ArchetypeActionResult = {
@@ -38,22 +39,39 @@ const createArchetype = async (
     return { success: false, error: 'You must be logged in' };
   }
 
-  const result = createArchetypeSchema.safeParse({
-    name: formData.get('name') as string,
-  });
+  const name = formData.get('name') as string;
+  const rawSlug = formData.get('slug') as string;
+  // Auto-derive slug from name if the user left the field blank
+  const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
+
+  const result = createArchetypeSchema.safeParse({ name, slug });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
   }
 
-  const archetype = await prisma.archetype.create({
-    data: {
-      name: result.data.name,
-      userId: user.userId,
-    },
-  });
+  try {
+    const archetype = await prisma.archetype.create({
+      data: {
+        name: result.data.name,
+        slug: result.data.slug,
+        userId: user.userId,
+      },
+    });
 
-  redirect(`/archetypes/${archetype.id}`);
+    redirect(`/archetypes/${archetype.slug}`);
+  } catch (error: unknown) {
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      (error as { code: string }).code === 'P2002'
+    ) {
+      return { success: false, error: 'An archetype with that name or slug already exists' };
+    }
+
+    throw error;
+  }
 };
 
 const updateArchetype = async (
@@ -67,10 +85,11 @@ const updateArchetype = async (
   }
 
   const archetypeId = formData.get('archetypeId') as string;
+  const name = formData.get('name') as string;
+  const rawSlug = formData.get('slug') as string;
+  const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
 
-  const result = createArchetypeSchema.safeParse({
-    name: formData.get('name') as string,
-  });
+  const result = createArchetypeSchema.safeParse({ name, slug });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
@@ -84,12 +103,25 @@ const updateArchetype = async (
     return { success: false, error: 'Archetype not found' };
   }
 
-  await prisma.archetype.update({
-    where: { id: archetypeId },
-    data: { name: result.data.name },
-  });
+  try {
+    const updated = await prisma.archetype.update({
+      where: { id: archetypeId },
+      data: { name: result.data.name, slug: result.data.slug },
+    });
 
-  redirect(`/archetypes/${archetypeId}`);
+    redirect(`/archetypes/${updated.slug}`);
+  } catch (error: unknown) {
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      (error as { code: string }).code === 'P2002'
+    ) {
+      return { success: false, error: 'An archetype with that name or slug already exists' };
+    }
+
+    throw error;
+  }
 };
 
 const deleteArchetype = async (

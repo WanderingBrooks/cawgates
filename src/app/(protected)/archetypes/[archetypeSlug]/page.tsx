@@ -8,14 +8,16 @@ import DeleteArchetypeButton from './DeleteArchetypeButton';
 const ArchetypePage = async ({
   params,
 }: {
-  params: Promise<{ archetypeId: string }>;
+  params: Promise<{ archetypeSlug: string }>;
 }) => {
-  const { archetypeId } = await params;
+  const { archetypeSlug } = await params;
   const t = await getTranslations('archetypePage');
 
-  const { archetype } = await getArchetypeForUser({ archetypeId });
+  const { archetype } = await getArchetypeForUser({ archetypeSlug });
 
-  const matchStatistics = await getMatchStatistics({ archetypeId });
+  const matchStatistics = await getMatchStatistics({
+    archetypeId: archetype.id,
+  });
 
   return (
     <>
@@ -24,10 +26,10 @@ const ArchetypePage = async ({
       <RecordTable rows={matchStatistics} />
 
       <FlexRowBetween>
-        <Link href={`/archetypes/${archetypeId}/edit`}>
+        <Link href={`/archetypes/${archetype.slug}/edit`}>
           <Button variant="primary">{t('edit')}</Button>
         </Link>
-        <DeleteArchetypeButton archetypeId={archetypeId} />
+        <DeleteArchetypeButton archetypeId={archetype.id} />
       </FlexRowBetween>
     </>
   );

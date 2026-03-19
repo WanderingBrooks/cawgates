@@ -48,6 +48,15 @@ export type EventFormData = Pick<
 // Schema for creating a user archetype (the user's own deck)
 const createArchetypeSchema = z.object({
   name: z.string().min(1, 'Archetype name is required').trim(),
+  slug: z
+    .string()
+    .min(1, 'Slug is required')
+    .max(100, 'Slug must be 100 characters or less')
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      'Slug may only contain lowercase letters, numbers, and hyphens',
+    )
+    .trim(),
 });
 
 // Exported type inferred from Zod schema

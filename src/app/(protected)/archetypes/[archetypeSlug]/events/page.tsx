@@ -6,17 +6,17 @@ import { getEventsForArchetype } from '@/lib/dal';
 const EventsPage = async ({
   params,
 }: {
-  params: Promise<{ archetypeId: string }>;
+  params: Promise<{ archetypeSlug: string }>;
 }) => {
   const t = await getTranslations('events');
-  const { archetypeId } = await params;
+  const { archetypeSlug } = await params;
 
-  const { archetype, events } = await getEventsForArchetype({ archetypeId });
+  const { archetype, events } = await getEventsForArchetype({ archetypeSlug });
 
   return (
     <>
       <PageTitle title={t('title')} subtitle={archetype.name} />
-      <Link href={`/archetypes/${archetypeId}/events/create`}>
+      <Link href={`/archetypes/${archetype.slug}/events/create`}>
         <Button variant="primary">{t('createEvent')}</Button>
       </Link>
 
@@ -44,7 +44,7 @@ const EventsPage = async ({
           return (
             <Link
               key={event.id}
-              href={`/archetypes/${archetypeId}/events/${event.id}`}
+              href={`/archetypes/${archetype.slug}/events/${event.id}`}
             >
               <Card>
                 <CardTitle>

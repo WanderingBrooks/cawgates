@@ -8,12 +8,15 @@ import Markdown from 'react-markdown';
 const EventPage = async ({
   params,
 }: {
-  params: Promise<{ archetypeId: string; id: string }>;
+  params: Promise<{ archetypeSlug: string; id: string }>;
 }) => {
-  const { archetypeId, id } = await params;
+  const { archetypeSlug, id } = await params;
   const t = await getTranslations('event');
 
-  const { archetype, event } = await getEventForUser({ archetypeId, eventId: id });
+  const { archetype, event } = await getEventForUser({
+    archetypeSlug,
+    eventId: id,
+  });
 
   const tableRows = event.matches.map(match => ({
     key: match.id,
@@ -29,7 +32,7 @@ const EventPage = async ({
       <RecordTable rows={tableRows} />
       {event.notes && <Markdown>{event.notes}</Markdown>}
       <FlexRowBetween>
-        <Link href={`/archetypes/${archetypeId}/events/${id}/edit`}>
+        <Link href={`/archetypes/${archetype.slug}/events/${id}/edit`}>
           <Button variant="primary">{t('edit')}</Button>
         </Link>
         <DeleteEventButton eventId={id} />

@@ -26,11 +26,15 @@ model User {
 model Archetype {
   id        String   @id @default(uuid())
   name      String
+  slug      String
   userId    String
   createdAt DateTime @default(now())
 
   user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   events Event[]
+
+  @@unique([userId, name])
+  @@unique([userId, slug])
 }
 
 model Event {
