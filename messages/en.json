@@ -112,6 +112,7 @@
     "archetypes": "All Archetypes",
     "events": "Events",
     "record": "Record",
+    "edit": "Edit",
     "logout": "Logout"
   },
   "loading": {

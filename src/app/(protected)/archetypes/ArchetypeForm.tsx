@@ -3,9 +3,21 @@
 import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
-import { createArchetype, updateArchetype, type ArchetypeActionResult } from '@/app/actions/archetypes';
-import { Button, ErrorMessage, Input, SpaceChildrenVertically, FlexRowBetween } from '@/components';
+import {
+  createArchetype,
+  updateArchetype,
+  type ArchetypeActionResult,
+} from '@/app/actions/archetypes';
+import {
+  Button,
+  ErrorMessage,
+  Input,
+  SpaceChildrenVertically,
+  FlexRowBetween,
+} from '@/components';
 import Link from 'next/link';
+import DeleteArchetypeButton from './DeleteArchetypeButton';
+import classes from './archetypeForm.module.css';
 
 const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();
@@ -20,7 +32,13 @@ const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
 
 type ArchetypeFormProps =
   | { mode: 'create' }
-  | { mode: 'edit'; archetypeId: string; archetypeSlug: string; initialName: string; initialSlug: string };
+  | {
+      mode: 'edit';
+      archetypeId: string;
+      archetypeSlug: string;
+      initialName: string;
+      initialSlug: string;
+    };
 
 const deriveSlug = (name: string) =>
   name
@@ -32,16 +50,21 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
   const t = useTranslations('archetypeForm');
   const action = props.mode === 'create' ? createArchetype : updateArchetype;
 
-  const [state, formAction] = useActionState<ArchetypeActionResult | null, FormData>(
-    action,
-    null,
+  const [state, formAction] = useActionState<
+    ArchetypeActionResult | null,
+    FormData
+  >(action, null);
+
+  const [slug, setSlug] = useState(
+    props.mode === 'edit' ? props.initialSlug : '',
   );
 
-  const [slug, setSlug] = useState(props.mode === 'edit' ? props.initialSlug : '');
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
 
   const cancelHref =
-    props.mode === 'create' ? '/archetypes' : `/archetypes/${props.archetypeSlug}`;
+    props.mode === 'create'
+      ? '/archetypes'
+      : `/archetypes/${props.archetypeSlug}`;
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!slugManuallyEdited) {
@@ -80,10 +103,24 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
         />
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween>
-          <Link href={cancelHref}>
-            <Button variant="secondary">{t('cancel')}</Button>
-          </Link>
-          <SubmitButton mode={props.mode} />
+          {props.mode === 'edit' ? (
+            <>
+              <DeleteArchetypeButton archetypeId={props.archetypeId} />
+              <div className={classes.rightButtons}>
+                <Link href={cancelHref}>
+                  <Button variant="secondary">{t('cancel')}</Button>
+                </Link>
+                <SubmitButton mode={props.mode} />
+              </div>
+            </>
+          ) : (
+            <>
+              <Link href={cancelHref}>
+                <Button variant="secondary">{t('cancel')}</Button>
+              </Link>
+              <SubmitButton mode={props.mode} />
+            </>
+          )}
         </FlexRowBetween>
       </SpaceChildrenVertically>
     </form>

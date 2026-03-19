@@ -105,6 +105,23 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
               {t('events')}
             </span>
           )}
+          {archetypeId ? (
+            <Link
+              href={`/archetypes/${archetypeId}/edit`}
+              className={cn(
+                classes.item,
+                pathname.startsWith(`/archetypes/${archetypeId}/edit`) &&
+                  classes.itemActive,
+              )}
+              onClick={() => setOpen(false)}
+            >
+              {t('edit')}
+            </Link>
+          ) : (
+            <span className={cn(classes.item, classes.itemDisabled)}>
+              {t('edit')}
+            </span>
+          )}
           <div className={classes.divider} />
           <button
             type="button"
