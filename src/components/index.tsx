@@ -9,6 +9,7 @@ import PageTitle from './PageTitle';
 import SpaceChildrenVertically from './SpaceChildrenVertically';
 import DialogTextInput from './DialogTextInput';
 import Loading from './Loading';
+import OpponentArchetypeForm from './OpponentArchetypeForm';
 import OpponentArchetypeSelect from './OpponentArchetypeSelect';
 
 export {
@@ -21,6 +22,7 @@ export {
   ErrorMessage,
   FlexRowBetween,
   Input,
+  OpponentArchetypeForm,
   OpponentArchetypeSelect,
   RecordTable,
   PageTitle,

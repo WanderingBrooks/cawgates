@@ -17,7 +17,7 @@ import {
   FlexRowBetween,
 } from '@/components';
 import Link from 'next/link';
-import DeleteOpponentArchetypeButton from './[opponentArchetypeSlug]/edit/DeleteOpponentArchetypeButton';
+import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
 import classes from './opponentArchetypeForm.module.css';
 import { slugify } from '@/lib/utils';
 

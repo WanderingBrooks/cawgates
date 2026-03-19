@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { getOpponentArchetypesForArchetype } from '@/app/actions/opponentArchetypes';
 import Dialog from '../Dialog';
 import Button from '../Button';
-import OpponentArchetypeForm from '@/app/(protected)/archetypes/[archetypeSlug]/opponent-archetypes/OpponentArchetypeForm';
+import OpponentArchetypeForm from '@/components/OpponentArchetypeForm';
 import classes from './opponentArchetypeSelect.module.css';
 
 type OpponentArchetypeOption = {

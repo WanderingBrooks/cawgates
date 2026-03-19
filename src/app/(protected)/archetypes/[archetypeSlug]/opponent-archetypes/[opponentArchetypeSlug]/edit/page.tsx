@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { PageTitle } from '@/components';
 import { getOpponentArchetypeForUser } from '@/lib/dal';
-import OpponentArchetypeForm from '../../OpponentArchetypeForm';
+import OpponentArchetypeForm from '@/components/OpponentArchetypeForm';
 
 const EditOpponentArchetypePage = async ({
   params,
