@@ -23,11 +23,11 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
   const segments = pathname.split('/').filter(Boolean);
   const archetypesIndex = segments.indexOf('archetypes');
 
-  const potentialId =
+  const potentialSlug =
     archetypesIndex >= 0 ? segments[archetypesIndex + 1] : undefined;
 
-  const archetypeId =
-    potentialId && potentialId !== 'create' ? potentialId : undefined;
+  const archetypeSlug =
+    potentialSlug && potentialSlug !== 'create' ? potentialSlug : undefined;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -72,12 +72,13 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
           {archetypeName && (
             <span className={classes.groupLabel}>{archetypeName}</span>
           )}
-          {archetypeId ? (
+          {archetypeSlug ? (
             <Link
-              href={`/archetypes/${archetypeId}`}
+              href={`/archetypes/${archetypeSlug}`}
               className={cn(
                 classes.item,
-                pathname === `/archetypes/${archetypeId}` && classes.itemActive,
+                pathname === `/archetypes/${archetypeSlug}` &&
+                  classes.itemActive,
               )}
               onClick={() => setOpen(false)}
             >
@@ -88,12 +89,12 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
               {t('record')}
             </span>
           )}
-          {archetypeId ? (
+          {archetypeSlug ? (
             <Link
-              href={`/archetypes/${archetypeId}/events`}
+              href={`/archetypes/${archetypeSlug}/events`}
               className={cn(
                 classes.item,
-                pathname.startsWith(`/archetypes/${archetypeId}/events`) &&
+                pathname.startsWith(`/archetypes/${archetypeSlug}/events`) &&
                   classes.itemActive,
               )}
               onClick={() => setOpen(false)}
@@ -105,12 +106,12 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
               {t('events')}
             </span>
           )}
-          {archetypeId ? (
+          {archetypeSlug ? (
             <Link
-              href={`/archetypes/${archetypeId}/edit`}
+              href={`/archetypes/${archetypeSlug}/edit`}
               className={cn(
                 classes.item,
-                pathname.startsWith(`/archetypes/${archetypeId}/edit`) &&
+                pathname.startsWith(`/archetypes/${archetypeSlug}/edit`) &&
                   classes.itemActive,
               )}
               onClick={() => setOpen(false)}
