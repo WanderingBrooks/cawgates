@@ -4,3 +4,9 @@
   justify-content: space-between;
   margin: var(--spacing-lg) 0;
 }
+
+.subtitle {
+  font-size: 1rem;
+  font-weight: normal;
+  margin: 0;
+}

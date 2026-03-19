@@ -12,7 +12,7 @@ const EditEventPage = async ({
   const { archetypeId, id } = await params;
   const t = await getTranslations('editEvent');
 
-  const { event } = await getEventForUser({ archetypeId, eventId: id });
+  const { archetype, event } = await getEventForUser({ archetypeId, eventId: id });
 
   const initialEventData: EventFormData = {
     eventName: event.name || '',
@@ -29,7 +29,7 @@ const EditEventPage = async ({
 
   return (
     <>
-      <PageTitle title={t('title')} />
+      <PageTitle title={t('title')} subtitle={archetype.name} />
       <EventForm
         mode="edit"
         archetypeId={archetypeId}

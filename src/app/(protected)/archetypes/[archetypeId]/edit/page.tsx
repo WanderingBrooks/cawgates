@@ -15,7 +15,7 @@ const EditArchetypePage = async ({
 
   return (
     <>
-      <PageTitle title={t('title')} />
+      <PageTitle title={t('title')} subtitle={archetype.name} />
       <ArchetypeForm
         mode="edit"
         archetypeId={archetypeId}

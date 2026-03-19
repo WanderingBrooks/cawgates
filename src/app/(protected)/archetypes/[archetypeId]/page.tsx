@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { MatchTable, PageTitle, Button, FlexRowBetween } from '@/components';
+import { RecordTable, PageTitle, Button, FlexRowBetween } from '@/components';
 import { getArchetypeForUser } from '@/lib/dal';
 import getMatchStatistics from './getMatchStatistics';
 import DeleteArchetypeButton from './DeleteArchetypeButton';
@@ -19,9 +19,9 @@ const ArchetypePage = async ({
 
   return (
     <>
-      <PageTitle title={t('title', { archetype: archetype.name })} />
+      <PageTitle title={t('title')} subtitle={archetype.name} />
 
-      <MatchTable rows={matchStatistics} />
+      <RecordTable rows={matchStatistics} />
 
       <FlexRowBetween>
         <Link href={`/archetypes/${archetypeId}/edit`}>
