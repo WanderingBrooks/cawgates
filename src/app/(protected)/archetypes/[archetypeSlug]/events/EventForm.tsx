@@ -9,7 +9,7 @@ import {
   type ActionResult,
 } from '@/app/actions/events';
 import {
-  ArchetypeList,
+  OpponentArchetypeSelect,
   Card,
   CardTitle,
   CardContent,
@@ -172,8 +172,9 @@ const EventForm = ({
               </Button>
             </CardTitle>
             <CardContent>
-              <ArchetypeList
+              <OpponentArchetypeSelect
                 archetypeId={archetypeId}
+                archetypeSlug={archetypeSlug}
                 id={`opponent-${index}`}
                 name={`matches[${index}].opponentArchetypeId`}
                 label={t('opponentArchetype')}

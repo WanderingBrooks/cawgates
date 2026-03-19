@@ -1,8 +1,9 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import {
   createOpponentArchetype,
   updateOpponentArchetype,
@@ -32,7 +33,13 @@ const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
 };
 
 type OpponentArchetypeFormProps =
-  | { mode: 'create'; archetypeId: string; archetypeSlug: string }
+  | {
+      mode: 'create';
+      archetypeId: string;
+      archetypeSlug: string;
+      onSuccess?: (data: { id: string; name: string; slug: string }) => void;
+      onCancel?: () => void;
+    }
   | {
       mode: 'edit';
       archetypeId: string;
@@ -41,10 +48,13 @@ type OpponentArchetypeFormProps =
       opponentArchetypeSlug: string;
       initialName: string;
       initialSlug: string;
+      onSuccess?: (data: { id: string; name: string; slug: string }) => void;
+      onCancel?: () => void;
     };
 
 const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
   const t = useTranslations('opponentArchetypeForm');
+  const router = useRouter();
 
   const action =
     props.mode === 'create' ? createOpponentArchetype : updateOpponentArchetype;
@@ -53,6 +63,17 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
     OpponentArchetypeActionResult | null,
     FormData
   >(action, null);
+
+  useEffect(() => {
+    if (state?.success && state.data) {
+      if (props.onSuccess) {
+        props.onSuccess(state.data);
+      } else {
+        router.push(`/archetypes/${props.archetypeSlug}/opponent-archetypes`);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   const [name, setName] = useState(
     props.mode === 'edit' ? props.initialName : '',
@@ -65,6 +86,16 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
 
   const cancelHref = `/archetypes/${props.archetypeSlug}/opponent-archetypes`;
+
+  const cancelButton = props.onCancel ? (
+    <Button type="button" variant="secondary" onClick={props.onCancel}>
+      {t('cancel')}
+    </Button>
+  ) : (
+    <Link href={cancelHref}>
+      <Button variant="secondary">{t('cancel')}</Button>
+    </Link>
+  );
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -116,17 +147,13 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
                 opponentArchetypeId={props.opponentArchetypeId}
               />
               <div className={classes.rightButtons}>
-                <Link href={cancelHref}>
-                  <Button variant="secondary">{t('cancel')}</Button>
-                </Link>
+                {cancelButton}
                 <SubmitButton mode={props.mode} />
               </div>
             </>
           ) : (
             <>
-              <Link href={cancelHref}>
-                <Button variant="secondary">{t('cancel')}</Button>
-              </Link>
+              {cancelButton}
               <SubmitButton mode={props.mode} />
             </>
           )}

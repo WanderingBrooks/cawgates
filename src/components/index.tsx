@@ -1,6 +1,6 @@
-import ArchetypeList from './ArchetypeList';
 import Button from './Button';
 import { Card, CardContent, CardTitle } from './Card';
+import Dialog from './Dialog';
 import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
 import Input from './Input';
@@ -9,17 +9,19 @@ import PageTitle from './PageTitle';
 import SpaceChildrenVertically from './SpaceChildrenVertically';
 import DialogTextInput from './DialogTextInput';
 import Loading from './Loading';
+import OpponentArchetypeSelect from './OpponentArchetypeSelect';
 
 export {
-  ArchetypeList,
   Button,
   Card,
   CardContent,
   CardTitle,
+  Dialog,
   DialogTextInput,
   ErrorMessage,
   FlexRowBetween,
   Input,
+  OpponentArchetypeSelect,
   RecordTable,
   PageTitle,
   SpaceChildrenVertically,

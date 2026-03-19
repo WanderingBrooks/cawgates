@@ -64,7 +64,7 @@ const createOpponentArchetype = async (
   }
 
   try {
-    await prisma.opponentArchetype.create({
+    const created = await prisma.opponentArchetype.create({
       data: {
         name: result.data.name,
         slug: result.data.slug,
@@ -73,7 +73,10 @@ const createOpponentArchetype = async (
       },
     });
 
-    redirect(`/archetypes/${archetype.slug}/opponent-archetypes`);
+    return {
+      success: true,
+      data: { id: created.id, name: created.name, slug: created.slug },
+    };
   } catch (error: unknown) {
     if (
       typeof error === 'object' &&
@@ -122,14 +125,15 @@ const updateOpponentArchetype = async (
   }
 
   try {
-    await prisma.opponentArchetype.update({
+    const updated = await prisma.opponentArchetype.update({
       where: { id: opponentArchetypeId },
       data: { name: result.data.name, slug: result.data.slug },
     });
 
-    redirect(
-      `/archetypes/${opponentArchetype.archetype.slug}/opponent-archetypes`,
-    );
+    return {
+      success: true,
+      data: { id: updated.id, name: updated.name, slug: updated.slug },
+    };
   } catch (error: unknown) {
     if (
       typeof error === 'object' &&

@@ -63,6 +63,7 @@ export type CreateOpponentArchetypeInput = z.infer<
 export type OpponentArchetypeActionResult = {
   success: boolean;
   error?: string;
+  data?: { id: string; name: string; slug: string };
 };
 
 // Helper type for event form data (event fields only, no matches)

@@ -70,12 +70,13 @@
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this event?"
   },
-  "archetypeList": {
-    "enterNewArchetype": "Enter new archetype...",
-    "cancel": "Cancel",
+  "opponentArchetypeSelect": {
     "selectArchetype": "Select an archetype...",
+    "loading": "Loading...",
     "addNew": "+ Add New...",
-    "loading": "Loading..."
+    "edit": "Edit",
+    "createTitle": "Create Opponent Archetype",
+    "editTitle": "Edit Opponent Archetype"
   },
   "errorMessage": {
     "message": "<strong>Error:</strong> {error}"
