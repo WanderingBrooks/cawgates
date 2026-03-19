@@ -68,5 +68,5 @@
 .divider {
   height: 1px;
   background-color: var(--color-border);
-  margin: var(--spacing-sm);
+  margin: var(--spacing-xs);
 }
