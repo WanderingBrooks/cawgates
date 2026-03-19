@@ -31,3 +31,13 @@
   background-color: var(--color-primary);
   color: white;
 }
+
+.danger {
+  background-color: var(--color-danger);
+  color: white;
+  border: none;
+}
+
+.danger:hover:not(:disabled) {
+  background-color: var(--color-danger-dark);
+}

@@ -29,7 +29,7 @@ const DeleteArchetypeButton = ({ archetypeId }: { archetypeId: string }) => {
   return (
     <>
       {error && <ErrorMessage error={error} />}
-      <Button onClick={handleDelete} disabled={isDeleting} variant="secondary">
+      <Button onClick={handleDelete} disabled={isDeleting} variant="danger">
         {isDeleting ? t('deleting') : t('delete')}
       </Button>
     </>

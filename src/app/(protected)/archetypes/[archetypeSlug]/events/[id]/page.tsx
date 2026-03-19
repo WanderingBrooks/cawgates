@@ -32,10 +32,10 @@ const EventPage = async ({
       <RecordTable rows={tableRows} />
       {event.notes && <Markdown>{event.notes}</Markdown>}
       <FlexRowBetween>
+        <DeleteEventButton eventId={id} />
         <Link href={`/archetypes/${archetype.slug}/events/${id}/edit`}>
           <Button variant="primary">{t('edit')}</Button>
         </Link>
-        <DeleteEventButton eventId={id} />
       </FlexRowBetween>
     </>
   );
