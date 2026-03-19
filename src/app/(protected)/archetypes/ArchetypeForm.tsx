@@ -55,6 +55,10 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
     FormData
   >(action, null);
 
+  const [name, setName] = useState(
+    props.mode === 'edit' ? props.initialName : '',
+  );
+
   const [slug, setSlug] = useState(
     props.mode === 'edit' ? props.initialSlug : '',
   );
@@ -67,6 +71,8 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
       : `/archetypes/${props.archetypeSlug}`;
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+
     if (!slugManuallyEdited) {
       setSlug(deriveSlug(e.target.value));
     }
@@ -88,7 +94,7 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
           id="name"
           name="name"
           label={t('name')}
-          defaultValue={props.mode === 'edit' ? props.initialName : ''}
+          value={name}
           onChange={handleNameChange}
           required
         />
@@ -97,9 +103,9 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
           id="slug"
           name="slug"
           label={t('slug')}
+          hint={t('slugHint')}
           value={slug}
           onChange={handleSlugChange}
-          required
         />
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween>

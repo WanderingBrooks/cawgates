@@ -15,7 +15,8 @@
   },
   "archetypeForm": {
     "name": "Archetype Name *",
-    "slug": "URL Slug *",
+    "slug": "URL Slug",
+    "slugHint": "Auto-generated from name if left blank",
     "create": "Create",
     "save": "Save",
     "saving": "Saving...",
