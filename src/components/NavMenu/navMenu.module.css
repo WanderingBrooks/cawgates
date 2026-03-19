@@ -54,12 +54,6 @@
   background-color: transparent;
 }
 
-.logoutItem {
-  border-top: 1px solid var(--color-border);
-  margin-top: var(--spacing-xs);
-  padding-top: var(--spacing-xs);
-}
-
 .logoutButton {
   color: var(--color-text);
 }
