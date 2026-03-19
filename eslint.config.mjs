@@ -36,6 +36,17 @@ const eslintConfig = defineConfig([
           message:
             'Inline exports are not allowed. Export separately at the end of the file.',
         },
+        // Archetypes have a compound unique index on (userId, slug). When querying
+        // by slug you must always include userId to avoid cross-user data leaks.
+        // prisma.archetype.findUnique with the userId_slug key already enforces
+        // this at the TypeScript level. findFirst/findFirstOrThrow bypass that
+        // constraint, so they are banned on the archetype model.
+        {
+          selector:
+            "CallExpression[callee.type='MemberExpression'][callee.object.type='MemberExpression'][callee.object.object.name='prisma'][callee.object.property.name='archetype'][callee.property.name=/^findFirst/]",
+          message:
+            'Do not use prisma.archetype.findFirst/findFirstOrThrow. Use prisma.archetype.findUnique with the userId_slug compound key ({ userId_slug: { userId, slug } }) to ensure ownership is always checked when querying by slug.',
+        },
       ],
       // New line between multi line blocks
       'padding-line-between-statements': [
