@@ -64,6 +64,7 @@ ALTER TABLE "OpponentArchetype" ADD CONSTRAINT "OpponentArchetype_archetypeId_fk
 -- AddForeignKey
 ALTER TABLE "Match" ADD CONSTRAINT "Match_opponentArchetypeId_fkey" FOREIGN KEY ("opponentArchetypeId") REFERENCES "OpponentArchetype"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
--- DropColumn
-ALTER TABLE "Match" DROP COLUMN "opponentArchetype";
-
+-- Make the `opponentArchetype` column nullable to avoid issues with newly created
+-- rows that don't have an opponent archetype yet. This column will be dropped
+-- in a future migration.
+ALTER TABLE "Match" ALTER COLUMN "opponentArchetype" DROP NOT NULL;
