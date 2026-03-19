@@ -9,6 +9,7 @@
     "title": "Create Archetype"
   },
   "archetypePage": {
+    "title": "{archetype} - Match Statistics",
     "viewEvents": "View Events",
     "edit": "Rename"
   },
@@ -26,10 +27,6 @@
     "delete": "Delete Archetype",
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this archetype? All events and matches will be lost."
-  },
-  "matchStatistics": {
-    "title": "Match Records",
-    "viewEvents": "View Events"
   },
   "events": {
     "title": "{archetype} - Events",

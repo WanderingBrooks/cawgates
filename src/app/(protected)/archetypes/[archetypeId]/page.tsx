@@ -19,7 +19,7 @@ const ArchetypePage = async ({
 
   return (
     <>
-      <PageTitle title={archetype.name} />
+      <PageTitle title={t('title', { archetype: archetype.name })} />
 
       <MatchTable rows={matchStatistics} />
 
