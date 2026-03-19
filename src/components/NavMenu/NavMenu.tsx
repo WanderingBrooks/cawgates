@@ -81,11 +81,11 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
               )}
               onClick={() => setOpen(false)}
             >
-              {t('matchStatistics')}
+              {t('record')}
             </Link>
           ) : (
             <span className={cn(classes.item, classes.itemDisabled)}>
-              {t('matchStatistics')}
+              {t('record')}
             </span>
           )}
           {archetypeId ? (

@@ -111,7 +111,7 @@
     "menu": "Menu",
     "archetypes": "All Archetypes",
     "events": "Events",
-    "matchStatistics": "Record",
+    "record": "Record",
     "logout": "Logout"
   },
   "loading": {
