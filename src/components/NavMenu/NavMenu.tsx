@@ -73,55 +73,53 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
             <span className={classes.groupLabel}>{archetypeName}</span>
           )}
           {archetypeSlug ? (
-            <Link
-              href={`/archetypes/${archetypeSlug}`}
-              className={cn(
-                classes.item,
-                pathname === `/archetypes/${archetypeSlug}` &&
-                  classes.itemActive,
-              )}
-              onClick={() => setOpen(false)}
-            >
-              {t('record')}
-            </Link>
+            <>
+              <Link
+                href={`/archetypes/${archetypeSlug}`}
+                className={cn(
+                  classes.item,
+                  pathname === `/archetypes/${archetypeSlug}` &&
+                    classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('record')}
+              </Link>
+              <Link
+                href={`/archetypes/${archetypeSlug}/events`}
+                className={cn(
+                  classes.item,
+                  pathname.startsWith(`/archetypes/${archetypeSlug}/events`) &&
+                    classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('events')}
+              </Link>
+              <Link
+                href={`/archetypes/${archetypeSlug}/edit`}
+                className={cn(
+                  classes.item,
+                  pathname.startsWith(`/archetypes/${archetypeSlug}/edit`) &&
+                    classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('edit')}
+              </Link>
+            </>
           ) : (
-            <span className={cn(classes.item, classes.itemDisabled)}>
-              {t('record')}
-            </span>
-          )}
-          {archetypeSlug ? (
-            <Link
-              href={`/archetypes/${archetypeSlug}/events`}
-              className={cn(
-                classes.item,
-                pathname.startsWith(`/archetypes/${archetypeSlug}/events`) &&
-                  classes.itemActive,
-              )}
-              onClick={() => setOpen(false)}
-            >
-              {t('events')}
-            </Link>
-          ) : (
-            <span className={cn(classes.item, classes.itemDisabled)}>
-              {t('events')}
-            </span>
-          )}
-          {archetypeSlug ? (
-            <Link
-              href={`/archetypes/${archetypeSlug}/edit`}
-              className={cn(
-                classes.item,
-                pathname.startsWith(`/archetypes/${archetypeSlug}/edit`) &&
-                  classes.itemActive,
-              )}
-              onClick={() => setOpen(false)}
-            >
-              {t('edit')}
-            </Link>
-          ) : (
-            <span className={cn(classes.item, classes.itemDisabled)}>
-              {t('edit')}
-            </span>
+            <>
+              <span className={cn(classes.item, classes.itemDisabled)}>
+                {t('record')}
+              </span>
+              <span className={cn(classes.item, classes.itemDisabled)}>
+                {t('events')}
+              </span>
+              <span className={cn(classes.item, classes.itemDisabled)}>
+                {t('edit')}
+              </span>
+            </>
           )}
           <div className={classes.divider} />
           <button
