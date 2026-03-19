@@ -9,7 +9,7 @@ const Loading = async () => {
 
   return (
     <>
-      <PageTitle title={t('title')} />
+      <PageTitle title={t('title')} disableMenu />
     </>
   );
 };

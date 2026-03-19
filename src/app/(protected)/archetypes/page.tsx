@@ -10,7 +10,7 @@ const ArchetypesPage = async () => {
 
   return (
     <>
-      <PageTitle title={t('title')} showLogout />
+      <PageTitle title={t('title')} />
       <Link href="/archetypes/create">
         <Button variant="primary">{t('createArchetype')}</Button>
       </Link>

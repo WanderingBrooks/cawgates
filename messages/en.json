@@ -9,6 +9,7 @@
     "title": "Create Archetype"
   },
   "archetypePage": {
+    "title": "Record",
     "viewEvents": "View Events",
     "edit": "Rename"
   },
@@ -27,12 +28,8 @@
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this archetype? All events and matches will be lost."
   },
-  "matchStatistics": {
-    "title": "Match Records",
-    "viewEvents": "View Events"
-  },
   "events": {
-    "title": "{archetype} - Events",
+    "title": "Events",
     "createEvent": "Create Event",
     "record": "{wins} - {losses} - {ties}",
     "noEvents": "No events yet"
@@ -98,16 +95,22 @@
     "submitting": "Logging in...",
     "clickHereToRegister": "Don't have an account? Click here to register."
   },
-  "matchTable": {
+  "recordTable": {
     "archetype": "Archetype",
     "wins": "Wins",
     "losses": "Losses",
     "winRate": "Win Rate",
     "winRateValue": "{winRate}%",
-    "totalGames": "Total Games",
     "noMatches": "No matches found"
   },
   "pageTitle": {
+    "logout": "Logout"
+  },
+  "navMenu": {
+    "menu": "Menu",
+    "archetypes": "All Archetypes",
+    "events": "Events",
+    "matchStatistics": "Record",
     "logout": "Logout"
   },
   "loading": {

@@ -11,11 +11,11 @@ const CreateEventPage = async ({
   const t = await getTranslations('createEvent');
   const { archetypeId } = await params;
 
-  await getArchetypeForUser({ archetypeId });
+  const { archetype } = await getArchetypeForUser({ archetypeId });
 
   return (
     <>
-      <PageTitle title={t('title')} showLogout />
+      <PageTitle title={t('title')} subtitle={archetype.name} />
       <EventForm mode="create" archetypeId={archetypeId} />
     </>
   );

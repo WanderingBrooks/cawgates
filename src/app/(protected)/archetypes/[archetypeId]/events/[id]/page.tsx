@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { Button, MatchTable, PageTitle, FlexRowBetween } from '@/components';
+import { Button, RecordTable, PageTitle, FlexRowBetween } from '@/components';
 import { getEventForUser } from '@/lib/dal';
 import DeleteEventButton from './DeleteEventButton';
 import Markdown from 'react-markdown';
@@ -13,7 +13,7 @@ const EventPage = async ({
   const { archetypeId, id } = await params;
   const t = await getTranslations('event');
 
-  const { event } = await getEventForUser({ archetypeId, eventId: id });
+  const { archetype, event } = await getEventForUser({ archetypeId, eventId: id });
 
   const tableRows = event.matches.map(match => ({
     key: match.id,
@@ -24,9 +24,9 @@ const EventPage = async ({
 
   return (
     <>
-      <PageTitle title={event.name} showLogout />
+      <PageTitle title={event.name} subtitle={archetype.name} />
       <p>{new Date(event.date).toLocaleDateString()}</p>
-      <MatchTable rows={tableRows} />
+      <RecordTable rows={tableRows} />
       {event.notes && <Markdown>{event.notes}</Markdown>}
       <FlexRowBetween>
         <Link href={`/archetypes/${archetypeId}/events/${id}/edit`}>

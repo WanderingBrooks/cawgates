@@ -1,27 +1,25 @@
 import { getTranslations } from 'next-intl/server';
 
-type MatchTableRow = {
+type RecordTableRow = {
   key: string;
   archetype: string;
   wins: number;
   losses: number;
   winRate?: number;
-  total?: number;
 };
 
-type MatchTableProps = {
-  rows: MatchTableRow[];
+type RecordTableProps = {
+  rows: RecordTableRow[];
 };
 
-const MatchTable = async ({ rows }: MatchTableProps) => {
-  const t = await getTranslations('matchTable');
+const RecordTable = async ({ rows }: RecordTableProps) => {
+  const t = await getTranslations('recordTable');
 
   if (rows.length === 0) {
     return <p>{t('noMatches')}</p>;
   }
 
   const atLeastOneMatchHasWinRate = rows.some(row => row.winRate !== undefined);
-  const atLeastOneMatchHasTotal = rows.some(row => row.total !== undefined);
 
   return (
     <table>
@@ -31,7 +29,6 @@ const MatchTable = async ({ rows }: MatchTableProps) => {
           <th>{t('wins')}</th>
           <th>{t('losses')}</th>
           {atLeastOneMatchHasWinRate && <th>{t('winRate')}</th>}
-          {atLeastOneMatchHasTotal && <th>{t('totalGames')}</th>}
         </tr>
       </thead>
       <tbody>
@@ -46,7 +43,6 @@ const MatchTable = async ({ rows }: MatchTableProps) => {
               {atLeastOneMatchHasWinRate && (
                 <td>{t('winRateValue', { winRate })}</td>
               )}
-              {atLeastOneMatchHasTotal && <td>{row.total}</td>}
             </tr>
           );
         })}
@@ -55,4 +51,4 @@ const MatchTable = async ({ rows }: MatchTableProps) => {
   );
 };
 
-export default MatchTable;
+export default RecordTable;

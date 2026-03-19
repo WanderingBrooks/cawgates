@@ -30,6 +30,7 @@
 
   /* Z-Index */
   --z-index-dialog: 2;
+  --z-index-menu: 3;
 }
 
 body {
