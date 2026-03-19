@@ -67,21 +67,6 @@ const NavMenu = ({ disabled = false }: NavMenuProps) => {
           <li>
             {archetypeId ? (
               <Link
-                href={`/archetypes/${archetypeId}/events`}
-                className={classes.item}
-                onClick={() => setOpen(false)}
-              >
-                {t('events')}
-              </Link>
-            ) : (
-              <span className={cn(classes.item, classes.itemDisabled)}>
-                {t('events')}
-              </span>
-            )}
-          </li>
-          <li>
-            {archetypeId ? (
-              <Link
                 href={`/archetypes/${archetypeId}`}
                 className={classes.item}
                 onClick={() => setOpen(false)}
@@ -91,6 +76,21 @@ const NavMenu = ({ disabled = false }: NavMenuProps) => {
             ) : (
               <span className={cn(classes.item, classes.itemDisabled)}>
                 {t('matchStatistics')}
+              </span>
+            )}
+          </li>
+          <li>
+            {archetypeId ? (
+              <Link
+                href={`/archetypes/${archetypeId}/events`}
+                className={classes.item}
+                onClick={() => setOpen(false)}
+              >
+                {t('events')}
+              </Link>
+            ) : (
+              <span className={cn(classes.item, classes.itemDisabled)}>
+                {t('events')}
               </span>
             )}
           </li>
