@@ -74,3 +74,13 @@
   background-color: var(--color-border);
   margin: var(--spacing-xs);
 }
+
+.groupLabel {
+  pointer-events: none;
+  padding: var(--spacing-xs) var(--spacing-lg);
+  margin-left: var(--spacing-xs);
+  margin-right: var(--spacing-xs);
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: var(--color-border);
+}

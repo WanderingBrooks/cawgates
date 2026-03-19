@@ -11,9 +11,10 @@ import Button from '../Button';
 
 type NavMenuProps = {
   disabled?: boolean;
+  archetypeName?: string;
 };
 
-const NavMenu = ({ disabled = false }: NavMenuProps) => {
+const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
   const t = useTranslations('navMenu');
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -66,7 +67,13 @@ const NavMenu = ({ disabled = false }: NavMenuProps) => {
           >
             {t('archetypes')}
           </Link>
+
           <div className={classes.divider} />
+          {archetypeName && (
+            <>
+              <span className={classes.groupLabel}>{archetypeName}</span>
+            </>
+          )}
           {archetypeId ? (
             <Link
               href={`/archetypes/${archetypeId}`}

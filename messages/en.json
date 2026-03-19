@@ -108,7 +108,7 @@
   },
   "navMenu": {
     "menu": "Menu",
-    "archetypes": "Archetypes",
+    "archetypes": "All Archetypes",
     "events": "Events",
     "matchStatistics": "Record",
     "logout": "Logout"

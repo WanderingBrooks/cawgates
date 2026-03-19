@@ -21,7 +21,7 @@ const PageTitle = ({
         <h1>{title}</h1>
         <h2 className={classes.subtitle}>{subtitle}</h2>
       </div>
-      <NavMenu disabled={disableMenu} />
+      <NavMenu disabled={disableMenu} archetypeName={subtitle} />
     </div>
   );
 };
