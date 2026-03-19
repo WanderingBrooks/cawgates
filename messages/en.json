@@ -118,5 +118,9 @@
   },
   "loading": {
     "title": "Loading..."
+  },
+  "notFound": {
+    "message": "This page could not be found.",
+    "backToArchetypes": "Bring me to the Archetypes page"
   }
 }

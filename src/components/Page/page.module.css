@@ -8,13 +8,13 @@
 }
 
 .pageContent {
-  max-width: var(--page-width-desktop);
-  width: var(--page-width-desktop);
+  max-width: var(--page-width-mobile);
+  width: var(--page-width-mobile);
 }
 
 @media (min-width: 768px) {
   .pageContent {
-    width: var(--page-width-mobile);
-    max-width: var(--page-width-mobile);
+    width: var(--page-width-desktop);
+    max-width: var(--page-width-desktop);
   }
 }
