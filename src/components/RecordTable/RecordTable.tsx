@@ -6,7 +6,6 @@ type RecordTableRow = {
   wins: number;
   losses: number;
   winRate?: number;
-  total?: number;
 };
 
 type RecordTableProps = {
