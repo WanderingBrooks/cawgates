@@ -74,7 +74,7 @@
   padding: var(--spacing-xs) var(--spacing-lg);
   margin-left: var(--spacing-xs);
   margin-right: var(--spacing-xs);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   font-weight: bold;
   color: var(--color-border);
 }

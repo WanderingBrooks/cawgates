@@ -6,20 +6,22 @@ import ArchetypeForm from '../../ArchetypeForm';
 const EditArchetypePage = async ({
   params,
 }: {
-  params: Promise<{ archetypeId: string }>;
+  params: Promise<{ archetypeSlug: string }>;
 }) => {
   const t = await getTranslations('editArchetype');
-  const { archetypeId } = await params;
+  const { archetypeSlug } = await params;
 
-  const { archetype } = await getArchetypeForUser({ archetypeId });
+  const { archetype } = await getArchetypeForUser({ archetypeSlug });
 
   return (
     <>
       <PageTitle title={t('title')} subtitle={archetype.name} />
       <ArchetypeForm
         mode="edit"
-        archetypeId={archetypeId}
+        archetypeId={archetype.id}
+        archetypeSlug={archetype.slug}
         initialName={archetype.name}
+        initialSlug={archetype.slug}
       />
     </>
   );

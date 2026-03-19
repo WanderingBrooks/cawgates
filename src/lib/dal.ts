@@ -14,9 +14,9 @@ import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 
 const getArchetypeForUser = async ({
-  archetypeId,
+  archetypeSlug,
 }: {
-  archetypeId: string;
+  archetypeSlug: string;
 }) => {
   const user = await getUser();
 
@@ -25,10 +25,10 @@ const getArchetypeForUser = async ({
   }
 
   const archetype = await prisma.archetype.findUnique({
-    where: { id: archetypeId },
+    where: { userId_slug: { userId: user.userId, slug: archetypeSlug } },
   });
 
-  if (!archetype || archetype.userId !== user.userId) {
+  if (!archetype) {
     notFound();
   }
 
@@ -36,16 +36,16 @@ const getArchetypeForUser = async ({
 };
 
 const getEventForUser = async ({
-  archetypeId,
+  archetypeSlug,
   eventId,
 }: {
-  archetypeId: string;
+  archetypeSlug: string;
   eventId: string;
 }) => {
-  const { user, archetype } = await getArchetypeForUser({ archetypeId });
+  const { user, archetype } = await getArchetypeForUser({ archetypeSlug });
 
   const event = await prisma.event.findUnique({
-    where: { id: eventId, archetypeId },
+    where: { id: eventId, archetypeId: archetype.id },
     include: { matches: { orderBy: { order: 'asc' } } },
   });
 
@@ -57,14 +57,14 @@ const getEventForUser = async ({
 };
 
 const getEventsForArchetype = async ({
-  archetypeId,
+  archetypeSlug,
 }: {
-  archetypeId: string;
+  archetypeSlug: string;
 }) => {
-  const { user, archetype } = await getArchetypeForUser({ archetypeId });
+  const { user, archetype } = await getArchetypeForUser({ archetypeSlug });
 
   const events = await prisma.event.findMany({
-    where: { archetypeId },
+    where: { archetypeId: archetype.id },
     orderBy: { date: 'desc' },
     include: { matches: true },
   });

@@ -8,10 +8,15 @@
   --color-primary-dark: #2f4e7a;
   --color-border: #d8d2c5;
   --color-text: #2a2a2a;
+  --color-text-muted: #6b6b6b;
 
   /* Status Colors */
   --color-error-bg: #fee2e2;
   --color-error-text: #991b1b;
+
+  /* Danger */
+  --color-danger: #a64a4a;
+  --color-danger-dark: #692f2f;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -23,6 +28,7 @@
 
   /* Typography */
   --font-family: 'Courier New', monospace;
+  --font-size-sm: 0.8rem;
 
   /* Page */
   --page-width-desktop: 92.5vw;

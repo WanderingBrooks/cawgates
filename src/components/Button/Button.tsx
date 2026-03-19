@@ -7,7 +7,7 @@ type ButtonProps = {
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   className?: string;
-  variant: 'primary' | 'secondary';
+  variant: 'primary' | 'secondary' | 'danger';
 };
 
 const Button = ({

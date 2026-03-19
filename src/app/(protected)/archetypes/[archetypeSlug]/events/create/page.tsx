@@ -6,17 +6,21 @@ import EventForm from '../EventForm';
 const CreateEventPage = async ({
   params,
 }: {
-  params: Promise<{ archetypeId: string }>;
+  params: Promise<{ archetypeSlug: string }>;
 }) => {
   const t = await getTranslations('createEvent');
-  const { archetypeId } = await params;
+  const { archetypeSlug } = await params;
 
-  const { archetype } = await getArchetypeForUser({ archetypeId });
+  const { archetype } = await getArchetypeForUser({ archetypeSlug });
 
   return (
     <>
       <PageTitle title={t('title')} subtitle={archetype.name} />
-      <EventForm mode="create" archetypeId={archetypeId} />
+      <EventForm
+        mode="create"
+        archetypeId={archetype.id}
+        archetypeSlug={archetype.slug}
+      />
     </>
   );
 };
