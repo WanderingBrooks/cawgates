@@ -159,51 +159,9 @@ const deleteArchetype = async (
   redirect('/archetypes');
 };
 
-// --- Opponent archetypes (strings used in matches, scoped to a user archetype) ---
-
-const getOpponentArchetypes = async (
-  archetypeId: string,
-): Promise<string[]> => {
-  try {
-    const user = await getUser();
-
-    if (!user) {
-      return [];
-    }
-
-    const archetype = await prisma.archetype.findUnique({
-      where: { id: archetypeId },
-    });
-
-    if (!archetype || archetype.userId !== user.userId) {
-      return [];
-    }
-
-    const matches = await prisma.match.findMany({
-      where: {
-        event: { archetypeId },
-      },
-      select: {
-        opponentArchetype: true,
-      },
-      distinct: ['opponentArchetype'],
-      orderBy: {
-        opponentArchetype: 'asc',
-      },
-    });
-
-    return matches.map(match => match.opponentArchetype);
-  } catch (error) {
-    console.error('Failed to fetch opponent archetypes:', error);
-
-    return [];
-  }
-};
-
 export {
   getUserArchetypes,
   createArchetype,
   updateArchetype,
   deleteArchetype,
-  getOpponentArchetypes,
 };

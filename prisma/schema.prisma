@@ -30,11 +30,27 @@ model Archetype {
   userId    String
   createdAt DateTime @default(now())
 
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  events Event[]
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  events             Event[]
+  opponentArchetypes OpponentArchetype[]
 
   @@unique([userId, name])
   @@unique([userId, slug])
+}
+
+model OpponentArchetype {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String
+  archetypeId String
+  isRogue     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  archetype Archetype @relation(fields: [archetypeId], references: [id], onDelete: Cascade)
+  matches   Match[]
+
+  @@unique([archetypeId, slug])
+  @@unique([archetypeId, name])
 }
 
 model Event {
@@ -50,14 +66,15 @@ model Event {
 }
 
 model Match {
-  id                String   @id @default(uuid())
-  eventId           String
-  order             Int      @default(0)
-  opponentArchetype String
-  wins              Int
-  losses            Int
-  journalEntry      String?
-  createdAt         DateTime @default(now())
+  id                   String   @id @default(uuid())
+  eventId              String
+  order                Int      @default(0)
+  opponentArchetypeId  String
+  wins                 Int
+  losses               Int
+  journalEntry         String?
+  createdAt            DateTime @default(now())
 
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  event             Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  opponentArchetype OpponentArchetype @relation(fields: [opponentArchetypeId], references: [id])
 }

@@ -20,7 +20,7 @@ const EventPage = async ({
 
   const tableRows = event.matches.map(match => ({
     key: match.id,
-    archetype: match.opponentArchetype,
+    archetype: match.opponentArchetype.name,
     wins: match.wins,
     losses: match.losses,
   }));

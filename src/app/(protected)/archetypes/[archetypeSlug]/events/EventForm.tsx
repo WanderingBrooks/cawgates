@@ -80,7 +80,7 @@ const EventForm = ({
       ...m,
       wins: m.wins as number | '',
       losses: m.losses as number | '',
-    })) || [{ opponentArchetype: '', wins: '', losses: '' }],
+    })) || [{ opponentArchetypeId: '', wins: '', losses: '' }],
   );
 
   const handleEventChange = (
@@ -109,7 +109,7 @@ const EventForm = ({
   const addMatch = () => {
     setMatches(prev => [
       ...prev,
-      { opponentArchetype: '', wins: '', losses: '' },
+      { opponentArchetypeId: '', wins: '', losses: '' },
     ]);
   };
 
@@ -175,13 +175,13 @@ const EventForm = ({
               <ArchetypeList
                 archetypeId={archetypeId}
                 id={`opponent-${index}`}
-                name={`matches[${index}].opponentArchetype`}
+                name={`matches[${index}].opponentArchetypeId`}
                 label={t('opponentArchetype')}
-                value={match.opponentArchetype}
+                value={match.opponentArchetypeId}
                 onChange={e =>
                   handleMatchChange({
                     index,
-                    field: 'opponentArchetype',
+                    field: 'opponentArchetypeId',
                     value: e.target.value,
                   })
                 }

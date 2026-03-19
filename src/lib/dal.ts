@@ -46,7 +46,12 @@ const getEventForUser = async ({
 
   const event = await prisma.event.findUnique({
     where: { id: eventId, archetypeId: archetype.id },
-    include: { matches: { orderBy: { order: 'asc' } } },
+    include: {
+      matches: {
+        orderBy: { order: 'asc' },
+        include: { opponentArchetype: true },
+      },
+    },
   });
 
   if (!event) {
@@ -72,4 +77,50 @@ const getEventsForArchetype = async ({
   return { user, archetype, events };
 };
 
-export { getArchetypeForUser, getEventsForArchetype, getEventForUser };
+const getOpponentArchetypesForUser = async ({
+  archetypeSlug,
+}: {
+  archetypeSlug: string;
+}) => {
+  const { user, archetype } = await getArchetypeForUser({ archetypeSlug });
+
+  const opponentArchetypes = await prisma.opponentArchetype.findMany({
+    where: { archetypeId: archetype.id },
+    orderBy: { name: 'asc' },
+  });
+
+  return { user, archetype, opponentArchetypes };
+};
+
+const getOpponentArchetypeForUser = async ({
+  archetypeSlug,
+  opponentArchetypeSlug,
+}: {
+  archetypeSlug: string;
+  opponentArchetypeSlug: string;
+}) => {
+  const { user, archetype } = await getArchetypeForUser({ archetypeSlug });
+
+  const opponentArchetype = await prisma.opponentArchetype.findUnique({
+    where: {
+      archetypeId_slug: {
+        archetypeId: archetype.id,
+        slug: opponentArchetypeSlug,
+      },
+    },
+  });
+
+  if (!opponentArchetype) {
+    notFound();
+  }
+
+  return { user, archetype, opponentArchetype };
+};
+
+export {
+  getArchetypeForUser,
+  getEventsForArchetype,
+  getEventForUser,
+  getOpponentArchetypesForUser,
+  getOpponentArchetypeForUser,
+};

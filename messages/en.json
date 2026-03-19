@@ -114,7 +114,35 @@
     "events": "Events",
     "record": "Record",
     "edit": "Edit",
+    "opponentArchetypes": "Opponent Archetypes",
     "logout": "Logout"
+  },
+  "opponentArchetypes": {
+    "title": "Opponent Archetypes",
+    "createOpponentArchetype": "Create Opponent Archetype",
+    "noOpponentArchetypes": "No opponent archetypes yet",
+    "edit": "Edit"
+  },
+  "createOpponentArchetype": {
+    "title": "Create Opponent Archetype"
+  },
+  "editOpponentArchetype": {
+    "title": "Edit Opponent Archetype"
+  },
+  "opponentArchetypeForm": {
+    "name": "Name *",
+    "slug": "URL Slug",
+    "slugHint": "Auto-generated from name if left blank",
+    "create": "Create",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel"
+  },
+  "deleteOpponentArchetypeButton": {
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "deleteConfirm": "Are you sure you want to delete this opponent archetype?",
+    "hasMatches": "Cannot delete: this archetype is used in existing matches."
   },
   "loading": {
     "title": "Loading..."

@@ -13,7 +13,7 @@ export type ActionResult = {
 
 type ParsedMatch = {
   id?: string;
-  opponentArchetype: string;
+  opponentArchetypeId: string;
   wins: number;
   losses: number;
 };
@@ -23,11 +23,11 @@ const parseMatches = (formData: FormData): ParsedMatch[] => {
   let index = 0;
   const matches: ParsedMatch[] = [];
 
-  while (formData.has(`matches[${index}].opponentArchetype`)) {
+  while (formData.has(`matches[${index}].opponentArchetypeId`)) {
     const id = formData.get(`matches[${index}].id`) as string | null;
 
-    const opponentArchetype = formData.get(
-      `matches[${index}].opponentArchetype`,
+    const opponentArchetypeId = formData.get(
+      `matches[${index}].opponentArchetypeId`,
     ) as string;
 
     const wins =
@@ -39,8 +39,8 @@ const parseMatches = (formData: FormData): ParsedMatch[] => {
     // Only include id if it exists (for edit mode)
     matches.push(
       id
-        ? { id, opponentArchetype, wins, losses }
-        : { opponentArchetype, wins, losses },
+        ? { id, opponentArchetypeId, wins, losses }
+        : { opponentArchetypeId, wins, losses },
     );
 
     index++;
@@ -111,7 +111,7 @@ const createEventWithMatches = async (
         matches: {
           create: validated.matches.map((m, index) => ({
             order: index,
-            opponentArchetype: m.opponentArchetype,
+            opponentArchetypeId: m.opponentArchetypeId,
             wins: m.wins,
             losses: m.losses,
           })),
@@ -272,13 +272,13 @@ const updateEventWithMatches = async (
             where: { id: match.id || 'new' },
             create: {
               order: index,
-              opponentArchetype: match.opponentArchetype,
+              opponentArchetypeId: match.opponentArchetypeId,
               wins: match.wins,
               losses: match.losses,
             },
             update: {
               order: index,
-              opponentArchetype: match.opponentArchetype,
+              opponentArchetypeId: match.opponentArchetypeId,
               wins: match.wins,
               losses: match.losses,
             },

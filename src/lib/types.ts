@@ -3,7 +3,10 @@ import { z } from 'zod';
 // Schema for a single match
 const matchSchema = z.object({
   id: z.string().optional(),
-  opponentArchetype: z.string().min(1, 'Opponent archetype is required').trim(),
+  opponentArchetypeId: z
+    .string()
+    .min(1, 'Opponent archetype is required')
+    .trim(),
   wins: z.number().min(0, 'Wins must be non-negative').int(),
   losses: z.number().min(0, 'Losses must be non-negative').int(),
 });
@@ -18,7 +21,7 @@ const createEventSchema = z.object({
     .array(matchSchema)
     .min(1, 'At least one match is required')
     .refine(
-      matches => matches.every(m => m.opponentArchetype.trim()),
+      matches => matches.every(m => m.opponentArchetypeId.trim()),
       'All matches must have an opponent archetype',
     ),
 });
@@ -37,6 +40,29 @@ export type UpdateEventInput = z.infer<typeof updateEventSchema>;
 export type MatchInputForm = Omit<MatchInput, 'wins' | 'losses'> & {
   wins: number | '';
   losses: number | '';
+};
+
+// Schema for creating/updating an opponent archetype
+const createOpponentArchetypeSchema = z.object({
+  name: z.string().min(1, 'Name is required').trim(),
+  slug: z
+    .string()
+    .min(1, 'Slug is required')
+    .max(100, 'Slug must be 100 characters or less')
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      'Slug may only contain lowercase letters, numbers, and hyphens',
+    )
+    .trim(),
+});
+
+export type CreateOpponentArchetypeInput = z.infer<
+  typeof createOpponentArchetypeSchema
+>;
+
+export type OpponentArchetypeActionResult = {
+  success: boolean;
+  error?: string;
 };
 
 // Helper type for event form data (event fields only, no matches)
@@ -93,6 +119,7 @@ export {
   createEventSchema,
   updateEventSchema,
   createArchetypeSchema,
+  createOpponentArchetypeSchema,
   registerUserSchema,
   loginSchema,
 };
