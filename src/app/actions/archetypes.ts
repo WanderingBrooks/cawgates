@@ -67,7 +67,10 @@ const createArchetype = async (
       'code' in error &&
       (error as { code: string }).code === 'P2002'
     ) {
-      return { success: false, error: 'An archetype with that name or slug already exists' };
+      return {
+        success: false,
+        error: 'You already have an archetype with that name or slug',
+      };
     }
 
     throw error;
@@ -117,7 +120,10 @@ const updateArchetype = async (
       'code' in error &&
       (error as { code: string }).code === 'P2002'
     ) {
-      return { success: false, error: 'An archetype with that name or slug already exists' };
+      return {
+        success: false,
+        error: 'You already have an archetype with that name or slug',
+      };
     }
 
     throw error;
@@ -142,7 +148,10 @@ const deleteArchetype = async (
   }
 
   if (archetype.userId !== user.userId) {
-    return { success: false, error: 'You do not have permission to delete this archetype' };
+    return {
+      success: false,
+      error: 'You do not have permission to delete this archetype',
+    };
   }
 
   await prisma.archetype.delete({ where: { id: archetypeId } });
@@ -152,7 +161,9 @@ const deleteArchetype = async (
 
 // --- Opponent archetypes (strings used in matches, scoped to a user archetype) ---
 
-const getOpponentArchetypes = async (archetypeId: string): Promise<string[]> => {
+const getOpponentArchetypes = async (
+  archetypeId: string,
+): Promise<string[]> => {
   try {
     const user = await getUser();
 
@@ -189,4 +200,10 @@ const getOpponentArchetypes = async (archetypeId: string): Promise<string[]> => 
   }
 };
 
-export { getUserArchetypes, createArchetype, updateArchetype, deleteArchetype, getOpponentArchetypes };
+export {
+  getUserArchetypes,
+  createArchetype,
+  updateArchetype,
+  deleteArchetype,
+  getOpponentArchetypes,
+};
