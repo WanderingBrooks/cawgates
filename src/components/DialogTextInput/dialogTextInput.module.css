@@ -23,8 +23,8 @@
 .dialog {
   border: 1px solid var(--color-border);
   background-color: var(--color-background);
-  max-width: var(--page-width-desktop);
-  width: var(--page-width-desktop);
+  max-width: var(--page-width-mobile);
+  width: var(--page-width-mobile);
   height: 80%;
   margin: 8px;
 
@@ -35,8 +35,8 @@
 
 @media (min-width: 768px) {
   .dialog {
-    width: var(--page-width-mobile);
-    max-width: var(--page-width-mobile);
+    width: var(--page-width-desktop);
+    max-width: var(--page-width-desktop);
   }
 }
 
