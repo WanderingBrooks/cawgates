@@ -43,7 +43,7 @@ const eslintConfig = defineConfig([
         // constraint, so they are banned on the archetype model.
         {
           selector:
-            "CallExpression[callee.type='MemberExpression'][callee.object.type='MemberExpression'][callee.object.object.name='prisma'][callee.object.property.name='archetype'][callee.property.name=/^findFirst/]",
+            'CallExpression[callee.type="MemberExpression"][callee.object.type="MemberExpression"][callee.object.object.name="prisma"][callee.object.property.name="archetype"][callee.property.name=/^findFirst/]',
           message:
             'Do not use prisma.archetype.findFirst/findFirstOrThrow. Use prisma.archetype.findUnique with the userId_slug compound key ({ userId_slug: { userId, slug } }) to ensure ownership is always checked when querying by slug.',
         },
