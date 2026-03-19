@@ -19,6 +19,11 @@ const PageTitle = ({
     <div className={cn(classes.pageTitle, className)}>
       <div>
         <h1>{title}</h1>
+        {/*
+         * Render h2 even when subtitle is not passed in
+         * to maintain consistent spacing between title
+         * and page content.
+         */}
         <h2 className={classes.subtitle}>{subtitle}</h2>
       </div>
       <NavMenu disabled={disableMenu} archetypeName={subtitle} />
