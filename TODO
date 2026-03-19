@@ -1,1 +1,3 @@
 1. Move delete buttons to use dialog
+2. The page subtitle is incorrect in the opponent archetype section. It get's the opponent one and not cawgates
+3. Opponent archetype is a bad name. Maybe we fix that in the next pr. But I feel like we need better names for our core tables / views.
