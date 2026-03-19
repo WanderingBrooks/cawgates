@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { logout } from '@/app/actions/auth';
 import classes from './navMenu.module.css';
 import { cn } from '@/lib/utils';
+import Button from '../Button';
 
 type NavMenuProps = {
   disabled?: boolean;
@@ -45,65 +46,58 @@ const NavMenu = ({ disabled = false }: NavMenuProps) => {
 
   return (
     <div ref={menuRef} className={classes.container}>
-      <button
-        className={classes.trigger}
+      <Button
+        variant="secondary"
         onClick={() => setOpen(prev => !prev)}
         disabled={disabled}
         type="button"
       >
         {t('menu')}
-      </button>
+      </Button>
       {open && (
-        <ul className={classes.dropdown}>
-          <li>
+        <div className={classes.dropdown}>
+          <Link
+            href="/archetypes"
+            className={classes.item}
+            onClick={() => setOpen(false)}
+          >
+            {t('archetypes')}
+          </Link>
+          {archetypeId ? (
             <Link
-              href="/archetypes"
+              href={`/archetypes/${archetypeId}`}
               className={classes.item}
               onClick={() => setOpen(false)}
             >
-              {t('archetypes')}
+              {t('matchStatistics')}
             </Link>
-          </li>
-          <li>
-            {archetypeId ? (
-              <Link
-                href={`/archetypes/${archetypeId}`}
-                className={classes.item}
-                onClick={() => setOpen(false)}
-              >
-                {t('matchStatistics')}
-              </Link>
-            ) : (
-              <span className={cn(classes.item, classes.itemDisabled)}>
-                {t('matchStatistics')}
-              </span>
-            )}
-          </li>
-          <li>
-            {archetypeId ? (
-              <Link
-                href={`/archetypes/${archetypeId}/events`}
-                className={classes.item}
-                onClick={() => setOpen(false)}
-              >
-                {t('events')}
-              </Link>
-            ) : (
-              <span className={cn(classes.item, classes.itemDisabled)}>
-                {t('events')}
-              </span>
-            )}
-          </li>
-          <li className={classes.logoutItem}>
-            <button
-              type="button"
-              className={cn(classes.item, classes.logoutButton)}
-              onClick={handleLogout}
+          ) : (
+            <span className={cn(classes.item, classes.itemDisabled)}>
+              {t('matchStatistics')}
+            </span>
+          )}
+          {archetypeId ? (
+            <Link
+              href={`/archetypes/${archetypeId}/events`}
+              className={classes.item}
+              onClick={() => setOpen(false)}
             >
-              {t('logout')}
-            </button>
-          </li>
-        </ul>
+              {t('events')}
+            </Link>
+          ) : (
+            <span className={cn(classes.item, classes.itemDisabled)}>
+              {t('events')}
+            </span>
+          )}
+          <div className={classes.divider} />
+          <button
+            type="button"
+            className={cn(classes.item, classes.logoutButton)}
+            onClick={handleLogout}
+          >
+            {t('logout')}
+          </button>
+        </div>
       )}
     </div>
   );
