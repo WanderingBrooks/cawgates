@@ -183,73 +183,9 @@ const deleteOpponentArchetype = async ({
   await prisma.opponentArchetype.delete({ where: { id: opponentArchetypeId } });
 };
 
-const createOpponentArchetypeInline = async ({
-  archetypeId,
-  name,
-}: {
-  archetypeId: string;
-  name: string;
-}): Promise<{ id: string } | { error: string }> => {
-  const user = await getUser();
-
-  if (!user) {
-    return { error: 'You must be logged in' };
-  }
-
-  const slug = slugify({ name });
-
-  const result = createOpponentArchetypeSchema.safeParse({ name, slug });
-
-  if (!result.success) {
-    return { error: result.error.issues[0].message };
-  }
-
-  const archetype = await prisma.archetype.findUnique({
-    where: { id: archetypeId },
-  });
-
-  if (!archetype || archetype.userId !== user.userId) {
-    return { error: 'Archetype not found' };
-  }
-
-  try {
-    const created = await prisma.opponentArchetype.create({
-      data: {
-        name: result.data.name,
-        slug: result.data.slug,
-        archetypeId,
-        isRogue: false,
-      },
-    });
-
-    return { id: created.id };
-  } catch (error: unknown) {
-    if (
-      typeof error === 'object' &&
-      error !== null &&
-      'code' in error &&
-      (error as { code: string }).code === 'P2002'
-    ) {
-      // If a duplicate exists, look up and return the existing record's id
-      const existing = await prisma.opponentArchetype.findFirst({
-        where: { archetypeId, name: result.data.name },
-      });
-
-      if (existing) {
-        return { id: existing.id };
-      }
-
-      return { error: 'An opponent archetype with that name already exists' };
-    }
-
-    return { error: 'Failed to create opponent archetype' };
-  }
-};
-
 export {
   getOpponentArchetypesForArchetype,
   createOpponentArchetype,
   updateOpponentArchetype,
   deleteOpponentArchetype,
-  createOpponentArchetypeInline,
 };
