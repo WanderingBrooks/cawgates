@@ -7,7 +7,6 @@ import {
   type OpponentArchetypeActionResult,
 } from '@/lib/types';
 import { slugify } from '@/lib/utils';
-import { redirect } from 'next/navigation';
 
 const getOpponentArchetypesForArchetype = async ({
   archetypeId,
@@ -120,7 +119,10 @@ const updateOpponentArchetype = async (
     include: { archetype: true },
   });
 
-  if (!opponentArchetype || opponentArchetype.archetype.userId !== user.userId) {
+  if (
+    !opponentArchetype ||
+    opponentArchetype.archetype.userId !== user.userId
+  ) {
     return { success: false, error: 'Opponent archetype not found' };
   }
 
@@ -164,10 +166,7 @@ const deleteOpponentArchetype = async ({
 
   const opponentArchetype = await prisma.opponentArchetype.findUnique({
     where: { id: opponentArchetypeId },
-    include: {
-      archetype: true,
-      _count: { select: { matches: true } },
-    },
+    include: { archetype: true },
   });
 
   if (!opponentArchetype) {
@@ -181,18 +180,7 @@ const deleteOpponentArchetype = async ({
     };
   }
 
-  if (opponentArchetype._count.matches > 0) {
-    return {
-      success: false,
-      error: 'Cannot delete: this archetype is used in existing matches.',
-    };
-  }
-
   await prisma.opponentArchetype.delete({ where: { id: opponentArchetypeId } });
-
-  redirect(
-    `/archetypes/${opponentArchetype.archetype.slug}/opponent-archetypes`,
-  );
 };
 
 const createOpponentArchetypeInline = async ({
