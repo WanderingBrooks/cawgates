@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation';
 import {
   createOpponentArchetype,
   updateOpponentArchetype,
-  type OpponentArchetypeActionResult,
 } from '@/app/actions/opponentArchetypes';
+import { type OpponentArchetypeActionResult } from '@/lib/types';
 import {
   Button,
   ErrorMessage,
@@ -72,7 +72,7 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
         router.push(`/archetypes/${props.archetypeSlug}/opponent-archetypes`);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   const [name, setName] = useState(
