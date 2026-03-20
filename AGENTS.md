@@ -4,6 +4,7 @@
 
 - Use `type` instead of `interface` for all type definitions
 - Always use `const` arrow functions instead of function declarations
+- Always use braces for `if` statements — no single-line braceless ifs
 
 ```typescript
 // ❌ Bad
@@ -11,12 +12,16 @@ interface User {
   name: string;
 }
 function greet(user: User) {}
+if (!user) return;
 
 // ✅ Good
 type User = {
   name: string;
 };
 const greet = (user: User) => {};
+if (!user) {
+  return;
+}
 ```
 
 ## Code Style

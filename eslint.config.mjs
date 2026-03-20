@@ -11,6 +11,7 @@ const eslintConfig = defineConfig([
 
   {
     rules: {
+      'curly': ['error', 'all'],
       'no-restricted-syntax': [
         'error',
         {
