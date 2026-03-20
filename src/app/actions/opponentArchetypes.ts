@@ -181,6 +181,10 @@ const deleteOpponentArchetype = async ({
   }
 
   await prisma.opponentArchetype.delete({ where: { id: opponentArchetypeId } });
+
+  return {
+    success: true,
+  };
 };
 
 export {
