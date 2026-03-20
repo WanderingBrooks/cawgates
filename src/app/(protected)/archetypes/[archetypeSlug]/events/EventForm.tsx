@@ -172,6 +172,9 @@ const EventForm = ({
               </Button>
             </CardTitle>
             <CardContent>
+              {/* TODO: Each OpponentArchetypeSelect fetches opponent archetypes independently.
+                  With multiple match cards this results in N identical requests for the same data.
+                  Fix: fetch once in EventForm and pass options down via an initialOptions prop. */}
               <OpponentArchetypeSelect
                 archetypeId={archetypeId}
                 archetypeSlug={archetypeSlug}
