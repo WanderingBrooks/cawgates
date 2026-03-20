@@ -115,14 +115,7 @@
     "events": "Events",
     "record": "Record",
     "edit": "Edit",
-    "opponentArchetypes": "Opponent Archetypes",
     "logout": "Logout"
-  },
-  "opponentArchetypes": {
-    "title": "Opponent Archetypes",
-    "createOpponentArchetype": "Create Opponent Archetype",
-    "noOpponentArchetypes": "No opponent archetypes yet",
-    "edit": "Edit"
   },
   "createOpponentArchetype": {
     "title": "Create Opponent Archetype"
@@ -138,11 +131,6 @@
     "save": "Save",
     "saving": "Saving...",
     "cancel": "Cancel"
-  },
-  "deleteOpponentArchetypeButton": {
-    "delete": "Delete",
-    "deleting": "Deleting...",
-    "deleteConfirm": "Are you sure you want to delete this opponent archetype? It will delete all connected matches, but the events will remain."
   },
   "loading": {
     "title": "Loading..."

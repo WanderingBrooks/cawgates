@@ -153,43 +153,8 @@ const updateOpponentArchetype = async (
   }
 };
 
-const deleteOpponentArchetype = async ({
-  opponentArchetypeId,
-}: {
-  opponentArchetypeId: string;
-}): Promise<OpponentArchetypeActionResult> => {
-  const user = await getUser();
-
-  if (!user) {
-    return { success: false, error: 'You must be logged in' };
-  }
-
-  const opponentArchetype = await prisma.opponentArchetype.findUnique({
-    where: { id: opponentArchetypeId },
-    include: { archetype: true },
-  });
-
-  if (!opponentArchetype) {
-    return { success: false, error: 'Opponent archetype not found' };
-  }
-
-  if (opponentArchetype.archetype.userId !== user.userId) {
-    return {
-      success: false,
-      error: 'You do not have permission to delete this opponent archetype',
-    };
-  }
-
-  await prisma.opponentArchetype.delete({ where: { id: opponentArchetypeId } });
-
-  return {
-    success: true,
-  };
-};
-
 export {
   getOpponentArchetypesForArchetype,
   createOpponentArchetype,
   updateOpponentArchetype,
-  deleteOpponentArchetype,
 };

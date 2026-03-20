@@ -17,8 +17,6 @@ import {
   FlexRowBetween,
 } from '@/components';
 import Link from 'next/link';
-import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
-import classes from './opponentArchetypeForm.module.css';
 import { slugify } from '@/lib/utils';
 
 const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
@@ -50,7 +48,6 @@ type OpponentArchetypeFormProps =
       initialSlug: string;
       onSuccess?: (data: { id: string; name: string; slug: string }) => void;
       onCancel?: () => void;
-      onDelete?: () => void;
     };
 
 const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
@@ -142,23 +139,10 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
         />
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween>
-          {props.mode === 'edit' ? (
-            <>
-              <DeleteOpponentArchetypeButton
-                opponentArchetypeId={props.opponentArchetypeId}
-                onDelete={props.onDelete}
-              />
-              <div className={classes.rightButtons}>
-                {cancelButton}
-                <SubmitButton mode={props.mode} />
-              </div>
-            </>
-          ) : (
-            <>
-              {cancelButton}
-              <SubmitButton mode={props.mode} />
-            </>
-          )}
+          <>
+            {cancelButton}
+            <SubmitButton mode={props.mode} />
+          </>
         </FlexRowBetween>
       </SpaceChildrenVertically>
     </form>

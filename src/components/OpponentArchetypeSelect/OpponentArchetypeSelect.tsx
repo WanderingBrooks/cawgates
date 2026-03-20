@@ -101,21 +101,6 @@ const OpponentArchetypeSelect = ({
     setIsEditOpen(false);
   };
 
-  const handleDelete = () => {
-    if (!selectedOption) {
-      return;
-    }
-
-    setOptions(prev => prev.filter(o => o.id !== selectedOption.id));
-
-    const syntheticEvent = {
-      target: { value: '' },
-    } as React.ChangeEvent<HTMLInputElement>;
-
-    onChange(syntheticEvent);
-    setIsEditOpen(false);
-  };
-
   return (
     <div className={classes.container}>
       {label && <label htmlFor={id}>{label}</label>}
@@ -178,7 +163,6 @@ const OpponentArchetypeSelect = ({
             initialSlug={selectedOption.slug}
             onSuccess={handleEditSuccess}
             onCancel={() => setIsEditOpen(false)}
-            onDelete={handleDelete}
           />
         </Dialog>
       )}
