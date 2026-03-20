@@ -7,8 +7,10 @@ import { Button, ErrorMessage } from '@/components';
 
 const DeleteOpponentArchetypeButton = ({
   opponentArchetypeId,
+  onDelete,
 }: {
   opponentArchetypeId: string;
+  onDelete?: () => void;
 }) => {
   const t = useTranslations('deleteOpponentArchetypeButton');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -24,9 +26,11 @@ const DeleteOpponentArchetypeButton = ({
 
     const result = await deleteOpponentArchetype({ opponentArchetypeId });
 
-    if (result && !result.success) {
-      setError(result.error || t('hasMatches'));
+    if (result && !result.success && result.error) {
+      setError(result.error);
       setIsDeleting(false);
+    } else {
+      onDelete?.();
     }
   };
 

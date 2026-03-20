@@ -70,7 +70,11 @@ const OpponentArchetypeSelect = ({
     onChange(syntheticEvent);
   };
 
-  const handleCreateSuccess = (data: { id: string; name: string; slug: string }) => {
+  const handleCreateSuccess = (data: {
+    id: string;
+    name: string;
+    slug: string;
+  }) => {
     setOptions(prev =>
       [...prev, data].sort((a, b) => a.name.localeCompare(b.name)),
     );
@@ -83,7 +87,11 @@ const OpponentArchetypeSelect = ({
     setIsCreateOpen(false);
   };
 
-  const handleEditSuccess = (data: { id: string; name: string; slug: string }) => {
+  const handleEditSuccess = (data: {
+    id: string;
+    name: string;
+    slug: string;
+  }) => {
     setOptions(prev =>
       prev
         .map(o => (o.id === data.id ? data : o))
@@ -93,11 +101,32 @@ const OpponentArchetypeSelect = ({
     setIsEditOpen(false);
   };
 
+  const handleDelete = () => {
+    if (!selectedOption) {
+      return;
+    }
+
+    setOptions(prev => prev.filter(o => o.id !== selectedOption.id));
+
+    const syntheticEvent = {
+      target: { value: '' },
+    } as React.ChangeEvent<HTMLInputElement>;
+
+    onChange(syntheticEvent);
+    setIsEditOpen(false);
+  };
+
   return (
     <div className={classes.container}>
       {label && <label htmlFor={id}>{label}</label>}
       {/* Hidden input carries the selected opponentArchetypeId for form submission */}
-      <input type="hidden" id={id} name={name} value={value} required={required} />
+      <input
+        type="hidden"
+        id={id}
+        name={name}
+        value={value}
+        required={required}
+      />
       <div className={classes.selectRow}>
         <select
           value={value}
@@ -149,6 +178,7 @@ const OpponentArchetypeSelect = ({
             initialSlug={selectedOption.slug}
             onSuccess={handleEditSuccess}
             onCancel={() => setIsEditOpen(false)}
+            onDelete={handleDelete}
           />
         </Dialog>
       )}

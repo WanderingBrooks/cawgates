@@ -50,6 +50,7 @@ type OpponentArchetypeFormProps =
       initialSlug: string;
       onSuccess?: (data: { id: string; name: string; slug: string }) => void;
       onCancel?: () => void;
+      onDelete?: () => void;
     };
 
 const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
@@ -145,6 +146,7 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
             <>
               <DeleteOpponentArchetypeButton
                 opponentArchetypeId={props.opponentArchetypeId}
+                onDelete={props.onDelete}
               />
               <div className={classes.rightButtons}>
                 {cancelButton}
