@@ -97,18 +97,6 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
                 {t('events')}
               </Link>
               <Link
-                href={`/archetypes/${archetypeSlug}/opponent-archetypes`}
-                className={cn(
-                  classes.item,
-                  pathname.startsWith(
-                    `/archetypes/${archetypeSlug}/opponent-archetypes`,
-                  ) && classes.itemActive,
-                )}
-                onClick={() => setOpen(false)}
-              >
-                {t('opponentArchetypes')}
-              </Link>
-              <Link
                 href={`/archetypes/${archetypeSlug}/edit`}
                 className={cn(
                   classes.item,
@@ -127,9 +115,6 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
               </span>
               <span className={cn(classes.item, classes.itemDisabled)}>
                 {t('events')}
-              </span>
-              <span className={cn(classes.item, classes.itemDisabled)}>
-                {t('opponentArchetypes')}
               </span>
               <span className={cn(classes.item, classes.itemDisabled)}>
                 {t('edit')}
