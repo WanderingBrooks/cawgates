@@ -68,7 +68,6 @@ const createOpponentArchetype = async (
         name: result.data.name,
         slug: result.data.slug,
         archetypeId,
-        isRogue: false,
       },
     });
 
