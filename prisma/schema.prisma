@@ -43,7 +43,6 @@ model OpponentArchetype {
   name        String
   slug        String
   archetypeId String
-  isRogue     Boolean  @default(false)
   createdAt   DateTime @default(now())
 
   archetype Archetype @relation(fields: [archetypeId], references: [id], onDelete: Cascade)

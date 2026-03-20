@@ -14,7 +14,6 @@ CREATE TABLE "OpponentArchetype" (
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "archetypeId" TEXT NOT NULL,
-    "isRogue" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "OpponentArchetype_pkey" PRIMARY KEY ("id")
@@ -31,13 +30,12 @@ CREATE UNIQUE INDEX "OpponentArchetype_archetypeId_name_key" ON "OpponentArchety
 -- to the id of the newly created OpponentArchetype row.
 INSERT INTO
   "OpponentArchetype"
-    ("id", "name", "slug", "archetypeId", "isRogue")
+    ("id", "name", "slug", "archetypeId")
   SELECT DISTINCT
     gen_random_uuid()::text AS id,
     m."opponentArchetype" AS name,
     regexp_replace(lower(m."opponentArchetype"), '\s+', '-', 'g') AS slug,
-    e."archetypeId",
-    false AS isRogue
+    e."archetypeId"
   FROM
     "Match" m
   JOIN "Event" e ON m."eventId" = e."id"
