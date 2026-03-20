@@ -27,7 +27,9 @@ const useIsClient = () =>
 const Dialog = ({ isOpen, title, children, className }: DialogProps) => {
   const isClient = useIsClient();
 
-  if (!isClient) return null;
+  if (!isClient) {
+    return null;
+  }
 
   return createPortal(
     <div className={cn(classes.dialogContainer, isOpen && classes.open)}>
