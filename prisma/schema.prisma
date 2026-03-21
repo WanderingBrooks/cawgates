@@ -41,14 +41,12 @@ model Archetype {
 model OpponentArchetype {
   id          String   @id @default(uuid())
   name        String
-  slug        String
   archetypeId String
   createdAt   DateTime @default(now())
 
   archetype Archetype @relation(fields: [archetypeId], references: [id], onDelete: Cascade)
   matches   Match[]
 
-  @@unique([archetypeId, slug])
   @@unique([archetypeId, name])
 }
 
@@ -65,14 +63,15 @@ model Event {
 }
 
 model Match {
-  id                   String   @id @default(uuid())
-  eventId              String
-  order                Int      @default(0)
-  opponentArchetypeId  String
-  wins                 Int
-  losses               Int
-  journalEntry         String?
-  createdAt            DateTime @default(now())
+  id                       String   @id @default(uuid())
+  eventId                  String
+  order                    Int      @default(0)
+  opponentArchetypeId      String
+  opponentArchetypeLegacy  String? @map("opponentArchetype")
+  wins                     Int
+  losses                   Int
+  journalEntry             String?
+  createdAt                DateTime @default(now())
 
   event             Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
   opponentArchetype OpponentArchetype @relation(fields: [opponentArchetypeId], references: [id])

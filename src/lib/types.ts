@@ -45,15 +45,6 @@ export type MatchInputForm = Omit<MatchInput, 'wins' | 'losses'> & {
 // Schema for creating/updating an opponent archetype
 const createOpponentArchetypeSchema = z.object({
   name: z.string().min(1, 'Name is required').trim(),
-  slug: z
-    .string()
-    .min(1, 'Slug is required')
-    .max(100, 'Slug must be 100 characters or less')
-    .regex(
-      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-      'Slug may only contain lowercase letters, numbers, and hyphens',
-    )
-    .trim(),
 });
 
 export type CreateOpponentArchetypeInput = z.infer<
@@ -63,7 +54,7 @@ export type CreateOpponentArchetypeInput = z.infer<
 export type OpponentArchetypeActionResult = {
   success: boolean;
   error?: string;
-  data?: { id: string; name: string; slug: string };
+  data?: { id: string; name: string };
 };
 
 // Helper type for event form data (event fields only, no matches)

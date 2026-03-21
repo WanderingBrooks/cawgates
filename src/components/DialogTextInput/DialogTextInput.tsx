@@ -26,7 +26,7 @@ const DialogTextInput = ({
       <Button onClick={() => setIsOpen(true)} variant="secondary">
         {openButtonLabel}
       </Button>
-      <Dialog isOpen={isOpen} title={label} className={classes.tallDialog}>
+      <Dialog isOpen={isOpen} title={label} className={classes.tallDialog} usePortal={false}>
         <TextArea
           {...inputProps}
           className={classes.textArea}

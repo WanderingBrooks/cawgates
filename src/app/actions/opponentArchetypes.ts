@@ -6,7 +6,6 @@ import {
   createOpponentArchetypeSchema,
   type OpponentArchetypeActionResult,
 } from '@/lib/types';
-import { slugify } from '@/lib/utils';
 
 const getOpponentArchetypesForArchetype = async ({
   archetypeId,
@@ -45,10 +44,8 @@ const createOpponentArchetype = async (
 
   const archetypeId = formData.get('archetypeId') as string;
   const name = formData.get('name') as string;
-  const rawSlug = formData.get('slug') as string;
-  const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
 
-  const result = createOpponentArchetypeSchema.safeParse({ name, slug });
+  const result = createOpponentArchetypeSchema.safeParse({ name });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
@@ -66,14 +63,13 @@ const createOpponentArchetype = async (
     const created = await prisma.opponentArchetype.create({
       data: {
         name: result.data.name,
-        slug: result.data.slug,
         archetypeId,
       },
     });
 
     return {
       success: true,
-      data: { id: created.id, name: created.name, slug: created.slug },
+      data: { id: created.id, name: created.name },
     };
   } catch (error: unknown) {
     if (
@@ -84,7 +80,7 @@ const createOpponentArchetype = async (
     ) {
       return {
         success: false,
-        error: 'An opponent archetype with that name or slug already exists',
+        error: 'An opponent archetype with that name already exists',
       };
     }
 
@@ -104,10 +100,8 @@ const updateOpponentArchetype = async (
 
   const opponentArchetypeId = formData.get('opponentArchetypeId') as string;
   const name = formData.get('name') as string;
-  const rawSlug = formData.get('slug') as string;
-  const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
 
-  const result = createOpponentArchetypeSchema.safeParse({ name, slug });
+  const result = createOpponentArchetypeSchema.safeParse({ name });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
@@ -128,12 +122,12 @@ const updateOpponentArchetype = async (
   try {
     const updated = await prisma.opponentArchetype.update({
       where: { id: opponentArchetypeId },
-      data: { name: result.data.name, slug: result.data.slug },
+      data: { name: result.data.name },
     });
 
     return {
       success: true,
-      data: { id: updated.id, name: updated.name, slug: updated.slug },
+      data: { id: updated.id, name: updated.name },
     };
   } catch (error: unknown) {
     if (
@@ -144,7 +138,7 @@ const updateOpponentArchetype = async (
     ) {
       return {
         success: false,
-        error: 'An opponent archetype with that name or slug already exists',
+        error: 'An opponent archetype with that name already exists',
       };
     }
 

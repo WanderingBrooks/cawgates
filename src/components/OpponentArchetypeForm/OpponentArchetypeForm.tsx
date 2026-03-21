@@ -17,7 +17,6 @@ import {
   FlexRowBetween,
 } from '@/components';
 import Link from 'next/link';
-import { slugify } from '@/lib/utils';
 
 const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();
@@ -35,7 +34,7 @@ type OpponentArchetypeFormProps =
       mode: 'create';
       archetypeId: string;
       archetypeSlug: string;
-      onSuccess?: (data: { id: string; name: string; slug: string }) => void;
+      onSuccess?: (data: { id: string; name: string }) => void;
       onCancel?: () => void;
     }
   | {
@@ -43,10 +42,8 @@ type OpponentArchetypeFormProps =
       archetypeId: string;
       archetypeSlug: string;
       opponentArchetypeId: string;
-      opponentArchetypeSlug: string;
       initialName: string;
-      initialSlug: string;
-      onSuccess?: (data: { id: string; name: string; slug: string }) => void;
+      onSuccess?: (data: { id: string; name: string }) => void;
       onCancel?: () => void;
     };
 
@@ -77,12 +74,6 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
     props.mode === 'edit' ? props.initialName : '',
   );
 
-  const [slug, setSlug] = useState(
-    props.mode === 'edit' ? props.initialSlug : '',
-  );
-
-  const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
-
   const cancelHref = `/archetypes/${props.archetypeSlug}/opponent-archetypes`;
 
   const cancelButton = props.onCancel ? (
@@ -94,19 +85,6 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
       <Button variant="secondary">{t('cancel')}</Button>
     </Link>
   );
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-
-    if (!slugManuallyEdited) {
-      setSlug(slugify({ name: e.target.value }));
-    }
-  };
-
-  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSlugManuallyEdited(true);
-    setSlug(e.target.value);
-  };
 
   return (
     <form action={formAction}>
@@ -125,24 +103,13 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
           name="name"
           label={t('name')}
           value={name}
-          onChange={handleNameChange}
+          onChange={e => setName(e.target.value)}
           required
-        />
-        <Input
-          type="text"
-          id="slug"
-          name="slug"
-          label={t('slug')}
-          hint={t('slugHint')}
-          value={slug}
-          onChange={handleSlugChange}
         />
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween>
-          <>
-            {cancelButton}
-            <SubmitButton mode={props.mode} />
-          </>
+          {cancelButton}
+          <SubmitButton mode={props.mode} />
         </FlexRowBetween>
       </SpaceChildrenVertically>
     </form>

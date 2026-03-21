@@ -11,6 +11,7 @@ type DialogProps = {
   title: string;
   children: React.ReactNode;
   className?: string;
+  usePortal?: boolean;
 };
 
 // useSyncExternalStore with a no-op subscribe is the React 18 idiomatic way
@@ -24,22 +25,33 @@ const useIsClient = () =>
     () => false,
   );
 
-const Dialog = ({ isOpen, title, children, className }: DialogProps) => {
+const Dialog = ({
+  isOpen,
+  title,
+  children,
+  className,
+  usePortal = false,
+}: DialogProps) => {
   const isClient = useIsClient();
 
-  if (!isClient) {
-    return null;
-  }
-
-  return createPortal(
+  const content = (
     <div className={cn(classes.dialogContainer, isOpen && classes.open)}>
       <Card className={cn(classes.dialog, className)}>
         <CardTitle>{title}</CardTitle>
         {children}
       </Card>
-    </div>,
-    document.body,
+    </div>
   );
+
+  if (usePortal) {
+    if (!isClient) {
+      return null;
+    }
+
+    return createPortal(content, document.body);
+  }
+
+  return content;
 };
 
 export default Dialog;

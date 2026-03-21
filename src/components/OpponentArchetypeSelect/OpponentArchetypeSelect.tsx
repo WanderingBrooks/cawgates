@@ -11,7 +11,6 @@ import classes from './opponentArchetypeSelect.module.css';
 type OpponentArchetypeOption = {
   id: string;
   name: string;
-  slug: string;
 };
 
 type OpponentArchetypeSelectProps = {
@@ -48,7 +47,7 @@ const OpponentArchetypeSelect = ({
     const loadOptions = async () => {
       const data = await getOpponentArchetypesForArchetype({ archetypeId });
 
-      setOptions(data.map(o => ({ id: o.id, name: o.name, slug: o.slug })));
+      setOptions(data.map(o => ({ id: o.id, name: o.name })));
       setIsLoading(false);
     };
 
@@ -70,11 +69,7 @@ const OpponentArchetypeSelect = ({
     onChange(syntheticEvent);
   };
 
-  const handleCreateSuccess = (data: {
-    id: string;
-    name: string;
-    slug: string;
-  }) => {
+  const handleCreateSuccess = (data: { id: string; name: string }) => {
     setOptions(prev =>
       [...prev, data].sort((a, b) => a.name.localeCompare(b.name)),
     );
@@ -87,11 +82,7 @@ const OpponentArchetypeSelect = ({
     setIsCreateOpen(false);
   };
 
-  const handleEditSuccess = (data: {
-    id: string;
-    name: string;
-    slug: string;
-  }) => {
+  const handleEditSuccess = (data: { id: string; name: string }) => {
     setOptions(prev =>
       prev
         .map(o => (o.id === data.id ? data : o))
@@ -141,7 +132,7 @@ const OpponentArchetypeSelect = ({
         )}
       </div>
 
-      <Dialog isOpen={isCreateOpen} title={t('createTitle')}>
+      <Dialog isOpen={isCreateOpen} title={t('createTitle')} usePortal>
         <OpponentArchetypeForm
           mode="create"
           archetypeId={archetypeId}
@@ -152,15 +143,13 @@ const OpponentArchetypeSelect = ({
       </Dialog>
 
       {selectedOption && (
-        <Dialog isOpen={isEditOpen} title={t('editTitle')}>
+        <Dialog isOpen={isEditOpen} title={t('editTitle')} usePortal>
           <OpponentArchetypeForm
             mode="edit"
             archetypeId={archetypeId}
             archetypeSlug={archetypeSlug}
             opponentArchetypeId={selectedOption.id}
-            opponentArchetypeSlug={selectedOption.slug}
             initialName={selectedOption.name}
-            initialSlug={selectedOption.slug}
             onSuccess={handleEditSuccess}
             onCancel={() => setIsEditOpen(false)}
           />

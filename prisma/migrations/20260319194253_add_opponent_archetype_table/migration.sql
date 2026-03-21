@@ -12,15 +12,11 @@ ALTER TABLE "Match" ADD COLUMN "opponentArchetypeId" TEXT;
 CREATE TABLE "OpponentArchetype" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "slug" TEXT NOT NULL,
     "archetypeId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "OpponentArchetype_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "OpponentArchetype_archetypeId_slug_key" ON "OpponentArchetype"("archetypeId", "slug");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "OpponentArchetype_archetypeId_name_key" ON "OpponentArchetype"("archetypeId", "name");
@@ -30,11 +26,10 @@ CREATE UNIQUE INDEX "OpponentArchetype_archetypeId_name_key" ON "OpponentArchety
 -- to the id of the newly created OpponentArchetype row.
 INSERT INTO
   "OpponentArchetype"
-    ("id", "name", "slug", "archetypeId")
+    ("id", "name", "archetypeId")
   SELECT DISTINCT
     gen_random_uuid()::text AS id,
     m."opponentArchetype" AS name,
-    regexp_replace(lower(m."opponentArchetype"), '\s+', '-', 'g') AS slug,
     e."archetypeId"
   FROM
     "Match" m
