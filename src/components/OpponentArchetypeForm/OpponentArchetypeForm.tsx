@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
+
 import {
   createOpponentArchetype,
   updateOpponentArchetype,
@@ -34,7 +34,7 @@ type OpponentArchetypeFormProps =
       mode: 'create';
       archetypeId: string;
       archetypeSlug: string;
-      onSuccess?: (data: { id: string; name: string }) => void;
+      onSuccess: (data: { id: string; name: string }) => void;
       onCancel?: () => void;
     }
   | {
@@ -43,13 +43,12 @@ type OpponentArchetypeFormProps =
       archetypeSlug: string;
       opponentArchetypeId: string;
       initialName: string;
-      onSuccess?: (data: { id: string; name: string }) => void;
+      onSuccess: (data: { id: string; name: string }) => void;
       onCancel?: () => void;
     };
 
 const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
   const t = useTranslations('opponentArchetypeForm');
-  const router = useRouter();
 
   const action =
     props.mode === 'create' ? createOpponentArchetype : updateOpponentArchetype;
@@ -61,11 +60,7 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
 
   useEffect(() => {
     if (state?.success && state.data) {
-      if (props.onSuccess) {
-        props.onSuccess(state.data);
-      } else {
-        router.push(`/archetypes/${props.archetypeSlug}/opponent-archetypes`);
-      }
+      props.onSuccess(state.data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
