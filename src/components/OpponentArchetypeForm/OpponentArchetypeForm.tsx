@@ -16,7 +16,6 @@ import {
   SpaceChildrenVertically,
   FlexRowBetween,
 } from '@/components';
-import Link from 'next/link';
 
 const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();
@@ -35,7 +34,7 @@ type OpponentArchetypeFormProps =
       archetypeId: string;
       archetypeSlug: string;
       onSuccess: (data: { id: string; name: string }) => void;
-      onCancel?: () => void;
+      onCancel: () => void;
     }
   | {
       mode: 'edit';
@@ -44,7 +43,7 @@ type OpponentArchetypeFormProps =
       opponentArchetypeId: string;
       initialName: string;
       onSuccess: (data: { id: string; name: string }) => void;
-      onCancel?: () => void;
+      onCancel: () => void;
     };
 
 const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
@@ -69,18 +68,6 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
     props.mode === 'edit' ? props.initialName : '',
   );
 
-  const cancelHref = `/archetypes/${props.archetypeSlug}/opponent-archetypes`;
-
-  const cancelButton = props.onCancel ? (
-    <Button type="button" variant="secondary" onClick={props.onCancel}>
-      {t('cancel')}
-    </Button>
-  ) : (
-    <Link href={cancelHref}>
-      <Button variant="secondary">{t('cancel')}</Button>
-    </Link>
-  );
-
   return (
     <form action={formAction}>
       <SpaceChildrenVertically>
@@ -103,7 +90,9 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
         />
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween>
-          {cancelButton}
+          <Button type="button" variant="secondary" onClick={props.onCancel}>
+            {t('cancel')}
+          </Button>
           <SubmitButton mode={props.mode} />
         </FlexRowBetween>
       </SpaceChildrenVertically>
