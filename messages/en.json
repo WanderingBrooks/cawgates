@@ -117,12 +117,6 @@
     "edit": "Edit",
     "logout": "Logout"
   },
-  "createOpponentArchetype": {
-    "title": "Create Opponent Archetype"
-  },
-  "editOpponentArchetype": {
-    "title": "Edit Opponent Archetype"
-  },
   "opponentArchetypeForm": {
     "name": "Name *",
     "create": "Create",
