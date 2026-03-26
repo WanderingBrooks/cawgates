@@ -32,14 +32,12 @@ type OpponentArchetypeFormProps =
   | {
       mode: 'create';
       archetypeId: string;
-      archetypeSlug: string;
       onSuccess: (data: { id: string; name: string }) => void;
       onCancel: () => void;
     }
   | {
       mode: 'edit';
       archetypeId: string;
-      archetypeSlug: string;
       opponentArchetypeId: string;
       initialName: string;
       onSuccess: (data: { id: string; name: string }) => void;

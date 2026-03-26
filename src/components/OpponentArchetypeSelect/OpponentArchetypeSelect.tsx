@@ -15,7 +15,6 @@ type OpponentArchetypeOption = {
 
 type OpponentArchetypeSelectProps = {
   archetypeId: string;
-  archetypeSlug: string;
   label?: string;
   id?: string;
   name?: string;
@@ -28,7 +27,6 @@ const ADD_NEW_VALUE = '__ADD_NEW__';
 
 const OpponentArchetypeSelect = ({
   archetypeId,
-  archetypeSlug,
   label,
   id,
   name,
@@ -136,7 +134,6 @@ const OpponentArchetypeSelect = ({
         <OpponentArchetypeForm
           mode="create"
           archetypeId={archetypeId}
-          archetypeSlug={archetypeSlug}
           onSuccess={handleCreateSuccess}
           onCancel={() => setIsCreateOpen(false)}
         />
@@ -147,7 +144,6 @@ const OpponentArchetypeSelect = ({
           <OpponentArchetypeForm
             mode="edit"
             archetypeId={archetypeId}
-            archetypeSlug={archetypeSlug}
             opponentArchetypeId={selectedOption.id}
             initialName={selectedOption.name}
             onSuccess={handleEditSuccess}

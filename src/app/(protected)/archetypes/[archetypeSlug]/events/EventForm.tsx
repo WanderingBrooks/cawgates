@@ -177,7 +177,6 @@ const EventForm = ({
                   Fix: fetch once in EventForm and pass options down via an initialOptions prop. */}
               <OpponentArchetypeSelect
                 archetypeId={archetypeId}
-                archetypeSlug={archetypeSlug}
                 id={`opponent-${index}`}
                 name={`matches[${index}].opponentArchetypeId`}
                 label={t('opponentArchetype')}
