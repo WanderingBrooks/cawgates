@@ -93,7 +93,9 @@ const OpponentArchetypeSelect = ({
   return (
     <div className={classes.container}>
       {label && <label htmlFor={id}>{label}</label>}
-      {/* Hidden input carries the selected opponentArchetypeId for form submission */}
+      {/* Hidden input for the label association (via id) and to carry the clean form value —
+          the visible <select> may hold the sentinel "__ADD_NEW__" value, so form submission
+          reads from here instead, which always contains a real opponentArchetypeId or empty string */}
       <input
         type="hidden"
         id={id}
