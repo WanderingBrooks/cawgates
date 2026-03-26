@@ -2,10 +2,9 @@
 
 import classes from './dialogTextInput.module.css';
 import TextArea, { TextAreaProps } from '../TextArea';
-import { Card, CardTitle } from '../Card';
 import { useState } from 'react';
 import Button from '../Button';
-import { cn } from '@/lib/utils';
+import Dialog from '../Dialog';
 
 type DialogTextInputProps = TextAreaProps & {
   label: string;
@@ -27,19 +26,16 @@ const DialogTextInput = ({
       <Button onClick={() => setIsOpen(true)} variant="secondary">
         {openButtonLabel}
       </Button>
-      <div className={cn(classes.dialogContainer, isOpen && classes.open)}>
-        <Card className={classes.dialog}>
-          <CardTitle>{label}</CardTitle>
-          <TextArea
-            {...inputProps}
-            className={classes.textArea}
-            containerClassName={classes.textAreaContainer}
-          />
-          <Button onClick={() => setIsOpen(false)} variant="primary">
-            {closeButtonLabel}
-          </Button>
-        </Card>
-      </div>
+      <Dialog isOpen={isOpen} title={label} className={classes.tallDialog} usePortal={false}>
+        <TextArea
+          {...inputProps}
+          className={classes.textArea}
+          containerClassName={classes.textAreaContainer}
+        />
+        <Button onClick={() => setIsOpen(false)} variant="primary">
+          {closeButtonLabel}
+        </Button>
+      </Dialog>
     </>
   );
 };

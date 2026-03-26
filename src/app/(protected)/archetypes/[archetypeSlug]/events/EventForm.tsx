@@ -9,7 +9,7 @@ import {
   type ActionResult,
 } from '@/app/actions/events';
 import {
-  ArchetypeList,
+  OpponentArchetypeSelect,
   Card,
   CardTitle,
   CardContent,
@@ -80,7 +80,7 @@ const EventForm = ({
       ...m,
       wins: m.wins as number | '',
       losses: m.losses as number | '',
-    })) || [{ opponentArchetype: '', wins: '', losses: '' }],
+    })) || [{ opponentArchetypeId: '', wins: '', losses: '' }],
   );
 
   const handleEventChange = (
@@ -109,7 +109,7 @@ const EventForm = ({
   const addMatch = () => {
     setMatches(prev => [
       ...prev,
-      { opponentArchetype: '', wins: '', losses: '' },
+      { opponentArchetypeId: '', wins: '', losses: '' },
     ]);
   };
 
@@ -172,16 +172,19 @@ const EventForm = ({
               </Button>
             </CardTitle>
             <CardContent>
-              <ArchetypeList
+              {/* TODO: Each OpponentArchetypeSelect fetches opponent archetypes independently.
+                  With multiple match cards this results in N identical requests for the same data.
+                  Fix: fetch once in EventForm and pass options down via an initialOptions prop. */}
+              <OpponentArchetypeSelect
                 archetypeId={archetypeId}
                 id={`opponent-${index}`}
-                name={`matches[${index}].opponentArchetype`}
+                name={`matches[${index}].opponentArchetypeId`}
                 label={t('opponentArchetype')}
-                value={match.opponentArchetype}
+                value={match.opponentArchetypeId}
                 onChange={e =>
                   handleMatchChange({
                     index,
-                    field: 'opponentArchetype',
+                    field: 'opponentArchetypeId',
                     value: e.target.value,
                   })
                 }

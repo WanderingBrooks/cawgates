@@ -8,7 +8,9 @@ const getMatchStatistics = async ({ archetypeId }: { archetypeId: string }) => {
       },
     },
     select: {
-      opponentArchetype: true,
+      opponentArchetype: {
+        select: { name: true },
+      },
       wins: true,
       losses: true,
     },
@@ -16,7 +18,7 @@ const getMatchStatistics = async ({ archetypeId }: { archetypeId: string }) => {
 
   const archetypeStats = matches.reduce(
     (acc, match) => {
-      const archetype = match.opponentArchetype;
+      const archetype = match.opponentArchetype.name;
 
       if (!acc[archetype]) {
         acc[archetype] = { wins: 0, losses: 0, winRate: 0, total: 0 };

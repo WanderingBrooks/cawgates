@@ -46,7 +46,12 @@ const getEventForUser = async ({
 
   const event = await prisma.event.findUnique({
     where: { id: eventId, archetypeId: archetype.id },
-    include: { matches: { orderBy: { order: 'asc' } } },
+    include: {
+      matches: {
+        orderBy: { order: 'asc' },
+        include: { opponentArchetype: true },
+      },
+    },
   });
 
   if (!event) {

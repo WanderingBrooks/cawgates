@@ -25,7 +25,7 @@ const EditEventPage = async ({
 
   const initialMatches: MatchInput[] = event.matches.map(match => ({
     id: match.id,
-    opponentArchetype: match.opponentArchetype,
+    opponentArchetypeId: match.opponentArchetypeId,
     wins: match.wins,
     losses: match.losses,
   }));
