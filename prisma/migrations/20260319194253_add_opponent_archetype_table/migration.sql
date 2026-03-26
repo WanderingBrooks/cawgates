@@ -1,7 +1,6 @@
 /*
   Warnings:
 
-  - You are about to drop the column `opponentArchetype` on the `Match` table. All the data in the column will be lost.
   - Added the required column `opponentArchetypeId` to the `Match` table without a default value. This is not possible if the table is not empty.
 
 */
