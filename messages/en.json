@@ -99,10 +99,8 @@
   },
   "recordTable": {
     "archetype": "Archetype",
-    "wins": "Wins",
-    "losses": "Losses",
-    "winRate": "Win Rate",
-    "winRateValue": "{winRate}%",
+    "matchRecord": "Match Record",
+    "gameRecord": "Game Record",
     "noMatches": "No matches found"
   },
   "pageTitle": {

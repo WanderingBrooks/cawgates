@@ -3,9 +3,11 @@ import { getTranslations } from 'next-intl/server';
 type RecordTableRow = {
   key: string;
   archetype: string;
-  wins: number;
-  losses: number;
-  winRate?: number;
+  matchWins: number;
+  matchLosses: number;
+  matchDraws: number;
+  gameWins: number;
+  gameLosses: number;
 };
 
 type RecordTableProps = {
@@ -19,33 +21,23 @@ const RecordTable = async ({ rows }: RecordTableProps) => {
     return <p>{t('noMatches')}</p>;
   }
 
-  const atLeastOneMatchHasWinRate = rows.some(row => row.winRate !== undefined);
-
   return (
     <table>
       <thead>
         <tr>
           <th>{t('archetype')}</th>
-          <th>{t('wins')}</th>
-          <th>{t('losses')}</th>
-          {atLeastOneMatchHasWinRate && <th>{t('winRate')}</th>}
+          <th>{t('matchRecord')}</th>
+          <th>{t('gameRecord')}</th>
         </tr>
       </thead>
       <tbody>
-        {rows.map(row => {
-          const winRate = ((row.winRate ?? 0) * 100).toFixed(1);
-
-          return (
-            <tr key={row.key}>
-              <td>{row.archetype}</td>
-              <td>{row.wins}</td>
-              <td>{row.losses}</td>
-              {atLeastOneMatchHasWinRate && (
-                <td>{t('winRateValue', { winRate })}</td>
-              )}
-            </tr>
-          );
-        })}
+        {rows.map(row => (
+          <tr key={row.key}>
+            <td>{row.archetype}</td>
+            <td>{row.matchWins}-{row.matchLosses}-{row.matchDraws}</td>
+            <td>{row.gameWins}-{row.gameLosses}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
