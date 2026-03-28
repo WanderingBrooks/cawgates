@@ -21,18 +21,42 @@ const getMatchStatistics = async ({ archetypeId }: { archetypeId: string }) => {
       const archetype = match.opponentArchetype.name;
 
       if (!acc[archetype]) {
-        acc[archetype] = { wins: 0, losses: 0, winRate: 0, total: 0 };
+        acc[archetype] = {
+          wins: 0,
+          losses: 0,
+          winRate: 0,
+          total: 0,
+          matchWins: 0,
+          matchLosses: 0,
+          matchDraws: 0,
+        };
       }
 
       acc[archetype].wins += match.wins;
       acc[archetype].losses += match.losses;
       acc[archetype].total += match.losses + match.wins;
 
+      if (match.wins > match.losses) {
+        acc[archetype].matchWins += 1;
+      } else if (match.losses > match.wins) {
+        acc[archetype].matchLosses += 1;
+      } else {
+        acc[archetype].matchDraws += 1;
+      }
+
       return acc;
     },
     {} as Record<
       string,
-      { wins: number; losses: number; winRate: number; total: number }
+      {
+        wins: number;
+        losses: number;
+        winRate: number;
+        total: number;
+        matchWins: number;
+        matchLosses: number;
+        matchDraws: number;
+      }
     >,
   );
 
@@ -69,6 +93,9 @@ const getMatchStatistics = async ({ archetypeId }: { archetypeId: string }) => {
     losses: stats.losses,
     winRate: stats.winRate,
     total: stats.total,
+    matchWins: stats.matchWins,
+    matchLosses: stats.matchLosses,
+    matchDraws: stats.matchDraws,
   }));
 };
 
