@@ -12,6 +12,7 @@ import { type OpponentArchetypeActionResult } from '@/lib/types';
 import {
   Button,
   ErrorMessage,
+  Form,
   Input,
   SpaceChildrenVertically,
   FlexRowBetween,
@@ -67,7 +68,7 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
   );
 
   return (
-    <form action={formAction}>
+    <Form action={formAction}>
       <SpaceChildrenVertically>
         <input type="hidden" name="archetypeId" value={props.archetypeId} />
         {props.mode === 'edit' && (
@@ -94,7 +95,7 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
           <SubmitButton mode={props.mode} />
         </FlexRowBetween>
       </SpaceChildrenVertically>
-    </form>
+    </Form>
   );
 };
 

@@ -7,6 +7,7 @@ import { registerUser, type ActionResult } from '@/app/actions/users';
 import {
   Button,
   ErrorMessage,
+  Form,
   Input,
   SpaceChildrenVertically,
 } from '@/components';
@@ -48,7 +49,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <form action={formAction}>
+    <Form action={formAction}>
       <SpaceChildrenVertically>
         <Input
           type="email"
@@ -93,7 +94,7 @@ const RegisterForm = () => {
         {state?.error && <ErrorMessage error={state.error} />}
         <SubmitButton />
       </SpaceChildrenVertically>
-    </form>
+    </Form>
   );
 };
 

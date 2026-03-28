@@ -7,6 +7,7 @@ import { login, type ActionResult } from '@/app/actions/auth';
 import {
   Button,
   ErrorMessage,
+  Form,
   Input,
   SpaceChildrenVertically,
 } from '@/components';
@@ -47,7 +48,7 @@ const LoginForm = () => {
   };
 
   return (
-    <form action={formAction}>
+    <Form action={formAction}>
       <SpaceChildrenVertically>
         <Input
           type="username"
@@ -73,7 +74,7 @@ const LoginForm = () => {
         <SubmitButton />
         <Link href="/register">{t('clickHereToRegister')}</Link>
       </SpaceChildrenVertically>
-    </form>
+    </Form>
   );
 };
 

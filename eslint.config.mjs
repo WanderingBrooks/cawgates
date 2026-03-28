@@ -37,6 +37,13 @@ const eslintConfig = defineConfig([
           message:
             'Inline exports are not allowed. Export separately at the end of the file.',
         },
+        // Use the custom <Form> component from @/components instead of native <form>
+        // to get automatic unsaved changes protection via beforeunload.
+        {
+          selector: 'JSXOpeningElement[name.name="form"]',
+          message:
+            'Use the custom <Form> component from @/components instead of <form> to get automatic unsaved changes protection.',
+        },
         // Archetypes have a compound unique index on (userId, slug). When querying
         // by slug you must always include userId to avoid cross-user data leaks.
         // prisma.archetype.findUnique with the userId_slug key already enforces
