@@ -48,7 +48,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Form action={formAction}>
+    <Form action={formAction} warnIfUnsaved={false}>
       <SpaceChildrenVertically>
         <Input
           type="username"
