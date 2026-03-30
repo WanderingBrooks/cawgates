@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import useWarnIfUnsaved from '@/hooks/useWarnIfUnsaved';
+import { useEffect, useState } from 'react';
 
 type FormProps = {
   action: (formData: FormData) => void;
@@ -23,7 +22,19 @@ type FormProps = {
 const Form = ({ action, children, warnIfUnsaved = true }: FormProps) => {
   const [isDirty, setIsDirty] = useState(false);
 
-  useWarnIfUnsaved(isDirty && warnIfUnsaved);
+  useEffect(() => {
+    if (!isDirty || !warnIfUnsaved) {
+      return;
+    }
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDirty, warnIfUnsaved]);
 
   return (
     // eslint-disable-next-line no-restricted-syntax
