@@ -1,5 +1,6 @@
 import Button from './Button';
 import { Card, CardContent, CardTitle } from './Card';
+import Form from './Form';
 import Dialog from './Dialog';
 import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
@@ -15,6 +16,7 @@ import OpponentArchetypeSelect from './OpponentArchetypeSelect';
 export {
   Button,
   Card,
+  Form,
   CardContent,
   CardTitle,
   Dialog,

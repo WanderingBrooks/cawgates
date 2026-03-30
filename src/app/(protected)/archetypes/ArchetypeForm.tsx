@@ -11,6 +11,7 @@ import {
 import {
   Button,
   ErrorMessage,
+  Form,
   Input,
   SpaceChildrenVertically,
   FlexRowBetween,
@@ -79,7 +80,7 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
   };
 
   return (
-    <form action={formAction}>
+    <Form action={formAction}>
       <SpaceChildrenVertically>
         {props.mode === 'edit' && (
           <input type="hidden" name="archetypeId" value={props.archetypeId} />
@@ -124,7 +125,7 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
           )}
         </FlexRowBetween>
       </SpaceChildrenVertically>
-    </form>
+    </Form>
   );
 };
 

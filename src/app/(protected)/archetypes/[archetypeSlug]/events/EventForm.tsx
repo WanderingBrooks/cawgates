@@ -15,6 +15,7 @@ import {
   CardContent,
   Button,
   ErrorMessage,
+  Form,
   Input,
   SpaceChildrenVertically,
   FlexRowBetween,
@@ -118,7 +119,7 @@ const EventForm = ({
   };
 
   return (
-    <form action={formAction}>
+    <Form action={formAction}>
       <SpaceChildrenVertically>
         <input type="hidden" name="archetypeId" value={archetypeId} />
         <input type="hidden" name="eventId" value={eventId} />
@@ -249,7 +250,7 @@ const EventForm = ({
           <SubmitButton />
         </FlexRowBetween>
       </SpaceChildrenVertically>
-    </form>
+    </Form>
   );
 };
 
