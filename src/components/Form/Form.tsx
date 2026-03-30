@@ -20,10 +20,10 @@ type FormProps = {
 };
 
 const Form = ({ action, children, warnIfUnsaved = true }: FormProps) => {
-  const [isDirty, setIsDirty] = useState(false);
+  const [hasFormDataChanged, setHasFormDataChanged] = useState(false);
 
   useEffect(() => {
-    if (!isDirty || !warnIfUnsaved) {
+    if (!hasFormDataChanged || !warnIfUnsaved) {
       return;
     }
 
@@ -34,11 +34,11 @@ const Form = ({ action, children, warnIfUnsaved = true }: FormProps) => {
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [isDirty, warnIfUnsaved]);
+  }, [hasFormDataChanged, warnIfUnsaved]);
 
   return (
     // eslint-disable-next-line no-restricted-syntax
-    <form action={action} onChange={() => setIsDirty(true)}>
+    <form action={action} onChange={() => setHasFormDataChanged(true)}>
       {children}
     </form>
   );
