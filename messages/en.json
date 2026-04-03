@@ -68,7 +68,33 @@
   },
   "event": {
     "viewEvents": "View Events",
-    "edit": "Edit"
+    "edit": "Edit",
+    "editEvent": "Edit Event",
+    "addMatch": "Add Match",
+    "editMatch": "Edit",
+    "noMatches": "No matches yet — add one to get started",
+    "opponent": "Opponent",
+    "wins": "Wins",
+    "losses": "Losses"
+  },
+  "matchForm": {
+    "opponentArchetype": "Opponent Archetype *",
+    "wins": "Wins *",
+    "losses": "Losses *",
+    "saveMatch": "Save Match",
+    "saving": "Saving...",
+    "cancel": "Cancel"
+  },
+  "createMatch": {
+    "title": "Add Match"
+  },
+  "editMatch": {
+    "title": "Edit Match"
+  },
+  "deleteMatchButton": {
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "deleteConfirm": "Are you sure you want to delete this match?"
   },
   "deleteEventButton": {
     "delete": "Delete",

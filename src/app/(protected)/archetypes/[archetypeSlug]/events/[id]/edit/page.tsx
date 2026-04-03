@@ -1,6 +1,6 @@
 import { PageTitle } from '@/components';
 import EventForm from '../../EventForm';
-import { EventFormData, MatchInput } from '@/lib/types';
+import { EventFormData } from '@/lib/types';
 import { getTranslations } from 'next-intl/server';
 import { getEventForUser } from '@/lib/dal';
 
@@ -23,13 +23,6 @@ const EditEventPage = async ({
     notes: event.notes || '',
   };
 
-  const initialMatches: MatchInput[] = event.matches.map(match => ({
-    id: match.id,
-    opponentArchetypeId: match.opponentArchetypeId,
-    wins: match.wins,
-    losses: match.losses,
-  }));
-
   return (
     <>
       <PageTitle title={t('title')} subtitle={archetype.name} />
@@ -39,7 +32,7 @@ const EditEventPage = async ({
         archetypeSlug={archetype.slug}
         eventId={id}
         initialEventData={initialEventData}
-        initialMatches={initialMatches}
+        showNotes
       />
     </>
   );

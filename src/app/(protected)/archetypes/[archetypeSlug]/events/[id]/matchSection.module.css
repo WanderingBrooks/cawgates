@@ -1,0 +1,16 @@
+.matchList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.matchMeta {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.matchActions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+}

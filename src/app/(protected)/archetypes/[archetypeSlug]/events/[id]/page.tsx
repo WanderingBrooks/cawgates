@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { Button, RecordTable, PageTitle, FlexRowBetween } from '@/components';
 import { getEventForUser } from '@/lib/dal';
 import DeleteEventButton from './DeleteEventButton';
+import MatchSection from './MatchSection';
 import Markdown from 'react-markdown';
 
 const EventPage = async ({
@@ -31,10 +32,15 @@ const EventPage = async ({
       <p>{new Date(event.date).toLocaleDateString()}</p>
       <RecordTable rows={tableRows} />
       {event.notes && <Markdown>{event.notes}</Markdown>}
+      <MatchSection
+        matches={event.matches}
+        eventId={id}
+        archetypeId={archetype.id}
+      />
       <FlexRowBetween>
         <DeleteEventButton eventId={id} />
         <Link href={`/archetypes/${archetype.slug}/events/${id}/edit`}>
-          <Button variant="primary">{t('edit')}</Button>
+          <Button variant="primary">{t('editEvent')}</Button>
         </Link>
       </FlexRowBetween>
     </>
