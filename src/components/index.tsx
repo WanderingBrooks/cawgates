@@ -5,7 +5,6 @@ import Dialog from './Dialog';
 import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
 import Input from './Input';
-import RecordTable from './RecordTable';
 import PageTitle from './PageTitle';
 import SpaceChildrenVertically from './SpaceChildrenVertically';
 import Loading from './Loading';
@@ -24,7 +23,6 @@ export {
   Input,
   OpponentArchetypeForm,
   OpponentArchetypeSelect,
-  RecordTable,
   PageTitle,
   SpaceChildrenVertically,
   Loading,

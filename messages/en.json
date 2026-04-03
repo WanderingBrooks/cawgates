@@ -53,18 +53,9 @@
     "eventName": "Event Name *",
     "eventDate": "Event Date *",
     "notes": "Notes",
-    "openNotes": "Open notes",
-    "closeNotes": "Close notes",
-    "addMatch": "Add Match",
-    "removeMatch": "Remove",
-    "opponentArchetype": "Opponent Archetype *",
-    "addNewArchetype": "Add New",
-    "saveEvent": "Save Event",
-    "wins": "Wins *",
-    "losses": "Losses *",
-    "matchLabel": "Match",
+    "cancel": "Cancel",
     "saving": "Saving...",
-    "cancel": "Cancel"
+    "saveEvent": "Save Event"
   },
   "event": {
     "viewEvents": "View Events",
@@ -135,14 +126,6 @@
     "submit": "Login",
     "submitting": "Logging in...",
     "clickHereToRegister": "Don't have an account? Click here to register."
-  },
-  "recordTable": {
-    "archetype": "Archetype",
-    "wins": "Wins",
-    "losses": "Losses",
-    "winRate": "Win Rate",
-    "winRateValue": "{winRate}%",
-    "noMatches": "No matches found"
   },
   "pageTitle": {
     "logout": "Logout"
