@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { Card, CardTitle, CardContent, Button, PageTitle } from '@/components';
 import { getEventsForArchetype } from '@/lib/dal';
+import classes from './event.module.css';
 
 const EventsPage = async ({
   params,
@@ -16,9 +17,11 @@ const EventsPage = async ({
   return (
     <>
       <PageTitle title={t('title')} subtitle={archetype.name} />
-      <Link href={`/archetypes/${archetype.slug}/events/create`}>
-        <Button variant="primary">{t('createEvent')}</Button>
-      </Link>
+      <div className={classes.rightAlignedButton}>
+        <Link href={`/archetypes/${archetype.slug}/events/create`}>
+          <Button variant="primary">{t('createEvent')}</Button>
+        </Link>
+      </div>
 
       {events.length === 0 ? (
         <p>{t('noEvents')}</p>
