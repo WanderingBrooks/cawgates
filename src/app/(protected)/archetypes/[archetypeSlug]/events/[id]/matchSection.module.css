@@ -4,13 +4,13 @@
   gap: var(--spacing-md);
 }
 
-.matchMeta {
-  display: flex;
-  gap: var(--spacing-lg);
+.record {
+  font-weight: bold;
 }
 
 .matchActions {
   display: flex;
   gap: var(--spacing-sm);
   justify-content: flex-end;
+  padding: var(--spacing-sm) var(--spacing-lg);
 }

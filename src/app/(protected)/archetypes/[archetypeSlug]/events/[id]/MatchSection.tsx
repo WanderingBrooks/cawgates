@@ -83,36 +83,33 @@ const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
           {matches.map(match => (
             <Card key={match.id}>
               <CardTitle>
-                <span>{match.opponentArchetype.name}</span>
+                <h3>{match.opponentArchetype.name}</h3>
+                <span className={classes.record}>
+                  {match.wins} – {match.losses}
+                </span>
               </CardTitle>
-              <CardContent>
-                <div className={classes.matchMeta}>
-                  <span>
-                    {t('wins')}: {match.wins}
-                  </span>
-                  <span>
-                    {t('losses')}: {match.losses}
-                  </span>
-                </div>
-                {match.notes && <Markdown>{match.notes}</Markdown>}
-                <div className={classes.matchActions}>
-                  <Button
-                    variant="secondary"
-                    onClick={() => setEditingMatch(match)}
-                  >
-                    {t('editMatch')}
-                  </Button>
-                  <Button
-                    variant="danger"
-                    disabled={deletingId === match.id}
-                    onClick={() => handleDelete({ matchId: match.id })}
-                  >
-                    {deletingId === match.id
-                      ? tDelete('deleting')
-                      : tDelete('delete')}
-                  </Button>
-                </div>
-              </CardContent>
+              {match.notes && (
+                <CardContent>
+                  <Markdown>{match.notes}</Markdown>
+                </CardContent>
+              )}
+              <div className={classes.matchActions}>
+                <Button
+                  variant="secondary"
+                  onClick={() => setEditingMatch(match)}
+                >
+                  {t('editMatch')}
+                </Button>
+                <Button
+                  variant="danger"
+                  disabled={deletingId === match.id}
+                  onClick={() => handleDelete({ matchId: match.id })}
+                >
+                  {deletingId === match.id
+                    ? tDelete('deleting')
+                    : tDelete('delete')}
+                </Button>
+              </div>
             </Card>
           ))}
         </div>
