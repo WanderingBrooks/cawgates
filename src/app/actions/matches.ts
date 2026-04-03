@@ -25,6 +25,7 @@ const createMatch = async (
       opponentArchetypeId: formData.get('opponentArchetypeId') as string,
       wins: parseInt(formData.get('wins') as string) || 0,
       losses: parseInt(formData.get('losses') as string) || 0,
+      notes: formData.get('notes') as string,
     };
 
     const result = createMatchSchema.safeParse(data);
@@ -60,6 +61,7 @@ const createMatch = async (
         opponentArchetypeId: validated.opponentArchetypeId,
         wins: validated.wins,
         losses: validated.losses,
+        notes: validated.notes,
         order,
       },
     });
@@ -100,6 +102,7 @@ const updateMatch = async (
       opponentArchetypeId: formData.get('opponentArchetypeId') as string,
       wins: parseInt(formData.get('wins') as string) || 0,
       losses: parseInt(formData.get('losses') as string) || 0,
+      notes: formData.get('notes') as string,
     };
 
     const result = updateMatchSchema.safeParse(data);
@@ -134,6 +137,7 @@ const updateMatch = async (
         opponentArchetypeId: validated.opponentArchetypeId,
         wins: validated.wins,
         losses: validated.losses,
+        notes: validated.notes,
       },
     });
 

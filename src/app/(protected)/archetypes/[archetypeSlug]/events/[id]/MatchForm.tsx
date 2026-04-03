@@ -12,6 +12,7 @@ import {
   Input,
   SpaceChildrenVertically,
   OpponentArchetypeSelect,
+  DialogTextInput,
 } from '@/components';
 import { MatchInputForm } from '@/lib/types';
 
@@ -59,6 +60,7 @@ const MatchForm = ({
       opponentArchetypeId: '',
       wins: '',
       losses: '',
+      notes: '',
     },
   );
 
@@ -70,6 +72,12 @@ const MatchForm = ({
 
   const handleOpponentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMatchData(prev => ({ ...prev, opponentArchetypeId: e.target.value }));
+  };
+
+  const handleNotesChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setMatchData(prev => ({ ...prev, notes: e.target.value }));
   };
 
   const handleNumberChange = ({
@@ -122,6 +130,16 @@ const MatchForm = ({
             handleNumberChange({ name: 'losses', value: e.target.value })
           }
           required
+        />
+
+        <DialogTextInput
+          id="notes"
+          name="notes"
+          label={t('notes')}
+          value={matchData.notes ?? ''}
+          onChange={handleNotesChange}
+          openButtonLabel={t('openNotes')}
+          closeButtonLabel={t('closeNotes')}
         />
 
         {state?.error && <ErrorMessage error={state.error} />}

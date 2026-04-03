@@ -14,12 +14,14 @@ import {
 import MatchForm from './MatchForm';
 import { MatchInputForm } from '@/lib/types';
 import classes from './matchSection.module.css';
+import Markdown from 'react-markdown';
 
 type Match = {
   id: string;
   opponentArchetypeId: string;
   wins: number;
   losses: number;
+  notes: string | null;
   opponentArchetype: {
     name: string;
   };
@@ -64,6 +66,7 @@ const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
         opponentArchetypeId: editingMatch.opponentArchetypeId,
         wins: editingMatch.wins,
         losses: editingMatch.losses,
+        notes: editingMatch.notes ?? '',
       }
     : undefined;
 
@@ -91,6 +94,7 @@ const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
                     {t('losses')}: {match.losses}
                   </span>
                 </div>
+                {match.notes && <Markdown>{match.notes}</Markdown>}
                 <div className={classes.matchActions}>
                   <Button
                     variant="secondary"

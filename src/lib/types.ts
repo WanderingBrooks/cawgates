@@ -34,6 +34,7 @@ const createMatchSchema = z.object({
     .trim(),
   wins: z.number().min(0, 'Wins must be non-negative').int(),
   losses: z.number().min(0, 'Losses must be non-negative').int(),
+  notes: z.string().optional().default(''),
 });
 
 // Schema for updating a match
@@ -52,6 +53,7 @@ export type UpdateMatchInput = z.infer<typeof updateMatchSchema>;
 export type MatchInputForm = Omit<MatchInput, 'wins' | 'losses'> & {
   wins: number | '';
   losses: number | '';
+  notes?: string;
 };
 
 // Schema for creating/updating an opponent archetype

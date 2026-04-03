@@ -70,7 +70,7 @@ model Match {
   opponentArchetypeLegacy  String? @map("opponentArchetype")
   wins                     Int
   losses                   Int
-  journalEntry             String?
+  notes                    String?
   createdAt                DateTime @default(now())
 
   event             Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)

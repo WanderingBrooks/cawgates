@@ -81,6 +81,9 @@
     "opponentArchetype": "Opponent Archetype *",
     "wins": "Wins *",
     "losses": "Losses *",
+    "notes": "Notes",
+    "openNotes": "Open notes",
+    "closeNotes": "Close notes",
     "saveMatch": "Save Match",
     "saving": "Saving...",
     "cancel": "Cancel"
