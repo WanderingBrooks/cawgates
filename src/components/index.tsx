@@ -8,7 +8,6 @@ import Input from './Input';
 import RecordTable from './RecordTable';
 import PageTitle from './PageTitle';
 import SpaceChildrenVertically from './SpaceChildrenVertically';
-import DialogTextInput from './DialogTextInput';
 import Loading from './Loading';
 import OpponentArchetypeForm from './OpponentArchetypeForm';
 import OpponentArchetypeSelect from './OpponentArchetypeSelect';
@@ -20,7 +19,6 @@ export {
   CardContent,
   CardTitle,
   Dialog,
-  DialogTextInput,
   ErrorMessage,
   FlexRowBetween,
   Input,

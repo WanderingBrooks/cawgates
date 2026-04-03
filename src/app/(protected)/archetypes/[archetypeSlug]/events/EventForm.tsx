@@ -12,10 +12,10 @@ import {
   Input,
   SpaceChildrenVertically,
   FlexRowBetween,
-  DialogTextInput,
 } from '@/components';
 import { EventFormData } from '@/lib/types';
 import Link from 'next/link';
+import TextArea from '@/components/TextArea';
 
 const SubmitButton = () => {
   const { pending } = useFormStatus();
@@ -34,7 +34,6 @@ type EventFormProps = {
   archetypeSlug: string;
   eventId?: string;
   initialEventData?: EventFormData;
-  showNotes?: boolean;
 };
 
 const EventForm = ({
@@ -43,7 +42,6 @@ const EventForm = ({
   archetypeSlug,
   eventId,
   initialEventData,
-  showNotes = false,
 }: EventFormProps) => {
   const t = useTranslations('eventForm');
 
@@ -93,17 +91,14 @@ const EventForm = ({
           onChange={handleEventChange}
           required
         />
-        {showNotes && (
-          <DialogTextInput
-            id="notes"
-            name="notes"
-            label={t('notes')}
-            value={eventData.notes}
-            onChange={handleEventChange}
-            openButtonLabel={t('openNotes')}
-            closeButtonLabel={t('closeNotes')}
-          />
-        )}
+        <TextArea
+          id="notes"
+          name="notes"
+          label={t('notes')}
+          value={eventData.notes}
+          onChange={handleEventChange}
+          rows={25}
+        />
 
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween>

@@ -12,9 +12,9 @@ import {
   Input,
   SpaceChildrenVertically,
   OpponentArchetypeSelect,
-  DialogTextInput,
 } from '@/components';
 import { MatchInputForm } from '@/lib/types';
+import TextArea from '@/components/TextArea';
 
 const SubmitButton = () => {
   const { pending } = useFormStatus();
@@ -132,14 +132,13 @@ const MatchForm = ({
           required
         />
 
-        <DialogTextInput
+        <TextArea
           id="notes"
           name="notes"
           label={t('notes')}
           value={matchData.notes ?? ''}
           onChange={handleNotesChange}
-          openButtonLabel={t('openNotes')}
-          closeButtonLabel={t('closeNotes')}
+          rows={15}
         />
 
         {state?.error && <ErrorMessage error={state.error} />}
