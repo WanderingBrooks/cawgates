@@ -17,6 +17,11 @@ import { EventFormData } from '@/lib/types';
 import Link from 'next/link';
 import TextArea from '@/components/TextArea';
 
+/**
+ * SubmitButton must be a separate component because useFormStatus() requires
+ * being called from within a <form> context (as a child of the form element).
+ * It cannot be called directly in EventForm since that component renders the form itself.
+ */
 const SubmitButton = () => {
   const { pending } = useFormStatus();
   const t = useTranslations('eventForm');
@@ -52,6 +57,7 @@ const EventForm = ({
     null,
   );
 
+  // Inline state management
   const [eventData, setEventData] = useState<EventFormData>(
     initialEventData || {
       eventName: '',
