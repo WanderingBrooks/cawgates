@@ -63,6 +63,9 @@ export type EventFormData = Pick<
   'eventName' | 'eventDate' | 'notes'
 >;
 
+// Slugs that conflict with static routes under /archetypes/
+const RESERVED_ARCHETYPE_SLUGS = ['create'];
+
 // Schema for creating a user archetype (the user's own deck)
 const createArchetypeSchema = z.object({
   name: z.string().min(1, 'Archetype name is required').trim(),
@@ -74,7 +77,11 @@ const createArchetypeSchema = z.object({
       /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
       'Slug may only contain lowercase letters, numbers, and hyphens',
     )
-    .trim(),
+    .trim()
+    .refine(
+      (slug) => !RESERVED_ARCHETYPE_SLUGS.includes(slug),
+      'This slug is reserved and cannot be used',
+    ),
 });
 
 // Exported type inferred from Zod schema
