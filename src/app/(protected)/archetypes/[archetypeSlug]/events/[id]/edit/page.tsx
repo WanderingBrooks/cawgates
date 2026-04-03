@@ -32,7 +32,6 @@ const EditEventPage = async ({
         archetypeSlug={archetype.slug}
         eventId={id}
         initialEventData={initialEventData}
-        showNotes
       />
     </>
   );
