@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { getUserArchetypes } from '@/app/actions/archetypes';
 import { Button, Card, CardTitle, PageTitle } from '@/components';
+import classes from './archetypes.module.css';
 
 const ArchetypesPage = async () => {
   const t = await getTranslations('archetypes');
@@ -11,9 +12,11 @@ const ArchetypesPage = async () => {
   return (
     <>
       <PageTitle title={t('title')} />
-      <Link href="/archetypes/create">
-        <Button variant="primary">{t('createArchetype')}</Button>
-      </Link>
+      <div className={classes.rightAlignedButton}>
+        <Link href="/archetypes/create">
+          <Button variant="primary">{t('createArchetype')}</Button>
+        </Link>
+      </div>
 
       {archetypes.length === 0 ? (
         <p>{t('noArchetypes')}</p>
