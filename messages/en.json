@@ -58,19 +58,15 @@
     "saveEvent": "Save Event"
   },
   "event": {
-    "viewEvents": "View Events",
-    "edit": "Edit",
     "editEvent": "Edit Event",
     "addMatch": "Add Match",
     "editMatch": "Edit",
     "noMatches": "No matches yet — add one to get started",
-    "opponent": "Opponent",
-    "wins": "Wins",
-    "losses": "Losses",
+    "gameRecord": "{wins}W – {losses}L",
     "matchesSection": "Matches",
     "notesSection": "Notes",
     "dangerZone": "Danger Zone",
-    "overallRecord": "{wins}W – {losses}L – {ties}T"
+    "matchRecord": "{wins}W – {losses}L – {ties}T"
   },
   "matchForm": {
     "opponentArchetype": "Opponent Archetype *",

@@ -51,11 +51,11 @@ const EventsPage = async ({
                   <Link
                     href={`/archetypes/${archetype.slug}/events/${event.id}`}
                   >
-                    <h2>{event.name}</h2>
+                    {event.name}
                   </Link>
                   <p>{new Date(event.date).toLocaleDateString()}</p>
                 </div>
-                <span className="text-emphasis">{t('record', record)}</span>
+                <p>{t('record', record)}</p>
               </CardTitle>
             </Card>
           );

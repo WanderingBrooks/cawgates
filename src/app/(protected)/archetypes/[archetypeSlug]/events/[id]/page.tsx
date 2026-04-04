@@ -35,7 +35,7 @@ const EventPage = async ({
           </p>
           {event.matches.length > 0 && (
             <p className="text-emphasis">
-              {t('overallRecord', {
+              {t('matchRecord', {
                 wins: matchWins,
                 losses: matchLosses,
                 ties: matchTies,
@@ -49,17 +49,23 @@ const EventPage = async ({
       </div>
       {event.notes && (
         <>
-          <p className={cn('text-label', classes.sectionHeader)}>{t('notesSection')}</p>
+          <p className={cn('text-label', classes.sectionHeader)}>
+            {t('notesSection')}
+          </p>
           <Markdown>{event.notes}</Markdown>
         </>
       )}
-      <p className={cn('text-label', classes.sectionHeader)}>{t('matchesSection')}</p>
+      <p className={cn('text-label', classes.sectionHeader)}>
+        {t('matchesSection')}
+      </p>
       <MatchSection
         matches={event.matches}
         eventId={id}
         archetypeId={archetype.id}
       />
-      <p className={cn('text-label', classes.sectionHeader)}>{t('dangerZone')}</p>
+      <p className={cn('text-label', classes.sectionHeader)}>
+        {t('dangerZone')}
+      </p>
       <DeleteEventButton eventId={id} />
     </>
   );

@@ -60,11 +60,9 @@ const OpponentArchetypePage = async ({
                   >
                     {match.event.name}
                   </Link>
-                  <p className={classes.matchMeta}>
-                    {new Date(match.event.date).toLocaleDateString()}
-                  </p>
+                  <p>{new Date(match.event.date).toLocaleDateString()}</p>
                 </div>
-                <span className="text-emphasis">
+                <span>
                   {t('record', { wins: match.wins, losses: match.losses })}
                 </span>
               </CardTitle>
