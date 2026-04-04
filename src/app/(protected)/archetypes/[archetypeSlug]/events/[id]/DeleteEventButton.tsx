@@ -21,7 +21,7 @@ const DeleteEventButton = ({ eventId }: { eventId: string }) => {
     const result = await deleteEvent(eventId);
 
     if (result && !result.success) {
-      setError(result.error || 'Failed to delete event');
+      setError(result.error);
       setIsDeleting(false);
     }
   };

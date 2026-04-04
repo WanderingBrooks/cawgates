@@ -8,7 +8,7 @@ import {
   createOpponentArchetype,
   updateOpponentArchetype,
 } from '@/app/actions/opponentArchetypes';
-import { type OpponentArchetypeActionResult } from '@/lib/types';
+import { type OpponentArchetypeActionResult } from '@/app/actions/opponentArchetypes';
 import {
   Button,
   ErrorMessage,
@@ -16,7 +16,7 @@ import {
   Input,
   SpaceChildrenVertically,
   FlexRowBetween,
-} from '../';
+} from '@/components';
 
 const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();

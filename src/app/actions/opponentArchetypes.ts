@@ -3,11 +3,11 @@
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
-import {
-  createOpponentArchetypeSchema,
-  type ActionResult,
-  type OpponentArchetypeActionResult,
-} from '@/lib/types';
+import { createOpponentArchetypeSchema, type ActionResult } from '@/lib/types';
+
+export type OpponentArchetypeActionResult =
+  | { success: true; data: { id: string; name: string } }
+  | { success: false; error: string };
 
 const getOpponentArchetypesForArchetype = async ({
   archetypeId,

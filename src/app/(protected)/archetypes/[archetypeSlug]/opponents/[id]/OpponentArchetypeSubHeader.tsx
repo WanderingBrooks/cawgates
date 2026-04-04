@@ -10,6 +10,7 @@ const OpponentArchetypeSubHeader = ({
   archetypeId,
   opponentArchetypeId,
   initialName,
+  totalMatches,
   matchWins,
   matchLosses,
   matchDraws,
@@ -17,6 +18,7 @@ const OpponentArchetypeSubHeader = ({
   archetypeId: string;
   opponentArchetypeId: string;
   initialName: string;
+  totalMatches: number;
   matchWins: number;
   matchLosses: number;
   matchDraws: number;
@@ -25,7 +27,7 @@ const OpponentArchetypeSubHeader = ({
   const router = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const hasMatches = matchWins + matchLosses + matchDraws > 0;
+  const hasMatches = totalMatches > 0;
 
   return (
     <>

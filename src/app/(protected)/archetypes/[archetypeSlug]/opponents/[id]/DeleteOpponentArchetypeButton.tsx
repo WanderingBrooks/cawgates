@@ -27,7 +27,7 @@ const DeleteOpponentArchetypeButton = ({
     const result = await deleteOpponentArchetype({ opponentArchetypeId });
 
     if (result && !result.success) {
-      setError(result.error || 'Failed to delete opponent archetype');
+      setError(result.error);
       setIsDeleting(false);
     }
   };

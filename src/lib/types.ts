@@ -68,16 +68,9 @@ export type CreateOpponentArchetypeInput = z.infer<
  * Return type of Create/Update/Delete actions, indicating
  * success or failure and optionally including an error message or data.
  */
-export type ActionResult = {
-  success: boolean;
-  error?: string;
-};
-
-export type OpponentArchetypeActionResult = {
-  success: boolean;
-  error?: string;
-  data?: { id: string; name: string };
-};
+export type ActionResult =
+  | { success: true }
+  | { success: false; error: string };
 
 // Helper type for event form data (event fields only, no matches)
 export type EventFormData = Pick<
