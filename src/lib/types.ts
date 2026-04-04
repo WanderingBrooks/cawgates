@@ -17,13 +17,6 @@ const createEventSchema = z.object({
   eventName: z.string().min(1, 'Event name is required').trim(),
   eventDate: z.string().min(1, 'Event date is required'),
   notes: z.string().optional().default(''),
-  matches: z
-    .array(matchSchema)
-    .min(1, 'At least one match is required')
-    .refine(
-      matches => matches.every(m => m.opponentArchetypeId.trim()),
-      'All matches must have an opponent archetype',
-    ),
 });
 
 // Schema for updating an event
@@ -31,15 +24,35 @@ const updateEventSchema = createEventSchema.extend({
   eventId: z.string().min(1, 'Event ID is required'),
 });
 
+// Schema for creating a match
+const createMatchSchema = z.object({
+  eventId: z.string().min(1, 'Event ID is required'),
+  opponentArchetypeId: z
+    .string()
+    .min(1, 'Opponent archetype is required')
+    .trim(),
+  wins: z.number().min(0, 'Wins must be non-negative').int(),
+  losses: z.number().min(0, 'Losses must be non-negative').int(),
+  notes: z.string().optional().default(''),
+});
+
+// Schema for updating a match
+const updateMatchSchema = createMatchSchema.extend({
+  matchId: z.string().min(1, 'Match ID is required'),
+});
+
 // Exported types inferred from Zod schemas
 export type MatchInput = z.infer<typeof matchSchema>;
 export type CreateEventInput = z.infer<typeof createEventSchema>;
 export type UpdateEventInput = z.infer<typeof updateEventSchema>;
+export type CreateMatchInput = z.infer<typeof createMatchSchema>;
+export type UpdateMatchInput = z.infer<typeof updateMatchSchema>;
 
 // Form state type that allows empty strings for wins/losses during input
 export type MatchInputForm = Omit<MatchInput, 'wins' | 'losses'> & {
   wins: number | '';
   losses: number | '';
+  notes?: string;
 };
 
 // Schema for creating/updating an opponent archetype
@@ -50,6 +63,15 @@ const createOpponentArchetypeSchema = z.object({
 export type CreateOpponentArchetypeInput = z.infer<
   typeof createOpponentArchetypeSchema
 >;
+
+/**
+ * Return type of Create/Update/Delete actions, indicating
+ * success or failure and optionally including an error message or data.
+ */
+export type ActionResult = {
+  success: boolean;
+  error?: string;
+};
 
 export type OpponentArchetypeActionResult = {
   success: boolean;
@@ -79,7 +101,7 @@ const createArchetypeSchema = z.object({
     )
     .trim()
     .refine(
-      (slug) => !RESERVED_ARCHETYPE_SLUGS.includes(slug),
+      slug => !RESERVED_ARCHETYPE_SLUGS.includes(slug),
       'This slug is reserved and cannot be used',
     ),
 });
@@ -117,6 +139,8 @@ export {
   matchSchema,
   createEventSchema,
   updateEventSchema,
+  createMatchSchema,
+  updateMatchSchema,
   createArchetypeSchema,
   createOpponentArchetypeSchema,
   registerUserSchema,

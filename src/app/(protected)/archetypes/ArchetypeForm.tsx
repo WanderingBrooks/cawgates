@@ -25,9 +25,15 @@ const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();
   const t = useTranslations('archetypeForm');
 
+  let label = mode === 'create' ? t('create') : t('save');
+
+  if (pending) {
+    label = t('saving');
+  }
+
   return (
     <Button type="submit" disabled={pending} variant="primary">
-      {pending ? t('saving') : mode === 'create' ? t('create') : t('save')}
+      {label}
     </Button>
   );
 };

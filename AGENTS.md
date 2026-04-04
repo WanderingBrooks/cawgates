@@ -69,6 +69,17 @@ const calculate = ({
 <div className={cn(classes.input, className)} />
 ```
 
+- **NEVER set `font-size`, `letter-spacing`, or other typography properties directly in CSS modules** — use reusable text utility classes from `globals.css` (e.g. `.text-label`, `.text-emphasis`) and apply them alongside module classes via `cn()`
+
+```tsx
+// ❌ Bad - typography in a CSS module
+// .sectionHeader { font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; }
+<p className={classes.sectionHeader} />
+
+// ✅ Good - global text utility composed with module class
+<p className={cn('text-label', classes.sectionHeader)} />
+```
+
 ## Internationalization
 
 - **CRITICAL: NEVER hardcode ANY text in components**

@@ -1,9 +1,12 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { Button, RecordTable, PageTitle, FlexRowBetween } from '@/components';
+import { Button, PageTitle } from '@/components';
 import { getEventForUser } from '@/lib/dal';
+import { cn } from '@/lib/utils';
 import DeleteEventButton from './DeleteEventButton';
+import MatchSection from './MatchSection';
 import Markdown from 'react-markdown';
+import classes from './eventPage.module.css';
 
 const EventPage = async ({
   params,
@@ -18,25 +21,46 @@ const EventPage = async ({
     eventId: id,
   });
 
-  const tableRows = event.matches.map(match => ({
-    key: match.id,
-    archetype: match.opponentArchetype.name,
-    wins: match.wins,
-    losses: match.losses,
-  }));
+  const matchWins = event.matches.filter(m => m.wins > m.losses).length;
+  const matchLosses = event.matches.filter(m => m.losses > m.wins).length;
+  const matchTies = event.matches.filter(m => m.wins === m.losses).length;
 
   return (
     <>
       <PageTitle title={event.name} subtitle={archetype.name} />
-      <p>{new Date(event.date).toLocaleDateString()}</p>
-      <RecordTable rows={tableRows} />
-      {event.notes && <Markdown>{event.notes}</Markdown>}
-      <FlexRowBetween>
-        <DeleteEventButton eventId={id} />
+      <div className={classes.headerRow}>
+        <div>
+          <p className={classes.meta}>
+            {new Date(event.date).toLocaleDateString()}
+          </p>
+          {event.matches.length > 0 && (
+            <p className="text-emphasis">
+              {t('overallRecord', {
+                wins: matchWins,
+                losses: matchLosses,
+                ties: matchTies,
+              })}
+            </p>
+          )}
+        </div>
         <Link href={`/archetypes/${archetype.slug}/events/${id}/edit`}>
-          <Button variant="primary">{t('edit')}</Button>
+          <Button variant="primary">{t('editEvent')}</Button>
         </Link>
-      </FlexRowBetween>
+      </div>
+      {event.notes && (
+        <>
+          <p className={cn('text-label', classes.sectionHeader)}>{t('notesSection')}</p>
+          <Markdown>{event.notes}</Markdown>
+        </>
+      )}
+      <p className={cn('text-label', classes.sectionHeader)}>{t('matchesSection')}</p>
+      <MatchSection
+        matches={event.matches}
+        eventId={id}
+        archetypeId={archetype.id}
+      />
+      <p className={cn('text-label', classes.sectionHeader)}>{t('dangerZone')}</p>
+      <DeleteEventButton eventId={id} />
     </>
   );
 };

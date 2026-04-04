@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { deleteEventAndMatches } from '@/app/actions/events';
+import { deleteEvent } from '@/app/actions/events';
 import { Button, ErrorMessage } from '@/components';
 
 const DeleteEventButton = ({ eventId }: { eventId: string }) => {
@@ -18,7 +18,7 @@ const DeleteEventButton = ({ eventId }: { eventId: string }) => {
     setIsDeleting(true);
     setError(null);
 
-    const result = await deleteEventAndMatches(eventId);
+    const result = await deleteEvent(eventId);
 
     if (result && !result.success) {
       setError(result.error || 'Failed to delete event');

@@ -2,54 +2,14 @@
 
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
-import { createEventSchema, updateEventSchema } from '@/lib/types';
+import {
+  createEventSchema,
+  updateEventSchema,
+  type ActionResult,
+} from '@/lib/types';
 import { getUser } from '@/lib/session';
 
-export type ActionResult = {
-  success: boolean;
-  error?: string;
-  eventId?: string;
-};
-
-type ParsedMatch = {
-  id?: string;
-  opponentArchetypeId: string;
-  wins: number;
-  losses: number;
-};
-
-// Helper function to parse matches array from FormData
-const parseMatches = (formData: FormData): ParsedMatch[] => {
-  let index = 0;
-  const matches: ParsedMatch[] = [];
-
-  while (formData.has(`matches[${index}].opponentArchetypeId`)) {
-    const id = formData.get(`matches[${index}].id`) as string | null;
-
-    const opponentArchetypeId = formData.get(
-      `matches[${index}].opponentArchetypeId`,
-    ) as string;
-
-    const wins =
-      parseInt(formData.get(`matches[${index}].wins`) as string) || 0;
-
-    const losses =
-      parseInt(formData.get(`matches[${index}].losses`) as string) || 0;
-
-    // Only include id if it exists (for edit mode)
-    matches.push(
-      id
-        ? { id, opponentArchetypeId, wins, losses }
-        : { opponentArchetypeId, wins, losses },
-    );
-
-    index++;
-  }
-
-  return matches;
-};
-
-const createEventWithMatches = async (
+const createEvent = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
@@ -57,7 +17,6 @@ const createEventWithMatches = async (
   let archetypeSlug: string;
 
   try {
-    // Get current user
     const user = await getUser();
 
     if (!user) {
@@ -67,18 +26,13 @@ const createEventWithMatches = async (
       };
     }
 
-    // Parse FormData
-    const matches = parseMatches(formData);
-
     const data = {
       archetypeId: formData.get('archetypeId') as string,
       eventName: formData.get('eventName') as string,
       eventDate: formData.get('eventDate') as string,
       notes: formData.get('notes') as string,
-      matches,
     };
 
-    // Validate with Zod
     const result = createEventSchema.safeParse(data);
 
     if (!result.success) {
@@ -90,10 +44,8 @@ const createEventWithMatches = async (
       };
     }
 
-    // Type-safe validated data
     const validated = result.data;
 
-    // Verify the archetype belongs to the user
     const archetype = await prisma.archetype.findUnique({
       where: { id: validated.archetypeId },
     });
@@ -108,14 +60,6 @@ const createEventWithMatches = async (
         date: new Date(validated.eventDate),
         notes: validated.notes,
         archetypeId: validated.archetypeId,
-        matches: {
-          create: validated.matches.map((m, index) => ({
-            order: index,
-            opponentArchetypeId: m.opponentArchetypeId,
-            wins: m.wins,
-            losses: m.losses,
-          })),
-        },
       },
     });
 
@@ -133,13 +77,90 @@ const createEventWithMatches = async (
   redirect(`/archetypes/${archetypeSlug}/events/${eventId}`);
 };
 
-const deleteEventAndMatches = async (
-  eventId: string,
+const updateEvent = async (
+  _prevState: ActionResult | null,
+  formData: FormData,
 ): Promise<ActionResult> => {
+  let eventId: string;
   let archetypeSlug: string;
 
   try {
-    // Get current user
+    const user = await getUser();
+
+    if (!user) {
+      return {
+        success: false,
+        error: 'You must be logged in to update an event',
+      };
+    }
+
+    const data = {
+      archetypeId: formData.get('archetypeId') as string,
+      eventId: formData.get('eventId') as string,
+      eventName: formData.get('eventName') as string,
+      eventDate: formData.get('eventDate') as string,
+      notes: formData.get('notes') as string,
+    };
+
+    const result = updateEventSchema.safeParse(data);
+
+    if (!result.success) {
+      const firstError = result.error.issues[0];
+
+      return {
+        success: false,
+        error: firstError.message,
+      };
+    }
+
+    const validated = result.data;
+
+    const existingEvent = await prisma.event.findUnique({
+      where: { id: validated.eventId },
+      include: { archetype: true },
+    });
+
+    if (!existingEvent) {
+      return { success: false, error: 'Event not found' };
+    }
+
+    if (existingEvent.archetype.userId !== user.userId) {
+      return {
+        success: false,
+        error: 'You do not have permission to edit this event',
+      };
+    }
+
+    await prisma.event.update({
+      where: { id: validated.eventId },
+      data: {
+        name: validated.eventName,
+        date: new Date(validated.eventDate),
+        notes: validated.notes,
+      },
+    });
+
+    eventId = validated.eventId;
+    archetypeSlug = existingEvent.archetype.slug;
+  } catch (error) {
+    console.error('Failed to update event:', error);
+
+    return {
+      success: false,
+      error: 'Failed to update event. Please try again.',
+    };
+  }
+
+  redirect(`/archetypes/${archetypeSlug}/events/${eventId}`);
+};
+
+/**
+ * Delete an event and all associated matches. Redirect back to the event list afterward.
+ */
+const deleteEvent = async (eventId: string): Promise<ActionResult> => {
+  let archetypeSlug: string;
+
+  try {
     const user = await getUser();
 
     if (!user) {
@@ -149,7 +170,6 @@ const deleteEventAndMatches = async (
       };
     }
 
-    // Check event ownership via archetype
     const event = await prisma.event.findUnique({
       where: { id: eventId },
       include: { archetype: true },
@@ -188,121 +208,4 @@ const deleteEventAndMatches = async (
   redirect(`/archetypes/${archetypeSlug}/events`);
 };
 
-const updateEventWithMatches = async (
-  _prevState: ActionResult | null,
-  formData: FormData,
-): Promise<ActionResult> => {
-  let eventId: string;
-  let archetypeSlug: string;
-
-  try {
-    // Get current user
-    const user = await getUser();
-
-    if (!user) {
-      return {
-        success: false,
-        error: 'You must be logged in to update an event',
-      };
-    }
-
-    // Parse FormData
-    const matches = parseMatches(formData);
-
-    const data = {
-      archetypeId: formData.get('archetypeId') as string,
-      eventId: formData.get('eventId') as string,
-      eventName: formData.get('eventName') as string,
-      eventDate: formData.get('eventDate') as string,
-      notes: formData.get('notes') as string,
-      matches,
-    };
-
-    // Validate with Zod
-    const result = updateEventSchema.safeParse(data);
-
-    if (!result.success) {
-      const firstError = result.error.issues[0];
-
-      return {
-        success: false,
-        error: firstError.message,
-      };
-    }
-
-    // Type-safe validated data
-    const validated = result.data;
-
-    const existingEvent = await prisma.event.findUnique({
-      where: { id: validated.eventId },
-      include: { archetype: true, matches: { orderBy: { order: 'asc' } } },
-    });
-
-    if (!existingEvent) {
-      return { success: false, error: 'Event not found' };
-    }
-
-    // Verify ownership via archetype
-    if (existingEvent.archetype.userId !== user.userId) {
-      return {
-        success: false,
-        error: 'You do not have permission to edit this event',
-      };
-    }
-
-    const existingMatchIds = existingEvent.matches.map(m => m.id);
-
-    const newMatchIds = validated.matches.filter(m => m.id).map(m => m.id!);
-
-    const matchesToDelete = existingMatchIds.filter(
-      id => !newMatchIds.includes(id),
-    );
-
-    await prisma.event.update({
-      where: { id: validated.eventId },
-      data: {
-        name: validated.eventName,
-        date: new Date(validated.eventDate),
-        notes: validated.notes,
-        matches: {
-          deleteMany: {
-            id: { in: matchesToDelete },
-          },
-          upsert: validated.matches.map((match, index) => ({
-            where: { id: match.id || 'new' },
-            create: {
-              order: index,
-              opponentArchetypeId: match.opponentArchetypeId,
-              wins: match.wins,
-              losses: match.losses,
-            },
-            update: {
-              order: index,
-              opponentArchetypeId: match.opponentArchetypeId,
-              wins: match.wins,
-              losses: match.losses,
-            },
-          })),
-        },
-      },
-    });
-
-    eventId = validated.eventId;
-    archetypeSlug = existingEvent.archetype.slug;
-  } catch (error) {
-    console.error('Failed to update event:', error);
-
-    return {
-      success: false,
-      error: 'Failed to update event. Please try again.',
-    };
-  }
-
-  redirect(`/archetypes/${archetypeSlug}/events/${eventId}`);
-};
-
-export {
-  createEventWithMatches,
-  deleteEventAndMatches,
-  updateEventWithMatches,
-};
+export { createEvent, updateEvent, deleteEvent };

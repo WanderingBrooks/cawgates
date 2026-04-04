@@ -17,7 +17,7 @@ type OpponentArchetypeSelectProps = {
   archetypeId: string;
   label?: string;
   id?: string;
-  name?: string;
+  name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
@@ -61,7 +61,7 @@ const OpponentArchetypeSelect = ({
     }
 
     const syntheticEvent = {
-      target: { value: e.target.value },
+      target: { name: name, value: e.target.value },
     } as React.ChangeEvent<HTMLInputElement>;
 
     onChange(syntheticEvent);
@@ -73,7 +73,7 @@ const OpponentArchetypeSelect = ({
     );
 
     const syntheticEvent = {
-      target: { value: data.id },
+      target: { name: name, value: data.id },
     } as React.ChangeEvent<HTMLInputElement>;
 
     onChange(syntheticEvent);

@@ -5,13 +5,12 @@ import Dialog from './Dialog';
 import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
 import Input from './Input';
-import RecordTable from './RecordTable';
 import PageTitle from './PageTitle';
 import SpaceChildrenVertically from './SpaceChildrenVertically';
-import DialogTextInput from './DialogTextInput';
 import Loading from './Loading';
 import OpponentArchetypeForm from './OpponentArchetypeForm';
 import OpponentArchetypeSelect from './OpponentArchetypeSelect';
+import TextArea from './TextArea';
 
 export {
   Button,
@@ -20,14 +19,13 @@ export {
   CardContent,
   CardTitle,
   Dialog,
-  DialogTextInput,
   ErrorMessage,
   FlexRowBetween,
   Input,
   OpponentArchetypeForm,
   OpponentArchetypeSelect,
-  RecordTable,
   PageTitle,
   SpaceChildrenVertically,
   Loading,
+  TextArea,
 };
