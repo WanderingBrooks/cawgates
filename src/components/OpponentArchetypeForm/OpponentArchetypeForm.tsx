@@ -16,7 +16,7 @@ import {
   Input,
   SpaceChildrenVertically,
   FlexRowBetween,
-} from '@/components';
+} from '../';
 
 const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();

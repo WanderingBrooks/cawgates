@@ -9,7 +9,7 @@ const getMatchStatistics = async ({ archetypeId }: { archetypeId: string }) => {
     },
     select: {
       opponentArchetype: {
-        select: { name: true },
+        select: { id: true, name: true },
       },
       wins: true,
       losses: true,
@@ -22,6 +22,7 @@ const getMatchStatistics = async ({ archetypeId }: { archetypeId: string }) => {
 
       if (!acc[archetype]) {
         acc[archetype] = {
+          opponentArchetypeId: match.opponentArchetype.id,
           wins: 0,
           losses: 0,
           winRate: 0,
@@ -49,6 +50,7 @@ const getMatchStatistics = async ({ archetypeId }: { archetypeId: string }) => {
     {} as Record<
       string,
       {
+        opponentArchetypeId: string;
         wins: number;
         losses: number;
         winRate: number;
@@ -89,6 +91,7 @@ const getMatchStatistics = async ({ archetypeId }: { archetypeId: string }) => {
   return sortedArchetypes.map(([archetype, stats]) => ({
     key: archetype,
     archetype,
+    opponentArchetypeId: stats.opponentArchetypeId,
     wins: stats.wins,
     losses: stats.losses,
     winRate: stats.winRate,

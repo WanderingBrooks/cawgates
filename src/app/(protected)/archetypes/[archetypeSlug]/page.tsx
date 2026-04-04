@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { PageTitle } from '@/components';
 import { getArchetypeForUser } from '@/lib/dal';
@@ -35,7 +36,11 @@ const ArchetypePage = async ({
           <tbody>
             {matchStatistics.map(row => (
               <tr key={row.key}>
-                <td>{row.archetype}</td>
+                <td>
+                  <Link href={`/archetypes/${archetypeSlug}/opponents/${row.opponentArchetypeId}`}>
+                    {row.archetype}
+                  </Link>
+                </td>
                 <td>{`${row.matchWins}-${row.matchLosses}-${row.matchDraws}`}</td>
                 <td>{`${row.wins}-${row.losses}`}</td>
                 <td>{`${(row.winRate * 100).toFixed(1)}%`}</td>
