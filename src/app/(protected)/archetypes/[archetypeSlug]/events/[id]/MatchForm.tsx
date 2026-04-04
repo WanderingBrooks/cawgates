@@ -70,26 +70,19 @@ const MatchForm = ({
     }
   }, [state, onSuccess]);
 
-  const handleOpponentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMatchData(prev => ({ ...prev, opponentArchetypeId: e.target.value }));
-  };
-
-  const handleNotesChange = (
+  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setMatchData(prev => ({ ...prev, notes: e.target.value }));
-  };
+    const { name, value } = e.target;
 
-  const handleNumberChange = ({
-    name,
-    value,
-  }: {
-    name: string;
-    value: string;
-  }) => {
     setMatchData(prev => ({
       ...prev,
-      [name]: value === '' ? '' : parseInt(value, 10) || 0,
+      [name]:
+        name === 'wins' || name === 'losses'
+          ? value === ''
+            ? ''
+            : parseInt(value, 10) || 0
+          : value,
     }));
   };
 
@@ -106,7 +99,7 @@ const MatchForm = ({
           name="opponentArchetypeId"
           label={t('opponentArchetype')}
           value={matchData.opponentArchetypeId}
-          onChange={handleOpponentChange}
+          onChange={handleChange}
           required
         />
         <Input
@@ -115,9 +108,7 @@ const MatchForm = ({
           name="wins"
           label={t('wins')}
           value={matchData.wins}
-          onChange={e =>
-            handleNumberChange({ name: 'wins', value: e.target.value })
-          }
+          onChange={handleChange}
           required
         />
         <Input
@@ -126,9 +117,7 @@ const MatchForm = ({
           name="losses"
           label={t('losses')}
           value={matchData.losses}
-          onChange={e =>
-            handleNumberChange({ name: 'losses', value: e.target.value })
-          }
+          onChange={handleChange}
           required
         />
 
@@ -137,7 +126,7 @@ const MatchForm = ({
           name="notes"
           label={t('notes')}
           value={matchData.notes ?? ''}
-          onChange={handleNotesChange}
+          onChange={handleChange}
           rows={15}
         />
 
