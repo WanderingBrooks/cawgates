@@ -123,13 +123,15 @@ const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
       )}
 
       <Dialog isOpen={isAddOpen} title={tCreateMatch('title')} usePortal>
-        <MatchForm
-          mode="create"
-          archetypeId={archetypeId}
-          eventId={eventId}
-          onSuccess={() => setIsAddOpen(false)}
-          onCancel={() => setIsAddOpen(false)}
-        />
+        {isAddOpen && (
+          <MatchForm
+            mode="create"
+            archetypeId={archetypeId}
+            eventId={eventId}
+            onSuccess={() => setIsAddOpen(false)}
+            onCancel={() => setIsAddOpen(false)}
+          />
+        )}
       </Dialog>
 
       <Dialog
@@ -137,16 +139,18 @@ const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
         title={tEditMatch('title')}
         usePortal
       >
-        <MatchForm
-          key={editingMatch?.id}
-          mode="edit"
-          archetypeId={archetypeId}
-          eventId={eventId}
-          matchId={editingMatch?.id}
-          initialMatchData={editingMatchData}
-          onSuccess={() => setEditingMatch(null)}
-          onCancel={() => setEditingMatch(null)}
-        />
+        {editingMatch !== null && (
+          <MatchForm
+            key={editingMatch.id}
+            mode="edit"
+            archetypeId={archetypeId}
+            eventId={eventId}
+            matchId={editingMatch.id}
+            initialMatchData={editingMatchData}
+            onSuccess={() => setEditingMatch(null)}
+            onCancel={() => setEditingMatch(null)}
+          />
+        )}
       </Dialog>
     </>
   );
