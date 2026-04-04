@@ -4,10 +4,6 @@
   gap: var(--spacing-md);
 }
 
-.record {
-  font-weight: bold;
-}
-
 .matchActions {
   display: flex;
   gap: var(--spacing-sm);

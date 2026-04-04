@@ -84,7 +84,7 @@ const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
             <Card key={match.id}>
               <CardTitle>
                 <h3>{match.opponentArchetype.name}</h3>
-                <span className={classes.record}>
+                <span className="text-emphasis">
                   {match.wins} – {match.losses}
                 </span>
               </CardTitle>
