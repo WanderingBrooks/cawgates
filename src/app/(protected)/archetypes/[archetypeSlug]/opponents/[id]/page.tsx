@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import Markdown from 'react-markdown';
-import { Card, CardContent, CardTitle, PageTitle } from '@/components';
+import { Card, CardContent, CardTitle, PageTitle, SectionHeader } from '@/components';
 import { getOpponentArchetypeForUser } from '@/lib/dal';
-import { cn } from '@/lib/utils';
 import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
 import OpponentArchetypeSubHeader from './OpponentArchetypeSubHeader';
 import classes from './opponentArchetypePage.module.css';
@@ -44,9 +43,7 @@ const OpponentArchetypePage = async ({
         matchLosses={matchLosses}
         matchDraws={matchDraws}
       />
-      <p className={cn('text-label', classes.sectionHeader)}>
-        {t('matchesSection')}
-      </p>
+      <SectionHeader>{t('matchesSection')}</SectionHeader>
       {opponentArchetype.matches.length === 0 ? (
         <p>{t('noMatches')}</p>
       ) : (
@@ -75,9 +72,7 @@ const OpponentArchetypePage = async ({
           ))}
         </div>
       )}
-      <p className={cn('text-label', classes.sectionHeader)}>
-        {t('dangerZone')}
-      </p>
+      <SectionHeader>{t('dangerZone')}</SectionHeader>
       <DeleteOpponentArchetypeButton
         opponentArchetypeId={opponentArchetype.id}
         hasMatches={opponentArchetype.matches.length > 0}
