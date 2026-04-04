@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { Button, PageTitle } from '@/components';
+import { Button, PageTitle, SectionHeader } from '@/components';
 import { getEventForUser } from '@/lib/dal';
-import { cn } from '@/lib/utils';
 import DeleteEventButton from './DeleteEventButton';
 import MatchSection from './MatchSection';
 import Markdown from 'react-markdown';
@@ -35,7 +34,7 @@ const EventPage = async ({
           </p>
           {event.matches.length > 0 && (
             <p className="text-emphasis">
-              {t('overallRecord', {
+              {t('matchRecord', {
                 wins: matchWins,
                 losses: matchLosses,
                 ties: matchTies,
@@ -49,17 +48,17 @@ const EventPage = async ({
       </div>
       {event.notes && (
         <>
-          <p className={cn('text-label', classes.sectionHeader)}>{t('notesSection')}</p>
+          <SectionHeader>{t('notesSection')}</SectionHeader>
           <Markdown>{event.notes}</Markdown>
         </>
       )}
-      <p className={cn('text-label', classes.sectionHeader)}>{t('matchesSection')}</p>
+      <SectionHeader>{t('matchesSection')}</SectionHeader>
       <MatchSection
         matches={event.matches}
         eventId={id}
         archetypeId={archetype.id}
       />
-      <p className={cn('text-label', classes.sectionHeader)}>{t('dangerZone')}</p>
+      <SectionHeader>{t('dangerZone')}</SectionHeader>
       <DeleteEventButton eventId={id} />
     </>
   );

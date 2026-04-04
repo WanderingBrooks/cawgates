@@ -104,6 +104,29 @@ const t = useTranslations('myComponent');
 {pending ? t('saving') : t('save')}
 ```
 
+## Server Actions
+
+- All server action return types must use `ActionResult` or `ActionResultWithData<T>` from `src/lib/types.ts` — never define new local result types in action files
+- `ActionResult` is for actions that return success/failure only
+- `ActionResultWithData<T>` is for actions that return data on success (e.g. `ActionResultWithData<{ id: string; name: string }>`)
+- Both use a discriminated union with `error?: never` on the success branch, so `state?.error` works ergonomically in forms without additional narrowing
+
+```typescript
+// ❌ Bad - local result type
+export type MyActionResult = { success: boolean; error?: string };
+
+// ✅ Good - shared types from types.ts
+import { type ActionResult, type ActionResultWithData } from '@/lib/types';
+const myAction = async (): Promise<ActionResult> => { ... };
+const myActionWithData = async (): Promise<ActionResultWithData<{ id: string }>> => { ... };
+```
+
+## Code Quality
+
+- After generating or modifying code, always run both `npm run lint` and `npm run typecheck` to catch errors
+- `npm run lint` catches style and ESLint rule violations
+- `npm run typecheck` runs `tsc --noEmit` to catch cross-file type errors that ESLint misses
+
 ## Data Access
 
 - **NEVER query Prisma directly in page components** — always use the Data Access Layer (`src/lib/dal.ts`)

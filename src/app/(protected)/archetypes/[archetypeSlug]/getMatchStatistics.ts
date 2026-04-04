@@ -1,102 +1,69 @@
 import { prisma } from '@/lib/prisma';
 
 const getMatchStatistics = async ({ archetypeId }: { archetypeId: string }) => {
-  const matches = await prisma.match.findMany({
+  const opponentArchetypes = await prisma.opponentArchetype.findMany({
     where: {
-      event: {
-        archetypeId,
-      },
+      archetypeId,
     },
     select: {
-      opponentArchetype: {
-        select: { name: true },
+      id: true,
+      name: true,
+      matches: {
+        select: { wins: true, losses: true },
       },
-      wins: true,
-      losses: true,
     },
   });
 
-  const archetypeStats = matches.reduce(
-    (acc, match) => {
-      const archetype = match.opponentArchetype.name;
-
-      if (!acc[archetype]) {
-        acc[archetype] = {
-          wins: 0,
-          losses: 0,
-          winRate: 0,
-          total: 0,
-          matchWins: 0,
-          matchLosses: 0,
-          matchDraws: 0,
-        };
-      }
-
-      acc[archetype].wins += match.wins;
-      acc[archetype].losses += match.losses;
-      acc[archetype].total += match.losses + match.wins;
-
-      if (match.wins > match.losses) {
-        acc[archetype].matchWins += 1;
-      } else if (match.losses > match.wins) {
-        acc[archetype].matchLosses += 1;
-      } else {
-        acc[archetype].matchDraws += 1;
-      }
-
-      return acc;
-    },
-    {} as Record<
-      string,
-      {
+  const archetypeStats = opponentArchetypes.map(opponentArchetype => {
+    const { wins, losses, matchWins, matchLosses, matchDraws } =
+      opponentArchetype.matches.reduce<{
         wins: number;
         losses: number;
-        winRate: number;
-        total: number;
         matchWins: number;
         matchLosses: number;
         matchDraws: number;
-      }
-    >,
-  );
+      }>(
+        (acc, match) => ({
+          wins: acc.wins + match.wins,
+          losses: acc.losses + match.losses,
+          matchWins: acc.matchWins + (match.wins > match.losses ? 1 : 0),
+          matchLosses: acc.matchLosses + (match.losses > match.wins ? 1 : 0),
+          matchDraws: acc.matchDraws + (match.wins === match.losses ? 1 : 0),
+        }),
+        { wins: 0, losses: 0, matchWins: 0, matchLosses: 0, matchDraws: 0 },
+      );
 
-  // Compute winRate once per archetype.
-  for (const stats of Object.values(archetypeStats)) {
-    stats.winRate = stats.total === 0 ? 0 : stats.wins / stats.total;
-  }
+    const total = wins + losses;
+
+    return {
+      opponentArchetype: opponentArchetype.name,
+      opponentArchetypeId: opponentArchetype.id,
+      totalMatches: opponentArchetype.matches.length,
+      total,
+      wins,
+      losses,
+      winRate: total === 0 ? 0 : wins / total,
+      matchWins,
+      matchLosses,
+      matchDraws,
+    };
+  });
 
   // Sort order:
   // 1) Total games played (wins + losses) descending — more data first.
   // 2) Win rate descending for ties in total games (wins/total).
   // 3) Alphabetical ascending fallback for deterministic ordering.
-  const sortedArchetypes = Object.entries(archetypeStats).sort(
-    ([aName, aStats], [bName, bStats]) => {
-      const aTotal = aStats.wins + aStats.losses;
-      const bTotal = bStats.wins + bStats.losses;
+  return archetypeStats.sort((a, b) => {
+    if (b.total !== a.total) {
+      return b.total - a.total;
+    }
 
-      if (bTotal !== aTotal) {
-        return bTotal - aTotal;
-      }
+    if (b.winRate !== a.winRate) {
+      return b.winRate - a.winRate;
+    }
 
-      if (bStats.winRate !== aStats.winRate) {
-        return bStats.winRate - aStats.winRate;
-      }
-
-      return aName.localeCompare(bName);
-    },
-  );
-
-  return sortedArchetypes.map(([archetype, stats]) => ({
-    key: archetype,
-    archetype,
-    wins: stats.wins,
-    losses: stats.losses,
-    winRate: stats.winRate,
-    total: stats.total,
-    matchWins: stats.matchWins,
-    matchLosses: stats.matchLosses,
-    matchDraws: stats.matchDraws,
-  }));
+    return a.opponentArchetype.localeCompare(b.opponentArchetype);
+  });
 };
 
 export default getMatchStatistics;

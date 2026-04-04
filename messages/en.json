@@ -38,7 +38,7 @@
   "events": {
     "title": "Events",
     "createEvent": "Create Event",
-    "record": "{wins} - {losses} - {ties}",
+    "record": "{wins}W – {losses}L – {ties}T",
     "noEvents": "No events yet"
   },
   "createEvent": {
@@ -58,19 +58,15 @@
     "saveEvent": "Save Event"
   },
   "event": {
-    "viewEvents": "View Events",
-    "edit": "Edit",
     "editEvent": "Edit Event",
     "addMatch": "Add Match",
     "editMatch": "Edit",
     "noMatches": "No matches yet — add one to get started",
-    "opponent": "Opponent",
-    "wins": "Wins",
-    "losses": "Losses",
+    "gameRecord": "{wins}W – {losses}L",
     "matchesSection": "Matches",
     "notesSection": "Notes",
     "dangerZone": "Danger Zone",
-    "overallRecord": "{wins}W – {losses}L – {ties}T"
+    "matchRecord": "{wins}W – {losses}L – {ties}T"
   },
   "matchForm": {
     "opponentArchetype": "Opponent Archetype *",
@@ -144,6 +140,22 @@
     "save": "Save",
     "saving": "Saving...",
     "cancel": "Cancel"
+  },
+  "opponentArchetypePage": {
+    "editSection": "Edit",
+    "matchesSection": "Matches",
+    "dangerZone": "Danger Zone",
+    "edit": "Edit",
+    "editTitle": "Edit Opponent Archetype",
+    "noMatches": "No matches yet",
+    "record": "{wins}W – {losses}L",
+    "overallRecord": "{wins}W – {losses}L – {ties}T"
+  },
+  "deleteOpponentArchetypeButton": {
+    "delete": "Delete Opponent Archetype",
+    "deleting": "Deleting...",
+    "deleteConfirm": "Are you sure you want to delete this opponent archetype?",
+    "hasMatchesHint": "To delete this opponent archetype, all matches must first be moved to another archetype or deleted."
   },
   "loading": {
     "title": "Loading..."

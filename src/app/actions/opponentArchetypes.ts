@@ -1,10 +1,12 @@
 'use server';
 
+import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 import {
   createOpponentArchetypeSchema,
-  type OpponentArchetypeActionResult,
+  type ActionResult,
+  type ActionResultWithData,
 } from '@/lib/types';
 
 const getOpponentArchetypesForArchetype = async ({
@@ -33,9 +35,9 @@ const getOpponentArchetypesForArchetype = async ({
 };
 
 const createOpponentArchetype = async (
-  _prevState: OpponentArchetypeActionResult | null,
+  _prevState: ActionResultWithData<{ id: string; name: string }> | null,
   formData: FormData,
-): Promise<OpponentArchetypeActionResult> => {
+): Promise<ActionResultWithData<{ id: string; name: string }>> => {
   const user = await getUser();
 
   if (!user) {
@@ -89,9 +91,9 @@ const createOpponentArchetype = async (
 };
 
 const updateOpponentArchetype = async (
-  _prevState: OpponentArchetypeActionResult | null,
+  _prevState: ActionResultWithData<{ id: string; name: string }> | null,
   formData: FormData,
-): Promise<OpponentArchetypeActionResult> => {
+): Promise<ActionResultWithData<{ id: string; name: string }>> => {
   const user = await getUser();
 
   if (!user) {
@@ -146,8 +148,73 @@ const updateOpponentArchetype = async (
   }
 };
 
+const deleteOpponentArchetype = async ({
+  opponentArchetypeId,
+}: {
+  opponentArchetypeId: string;
+}): Promise<ActionResult> => {
+  let archetypeSlug: string;
+
+  try {
+    const user = await getUser();
+
+    if (!user) {
+      return {
+        success: false,
+        error: 'You must be logged in to delete an opponent archetype',
+      };
+    }
+
+    const opponentArchetype = await prisma.opponentArchetype.findUnique({
+      where: { id: opponentArchetypeId },
+      include: { archetype: true },
+    });
+
+    if (!opponentArchetype) {
+      return {
+        success: false,
+        error: 'Opponent archetype not found',
+      };
+    }
+
+    if (opponentArchetype.archetype.userId !== user.userId) {
+      return {
+        success: false,
+        error: 'You do not have permission to delete this opponent archetype',
+      };
+    }
+
+    const matchCount = await prisma.match.count({
+      where: { opponentArchetypeId },
+    });
+
+    if (matchCount > 0) {
+      return {
+        success: false,
+        error: 'Cannot delete an opponent archetype that has matches.',
+      };
+    }
+
+    archetypeSlug = opponentArchetype.archetype.slug;
+
+    await prisma.opponentArchetype.delete({
+      where: { id: opponentArchetypeId },
+    });
+  } catch (error) {
+    console.error('Failed to delete opponent archetype:', error);
+
+    return {
+      success: false,
+      error: 'Failed to delete opponent archetype. Please try again.',
+    };
+  }
+
+  redirect(`/archetypes/${archetypeSlug}`);
+};
+
 export {
   getOpponentArchetypesForArchetype,
   createOpponentArchetype,
   updateOpponentArchetype,
+  deleteOpponentArchetype,
 };

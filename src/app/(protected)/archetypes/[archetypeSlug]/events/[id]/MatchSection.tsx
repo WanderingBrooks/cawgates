@@ -85,33 +85,38 @@ const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
           {matches.map(match => (
             <Card key={match.id}>
               <CardTitle>
-                <h3>{match.opponentArchetype.name}</h3>
-                <span className="text-emphasis">
-                  {match.wins} – {match.losses}
-                </span>
+                <div>
+                  {match.opponentArchetype.name}
+                  <p>
+                    {t('gameRecord', {
+                      wins: match.wins,
+                      losses: match.losses,
+                    })}
+                  </p>
+                </div>
+                <div className={classes.matchActions}>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setEditingMatch(match)}
+                  >
+                    {t('editMatch')}
+                  </Button>
+                  <Button
+                    variant="danger"
+                    disabled={deletingId === match.id}
+                    onClick={() => handleDelete({ matchId: match.id })}
+                  >
+                    {deletingId === match.id
+                      ? tDelete('deleting')
+                      : tDelete('delete')}
+                  </Button>
+                </div>
               </CardTitle>
               {match.notes && (
                 <CardContent>
                   <Markdown>{match.notes}</Markdown>
                 </CardContent>
               )}
-              <div className={classes.matchActions}>
-                <Button
-                  variant="secondary"
-                  onClick={() => setEditingMatch(match)}
-                >
-                  {t('editMatch')}
-                </Button>
-                <Button
-                  variant="danger"
-                  disabled={deletingId === match.id}
-                  onClick={() => handleDelete({ matchId: match.id })}
-                >
-                  {deletingId === match.id
-                    ? tDelete('deleting')
-                    : tDelete('delete')}
-                </Button>
-              </div>
             </Card>
           ))}
         </div>

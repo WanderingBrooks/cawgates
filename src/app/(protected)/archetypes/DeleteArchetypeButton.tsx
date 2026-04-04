@@ -21,7 +21,7 @@ const DeleteArchetypeButton = ({ archetypeId }: { archetypeId: string }) => {
     const result = await deleteArchetype(archetypeId);
 
     if (result && !result.success) {
-      setError(result.error || 'Failed to delete archetype');
+      setError(result.error);
       setIsDeleting(false);
     }
   };

@@ -2,11 +2,17 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { deleteEvent } from '@/app/actions/events';
+import { deleteOpponentArchetype } from '@/app/actions/opponentArchetypes';
 import { Button, ErrorMessage } from '@/components';
 
-const DeleteEventButton = ({ eventId }: { eventId: string }) => {
-  const t = useTranslations('deleteEventButton');
+const DeleteOpponentArchetypeButton = ({
+  opponentArchetypeId,
+  hasMatches,
+}: {
+  opponentArchetypeId: string;
+  hasMatches: boolean;
+}) => {
+  const t = useTranslations('deleteOpponentArchetypeButton');
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,7 +24,7 @@ const DeleteEventButton = ({ eventId }: { eventId: string }) => {
     setIsDeleting(true);
     setError(null);
 
-    const result = await deleteEvent(eventId);
+    const result = await deleteOpponentArchetype({ opponentArchetypeId });
 
     if (result && !result.success) {
       setError(result.error);
@@ -29,11 +35,16 @@ const DeleteEventButton = ({ eventId }: { eventId: string }) => {
   return (
     <>
       {error && <ErrorMessage error={error} />}
-      <Button onClick={handleDelete} disabled={isDeleting} variant="danger">
+      <Button
+        onClick={handleDelete}
+        disabled={isDeleting || hasMatches}
+        variant="danger"
+      >
         {isDeleting ? t('deleting') : t('delete')}
       </Button>
+      {hasMatches && <p>{t('hasMatchesHint')}</p>}
     </>
   );
 };
 
-export default DeleteEventButton;
+export default DeleteOpponentArchetypeButton;

@@ -6,6 +6,7 @@ import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
 import Input from './Input';
 import PageTitle from './PageTitle';
+import SectionHeader from './SectionHeader';
 import SpaceChildrenVertically from './SpaceChildrenVertically';
 import Loading from './Loading';
 import OpponentArchetypeForm from './OpponentArchetypeForm';
@@ -25,6 +26,7 @@ export {
   OpponentArchetypeForm,
   OpponentArchetypeSelect,
   PageTitle,
+  SectionHeader,
   SpaceChildrenVertically,
   Loading,
   TextArea,

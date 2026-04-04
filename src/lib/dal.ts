@@ -77,4 +77,35 @@ const getEventsForArchetype = async ({
   return { user, archetype, events };
 };
 
-export { getArchetypeForUser, getEventsForArchetype, getEventForUser };
+const getOpponentArchetypeForUser = async ({
+  archetypeSlug,
+  opponentArchetypeId,
+}: {
+  archetypeSlug: string;
+  opponentArchetypeId: string;
+}) => {
+  const { user, archetype } = await getArchetypeForUser({ archetypeSlug });
+
+  const opponentArchetype = await prisma.opponentArchetype.findUnique({
+    where: { id: opponentArchetypeId, archetypeId: archetype.id },
+    include: {
+      matches: {
+        orderBy: { event: { date: 'desc' } },
+        include: { event: true },
+      },
+    },
+  });
+
+  if (!opponentArchetype) {
+    notFound();
+  }
+
+  return { user, archetype, opponentArchetype };
+};
+
+export {
+  getArchetypeForUser,
+  getEventsForArchetype,
+  getEventForUser,
+  getOpponentArchetypeForUser,
+};

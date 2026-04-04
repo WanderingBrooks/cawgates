@@ -3,11 +3,8 @@
 import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
-import {
-  createArchetype,
-  updateArchetype,
-  type ArchetypeActionResult,
-} from '@/app/actions/archetypes';
+import { createArchetype, updateArchetype } from '@/app/actions/archetypes';
+import { type ActionResult } from '@/lib/types';
 import {
   Button,
   ErrorMessage,
@@ -53,7 +50,7 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
   const action = props.mode === 'create' ? createArchetype : updateArchetype;
 
   const [state, formAction] = useActionState<
-    ArchetypeActionResult | null,
+    ActionResult | null,
     FormData
   >(action, null);
 

@@ -8,7 +8,7 @@ import {
   createOpponentArchetype,
   updateOpponentArchetype,
 } from '@/app/actions/opponentArchetypes';
-import { type OpponentArchetypeActionResult } from '@/lib/types';
+import { type ActionResultWithData } from '@/lib/types';
 import {
   Button,
   ErrorMessage,
@@ -58,7 +58,7 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
     props.mode === 'create' ? createOpponentArchetype : updateOpponentArchetype;
 
   const [state, formAction] = useActionState<
-    OpponentArchetypeActionResult | null,
+    ActionResultWithData<{ id: string; name: string }> | null,
     FormData
   >(action, null);
 
