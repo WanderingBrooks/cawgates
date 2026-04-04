@@ -19,16 +19,14 @@ const ArchetypesPage = async () => {
         <p>{t('noArchetypes')}</p>
       ) : (
         archetypes.map(archetype => (
-          <Link key={archetype.id} href={`/archetypes/${archetype.slug}`}>
-            <Card>
-              <CardTitle>
-                <h2>{archetype.name}</h2>
-                <span>
-                  {t('eventCount', { count: archetype._count.events })}
-                </span>
-              </CardTitle>
-            </Card>
-          </Link>
+          <Card key={archetype.id}>
+            <CardTitle>
+              <Link href={`/archetypes/${archetype.slug}`}>
+                {archetype.name}
+              </Link>
+              <span>{t('eventCount', { count: archetype._count.events })}</span>
+            </CardTitle>
+          </Card>
         ))
       )}
     </>
