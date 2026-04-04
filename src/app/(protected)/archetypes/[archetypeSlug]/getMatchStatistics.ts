@@ -1,104 +1,88 @@
 import { prisma } from '@/lib/prisma';
 
 const getMatchStatistics = async ({ archetypeId }: { archetypeId: string }) => {
-  const matches = await prisma.match.findMany({
+  const opponentArchetypes = await prisma.opponentArchetype.findMany({
     where: {
-      event: {
-        archetypeId,
-      },
+      archetypeId,
     },
     select: {
-      opponentArchetype: {
-        select: { id: true, name: true },
+      id: true,
+      name: true,
+      matches: {
+        select: { wins: true, losses: true },
       },
-      wins: true,
-      losses: true,
     },
   });
 
-  const archetypeStats = matches.reduce(
-    (acc, match) => {
-      const archetype = match.opponentArchetype.name;
+  const archetypeStats = opponentArchetypes.map(opponentArchetype => {
+    const gameWins = opponentArchetype.matches.reduce(
+      (sum, match) => sum + match.wins,
+      0,
+    );
 
-      if (!acc[archetype]) {
-        acc[archetype] = {
-          opponentArchetypeId: match.opponentArchetype.id,
-          wins: 0,
-          losses: 0,
-          winRate: 0,
-          total: 0,
-          matchWins: 0,
-          matchLosses: 0,
-          matchDraws: 0,
-        };
-      }
+    const gameLosses = opponentArchetype.matches.reduce(
+      (sum, match) => sum + match.losses,
+      0,
+    );
 
-      acc[archetype].wins += match.wins;
-      acc[archetype].losses += match.losses;
-      acc[archetype].total += match.losses + match.wins;
-
-      if (match.wins > match.losses) {
-        acc[archetype].matchWins += 1;
-      } else if (match.losses > match.wins) {
-        acc[archetype].matchLosses += 1;
-      } else {
-        acc[archetype].matchDraws += 1;
-      }
-
-      return acc;
-    },
-    {} as Record<
-      string,
-      {
-        opponentArchetypeId: string;
-        wins: number;
-        losses: number;
-        winRate: number;
-        total: number;
-        matchWins: number;
-        matchLosses: number;
-        matchDraws: number;
-      }
-    >,
-  );
+    return {
+      opponentArchetype: opponentArchetype.name,
+      opponentArchetypeId: opponentArchetype.id,
+      totalMatches: opponentArchetype.matches.length,
+      totalGames: gameWins + gameLosses,
+      gameWins,
+      gameLosses,
+      gameWinRate: 0, // Placeholder, will compute after loop
+      matchWins: opponentArchetype.matches.reduce(
+        (sum, match) => sum + (match.wins > match.losses ? 1 : 0),
+        0,
+      ),
+      matchLosses: opponentArchetype.matches.reduce(
+        (sum, match) => sum + (match.losses > match.wins ? 1 : 0),
+        0,
+      ),
+      matchDraws: opponentArchetype.matches.reduce(
+        (sum, match) => sum + (match.wins === match.losses ? 1 : 0),
+        0,
+      ),
+    };
+  });
 
   // Compute winRate once per archetype.
-  for (const stats of Object.values(archetypeStats)) {
-    stats.winRate = stats.total === 0 ? 0 : stats.wins / stats.total;
+  for (const stats of archetypeStats) {
+    stats.gameWinRate =
+      stats.totalGames === 0 ? 0 : stats.gameWins / stats.totalGames;
   }
 
   // Sort order:
   // 1) Total games played (wins + losses) descending — more data first.
   // 2) Win rate descending for ties in total games (wins/total).
   // 3) Alphabetical ascending fallback for deterministic ordering.
-  const sortedArchetypes = Object.entries(archetypeStats).sort(
-    ([aName, aStats], [bName, bStats]) => {
-      const aTotal = aStats.wins + aStats.losses;
-      const bTotal = bStats.wins + bStats.losses;
+  const sortedArchetypes = archetypeStats.sort((a, b) => {
+    const aTotal = a.gameWins + a.gameLosses;
+    const bTotal = b.gameWins + b.gameLosses;
 
-      if (bTotal !== aTotal) {
-        return bTotal - aTotal;
-      }
+    if (bTotal !== aTotal) {
+      return bTotal - aTotal;
+    }
 
-      if (bStats.winRate !== aStats.winRate) {
-        return bStats.winRate - aStats.winRate;
-      }
+    if (b.gameWinRate !== a.gameWinRate) {
+      return b.gameWinRate - a.gameWinRate;
+    }
 
-      return aName.localeCompare(bName);
-    },
-  );
+    return a.opponentArchetype.localeCompare(b.opponentArchetype);
+  });
 
-  return sortedArchetypes.map(([archetype, stats]) => ({
-    key: archetype,
-    archetype,
-    opponentArchetypeId: stats.opponentArchetypeId,
-    wins: stats.wins,
-    losses: stats.losses,
-    winRate: stats.winRate,
-    total: stats.total,
-    matchWins: stats.matchWins,
-    matchLosses: stats.matchLosses,
-    matchDraws: stats.matchDraws,
+  return sortedArchetypes.map(archetype => ({
+    opponentArchetype: archetype.opponentArchetype,
+    opponentArchetypeId: archetype.opponentArchetypeId,
+    wins: archetype.gameWins,
+    losses: archetype.gameLosses,
+    winRate: archetype.gameWinRate,
+    total: archetype.totalGames,
+    matchWins: archetype.matchWins,
+    matchLosses: archetype.matchLosses,
+    matchDraws: archetype.matchDraws,
   }));
 };
 

@@ -35,10 +35,12 @@ const ArchetypePage = async ({
           </thead>
           <tbody>
             {matchStatistics.map(row => (
-              <tr key={row.key}>
+              <tr key={row.opponentArchetypeId}>
                 <td>
-                  <Link href={`/archetypes/${archetypeSlug}/opponents/${row.opponentArchetypeId}`}>
-                    {row.archetype}
+                  <Link
+                    href={`/archetypes/${archetypeSlug}/opponents/${row.opponentArchetypeId}`}
+                  >
+                    {row.opponentArchetype}
                   </Link>
                 </td>
                 <td>{`${row.matchWins}-${row.matchLosses}-${row.matchDraws}`}</td>
