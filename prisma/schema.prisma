@@ -65,7 +65,6 @@ model Event {
 model Match {
   id                       String   @id @default(uuid())
   eventId                  String
-  order                    Int      @default(0)
   opponentArchetypeId      String
   opponentArchetypeLegacy  String? @map("opponentArchetype")
   wins                     Int
