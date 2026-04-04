@@ -10,6 +10,7 @@ import SpaceChildrenVertically from './SpaceChildrenVertically';
 import Loading from './Loading';
 import OpponentArchetypeForm from './OpponentArchetypeForm';
 import OpponentArchetypeSelect from './OpponentArchetypeSelect';
+import TextArea from './TextArea';
 
 export {
   Button,
@@ -26,4 +27,5 @@ export {
   PageTitle,
   SpaceChildrenVertically,
   Loading,
+  TextArea,
 };

@@ -4,7 +4,7 @@ import { useActionState, useEffect, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { createMatch, updateMatch } from '@/app/actions/matches';
-import { type ActionResult } from '@/lib/types';
+import { type ActionResult, MatchInputForm } from '@/lib/types';
 import {
   Button,
   ErrorMessage,
@@ -12,9 +12,8 @@ import {
   Input,
   SpaceChildrenVertically,
   OpponentArchetypeSelect,
+  TextArea,
 } from '@/components';
-import { MatchInputForm } from '@/lib/types';
-import TextArea from '@/components/TextArea';
 
 const SubmitButton = () => {
   const { pending } = useFormStatus();
@@ -90,7 +89,6 @@ const MatchForm = ({
     <Form action={formAction}>
       <SpaceChildrenVertically>
         <input type="hidden" name="eventId" value={eventId} />
-        <input type="hidden" name="archetypeId" value={archetypeId} />
         {matchId && <input type="hidden" name="matchId" value={matchId} />}
 
         <OpponentArchetypeSelect

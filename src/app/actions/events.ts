@@ -150,7 +150,7 @@ const updateEvent = async (
   redirect(`/archetypes/${archetypeSlug}/events/${eventId}`);
 };
 
-const deleteEventAndMatches = async (
+const deleteEvent = async (
   eventId: string,
 ): Promise<ActionResult> => {
   let archetypeSlug: string;
@@ -203,4 +203,4 @@ const deleteEventAndMatches = async (
   redirect(`/archetypes/${archetypeSlug}/events`);
 };
 
-export { createEvent, updateEvent, deleteEventAndMatches };
+export { createEvent, updateEvent, deleteEvent };

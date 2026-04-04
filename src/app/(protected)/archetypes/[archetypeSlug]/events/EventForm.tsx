@@ -12,10 +12,10 @@ import {
   Input,
   SpaceChildrenVertically,
   FlexRowBetween,
+  TextArea,
 } from '@/components';
 import { EventFormData } from '@/lib/types';
 import Link from 'next/link';
-import TextArea from '@/components/TextArea';
 
 /**
  * SubmitButton must be a separate component because useFormStatus() requires

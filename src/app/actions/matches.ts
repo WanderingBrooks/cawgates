@@ -21,7 +21,6 @@ const createMatch = async (
 
     const data = {
       eventId: formData.get('eventId') as string,
-      archetypeId: formData.get('archetypeId') as string,
       opponentArchetypeId: formData.get('opponentArchetypeId') as string,
       wins: parseInt(formData.get('wins') as string) || 0,
       losses: parseInt(formData.get('losses') as string) || 0,
@@ -92,7 +91,6 @@ const updateMatch = async (
     const data = {
       matchId: formData.get('matchId') as string,
       eventId: formData.get('eventId') as string,
-      archetypeId: formData.get('archetypeId') as string,
       opponentArchetypeId: formData.get('opponentArchetypeId') as string,
       wins: parseInt(formData.get('wins') as string) || 0,
       losses: parseInt(formData.get('losses') as string) || 0,

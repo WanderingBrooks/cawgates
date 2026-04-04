@@ -78,6 +78,8 @@ const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
 
       {deleteError && <ErrorMessage error={deleteError} />}
 
+      {matches.length === 0 && <p>{t('noMatches')}</p>}
+
       {matches.length > 0 && (
         <div className={classes.matchList}>
           {matches.map(match => (

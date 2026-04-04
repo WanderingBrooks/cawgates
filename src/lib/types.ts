@@ -27,7 +27,6 @@ const updateEventSchema = createEventSchema.extend({
 // Schema for creating a match
 const createMatchSchema = z.object({
   eventId: z.string().min(1, 'Event ID is required'),
-  archetypeId: z.string().min(1, 'Archetype ID is required'),
   opponentArchetypeId: z
     .string()
     .min(1, 'Opponent archetype is required')
