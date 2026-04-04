@@ -7,8 +7,10 @@ import { Button, ErrorMessage } from '@/components';
 
 const DeleteOpponentArchetypeButton = ({
   opponentArchetypeId,
+  hasMatches,
 }: {
   opponentArchetypeId: string;
+  hasMatches: boolean;
 }) => {
   const t = useTranslations('deleteOpponentArchetypeButton');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -33,9 +35,14 @@ const DeleteOpponentArchetypeButton = ({
   return (
     <>
       {error && <ErrorMessage error={error} />}
-      <Button onClick={handleDelete} disabled={isDeleting} variant="danger">
+      <Button
+        onClick={handleDelete}
+        disabled={isDeleting || hasMatches}
+        variant="danger"
+      >
         {isDeleting ? t('deleting') : t('delete')}
       </Button>
+      {hasMatches && <p>{t('hasMatchesHint')}</p>}
     </>
   );
 };

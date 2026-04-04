@@ -21,9 +21,17 @@ const OpponentArchetypePage = async ({
     opponentArchetypeId: id,
   });
 
-  const matchWins = opponentArchetype.matches.filter(m => m.wins > m.losses).length;
-  const matchLosses = opponentArchetype.matches.filter(m => m.losses > m.wins).length;
-  const matchDraws = opponentArchetype.matches.filter(m => m.wins === m.losses).length;
+  const matchWins = opponentArchetype.matches.filter(
+    m => m.wins > m.losses,
+  ).length;
+
+  const matchLosses = opponentArchetype.matches.filter(
+    m => m.losses > m.wins,
+  ).length;
+
+  const matchDraws = opponentArchetype.matches.filter(
+    m => m.wins === m.losses,
+  ).length;
 
   return (
     <>
@@ -36,7 +44,9 @@ const OpponentArchetypePage = async ({
         matchLosses={matchLosses}
         matchDraws={matchDraws}
       />
-      <p className={cn('text-label', classes.sectionHeader)}>{t('matchesSection')}</p>
+      <p className={cn('text-label', classes.sectionHeader)}>
+        {t('matchesSection')}
+      </p>
       {opponentArchetype.matches.length === 0 ? (
         <p>{t('noMatches')}</p>
       ) : (
@@ -45,7 +55,9 @@ const OpponentArchetypePage = async ({
             <Card key={match.id}>
               <CardTitle>
                 <div>
-                  <Link href={`/archetypes/${archetypeSlug}/events/${match.event.id}`}>
+                  <Link
+                    href={`/archetypes/${archetypeSlug}/events/${match.event.id}`}
+                  >
                     {match.event.name}
                   </Link>
                   <p className={classes.matchMeta}>
@@ -65,8 +77,13 @@ const OpponentArchetypePage = async ({
           ))}
         </div>
       )}
-      <p className={cn('text-label', classes.sectionHeader)}>{t('dangerZone')}</p>
-      <DeleteOpponentArchetypeButton opponentArchetypeId={opponentArchetype.id} />
+      <p className={cn('text-label', classes.sectionHeader)}>
+        {t('dangerZone')}
+      </p>
+      <DeleteOpponentArchetypeButton
+        opponentArchetypeId={opponentArchetype.id}
+        hasMatches={opponentArchetype.matches.length > 0}
+      />
     </>
   );
 };

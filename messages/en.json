@@ -158,7 +158,8 @@
   "deleteOpponentArchetypeButton": {
     "delete": "Delete Opponent Archetype",
     "deleting": "Deleting...",
-    "deleteConfirm": "Are you sure you want to delete this opponent archetype? All associated matches will be lost."
+    "deleteConfirm": "Are you sure you want to delete this opponent archetype? All associated matches will be lost.",
+    "hasMatchesHint": "To delete this opponent archetype, all matches must first be moved to another archetype or deleted."
   },
   "loading": {
     "title": "Loading..."

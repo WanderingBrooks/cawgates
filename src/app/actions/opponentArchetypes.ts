@@ -184,6 +184,17 @@ const deleteOpponentArchetype = async ({
       };
     }
 
+    const matchCount = await prisma.match.count({
+      where: { opponentArchetypeId },
+    });
+
+    if (matchCount > 0) {
+      return {
+        success: false,
+        error: 'Cannot delete an opponent archetype that has matches.',
+      };
+    }
+
     archetypeSlug = opponentArchetype.archetype.slug;
 
     await prisma.opponentArchetype.delete({
