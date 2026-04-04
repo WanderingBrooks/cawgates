@@ -3,41 +3,62 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Button, OpponentArchetypeForm } from '@/components';
+import { Button, Dialog, OpponentArchetypeForm } from '@/components';
+import classes from './opponentArchetypePage.module.css';
 
 const OpponentArchetypeEditSection = ({
   archetypeId,
   opponentArchetypeId,
   initialName,
+  matchWins,
+  matchLosses,
+  matchDraws,
 }: {
   archetypeId: string;
   opponentArchetypeId: string;
   initialName: string;
+  matchWins: number;
+  matchLosses: number;
+  matchDraws: number;
 }) => {
   const t = useTranslations('opponentArchetypePage');
   const router = useRouter();
-  const [isEditing, setIsEditing] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  if (isEditing) {
-    return (
-      <OpponentArchetypeForm
-        mode="edit"
-        archetypeId={archetypeId}
-        opponentArchetypeId={opponentArchetypeId}
-        initialName={initialName}
-        onSuccess={() => {
-          setIsEditing(false);
-          router.refresh();
-        }}
-        onCancel={() => setIsEditing(false)}
-      />
-    );
-  }
+  const hasMatches = matchWins + matchLosses + matchDraws > 0;
 
   return (
-    <Button variant="primary" onClick={() => setIsEditing(true)}>
-      {t('edit')}
-    </Button>
+    <>
+      <div className={classes.headerRow}>
+        <div>
+          {hasMatches && (
+            <p className="text-emphasis">
+              {t('overallRecord', {
+                wins: matchWins,
+                losses: matchLosses,
+                ties: matchDraws,
+              })}
+            </p>
+          )}
+        </div>
+        <Button variant="primary" onClick={() => setIsDialogOpen(true)}>
+          {t('edit')}
+        </Button>
+      </div>
+      <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
+        <OpponentArchetypeForm
+          mode="edit"
+          archetypeId={archetypeId}
+          opponentArchetypeId={opponentArchetypeId}
+          initialName={initialName}
+          onSuccess={() => {
+            setIsDialogOpen(false);
+            router.refresh();
+          }}
+          onCancel={() => setIsDialogOpen(false)}
+        />
+      </Dialog>
+    </>
   );
 };
 

@@ -147,8 +147,13 @@
   },
   "opponentArchetypePage": {
     "editSection": "Edit",
+    "matchesSection": "Matches",
     "dangerZone": "Danger Zone",
-    "edit": "Edit"
+    "edit": "Edit",
+    "editTitle": "Edit Opponent Archetype",
+    "noMatches": "No matches yet",
+    "record": "{wins}W – {losses}L",
+    "overallRecord": "{wins}W – {losses}L – {ties}T"
   },
   "deleteOpponentArchetypeButton": {
     "delete": "Delete Opponent Archetype",

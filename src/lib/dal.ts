@@ -88,6 +88,12 @@ const getOpponentArchetypeForUser = async ({
 
   const opponentArchetype = await prisma.opponentArchetype.findUnique({
     where: { id: opponentArchetypeId, archetypeId: archetype.id },
+    include: {
+      matches: {
+        orderBy: { event: { date: 'desc' } },
+        include: { event: true },
+      },
+    },
   });
 
   if (!opponentArchetype) {
