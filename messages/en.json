@@ -38,7 +38,7 @@
   "events": {
     "title": "Events",
     "createEvent": "Create Event",
-    "record": "{wins} - {losses} - {ties}",
+    "record": "{wins}W – {losses}L – {ties}T",
     "noEvents": "No events yet"
   },
   "createEvent": {

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { Card, CardTitle, CardContent, Button, PageTitle } from '@/components';
+import { Card, CardTitle, Button, PageTitle } from '@/components';
 import { getEventsForArchetype } from '@/lib/dal';
 import classes from './event.module.css';
 
@@ -45,20 +45,19 @@ const EventsPage = async ({
           );
 
           return (
-            <Link
-              key={event.id}
-              href={`/archetypes/${archetype.slug}/events/${event.id}`}
-            >
-              <Card>
-                <CardTitle>
-                  <h2>{event.name}</h2>
-                  <span>{new Date(event.date).toLocaleDateString()}</span>
-                </CardTitle>
-                <CardContent>
-                  <p>{t('record', record)}</p>
-                </CardContent>
-              </Card>
-            </Link>
+            <Card key={event.id}>
+              <CardTitle>
+                <div>
+                  <Link
+                    href={`/archetypes/${archetype.slug}/events/${event.id}`}
+                  >
+                    <h2>{event.name}</h2>
+                  </Link>
+                  <p>{new Date(event.date).toLocaleDateString()}</p>
+                </div>
+                <span className="text-emphasis">{t('record', record)}</span>
+              </CardTitle>
+            </Card>
           );
         })
       )}
