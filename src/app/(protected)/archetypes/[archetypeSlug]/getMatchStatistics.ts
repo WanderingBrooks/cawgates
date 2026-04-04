@@ -15,75 +15,55 @@ const getMatchStatistics = async ({ archetypeId }: { archetypeId: string }) => {
   });
 
   const archetypeStats = opponentArchetypes.map(opponentArchetype => {
-    const gameWins = opponentArchetype.matches.reduce(
-      (sum, match) => sum + match.wins,
-      0,
-    );
+    const { wins, losses, matchWins, matchLosses, matchDraws } =
+      opponentArchetype.matches.reduce<{
+        wins: number;
+        losses: number;
+        matchWins: number;
+        matchLosses: number;
+        matchDraws: number;
+      }>(
+        (acc, match) => ({
+          wins: acc.wins + match.wins,
+          losses: acc.losses + match.losses,
+          matchWins: acc.matchWins + (match.wins > match.losses ? 1 : 0),
+          matchLosses: acc.matchLosses + (match.losses > match.wins ? 1 : 0),
+          matchDraws: acc.matchDraws + (match.wins === match.losses ? 1 : 0),
+        }),
+        { wins: 0, losses: 0, matchWins: 0, matchLosses: 0, matchDraws: 0 },
+      );
 
-    const gameLosses = opponentArchetype.matches.reduce(
-      (sum, match) => sum + match.losses,
-      0,
-    );
+    const total = wins + losses;
 
     return {
       opponentArchetype: opponentArchetype.name,
       opponentArchetypeId: opponentArchetype.id,
       totalMatches: opponentArchetype.matches.length,
-      totalGames: gameWins + gameLosses,
-      gameWins,
-      gameLosses,
-      gameWinRate: 0, // Placeholder, will compute after loop
-      matchWins: opponentArchetype.matches.reduce(
-        (sum, match) => sum + (match.wins > match.losses ? 1 : 0),
-        0,
-      ),
-      matchLosses: opponentArchetype.matches.reduce(
-        (sum, match) => sum + (match.losses > match.wins ? 1 : 0),
-        0,
-      ),
-      matchDraws: opponentArchetype.matches.reduce(
-        (sum, match) => sum + (match.wins === match.losses ? 1 : 0),
-        0,
-      ),
+      total,
+      wins,
+      losses,
+      winRate: total === 0 ? 0 : wins / total,
+      matchWins,
+      matchLosses,
+      matchDraws,
     };
   });
-
-  // Compute winRate once per archetype.
-  for (const stats of archetypeStats) {
-    stats.gameWinRate =
-      stats.totalGames === 0 ? 0 : stats.gameWins / stats.totalGames;
-  }
 
   // Sort order:
   // 1) Total games played (wins + losses) descending — more data first.
   // 2) Win rate descending for ties in total games (wins/total).
   // 3) Alphabetical ascending fallback for deterministic ordering.
-  const sortedArchetypes = archetypeStats.sort((a, b) => {
-    const aTotal = a.gameWins + a.gameLosses;
-    const bTotal = b.gameWins + b.gameLosses;
-
-    if (bTotal !== aTotal) {
-      return bTotal - aTotal;
+  return archetypeStats.sort((a, b) => {
+    if (b.total !== a.total) {
+      return b.total - a.total;
     }
 
-    if (b.gameWinRate !== a.gameWinRate) {
-      return b.gameWinRate - a.gameWinRate;
+    if (b.winRate !== a.winRate) {
+      return b.winRate - a.winRate;
     }
 
     return a.opponentArchetype.localeCompare(b.opponentArchetype);
   });
-
-  return sortedArchetypes.map(archetype => ({
-    opponentArchetype: archetype.opponentArchetype,
-    opponentArchetypeId: archetype.opponentArchetypeId,
-    wins: archetype.gameWins,
-    losses: archetype.gameLosses,
-    winRate: archetype.gameWinRate,
-    total: archetype.totalGames,
-    matchWins: archetype.matchWins,
-    matchLosses: archetype.matchLosses,
-    matchDraws: archetype.matchDraws,
-  }));
 };
 
 export default getMatchStatistics;
