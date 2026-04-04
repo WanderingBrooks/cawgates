@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Button, Dialog, OpponentArchetypeForm } from '@/components';
 import classes from './opponentArchetypePage.module.css';
 
-const OpponentArchetypeEditSection = ({
+const OpponentArchetypeSubHeader = ({
   archetypeId,
   opponentArchetypeId,
   initialName,
@@ -62,4 +62,4 @@ const OpponentArchetypeEditSection = ({
   );
 };
 
-export default OpponentArchetypeEditSection;
+export default OpponentArchetypeSubHeader;

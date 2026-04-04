@@ -5,7 +5,7 @@ import { Card, CardContent, CardTitle, PageTitle } from '@/components';
 import { getOpponentArchetypeForUser } from '@/lib/dal';
 import { cn } from '@/lib/utils';
 import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
-import OpponentArchetypeEditSection from './OpponentArchetypeEditSection';
+import OpponentArchetypeSubHeader from './OpponentArchetypeSubHeader';
 import classes from './opponentArchetypePage.module.css';
 
 const OpponentArchetypePage = async ({
@@ -36,7 +36,7 @@ const OpponentArchetypePage = async ({
   return (
     <>
       <PageTitle title={opponentArchetype.name} subtitle={archetype.name} />
-      <OpponentArchetypeEditSection
+      <OpponentArchetypeSubHeader
         archetypeId={archetype.id}
         opponentArchetypeId={opponentArchetype.id}
         initialName={opponentArchetype.name}
