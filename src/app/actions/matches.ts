@@ -43,17 +43,12 @@ const createMatch = async (
 
     const event = await prisma.event.findUnique({
       where: { id: validated.eventId },
-      include: {
-        archetype: true,
-        matches: { select: { id: true } },
-      },
+      include: { archetype: true },
     });
 
     if (!event || event.archetype.userId !== user.userId) {
       return { success: false, error: 'Event not found' };
     }
-
-    const order = event.matches.length;
 
     await prisma.match.create({
       data: {
@@ -62,7 +57,6 @@ const createMatch = async (
         wins: validated.wins,
         losses: validated.losses,
         notes: validated.notes,
-        order,
       },
     });
 

@@ -48,7 +48,7 @@ const getEventForUser = async ({
     where: { id: eventId, archetypeId: archetype.id },
     include: {
       matches: {
-        orderBy: { order: 'asc' },
+        orderBy: { createdAt: 'asc' },
         include: { opponentArchetype: true },
       },
     },

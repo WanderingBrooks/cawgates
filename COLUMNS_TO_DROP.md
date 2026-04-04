@@ -1,3 +1,15 @@
+## "Match"."order"
+
+Match ordering was originally based on array index during bulk event creation.
+Matches are now created individually and sorted by `createdAt` instead. The
+`order` column is no longer written to or read from and can be safely dropped.
+
+```sql
+ALTER TABLE "Match" DROP COLUMN "order";
+```
+
+---
+
 ## "Match"."opponentArchetype";
 
 Opponent archetype was moved to it's own table. Once that is deployed,
