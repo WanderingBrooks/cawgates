@@ -54,8 +54,8 @@ const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
 
     const result = await deleteMatch(matchId);
 
-    if (result && !result.success) {
-      setDeleteError(result.error || 'Failed to delete match');
+    if (result && result.error) {
+      setDeleteError(result.error);
       setDeletingId(null);
     }
   };
