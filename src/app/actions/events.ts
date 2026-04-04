@@ -2,7 +2,11 @@
 
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
-import { createEventSchema, updateEventSchema, type ActionResult } from '@/lib/types';
+import {
+  createEventSchema,
+  updateEventSchema,
+  type ActionResult,
+} from '@/lib/types';
 import { getUser } from '@/lib/session';
 
 const createEvent = async (
@@ -150,9 +154,10 @@ const updateEvent = async (
   redirect(`/archetypes/${archetypeSlug}/events/${eventId}`);
 };
 
-const deleteEvent = async (
-  eventId: string,
-): Promise<ActionResult> => {
+/**
+ * Delete an event and all associated matches. Redirect back to the event list afterward.
+ */
+const deleteEvent = async (eventId: string): Promise<ActionResult> => {
   let archetypeSlug: string;
 
   try {

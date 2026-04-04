@@ -72,16 +72,19 @@ const MatchForm = ({
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const { name, value } = e.target;
+    const { name, value: givenValue } = e.target;
+
+    let value: string | number = '';
+
+    if (givenValue !== '' && (name === 'wins' || name === 'losses')) {
+      value = parseInt(givenValue, 10) || 0;
+    } else {
+      value = givenValue;
+    }
 
     setMatchData(prev => ({
       ...prev,
-      [name]:
-        name === 'wins' || name === 'losses'
-          ? value === ''
-            ? ''
-            : parseInt(value, 10) || 0
-          : value,
+      [name]: value,
     }));
   };
 
