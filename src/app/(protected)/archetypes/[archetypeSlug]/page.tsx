@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { PageTitle } from '@/components';
+import { PageTitle, Button } from '@/components';
 import { getArchetypeForUser } from '@/lib/dal';
 import getMatchStatistics from './getMatchStatistics';
+import classes from './archetype.module.css';
 
 const ArchetypePage = async ({
   params,
@@ -21,6 +22,11 @@ const ArchetypePage = async ({
   return (
     <>
       <PageTitle title={t('title')} subtitle={archetype.name} />
+      <div className={classes.rightAlignedButton}>
+        <Link href={`/archetypes/${archetype.slug}/events`}>
+          <Button variant="primary">{t('viewEvents')}</Button>
+        </Link>
+      </div>
       {matchStatistics.length === 0 ? (
         <p>{t('noMatches')}</p>
       ) : (
