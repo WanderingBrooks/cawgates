@@ -2,14 +2,9 @@
 
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
-import { createArchetypeSchema } from '@/lib/types';
+import { createArchetypeSchema, type ActionResult } from '@/lib/types';
 import { slugify } from '@/lib/utils';
 import { redirect } from 'next/navigation';
-
-export type ArchetypeActionResult = {
-  success: boolean;
-  error?: string;
-};
 
 // --- User's own deck archetypes ---
 
@@ -30,9 +25,9 @@ const getUserArchetypes = async () => {
 };
 
 const createArchetype = async (
-  _prevState: ArchetypeActionResult | null,
+  _prevState: ActionResult | null,
   formData: FormData,
-): Promise<ArchetypeActionResult> => {
+): Promise<ActionResult> => {
   const user = await getUser();
 
   if (!user) {
@@ -78,9 +73,9 @@ const createArchetype = async (
 };
 
 const updateArchetype = async (
-  _prevState: ArchetypeActionResult | null,
+  _prevState: ActionResult | null,
   formData: FormData,
-): Promise<ArchetypeActionResult> => {
+): Promise<ActionResult> => {
   const user = await getUser();
 
   if (!user) {
@@ -132,7 +127,7 @@ const updateArchetype = async (
 
 const deleteArchetype = async (
   archetypeId: string,
-): Promise<ArchetypeActionResult> => {
+): Promise<ActionResult> => {
   const user = await getUser();
 
   if (!user) {

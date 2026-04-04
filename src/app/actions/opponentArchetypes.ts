@@ -3,11 +3,11 @@
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
-import { createOpponentArchetypeSchema, type ActionResult } from '@/lib/types';
-
-export type OpponentArchetypeActionResult =
-  | { success: true; data: { id: string; name: string } }
-  | { success: false; error: string };
+import {
+  createOpponentArchetypeSchema,
+  type ActionResult,
+  type ActionResultWithData,
+} from '@/lib/types';
 
 const getOpponentArchetypesForArchetype = async ({
   archetypeId,
@@ -35,9 +35,9 @@ const getOpponentArchetypesForArchetype = async ({
 };
 
 const createOpponentArchetype = async (
-  _prevState: OpponentArchetypeActionResult | null,
+  _prevState: ActionResultWithData<{ id: string; name: string }> | null,
   formData: FormData,
-): Promise<OpponentArchetypeActionResult> => {
+): Promise<ActionResultWithData<{ id: string; name: string }>> => {
   const user = await getUser();
 
   if (!user) {
@@ -91,9 +91,9 @@ const createOpponentArchetype = async (
 };
 
 const updateOpponentArchetype = async (
-  _prevState: OpponentArchetypeActionResult | null,
+  _prevState: ActionResultWithData<{ id: string; name: string }> | null,
   formData: FormData,
-): Promise<OpponentArchetypeActionResult> => {
+): Promise<ActionResultWithData<{ id: string; name: string }>> => {
   const user = await getUser();
 
   if (!user) {
