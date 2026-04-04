@@ -28,6 +28,7 @@
 
   /* Typography */
   --font-family: 'Courier New', monospace;
+  --font-size-base: 1rem;
   --font-size-sm: 0.8rem;
   --font-size-emphasis: 1.1rem;
   --letter-spacing-label: 0.05em;

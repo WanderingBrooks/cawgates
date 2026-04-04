@@ -7,7 +7,7 @@
 
 .subtitle {
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   height: 1rem;
   font-weight: bold;
 }
