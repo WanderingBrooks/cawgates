@@ -8,9 +8,9 @@ import classes from './archetype.module.css';
 const ArchetypePage = async ({
   params,
 }: {
-  params: Promise<{ archetypeSlug: string }>;
+  params: Promise<{ username: string; archetypeSlug: string }>;
 }) => {
-  const { archetypeSlug } = await params;
+  const { username, archetypeSlug } = await params;
   const t = await getTranslations('archetypePage');
 
   const { archetype } = await getArchetypeForUser({ archetypeSlug });
@@ -23,7 +23,7 @@ const ArchetypePage = async ({
     <>
       <PageTitle title={t('title')} subtitle={archetype.name} />
       <div className={classes.rightAlignedButton}>
-        <Link href={`/archetypes/${archetype.slug}/events`}>
+        <Link href={`/${username}/${archetype.slug}/events`}>
           <Button variant="primary">{t('viewEvents')}</Button>
         </Link>
       </div>
@@ -44,7 +44,7 @@ const ArchetypePage = async ({
               <tr key={row.opponentArchetypeId}>
                 <td>
                   <Link
-                    href={`/archetypes/${archetypeSlug}/opponents/${row.opponentArchetypeId}`}
+                    href={`/${username}/${archetypeSlug}/opponents/${row.opponentArchetypeId}`}
                   >
                     {row.opponentArchetype}
                   </Link>

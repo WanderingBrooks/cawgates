@@ -7,9 +7,9 @@ import { getEventForUser } from '@/lib/dal';
 const EditEventPage = async ({
   params,
 }: {
-  params: Promise<{ archetypeSlug: string; id: string }>;
+  params: Promise<{ username: string; archetypeSlug: string; id: string }>;
 }) => {
-  const { archetypeSlug, id } = await params;
+  const { username, archetypeSlug, id } = await params;
   const t = await getTranslations('editEvent');
 
   const { archetype, event } = await getEventForUser({
@@ -28,6 +28,7 @@ const EditEventPage = async ({
       <PageTitle title={t('title')} subtitle={archetype.name} />
       <EventForm
         mode="edit"
+        username={username}
         archetypeId={archetype.id}
         archetypeSlug={archetype.slug}
         eventId={id}

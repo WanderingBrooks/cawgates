@@ -9,8 +9,8 @@ const NotFound = async () => {
   return (
     <div className={classes.container}>
       <p>{t('message')}</p>
-      <Link href="/archetypes">
-        <Button variant="primary">{t('backToArchetypes')}</Button>
+      <Link href="/">
+        <Button variant="primary">{t('backToHome')}</Button>
       </Link>
     </div>
   );

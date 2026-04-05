@@ -60,7 +60,7 @@ const createMatch = async (
     });
 
     revalidatePath(
-      `/archetypes/${event.archetype.slug}/events/${validated.eventId}`,
+      `/${user.username}/${event.archetype.slug}/events/${validated.eventId}`,
     );
 
     return { success: true };
@@ -134,7 +134,7 @@ const updateMatch = async (
     });
 
     revalidatePath(
-      `/archetypes/${match.event.archetype.slug}/events/${match.eventId}`,
+      `/${user.username}/${match.event.archetype.slug}/events/${match.eventId}`,
     );
 
     return { success: true };
@@ -175,7 +175,7 @@ const deleteMatch = async (matchId: string): Promise<ActionResult> => {
     await prisma.match.delete({ where: { id: matchId } });
 
     revalidatePath(
-      `/archetypes/${match.event.archetype.slug}/events/${match.eventId}`,
+      `/${user.username}/${match.event.archetype.slug}/events/${match.eventId}`,
     );
 
     return { success: true };

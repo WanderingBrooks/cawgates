@@ -10,9 +10,9 @@ import classes from './eventPage.module.css';
 const EventPage = async ({
   params,
 }: {
-  params: Promise<{ archetypeSlug: string; id: string }>;
+  params: Promise<{ username: string; archetypeSlug: string; id: string }>;
 }) => {
-  const { archetypeSlug, id } = await params;
+  const { username, archetypeSlug, id } = await params;
   const t = await getTranslations('event');
 
   const { archetype, event } = await getEventForUser({
@@ -42,7 +42,7 @@ const EventPage = async ({
             </p>
           )}
         </div>
-        <Link href={`/archetypes/${archetype.slug}/events/${id}/edit`}>
+        <Link href={`/${username}/${archetype.slug}/events/${id}/edit`}>
           <Button variant="primary">{t('editEvent')}</Button>
         </Link>
       </div>

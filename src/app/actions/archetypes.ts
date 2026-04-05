@@ -54,7 +54,7 @@ const createArchetype = async (
       },
     });
 
-    redirect(`/archetypes/${archetype.slug}`);
+    redirect(`/${user.username}/${archetype.slug}`);
   } catch (error: unknown) {
     if (
       typeof error === 'object' &&
@@ -107,7 +107,7 @@ const updateArchetype = async (
       data: { name: result.data.name, slug: result.data.slug },
     });
 
-    redirect(`/archetypes/${updated.slug}`);
+    redirect(`/${user.username}/${updated.slug}`);
   } catch (error: unknown) {
     if (
       typeof error === 'object' &&
@@ -151,7 +151,7 @@ const deleteArchetype = async (
 
   await prisma.archetype.delete({ where: { id: archetypeId } });
 
-  redirect('/archetypes');
+  redirect(`/${user.username}`);
 };
 
 export {

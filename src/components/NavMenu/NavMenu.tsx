@@ -21,10 +21,9 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
   const segments = pathname.split('/').filter(Boolean);
-  const archetypesIndex = segments.indexOf('archetypes');
+  const username = segments[0];
 
-  const potentialSlug =
-    archetypesIndex >= 0 ? segments[archetypesIndex + 1] : undefined;
+  const potentialSlug = segments.length > 1 ? segments[1] : undefined;
 
   const archetypeSlug =
     potentialSlug && potentialSlug !== 'create' ? potentialSlug : undefined;
@@ -58,10 +57,10 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
       {open && (
         <div className={classes.dropdown}>
           <Link
-            href="/archetypes"
+            href={`/${username}`}
             className={cn(
               classes.item,
-              pathname === '/archetypes' && classes.itemActive,
+              pathname === `/${username}` && classes.itemActive,
             )}
             onClick={() => setOpen(false)}
           >
@@ -75,10 +74,10 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
           {archetypeSlug ? (
             <>
               <Link
-                href={`/archetypes/${archetypeSlug}`}
+                href={`/${username}/${archetypeSlug}`}
                 className={cn(
                   classes.item,
-                  pathname === `/archetypes/${archetypeSlug}` &&
+                  pathname === `/${username}/${archetypeSlug}` &&
                     classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}
@@ -86,10 +85,10 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
                 {t('record')}
               </Link>
               <Link
-                href={`/archetypes/${archetypeSlug}/events`}
+                href={`/${username}/${archetypeSlug}/events`}
                 className={cn(
                   classes.item,
-                  pathname.startsWith(`/archetypes/${archetypeSlug}/events`) &&
+                  pathname.startsWith(`/${username}/${archetypeSlug}/events`) &&
                     classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}
@@ -97,10 +96,10 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
                 {t('events')}
               </Link>
               <Link
-                href={`/archetypes/${archetypeSlug}/edit`}
+                href={`/${username}/${archetypeSlug}/edit`}
                 className={cn(
                   classes.item,
-                  pathname.startsWith(`/archetypes/${archetypeSlug}/edit`) &&
+                  pathname.startsWith(`/${username}/${archetypeSlug}/edit`) &&
                     classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}

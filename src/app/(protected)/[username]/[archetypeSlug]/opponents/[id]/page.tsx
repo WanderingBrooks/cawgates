@@ -10,9 +10,9 @@ import classes from './opponentArchetypePage.module.css';
 const OpponentArchetypePage = async ({
   params,
 }: {
-  params: Promise<{ archetypeSlug: string; id: string }>;
+  params: Promise<{ username: string; archetypeSlug: string; id: string }>;
 }) => {
-  const { archetypeSlug, id } = await params;
+  const { username, archetypeSlug, id } = await params;
   const t = await getTranslations('opponentArchetypePage');
 
   const { archetype, opponentArchetype } = await getOpponentArchetypeForUser({
@@ -54,7 +54,7 @@ const OpponentArchetypePage = async ({
               <CardTitle>
                 <div>
                   <Link
-                    href={`/archetypes/${archetypeSlug}/events/${match.event.id}`}
+                    href={`/${username}/${archetypeSlug}/events/${match.event.id}`}
                   >
                     {match.event.name}
                   </Link>

@@ -35,6 +35,7 @@ const SubmitButton = () => {
 
 type EventFormProps = {
   mode: 'create' | 'edit';
+  username: string;
   archetypeId: string;
   archetypeSlug: string;
   eventId?: string;
@@ -43,6 +44,7 @@ type EventFormProps = {
 
 const EventForm = ({
   mode,
+  username,
   archetypeId,
   archetypeSlug,
   eventId,
@@ -111,8 +113,8 @@ const EventForm = ({
           <Link
             href={
               mode === 'create'
-                ? `/archetypes/${archetypeSlug}/events`
-                : `/archetypes/${archetypeSlug}/events/${eventId}`
+                ? `/${username}/${archetypeSlug}/events`
+                : `/${username}/${archetypeSlug}/events/${eventId}`
             }
           >
             <Button variant="secondary">{t('cancel')}</Button>

@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation';
+import { getUser } from '@/lib/session';
 
-const RootPage = () => {
-  redirect('/archetypes');
+const RootPage = async () => {
+  const user = await getUser();
+  redirect(`/${user!.username}`);
 };
 
 export default RootPage;

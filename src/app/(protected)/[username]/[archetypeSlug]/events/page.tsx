@@ -7,10 +7,10 @@ import classes from './event.module.css';
 const EventsPage = async ({
   params,
 }: {
-  params: Promise<{ archetypeSlug: string }>;
+  params: Promise<{ username: string; archetypeSlug: string }>;
 }) => {
   const t = await getTranslations('events');
-  const { archetypeSlug } = await params;
+  const { username, archetypeSlug } = await params;
 
   const { archetype, events } = await getEventsForArchetype({ archetypeSlug });
 
@@ -18,7 +18,7 @@ const EventsPage = async ({
     <>
       <PageTitle title={t('title')} subtitle={archetype.name} />
       <div className={classes.rightAlignedButton}>
-        <Link href={`/archetypes/${archetype.slug}/events/create`}>
+        <Link href={`/${username}/${archetype.slug}/events/create`}>
           <Button variant="primary">{t('createEvent')}</Button>
         </Link>
       </div>
@@ -49,7 +49,7 @@ const EventsPage = async ({
               <CardTitle>
                 <div>
                   <Link
-                    href={`/archetypes/${archetype.slug}/events/${event.id}`}
+                    href={`/${username}/${archetype.slug}/events/${event.id}`}
                   >
                     {event.name}
                   </Link>

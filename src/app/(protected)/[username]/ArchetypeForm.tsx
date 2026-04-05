@@ -36,9 +36,10 @@ const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
 };
 
 type ArchetypeFormProps =
-  | { mode: 'create' }
+  | { mode: 'create'; username: string }
   | {
       mode: 'edit';
+      username: string;
       archetypeId: string;
       archetypeSlug: string;
       initialName: string;
@@ -66,8 +67,8 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
 
   const cancelHref =
     props.mode === 'create'
-      ? '/archetypes'
-      : `/archetypes/${props.archetypeSlug}`;
+      ? `/${props.username}`
+      : `/${props.username}/${props.archetypeSlug}`;
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);

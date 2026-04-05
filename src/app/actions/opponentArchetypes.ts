@@ -154,6 +154,7 @@ const deleteOpponentArchetype = async ({
   opponentArchetypeId: string;
 }): Promise<ActionResult> => {
   let archetypeSlug: string;
+  let username: string;
 
   try {
     const user = await getUser();
@@ -196,6 +197,7 @@ const deleteOpponentArchetype = async ({
     }
 
     archetypeSlug = opponentArchetype.archetype.slug;
+    username = user.username;
 
     await prisma.opponentArchetype.delete({
       where: { id: opponentArchetypeId },
@@ -209,7 +211,7 @@ const deleteOpponentArchetype = async ({
     };
   }
 
-  redirect(`/archetypes/${archetypeSlug}`);
+  redirect(`/${username}/${archetypeSlug}`);
 };
 
 export {

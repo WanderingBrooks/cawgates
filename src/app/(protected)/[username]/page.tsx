@@ -4,7 +4,12 @@ import { getUserArchetypes } from '@/app/actions/archetypes';
 import { Button, Card, CardTitle, PageTitle } from '@/components';
 import classes from './archetypes.module.css';
 
-const ArchetypesPage = async () => {
+const ArchetypesPage = async ({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}) => {
+  const { username } = await params;
   const t = await getTranslations('archetypes');
 
   const archetypes = await getUserArchetypes();
@@ -13,7 +18,7 @@ const ArchetypesPage = async () => {
     <>
       <PageTitle title={t('title')} />
       <div className={classes.rightAlignedButton}>
-        <Link href="/archetypes/create">
+        <Link href={`/${username}/create`}>
           <Button variant="primary">{t('createArchetype')}</Button>
         </Link>
       </div>
@@ -24,7 +29,7 @@ const ArchetypesPage = async () => {
         archetypes.map(archetype => (
           <Card key={archetype.id}>
             <CardTitle>
-              <Link href={`/archetypes/${archetype.slug}`}>
+              <Link href={`/${username}/${archetype.slug}`}>
                 {archetype.name}
               </Link>
               <span>{t('eventCount', { count: archetype._count.events })}</span>
