@@ -31,9 +31,10 @@ type MatchSectionProps = {
   matches: Match[];
   eventId: string;
   archetypeId: string;
+  isOwner: boolean;
 };
 
-const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
+const MatchSection = ({ matches, eventId, archetypeId, isOwner }: MatchSectionProps) => {
   const t = useTranslations('event');
   const tDelete = useTranslations('deleteMatchButton');
   const tCreateMatch = useTranslations('createMatch');
@@ -72,9 +73,11 @@ const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
 
   return (
     <>
-      <Button variant="primary" onClick={() => setIsAddOpen(true)}>
-        {t('addMatch')}
-      </Button>
+      {isOwner && (
+        <Button variant="primary" onClick={() => setIsAddOpen(true)}>
+          {t('addMatch')}
+        </Button>
+      )}
 
       {deleteError && <ErrorMessage error={deleteError} />}
 
@@ -94,23 +97,25 @@ const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
                     })}
                   </p>
                 </div>
-                <div className={classes.matchActions}>
-                  <Button
-                    variant="secondary"
-                    onClick={() => setEditingMatch(match)}
-                  >
-                    {t('editMatch')}
-                  </Button>
-                  <Button
-                    variant="danger"
-                    disabled={deletingId === match.id}
-                    onClick={() => handleDelete({ matchId: match.id })}
-                  >
-                    {deletingId === match.id
-                      ? tDelete('deleting')
-                      : tDelete('delete')}
-                  </Button>
-                </div>
+                {isOwner && (
+                  <div className={classes.matchActions}>
+                    <Button
+                      variant="secondary"
+                      onClick={() => setEditingMatch(match)}
+                    >
+                      {t('editMatch')}
+                    </Button>
+                    <Button
+                      variant="danger"
+                      disabled={deletingId === match.id}
+                      onClick={() => handleDelete({ matchId: match.id })}
+                    >
+                      {deletingId === match.id
+                        ? tDelete('deleting')
+                        : tDelete('delete')}
+                    </Button>
+                  </div>
+                )}
               </CardTitle>
               {match.notes && (
                 <CardContent>
@@ -122,36 +127,40 @@ const MatchSection = ({ matches, eventId, archetypeId }: MatchSectionProps) => {
         </div>
       )}
 
-      <Dialog isOpen={isAddOpen} title={tCreateMatch('title')} usePortal>
-        {isAddOpen && (
-          <MatchForm
-            mode="create"
-            archetypeId={archetypeId}
-            eventId={eventId}
-            onSuccess={() => setIsAddOpen(false)}
-            onCancel={() => setIsAddOpen(false)}
-          />
-        )}
-      </Dialog>
+      {isOwner && (
+        <>
+          <Dialog isOpen={isAddOpen} title={tCreateMatch('title')} usePortal>
+            {isAddOpen && (
+              <MatchForm
+                mode="create"
+                archetypeId={archetypeId}
+                eventId={eventId}
+                onSuccess={() => setIsAddOpen(false)}
+                onCancel={() => setIsAddOpen(false)}
+              />
+            )}
+          </Dialog>
 
-      <Dialog
-        isOpen={editingMatch !== null}
-        title={tEditMatch('title')}
-        usePortal
-      >
-        {editingMatch !== null && (
-          <MatchForm
-            key={editingMatch.id}
-            mode="edit"
-            archetypeId={archetypeId}
-            eventId={eventId}
-            matchId={editingMatch.id}
-            initialMatchData={editingMatchData}
-            onSuccess={() => setEditingMatch(null)}
-            onCancel={() => setEditingMatch(null)}
-          />
-        )}
-      </Dialog>
+          <Dialog
+            isOpen={editingMatch !== null}
+            title={tEditMatch('title')}
+            usePortal
+          >
+            {editingMatch !== null && (
+              <MatchForm
+                key={editingMatch.id}
+                mode="edit"
+                archetypeId={archetypeId}
+                eventId={eventId}
+                matchId={editingMatch.id}
+                initialMatchData={editingMatchData}
+                onSuccess={() => setEditingMatch(null)}
+                onCancel={() => setEditingMatch(null)}
+              />
+            )}
+          </Dialog>
+        </>
+      )}
     </>
   );
 };

@@ -2,7 +2,8 @@ import { PageTitle } from '@/components';
 import EventForm from '../../EventForm';
 import { EventFormData } from '@/lib/types';
 import { getTranslations } from 'next-intl/server';
-import { getEventForUser } from '@/lib/dal';
+import { notFound } from 'next/navigation';
+import { getEvent } from '@/lib/dal';
 
 const EditEventPage = async ({
   params,
@@ -12,10 +13,15 @@ const EditEventPage = async ({
   const { username, archetypeSlug, id } = await params;
   const t = await getTranslations('editEvent');
 
-  const { archetype, event } = await getEventForUser({
+  const { archetype, event, isOwner } = await getEvent({
+    ownerUsername: username,
     archetypeSlug,
     eventId: id,
   });
+
+  if (!isOwner) {
+    notFound();
+  }
 
   const initialEventData: EventFormData = {
     eventName: event.name || '',

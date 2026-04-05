@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getUser } from '@/lib/session';
+import { prisma } from '@/lib/prisma';
 
 const UsernameLayout = async ({
   children,
@@ -8,9 +8,14 @@ const UsernameLayout = async ({
   children: React.ReactNode;
   params: Promise<{ username: string }>;
 }) => {
-  const [user, { username }] = await Promise.all([getUser(), params]);
+  const { username } = await params;
 
-  if (!user || user.username !== username) {
+  const owner = await prisma.user.findUnique({
+    where: { username },
+    select: { id: true },
+  });
+
+  if (!owner) {
     notFound();
   }
 

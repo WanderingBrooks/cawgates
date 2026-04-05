@@ -125,9 +125,7 @@ const updateArchetype = async (
   }
 };
 
-const deleteArchetype = async (
-  archetypeId: string,
-): Promise<ActionResult> => {
+const deleteArchetype = async (archetypeId: string): Promise<ActionResult> => {
   const user = await getUser();
 
   if (!user) {
@@ -154,9 +152,39 @@ const deleteArchetype = async (
   redirect(`/${user.username}`);
 };
 
+const setArchetypePublic = async ({
+  archetypeId,
+  isPublic,
+}: {
+  archetypeId: string;
+  isPublic: boolean;
+}): Promise<ActionResult> => {
+  const user = await getUser();
+
+  if (!user) {
+    return { success: false, error: 'You must be logged in' };
+  }
+
+  const archetype = await prisma.archetype.findUnique({
+    where: { id: archetypeId },
+  });
+
+  if (!archetype || archetype.userId !== user.userId) {
+    return { success: false, error: 'Archetype not found' };
+  }
+
+  await prisma.archetype.update({
+    where: { id: archetypeId },
+    data: { isPublic },
+  });
+
+  return { success: true };
+};
+
 export {
   getUserArchetypes,
   createArchetype,
   updateArchetype,
   deleteArchetype,
+  setArchetypePublic,
 };

@@ -1,7 +1,9 @@
+import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { PageTitle } from '@/components';
-import { getArchetypeForUser } from '@/lib/dal';
+import { PageTitle, SectionHeader } from '@/components';
+import { getArchetype } from '@/lib/dal';
 import ArchetypeForm from '../../ArchetypeForm';
+import PublicToggle from '../../PublicToggle';
 
 const EditArchetypePage = async ({
   params,
@@ -11,7 +13,11 @@ const EditArchetypePage = async ({
   const t = await getTranslations('editArchetype');
   const { username, archetypeSlug } = await params;
 
-  const { archetype } = await getArchetypeForUser({ archetypeSlug });
+  const { archetype, isOwner } = await getArchetype({ ownerUsername: username, archetypeSlug });
+
+  if (!isOwner) {
+    notFound();
+  }
 
   return (
     <>
@@ -24,6 +30,8 @@ const EditArchetypePage = async ({
         initialName={archetype.name}
         initialSlug={archetype.slug}
       />
+      <SectionHeader>{t('visibility')}</SectionHeader>
+      <PublicToggle archetypeId={archetype.id} initialIsPublic={archetype.isPublic} />
     </>
   );
 };

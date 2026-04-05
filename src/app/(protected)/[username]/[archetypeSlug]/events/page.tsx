@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { Card, CardTitle, Button, PageTitle } from '@/components';
-import { getEventsForArchetype } from '@/lib/dal';
+import { getEvents } from '@/lib/dal';
 import classes from './event.module.css';
 
 const EventsPage = async ({
@@ -12,16 +12,18 @@ const EventsPage = async ({
   const t = await getTranslations('events');
   const { username, archetypeSlug } = await params;
 
-  const { archetype, events } = await getEventsForArchetype({ archetypeSlug });
+  const { archetype, events, isOwner } = await getEvents({ ownerUsername: username, archetypeSlug });
 
   return (
     <>
       <PageTitle title={t('title')} subtitle={archetype.name} />
-      <div className={classes.rightAlignedButton}>
-        <Link href={`/${username}/${archetype.slug}/events/create`}>
-          <Button variant="primary">{t('createEvent')}</Button>
-        </Link>
-      </div>
+      {isOwner && (
+        <div className={classes.rightAlignedButton}>
+          <Link href={`/${username}/${archetype.slug}/events/create`}>
+            <Button variant="primary">{t('createEvent')}</Button>
+          </Link>
+        </div>
+      )}
 
       {events.length === 0 ? (
         <p>{t('noEvents')}</p>

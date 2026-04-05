@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { PageTitle, Button } from '@/components';
-import { getArchetypeForUser } from '@/lib/dal';
+import { getArchetype } from '@/lib/dal';
 import getMatchStatistics from './getMatchStatistics';
 import classes from './archetype.module.css';
 
@@ -13,7 +13,7 @@ const ArchetypePage = async ({
   const { username, archetypeSlug } = await params;
   const t = await getTranslations('archetypePage');
 
-  const { archetype } = await getArchetypeForUser({ archetypeSlug });
+  const { archetype } = await getArchetype({ ownerUsername: username, archetypeSlug });
 
   const matchStatistics = await getMatchStatistics({
     archetypeId: archetype.id,

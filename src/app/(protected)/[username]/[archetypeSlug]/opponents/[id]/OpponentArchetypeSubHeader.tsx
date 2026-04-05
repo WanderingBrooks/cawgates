@@ -14,6 +14,7 @@ const OpponentArchetypeSubHeader = ({
   matchWins,
   matchLosses,
   matchDraws,
+  isOwner,
 }: {
   archetypeId: string;
   opponentArchetypeId: string;
@@ -22,6 +23,7 @@ const OpponentArchetypeSubHeader = ({
   matchWins: number;
   matchLosses: number;
   matchDraws: number;
+  isOwner: boolean;
 }) => {
   const t = useTranslations('opponentArchetypePage');
   const router = useRouter();
@@ -43,23 +45,27 @@ const OpponentArchetypeSubHeader = ({
             </p>
           )}
         </div>
-        <Button variant="primary" onClick={() => setIsDialogOpen(true)}>
-          {t('edit')}
-        </Button>
+        {isOwner && (
+          <Button variant="primary" onClick={() => setIsDialogOpen(true)}>
+            {t('edit')}
+          </Button>
+        )}
       </div>
-      <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
-        <OpponentArchetypeForm
-          mode="edit"
-          archetypeId={archetypeId}
-          opponentArchetypeId={opponentArchetypeId}
-          initialName={initialName}
-          onSuccess={() => {
-            setIsDialogOpen(false);
-            router.refresh();
-          }}
-          onCancel={() => setIsDialogOpen(false)}
-        />
-      </Dialog>
+      {isOwner && (
+        <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
+          <OpponentArchetypeForm
+            mode="edit"
+            archetypeId={archetypeId}
+            opponentArchetypeId={opponentArchetypeId}
+            initialName={initialName}
+            onSuccess={() => {
+              setIsDialogOpen(false);
+              router.refresh();
+            }}
+            onCancel={() => setIsDialogOpen(false)}
+          />
+        </Dialog>
+      )}
     </>
   );
 };

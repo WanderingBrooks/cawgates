@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { Button, PageTitle, SectionHeader } from '@/components';
-import { getEventForUser } from '@/lib/dal';
+import { getEvent } from '@/lib/dal';
 import DeleteEventButton from './DeleteEventButton';
 import MatchSection from './MatchSection';
 import Markdown from 'react-markdown';
@@ -15,7 +15,8 @@ const EventPage = async ({
   const { username, archetypeSlug, id } = await params;
   const t = await getTranslations('event');
 
-  const { archetype, event } = await getEventForUser({
+  const { archetype, event, isOwner } = await getEvent({
+    ownerUsername: username,
     archetypeSlug,
     eventId: id,
   });
@@ -42,9 +43,11 @@ const EventPage = async ({
             </p>
           )}
         </div>
-        <Link href={`/${username}/${archetype.slug}/events/${id}/edit`}>
-          <Button variant="primary">{t('editEvent')}</Button>
-        </Link>
+        {isOwner && (
+          <Link href={`/${username}/${archetype.slug}/events/${id}/edit`}>
+            <Button variant="primary">{t('editEvent')}</Button>
+          </Link>
+        )}
       </div>
       {event.notes && (
         <>
@@ -57,9 +60,14 @@ const EventPage = async ({
         matches={event.matches}
         eventId={id}
         archetypeId={archetype.id}
+        isOwner={isOwner}
       />
-      <SectionHeader>{t('dangerZone')}</SectionHeader>
-      <DeleteEventButton eventId={id} />
+      {isOwner && (
+        <>
+          <SectionHeader>{t('dangerZone')}</SectionHeader>
+          <DeleteEventButton eventId={id} />
+        </>
+      )}
     </>
   );
 };

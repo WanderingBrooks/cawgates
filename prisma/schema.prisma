@@ -27,6 +27,7 @@ model Archetype {
   id        String   @id @default(uuid())
   name      String
   slug      String
+  isPublic  Boolean  @default(false)
   userId    String
   createdAt DateTime @default(now())
 

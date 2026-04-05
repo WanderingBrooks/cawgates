@@ -28,7 +28,15 @@
     "cancel": "Cancel"
   },
   "editArchetype": {
-    "title": "Rename Archetype"
+    "title": "Rename Archetype",
+    "visibility": "Visibility"
+  },
+  "publicToggle": {
+    "makePublic": "Make public",
+    "makePrivate": "Make private",
+    "saving": "Saving...",
+    "publicHint": "Anyone with the link can view this archetype",
+    "privateHint": "Only you can view this archetype"
   },
   "deleteArchetypeButton": {
     "delete": "Delete Archetype",

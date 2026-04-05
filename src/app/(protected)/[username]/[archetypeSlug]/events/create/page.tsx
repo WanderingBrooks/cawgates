@@ -1,6 +1,7 @@
+import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { PageTitle } from '@/components';
-import { getArchetypeForUser } from '@/lib/dal';
+import { getArchetype } from '@/lib/dal';
 import EventForm from '../EventForm';
 
 const CreateEventPage = async ({
@@ -11,7 +12,11 @@ const CreateEventPage = async ({
   const t = await getTranslations('createEvent');
   const { username, archetypeSlug } = await params;
 
-  const { archetype } = await getArchetypeForUser({ archetypeSlug });
+  const { archetype, isOwner } = await getArchetype({ ownerUsername: username, archetypeSlug });
+
+  if (!isOwner) {
+    notFound();
+  }
 
   return (
     <>

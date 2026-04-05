@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import Markdown from 'react-markdown';
 import { Card, CardContent, CardTitle, PageTitle, SectionHeader } from '@/components';
-import { getOpponentArchetypeForUser } from '@/lib/dal';
+import { getOpponentArchetype } from '@/lib/dal';
 import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
 import OpponentArchetypeSubHeader from './OpponentArchetypeSubHeader';
 import classes from './opponentArchetypePage.module.css';
@@ -15,7 +15,8 @@ const OpponentArchetypePage = async ({
   const { username, archetypeSlug, id } = await params;
   const t = await getTranslations('opponentArchetypePage');
 
-  const { archetype, opponentArchetype } = await getOpponentArchetypeForUser({
+  const { archetype, opponentArchetype, isOwner } = await getOpponentArchetype({
+    ownerUsername: username,
     archetypeSlug,
     opponentArchetypeId: id,
   });
@@ -43,6 +44,7 @@ const OpponentArchetypePage = async ({
         matchWins={matchWins}
         matchLosses={matchLosses}
         matchDraws={matchDraws}
+        isOwner={isOwner}
       />
       <SectionHeader>{t('matchesSection')}</SectionHeader>
       {opponentArchetype.matches.length === 0 ? (
@@ -73,11 +75,15 @@ const OpponentArchetypePage = async ({
           ))}
         </div>
       )}
-      <SectionHeader>{t('dangerZone')}</SectionHeader>
-      <DeleteOpponentArchetypeButton
-        opponentArchetypeId={opponentArchetype.id}
-        hasMatches={opponentArchetype.matches.length > 0}
-      />
+      {isOwner && (
+        <>
+          <SectionHeader>{t('dangerZone')}</SectionHeader>
+          <DeleteOpponentArchetypeButton
+            opponentArchetypeId={opponentArchetype.id}
+            hasMatches={opponentArchetype.matches.length > 0}
+          />
+        </>
+      )}
     </>
   );
 };

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { getUserArchetypes } from '@/app/actions/archetypes';
+import { getArchetypesForOwner } from '@/lib/dal';
 import { Button, Card, CardTitle, PageTitle } from '@/components';
 import classes from './archetypes.module.css';
 
@@ -12,16 +12,18 @@ const ArchetypesPage = async ({
   const { username } = await params;
   const t = await getTranslations('archetypes');
 
-  const archetypes = await getUserArchetypes();
+  const { archetypes, isOwner } = await getArchetypesForOwner({ ownerUsername: username });
 
   return (
     <>
       <PageTitle title={t('title')} />
-      <div className={classes.rightAlignedButton}>
-        <Link href={`/${username}/create`}>
-          <Button variant="primary">{t('createArchetype')}</Button>
-        </Link>
-      </div>
+      {isOwner && (
+        <div className={classes.rightAlignedButton}>
+          <Link href={`/${username}/create`}>
+            <Button variant="primary">{t('createArchetype')}</Button>
+          </Link>
+        </div>
+      )}
 
       {archetypes.length === 0 ? (
         <p>{t('noArchetypes')}</p>
