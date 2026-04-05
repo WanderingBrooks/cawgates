@@ -84,10 +84,11 @@ const updateArchetype = async (
 
   const archetypeId = formData.get('archetypeId') as string;
   const name = formData.get('name') as string;
+  const isPublic = formData.get('isPublic') as string;
   const rawSlug = formData.get('slug') as string;
   const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
 
-  const result = createArchetypeSchema.safeParse({ name, slug });
+  const result = createArchetypeSchema.safeParse({ name, slug, isPublic });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
@@ -104,7 +105,11 @@ const updateArchetype = async (
   try {
     const updated = await prisma.archetype.update({
       where: { id: archetypeId },
-      data: { name: result.data.name, slug: result.data.slug },
+      data: {
+        name: result.data.name,
+        slug: result.data.slug,
+        isPublic: result.data.isPublic,
+      },
     });
 
     redirect(`/${user.username}/${updated.slug}`);
@@ -152,39 +157,4 @@ const deleteArchetype = async (archetypeId: string): Promise<ActionResult> => {
   redirect(`/${user.username}`);
 };
 
-const setArchetypePublic = async ({
-  archetypeId,
-  isPublic,
-}: {
-  archetypeId: string;
-  isPublic: boolean;
-}): Promise<ActionResult> => {
-  const user = await getUser();
-
-  if (!user) {
-    return { success: false, error: 'You must be logged in' };
-  }
-
-  const archetype = await prisma.archetype.findUnique({
-    where: { id: archetypeId },
-  });
-
-  if (!archetype || archetype.userId !== user.userId) {
-    return { success: false, error: 'Archetype not found' };
-  }
-
-  await prisma.archetype.update({
-    where: { id: archetypeId },
-    data: { isPublic },
-  });
-
-  return { success: true };
-};
-
-export {
-  getUserArchetypes,
-  createArchetype,
-  updateArchetype,
-  deleteArchetype,
-  setArchetypePublic,
-};
+export { getUserArchetypes, createArchetype, updateArchetype, deleteArchetype };

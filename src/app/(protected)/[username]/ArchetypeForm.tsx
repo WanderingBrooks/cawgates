@@ -42,26 +42,35 @@ type ArchetypeFormProps =
       username: string;
       archetypeId: string;
       archetypeSlug: string;
-      initialName: string;
-      initialSlug: string;
+      initialArchetypeData: {
+        name: string;
+        slug: string;
+        isPublic: boolean;
+      };
     };
 
 const ArchetypeForm = (props: ArchetypeFormProps) => {
   const t = useTranslations('archetypeForm');
   const action = props.mode === 'create' ? createArchetype : updateArchetype;
 
-  const [state, formAction] = useActionState<
-    ActionResult | null,
-    FormData
-  >(action, null);
+  const [state, formAction] = useActionState<ActionResult | null, FormData>(
+    action,
+    null,
+  );
 
   const [name, setName] = useState(
-    props.mode === 'edit' ? props.initialName : '',
+    props.mode === 'edit' ? props.initialArchetypeData.name : '',
   );
 
   const [slug, setSlug] = useState(
-    props.mode === 'edit' ? props.initialSlug : '',
+    props.mode === 'edit' ? props.initialArchetypeData.slug : '',
   );
+
+  const [isPublic, setIsPublic] = useState(
+    props.mode === 'edit' ? props.initialArchetypeData.isPublic : false,
+  );
+
+  console.log({ isPublic, props });
 
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
 
@@ -106,6 +115,15 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
           hint={t('slugHint')}
           value={slug}
           onChange={handleSlugChange}
+        />
+        <Input
+          type="checkbox"
+          id="isPublic"
+          name="isPublic"
+          label={t('isPublic')}
+          hint={t('isPublicHint')}
+          checked={isPublic}
+          onChange={e => setIsPublic(e.target.checked)}
         />
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween>

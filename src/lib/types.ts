@@ -88,6 +88,11 @@ const RESERVED_ARCHETYPE_SLUGS = ['create'];
 // Schema for creating a user archetype (the user's own deck)
 const createArchetypeSchema = z.object({
   name: z.string().min(1, 'Archetype name is required').trim(),
+  isPublic: z
+    .enum(['true', 'false'])
+    .optional()
+    .default('false')
+    .transform(value => value === 'true'),
   slug: z
     .string()
     .min(1, 'Slug is required')

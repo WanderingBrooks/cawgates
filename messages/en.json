@@ -22,6 +22,8 @@
     "name": "Archetype Name *",
     "slug": "URL Slug",
     "slugHint": "Auto-generated from name if left blank",
+    "isPublic": "Make archetype public",
+    "isPublicHint": "Public archetypes can be viewed by other users",
     "create": "Create",
     "save": "Save",
     "saving": "Saving...",
@@ -30,13 +32,6 @@
   "editArchetype": {
     "title": "Rename Archetype",
     "visibility": "Visibility"
-  },
-  "publicToggle": {
-    "makePublic": "Make public",
-    "makePrivate": "Make private",
-    "saving": "Saving...",
-    "publicHint": "Anyone with the link can view this archetype",
-    "privateHint": "Only you can view this archetype"
   },
   "deleteArchetypeButton": {
     "delete": "Delete Archetype",
