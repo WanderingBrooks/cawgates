@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { PageTitle, SectionHeader } from '@/components';
+import { PageTitle } from '@/components';
 import { getArchetype } from '@/lib/dal';
 import ArchetypeForm from '../../ArchetypeForm';
 
