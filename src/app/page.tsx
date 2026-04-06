@@ -3,7 +3,12 @@ import { getUser } from '@/lib/session';
 
 const RootPage = async () => {
   const user = await getUser();
-  redirect(`/${user!.username}`);
+
+  if (!user) {
+    redirect('/login');
+  }
+
+  redirect(`/${user.username}`);
 };
 
 export default RootPage;

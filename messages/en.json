@@ -166,7 +166,7 @@
   "guestBanner": {
     "viewing": "You are viewing {username}'s profile.",
     "backToMyDecks": "Back to my decks",
-    "loggedOut": "Login or register to start tracking your own decks",
+    "loggedOut": " to start tracking your own decks",
     "login": "Login",
     "register": "Register"
   },
