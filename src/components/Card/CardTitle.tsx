@@ -1,24 +1,21 @@
+import { cn } from '@/lib/utils';
 import classes from './card.module.css';
+
+const alignClass = {
+  start: undefined,
+  center: classes.cardTitleAlignCenter,
+  end: classes.cardTitleAlignEnd,
+} as const;
 
 type CardTitleProps = {
   children: React.ReactNode;
-  verticalAlignment?: 'flex-start' | 'center' | 'flex-end';
+  align?: keyof typeof alignClass;
 };
 
-const CardTitle = ({
-  children,
-  verticalAlignment = 'flex-start',
-}: CardTitleProps) => {
-  return (
-    <div
-      className={classes.cardTitle}
-      // This should not be style.
-      // There should be a map of classes based on the verticalAlignment prop.
-      style={{ alignItems: verticalAlignment }}
-    >
-      {children}
-    </div>
-  );
-};
+const CardTitle = ({ children, align = 'start' }: CardTitleProps) => (
+  <div className={cn(classes.cardTitle, alignClass[align])}>
+    {children}
+  </div>
+);
 
 export default CardTitle;

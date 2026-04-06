@@ -13,7 +13,7 @@ const GuestBanner = async ({ ownerUsername, viewer }: GuestBannerProps) => {
 
   return (
     <Card className={classes.guestBanner}>
-      <CardTitle verticalAlignment="center">
+      <CardTitle align="center">
         <p>{t('viewing', { username: ownerUsername })}</p>
         {viewer ? (
           <Link href={`/${viewer.username}`}>{t('backToMyDecks')}</Link>
