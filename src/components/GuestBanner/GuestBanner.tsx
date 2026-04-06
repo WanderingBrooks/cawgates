@@ -20,9 +20,9 @@ const GuestBanner = async ({ ownerUsername, viewer }: GuestBannerProps) => {
         ) : (
           <p>
             <Link href="/login">{t('login')}</Link>
-            {' / '}
+            {t('or')}
             <Link href="/register">{t('register')}</Link>
-            {t('loggedOut')}{' '}
+            {t('loggedOut')}
           </p>
         )}
       </CardTitle>

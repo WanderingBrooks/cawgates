@@ -164,10 +164,11 @@
     "title": "Loading..."
   },
   "guestBanner": {
-    "viewing": "You are viewing {username}'s profile.",
+    "viewing": "{username}'s profile.",
     "backToMyDecks": "Back to my decks",
     "loggedOut": " to start tracking your own decks",
     "login": "Login",
+    "or": " or ",
     "register": "Register"
   },
   "notFound": {
