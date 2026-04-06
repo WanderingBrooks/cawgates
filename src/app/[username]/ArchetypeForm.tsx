@@ -70,8 +70,6 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
     props.mode === 'edit' ? props.initialArchetypeData.isPublic : false,
   );
 
-  console.log({ isPublic, props });
-
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
 
   const cancelHref =
