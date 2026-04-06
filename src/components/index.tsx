@@ -1,4 +1,5 @@
 import Button from './Button';
+import GuestBanner from './GuestBanner/GuestBanner';
 import { Card, CardContent, CardTitle } from './Card';
 import Form from './Form';
 import Dialog from './Dialog';
@@ -15,6 +16,7 @@ import TextArea from './TextArea';
 
 export {
   Button,
+  GuestBanner,
   Card,
   Form,
   CardContent,

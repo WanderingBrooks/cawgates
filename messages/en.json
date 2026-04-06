@@ -163,6 +163,13 @@
   "loading": {
     "title": "Loading..."
   },
+  "guestBanner": {
+    "viewing": "You are viewing {username}'s profile.",
+    "backToMyDecks": "Back to my decks",
+    "loggedOut": "Login or register to start tracking your own decks",
+    "login": "Login",
+    "register": "Register"
+  },
   "notFound": {
     "message": "This page could not be found.",
     "backToHome": "Bring me to the Archetypes page"

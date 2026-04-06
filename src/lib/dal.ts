@@ -162,7 +162,21 @@ const getOpponentArchetype = async ({
   return { archetype, opponentArchetype, isOwner };
 };
 
+const getOwnerByUsername = async ({ username }: { username: string }) => {
+  const owner = await prisma.user.findUnique({
+    where: { username },
+    select: { id: true },
+  });
+
+  if (!owner) {
+    notFound();
+  }
+
+  return { owner };
+};
+
 export {
+  getOwnerByUsername,
   getArchetypesForOwner,
   getArchetype,
   getEvents,

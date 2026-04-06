@@ -1,9 +1,6 @@
-import { notFound } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
-import Card from '@/components/Card/Card';
-import { Button, CardTitle } from '@/components';
-import Link from 'next/link';
+import { getOwnerByUsername } from '@/lib/dal';
+import { GuestBanner } from '@/components';
 
 const UsernameLayout = async ({
   children,
@@ -13,41 +10,21 @@ const UsernameLayout = async ({
   params: Promise<{ username: string }>;
 }) => {
   const { username } = await params;
-  const currentUser = await getUser();
 
-  // I think this is breaking a AGENTS.md rule and should
-  // be moved to DAL.
-  const owner = await prisma.user.findUnique({
-    where: { username },
-    select: { id: true },
-  });
+  const [{ owner }, viewer] = await Promise.all([
+    getOwnerByUsername({ username }),
+    getUser(),
+  ]);
 
-  if (!owner) {
-    notFound();
-  }
+  const isOwner = viewer?.userId === owner.id;
 
   return (
     <>
-      {(!currentUser || currentUser.userId !== owner.id) && (
-        <Card>
-          <CardTitle verticalAlignment="center">
-            You are viewing {username}'s profile.
-            {currentUser ? (
-              <Link href={`/${currentUser.username}`}>
-                <Button variant="secondary">
-                  Click here to go to your profile.
-                </Button>
-              </Link>
-            ) : (
-              <Link href="/login">
-                <Button variant="secondary">
-                  Click here to login or register and start tracking your
-                  matches.
-                </Button>
-              </Link>
-            )}
-          </CardTitle>
-        </Card>
+      {!isOwner && (
+        <GuestBanner
+          ownerUsername={username}
+          viewer={viewer ? { username: viewer.username } : null}
+        />
       )}
       {children}
     </>
