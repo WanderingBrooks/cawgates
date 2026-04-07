@@ -101,10 +101,10 @@ const slugSchema = z
 const createArchetypeSchema = z.object({
   name: z.string().min(1, 'Archetype name is required').trim(),
   isPublic: z
-    .enum(['true', 'false'])
+    .literal('on')
     .optional()
-    .default('false')
-    .transform(value => value === 'true'),
+    .nullable()
+    .transform(value => value === 'on'),
   slug: slugSchema
     .min(1, 'Slug is required')
     .max(100, 'Slug must be 100 characters or less'),
