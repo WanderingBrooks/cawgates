@@ -1,3 +1,8 @@
 .guestBanner {
-  margin-top: var(--spacing-md);
+  margin-inline: var(--spacing-xs);
+  position: sticky;
+  top: var(--spacing-md);
+  z-index: var(--z-index-banner);
+  box-shadow: var(--drop-shadow);
+  background-color: var(--color-background);
 }
