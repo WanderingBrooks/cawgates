@@ -113,6 +113,7 @@
     "title": "Create Account",
     "email": "Email *",
     "username": "Username *",
+    "usernameHint": "May only contain lowercase letters, numbers, and hyphens",
     "password": "Password *",
     "confirmPassword": "Confirm Password *",
     "submit": "Create Account",

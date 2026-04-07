@@ -66,6 +66,7 @@ const RegisterForm = () => {
           id="username"
           name="username"
           label={t('username')}
+          hint={t('usernameHint')}
           value={formData.username}
           onChange={handleChange}
           required
