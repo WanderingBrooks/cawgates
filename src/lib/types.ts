@@ -83,7 +83,7 @@ export type EventFormData = Pick<
 >;
 
 // Slugs that conflict with static routes
-const RESERVED_SLUGS = ['create'];
+const RESERVED_SLUGS = ['create', 'login', 'register'];
 
 const slugSchema = z
   .string()
