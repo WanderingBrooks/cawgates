@@ -124,7 +124,7 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
           onChange={e => setIsPublic(e.target.checked)}
         />
         {state?.error && <ErrorMessage error={state.error} />}
-        <FlexRowBetween>
+        <FlexRowBetween className={classes.actionRow}>
           {props.mode === 'edit' ? (
             <>
               <DeleteArchetypeButton archetypeId={props.archetypeId} />
