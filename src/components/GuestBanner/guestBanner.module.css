@@ -6,3 +6,7 @@
   box-shadow: var(--drop-shadow);
   background-color: var(--color-background);
 }
+
+.guestBannerContent {
+  justify-content: space-between;
+}

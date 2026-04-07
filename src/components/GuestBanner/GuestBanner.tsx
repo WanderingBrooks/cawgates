@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { Card, CardTitle } from '@/components';
+import { Card, CardContent } from '@/components';
 import classes from './guestBanner.module.css';
 
 type GuestBannerProps = {
@@ -13,7 +13,7 @@ const GuestBanner = async ({ ownerUsername, viewer }: GuestBannerProps) => {
 
   return (
     <Card className={classes.guestBanner}>
-      <CardTitle align="center">
+      <CardContent direction="horizontal" className={classes.guestBannerContent}>
         <p>{t('viewing', { username: ownerUsername })}</p>
         {viewer ? (
           <Link href={`/${viewer.username}`}>{t('backToMyDecks')}</Link>
@@ -25,7 +25,7 @@ const GuestBanner = async ({ ownerUsername, viewer }: GuestBannerProps) => {
             {t('loggedOut')}
           </p>
         )}
-      </CardTitle>
+      </CardContent>
     </Card>
   );
 };
