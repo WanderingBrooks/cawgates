@@ -19,10 +19,10 @@ const GuestBanner = async ({ ownerUsername, viewer }: GuestBannerProps) => {
           <Link href={`/${viewer.username}`}>{t('backToMyDecks')}</Link>
         ) : (
           <p>
-            <Link href="/login">{t('login')}</Link>
-            {t('or')}
-            <Link href="/register">{t('register')}</Link>
-            {t('loggedOut')}
+            {t.rich('signUpPrompt', {
+              login: chunks => <Link href="/login">{chunks}</Link>,
+              register: chunks => <Link href="/register">{chunks}</Link>,
+            })}
           </p>
         )}
       </CardContent>

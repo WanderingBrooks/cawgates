@@ -167,10 +167,7 @@
   "guestBanner": {
     "viewing": "{username}'s profile.",
     "backToMyDecks": "Back to my decks",
-    "loggedOut": " to start tracking your own decks",
-    "login": "Login",
-    "or": " or ",
-    "register": "Register"
+    "signUpPrompt": "<login>Login</login> or <register>Register</register> to start tracking your own decks"
   },
   "notFound": {
     "message": "This page could not be found.",
