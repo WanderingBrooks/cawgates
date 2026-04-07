@@ -131,7 +131,8 @@
   },
   "navMenu": {
     "menu": "Menu",
-    "archetypes": "All Archetypes",
+    "myArchetypes": "My archetypes",
+    "archetypes": "{username}''s archetypes",
     "events": "Events",
     "record": "Record",
     "edit": "Edit",

@@ -1,6 +1,7 @@
 import { getUser } from '@/lib/session';
 import { getOwnerByUsername } from '@/lib/dal';
 import { GuestBanner } from '@/components';
+import { ViewerProvider } from '@/components/NavMenu/ViewerContext';
 
 const UsernameLayout = async ({
   children,
@@ -19,7 +20,7 @@ const UsernameLayout = async ({
   const isOwner = viewer?.userId === owner.id;
 
   return (
-    <>
+    <ViewerProvider isOwner={isOwner} isLoggedIn={viewer !== null} viewerUsername={viewer?.username ?? null}>
       {!isOwner && (
         <GuestBanner
           ownerUsername={username}
@@ -27,7 +28,7 @@ const UsernameLayout = async ({
         />
       )}
       {children}
-    </>
+    </ViewerProvider>
   );
 };
 
