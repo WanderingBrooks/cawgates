@@ -30,8 +30,7 @@
     "cancel": "Cancel"
   },
   "editArchetype": {
-    "title": "Rename Archetype",
-    "visibility": "Visibility"
+    "title": "Rename Archetype"
   },
   "deleteArchetypeButton": {
     "delete": "Delete Archetype",
