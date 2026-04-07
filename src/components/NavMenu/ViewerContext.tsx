@@ -2,6 +2,18 @@
 
 import { createContext, useContext } from 'react';
 
+type ViewerContextValue = {
+  isOwner: boolean;
+  isLoggedIn: boolean;
+  viewerUsername: string | null;
+};
+
+const ViewerContext = createContext<ViewerContextValue>({
+  isOwner: true,
+  isLoggedIn: false,
+  viewerUsername: null,
+});
+
 /**
  * ViewerContext shares server-resolved viewer state with the NavMenu client
  * component without prop-drilling through PageTitle.
@@ -18,18 +30,6 @@ import { createContext, useContext } from 'react';
  * `viewerUsername: null`. This keeps the menu correct on those pages without
  * requiring every page to supply the provider.
  */
-type ViewerContextValue = {
-  isOwner: boolean;
-  isLoggedIn: boolean;
-  viewerUsername: string | null;
-};
-
-const ViewerContext = createContext<ViewerContextValue>({
-  isOwner: true,
-  isLoggedIn: false,
-  viewerUsername: null,
-});
-
 const ViewerProvider = ({
   children,
   isOwner,
