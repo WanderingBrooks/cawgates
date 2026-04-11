@@ -59,28 +59,53 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
       {open && (
         <div className={classes.dropdown}>
           {viewerUsername !== null && (
-            <Link
-              href={`/${viewerUsername}`}
-              className={cn(
-                classes.item,
-                pathname === `/${viewerUsername}` && classes.itemActive,
-              )}
-              onClick={() => setOpen(false)}
-            >
-              {t('myDecks')}
-            </Link>
+            <>
+              <Link
+                href={`/${viewerUsername}`}
+                className={cn(
+                  classes.item,
+                  pathname === `/${viewerUsername}` && classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('myDecks')}
+              </Link>
+              <Link
+                href={`/${viewerUsername}/events`}
+                className={cn(
+                  classes.item,
+                  pathname === `/${viewerUsername}/events` &&
+                    classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('myEvents')}
+              </Link>
+            </>
           )}
           {!isOwner && (
-            <Link
-              href={`/${username}`}
-              className={cn(
-                classes.item,
-                pathname === `/${username}` && classes.itemActive,
-              )}
-              onClick={() => setOpen(false)}
-            >
-              {t('decks', { username })}
-            </Link>
+            <>
+              <Link
+                href={`/${username}`}
+                className={cn(
+                  classes.item,
+                  pathname === `/${username}` && classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('decks', { username })}
+              </Link>
+              <Link
+                href={`/${username}/events`}
+                className={cn(
+                  classes.item,
+                  pathname === `/${username}/events` && classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('events', { username })}
+              </Link>
+            </>
           )}
 
           {(viewerUsername !== null || !isOwner) && (
@@ -98,17 +123,6 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
                 onClick={() => setOpen(false)}
               >
                 {t('record')}
-              </Link>
-              <Link
-                href={`/${username}/${deckSlug}/events`}
-                className={cn(
-                  classes.item,
-                  pathname.startsWith(`/${username}/${deckSlug}/events`) &&
-                    classes.itemActive,
-                )}
-                onClick={() => setOpen(false)}
-              >
-                {t('events')}
               </Link>
               {isOwner && (
                 <Link
@@ -128,9 +142,6 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
             <>
               <span className={cn(classes.item, classes.itemDisabled)}>
                 {t('record')}
-              </span>
-              <span className={cn(classes.item, classes.itemDisabled)}>
-                {t('events')}
               </span>
               {isOwner && (
                 <span className={cn(classes.item, classes.itemDisabled)}>

@@ -134,8 +134,9 @@
   "navMenu": {
     "menu": "Menu",
     "myDecks": "My Decks",
+    "myEvents": "My Events",
     "decks": "{username}''s Decks",
-    "events": "Events",
+    "events": "{username}''s Events",
     "record": "Record",
     "edit": "Edit",
     "logout": "Logout"
