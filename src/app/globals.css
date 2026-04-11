@@ -2,10 +2,11 @@
 
 :root {
   /* Colors */
-  --color-background: #f4efe6;
-  --color-input-bg: #fbfaf7;
-  --color-primary: #4a6fa5;
-  --color-primary-dark: #2f4e7a;
+  --color-background: #f2e5cc;
+  --color-surface: #f7f1e3;
+  --color-input-bg: #faf5e8;
+  --color-primary: #2c4a7c;
+  --color-primary-dark: #1c3260;
   --color-border: #d8d2c5;
   --color-text: #2a2a2a;
   --color-text-muted: #6b6b6b;
@@ -29,8 +30,10 @@
   /* Typography */
   --font-family: 'Courier New', monospace;
   --font-size-base: 1rem;
-  --font-size-sm: 0.8rem;
+  --font-size-sm: 0.75rem;
   --font-size-emphasis: 1.1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
   --letter-spacing-label: 0.05em;
 
   /* Page */
@@ -39,6 +42,9 @@
 
   /* Shadows */
   --drop-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  /* Radius */
+  --radius: 2px;
 
   /* Z-Index */
   --z-index-banner: 2;
@@ -71,6 +77,21 @@ h3 {
   margin: 0;
 }
 
+h1 {
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+}
+
+h2 {
+  font-size: var(--font-size-base);
+  font-weight: bold;
+}
+
+h3 {
+  font-size: var(--font-size-base);
+  font-weight: bold;
+}
+
 table {
   border-collapse: collapse;
 }
@@ -80,6 +101,14 @@ td {
   padding: var(--spacing-sm);
   text-align: left;
   border: 1px solid var(--color-border);
+}
+
+thead tr {
+  background-color: var(--color-border);
+}
+
+tbody td {
+  background-color: var(--color-surface);
 }
 
 /* Text Utilities */
