@@ -68,6 +68,7 @@
   },
   "event": {
     "editEvent": "Edit Event",
+    "archetype": "Archetype",
     "viewArchetype": "View Archetype",
     "addMatch": "Add Match",
     "editMatch": "Edit",
