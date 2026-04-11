@@ -2,3 +2,22 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.eventName {
+  font-weight: bold;
+}
+
+.eventMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-xs);
+}
+
+.eventDate {
+  color: var(--color-text-muted);
+}
+
+.record {
+  color: var(--color-text-muted);
+}

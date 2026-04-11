@@ -8,8 +8,13 @@
 .cardTitle {
   display: flex;
   justify-content: space-between;
-  padding-bottom: var(--spacing-lg);
 }
+
+.cardContent {
+  margin-top: var(--spacing-lg);
+}
+
+
 
 .cardTitleAlignStart {
   align-items: flex-start;
