@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { logout } from '@/app/actions/auth';
 import classes from './navMenu.module.css';
-import { cn } from '@/lib/utils';
+import { cn, RESERVED_SLUGS } from '@/lib/utils';
 import Button from '../Button';
 import { useViewer } from './ViewerContext';
 
@@ -25,14 +25,9 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
   const segments = pathname.split('/').filter(Boolean);
   const username = segments[0];
 
-  const potentialSlug = segments.length > 1 ? segments[1] : undefined;
-
   const archetypeSlug =
-    potentialSlug &&
-    potentialSlug !== 'create' &&
-    potentialSlug !== 'events' &&
-    potentialSlug !== 'archetypes'
-      ? potentialSlug
+    segments[1] && !RESERVED_SLUGS.includes(segments[1])
+      ? segments[1]
       : undefined;
 
   useEffect(() => {
@@ -69,7 +64,8 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
                 href={`/${viewerUsername}/events`}
                 className={cn(
                   classes.item,
-                  pathname.startsWith(`/${viewerUsername}/events`) && classes.itemActive,
+                  pathname.startsWith(`/${viewerUsername}/events`) &&
+                    classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}
               >
@@ -79,7 +75,8 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
                 href={`/${viewerUsername}/archetypes`}
                 className={cn(
                   classes.item,
-                  pathname.startsWith(`/${viewerUsername}/archetypes`) && classes.itemActive,
+                  pathname.startsWith(`/${viewerUsername}/archetypes`) &&
+                    classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}
               >
@@ -93,7 +90,8 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
                 href={`/${username}/events`}
                 className={cn(
                   classes.item,
-                  pathname.startsWith(`/${username}/events`) && classes.itemActive,
+                  pathname.startsWith(`/${username}/events`) &&
+                    classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}
               >
@@ -103,7 +101,8 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
                 href={`/${username}/archetypes`}
                 className={cn(
                   classes.item,
-                  pathname.startsWith(`/${username}/archetypes`) && classes.itemActive,
+                  pathname.startsWith(`/${username}/archetypes`) &&
+                    classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}
               >

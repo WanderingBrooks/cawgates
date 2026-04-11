@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 import { createArchetypeSchema, type ActionResult } from '@/lib/types';
-import { slugify } from '@/lib/utils';
+import { slugify, RESERVED_SLUGS } from '@/lib/utils';
 import { redirect } from 'next/navigation';
 
 // --- User's own deck archetypes ---
@@ -24,8 +24,6 @@ const getUserArchetypes = async () => {
   });
 };
 
-const RESERVED_SLUGS = ['events', 'archetypes', 'create'];
-
 const createArchetype = async (
   _prevState: ActionResult | null,
   formData: FormData,
@@ -43,7 +41,10 @@ const createArchetype = async (
   const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
 
   if (RESERVED_SLUGS.includes(slug)) {
-    return { success: false, error: `"${slug}" is a reserved name and cannot be used as an archetype slug` };
+    return {
+      success: false,
+      error: `"${slug}" is a reserved name and cannot be used as an archetype slug`,
+    };
   }
 
   const result = createArchetypeSchema.safeParse({ name, slug, isPublic });
@@ -97,7 +98,10 @@ const updateArchetype = async (
   const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
 
   if (RESERVED_SLUGS.includes(slug)) {
-    return { success: false, error: `"${slug}" is a reserved name and cannot be used as an archetype slug` };
+    return {
+      success: false,
+      error: `"${slug}" is a reserved name and cannot be used as an archetype slug`,
+    };
   }
 
   const result = createArchetypeSchema.safeParse({ name, slug, isPublic });

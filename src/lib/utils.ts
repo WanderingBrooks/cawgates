@@ -14,4 +14,6 @@ const slugify = ({ name }: { name: string }) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-export { cn, slugify };
+const RESERVED_SLUGS = ['events', 'archetypes', 'create'];
+
+export { cn, slugify, RESERVED_SLUGS };
