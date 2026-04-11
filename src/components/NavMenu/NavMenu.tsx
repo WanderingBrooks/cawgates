@@ -127,30 +127,12 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
               >
                 {t('record')}
               </Link>
-              {isOwner && (
-                <Link
-                  href={`/${username}/${deckSlug}/edit`}
-                  className={cn(
-                    classes.item,
-                    pathname.startsWith(`/${username}/${deckSlug}/edit`) &&
-                      classes.itemActive,
-                  )}
-                  onClick={() => setOpen(false)}
-                >
-                  {t('edit')}
-                </Link>
-              )}
             </>
           ) : (
             <>
               <span className={cn(classes.item, classes.itemDisabled)}>
                 {t('record')}
               </span>
-              {isOwner && (
-                <span className={cn(classes.item, classes.itemDisabled)}>
-                  {t('edit')}
-                </span>
-              )}
             </>
           )}
           {isLoggedIn && (
