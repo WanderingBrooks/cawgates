@@ -40,10 +40,11 @@ model Deck {
 }
 
 model OpponentArchetype {
-  id        String   @id @default(uuid())
-  name      String
-  deckId    String
-  createdAt DateTime @default(now())
+  id                 String   @id @default(uuid())
+  name               String
+  deckId             String
+  archetypeIdLegacy  String? @map("archetypeId")
+  createdAt          DateTime @default(now())
 
   deck    Deck    @relation(fields: [deckId], references: [id], onDelete: Cascade)
   matches Match[]
@@ -52,12 +53,13 @@ model OpponentArchetype {
 }
 
 model Event {
-  id        String   @id @default(uuid())
-  name      String
-  date      DateTime
-  notes     String?
-  deckId    String
-  createdAt DateTime @default(now())
+  id                 String   @id @default(uuid())
+  name               String
+  date               DateTime
+  notes              String?
+  deckId             String
+  archetypeIdLegacy  String? @map("archetypeId")
+  createdAt          DateTime @default(now())
 
   matches Match[]
   deck    Deck    @relation(fields: [deckId], references: [id], onDelete: Cascade)
