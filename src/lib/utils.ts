@@ -14,4 +14,7 @@ const slugify = ({ name }: { name: string }) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-export { cn, slugify };
+// Slugs that conflict with static routes
+const RESERVED_SLUGS = ['create', 'login', 'register', 'events'];
+
+export { cn, slugify, RESERVED_SLUGS };

@@ -9,6 +9,7 @@ import classes from './navMenu.module.css';
 import { cn } from '@/lib/utils';
 import Button from '../Button';
 import { useViewer } from './ViewerContext';
+import { RESERVED_SLUGS } from '../../lib/utils';
 
 type NavMenuProps = {
   disabled?: boolean;
@@ -28,7 +29,9 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
   const potentialSlug = segments.length > 1 ? segments[1] : undefined;
 
   const deckSlug =
-    potentialSlug && potentialSlug !== 'create' ? potentialSlug : undefined;
+    potentialSlug && !RESERVED_SLUGS.includes(potentialSlug)
+      ? potentialSlug
+      : undefined;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
