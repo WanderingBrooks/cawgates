@@ -3,6 +3,7 @@ import GuestBanner from './GuestBanner/GuestBanner';
 import { Card, CardContent, CardTitle } from './Card';
 import Form from './Form';
 import Dialog from './Dialog';
+import DeckForm from './DeckForm';
 import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
 import Input from './Input';
@@ -22,6 +23,7 @@ export {
   Form,
   CardContent,
   CardTitle,
+  DeckForm,
   Dialog,
   ErrorMessage,
   FlexRowBetween,

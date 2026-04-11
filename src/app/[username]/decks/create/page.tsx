@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { getUser } from '@/lib/session';
 import { PageTitle } from '@/components';
-import DeckForm from '../DeckForm';
+import { DeckForm } from '@/components';
 
 const CreateDeckPage = async ({
   params,
