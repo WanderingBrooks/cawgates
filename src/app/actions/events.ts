@@ -158,7 +158,6 @@ const updateEvent = async (
  * Delete an event and all associated matches. Redirect back to the event list afterward.
  */
 const deleteEvent = async (eventId: string): Promise<ActionResult> => {
-  let deckSlug: string;
   let username: string;
 
   try {
@@ -190,7 +189,6 @@ const deleteEvent = async (eventId: string): Promise<ActionResult> => {
       };
     }
 
-    deckSlug = event.deck.slug;
     username = user.username;
 
     await prisma.event.delete({
@@ -207,7 +205,7 @@ const deleteEvent = async (eventId: string): Promise<ActionResult> => {
     };
   }
 
-  redirect(`/${username}/${deckSlug}/events`);
+  redirect(`/${username}/events`);
 };
 
 export { createEvent, updateEvent, deleteEvent };
