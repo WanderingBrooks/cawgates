@@ -64,7 +64,7 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
           {viewerUsername !== null && (
             <>
               <Link
-                href={`/${viewerUsername}`}
+                href={`/${viewerUsername}/decks`}
                 className={cn(
                   classes.item,
                   pathname === `/${viewerUsername}` && classes.itemActive,
@@ -89,7 +89,7 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
           {!isOwner && (
             <>
               <Link
-                href={`/${username}`}
+                href={`/${username}/decks`}
                 className={cn(
                   classes.item,
                   pathname === `/${username}` && classes.itemActive,
