@@ -1,7 +1,13 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import Markdown from 'react-markdown';
-import { Card, CardContent, CardTitle, PageTitle, SectionHeader } from '@/components';
+import {
+  Card,
+  CardContent,
+  CardTitle,
+  PageTitle,
+  SectionHeader,
+} from '@/components';
 import { getOpponentArchetype } from '@/lib/dal';
 import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
 import OpponentArchetypeSubHeader from './OpponentArchetypeSubHeader';
@@ -61,7 +67,11 @@ const OpponentArchetypePage = async ({
                   >
                     {match.event.name}
                   </Link>
-                  <p>{formatter.dateTime(new Date(match.event.date), { dateStyle: 'medium' })}</p>
+                  <p>
+                    {formatter.dateTime(new Date(match.event.date), {
+                      dateStyle: 'medium',
+                    })}
+                  </p>
                 </div>
                 <span>
                   {t('record', { wins: match.wins, losses: match.losses })}
