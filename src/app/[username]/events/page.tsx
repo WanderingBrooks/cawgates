@@ -1,25 +1,26 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { Card, CardTitle, Button, PageTitle } from '@/components';
-import { getEvents } from '@/lib/dal';
+import { getEventsForUser } from '@/lib/dal';
 import classes from './event.module.css';
 
 const EventsPage = async ({
   params,
 }: {
-  params: Promise<{ username: string; archetypeSlug: string }>;
+  params: Promise<{ username: string }>;
 }) => {
+  const { username } = await params;
   const t = await getTranslations('events');
-  const { username, archetypeSlug } = await params;
+  const tAll = await getTranslations('allEvents');
 
-  const { archetype, events, isOwner } = await getEvents({ ownerUsername: username, archetypeSlug });
+  const { events, isOwner } = await getEventsForUser({ ownerUsername: username });
 
   return (
     <>
-      <PageTitle title={t('title')} subtitle={archetype.name} />
+      <PageTitle title={isOwner ? tAll('title') : tAll('guestTitle', { username })} />
       {isOwner && (
         <div className={classes.rightAlignedButton}>
-          <Link href={`/${username}/${archetype.slug}/events/create`}>
+          <Link href={`/${username}/events/create`}>
             <Button variant="primary">{t('createEvent')}</Button>
           </Link>
         </div>
@@ -50,12 +51,11 @@ const EventsPage = async ({
             <Card key={event.id}>
               <CardTitle>
                 <div>
-                  <Link
-                    href={`/${username}/${archetype.slug}/events/${event.id}`}
-                  >
+                  <Link href={`/${username}/events/${event.id}`}>
                     {event.name}
                   </Link>
                   <p>{new Date(event.date).toLocaleDateString()}</p>
+                  <p>{event.archetype.name}</p>
                 </div>
                 <p>{t('record', record)}</p>
               </CardTitle>

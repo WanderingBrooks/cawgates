@@ -74,7 +74,7 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
 
   const cancelHref =
     props.mode === 'create'
-      ? `/${props.username}`
+      ? `/${props.username}/archetypes`
       : `/${props.username}/${props.archetypeSlug}`;
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

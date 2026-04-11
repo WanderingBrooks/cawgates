@@ -33,40 +33,38 @@ const SubmitButton = () => {
   );
 };
 
-type EventFormProps = {
-  mode: 'create' | 'edit';
+type CreateEventFormProps = {
+  mode: 'create';
   username: string;
-  archetypeId: string;
-  archetypeSlug: string;
-  eventId?: string;
-  initialEventData?: EventFormData;
+  archetypes: Array<{ id: string; name: string }>;
 };
 
-const EventForm = ({
-  mode,
-  username,
-  archetypeId,
-  archetypeSlug,
-  eventId,
-  initialEventData,
-}: EventFormProps) => {
+type EditEventFormProps = {
+  mode: 'edit';
+  username: string;
+  archetypeId: string;
+  eventId: string;
+  initialEventData: EventFormData;
+};
+
+type EventFormProps = CreateEventFormProps | EditEventFormProps;
+
+const EventForm = (props: EventFormProps) => {
   const t = useTranslations('eventForm');
 
-  const action = mode === 'create' ? createEvent : updateEvent;
+  const action = props.mode === 'create' ? createEvent : updateEvent;
 
   const [state, formAction] = useActionState<ActionResult | null, FormData>(
     action,
     null,
   );
 
-  // Inline state management
-  const [eventData, setEventData] = useState<EventFormData>(
-    initialEventData || {
-      eventName: '',
-      eventDate: '',
-      notes: '',
-    },
-  );
+  const initialData: EventFormData =
+    props.mode === 'edit'
+      ? props.initialEventData
+      : { eventName: '', eventDate: '', notes: '' };
+
+  const [eventData, setEventData] = useState<EventFormData>(initialData);
 
   const handleEventChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -75,11 +73,39 @@ const EventForm = ({
     setEventData(prev => ({ ...prev, [name]: value }));
   };
 
+  const cancelHref =
+    props.mode === 'create'
+      ? `/${props.username}/events`
+      : `/${props.username}/events/${props.eventId}`;
+
   return (
     <Form action={formAction}>
       <SpaceChildrenVertically>
-        <input type="hidden" name="archetypeId" value={archetypeId} />
-        <input type="hidden" name="eventId" value={eventId} />
+        {props.mode === 'edit' ? (
+          <input type="hidden" name="archetypeId" value={props.archetypeId} />
+        ) : (
+          <div>
+            <label htmlFor="archetypeId">{t('archetype')}</label>
+            <select
+              id="archetypeId"
+              name="archetypeId"
+              defaultValue=""
+              required
+            >
+              <option value="" disabled>
+                {t('selectArchetype')}
+              </option>
+              {props.archetypes.map(archetype => (
+                <option key={archetype.id} value={archetype.id}>
+                  {archetype.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        {props.mode === 'edit' && (
+          <input type="hidden" name="eventId" value={props.eventId} />
+        )}
 
         <Input
           type="text"
@@ -110,13 +136,7 @@ const EventForm = ({
 
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween>
-          <Link
-            href={
-              mode === 'create'
-                ? `/${username}/${archetypeSlug}/events`
-                : `/${username}/${archetypeSlug}/events/${eventId}`
-            }
-          >
+          <Link href={cancelHref}>
             <Button variant="secondary">{t('cancel')}</Button>
           </Link>
           <SubmitButton />

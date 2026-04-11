@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { Button, PageTitle, SectionHeader } from '@/components';
-import { getEvent } from '@/lib/dal';
+import { getEventById } from '@/lib/dal';
 import DeleteEventButton from './DeleteEventButton';
 import MatchSection from './MatchSection';
 import Markdown from 'react-markdown';
@@ -10,14 +10,13 @@ import classes from './eventPage.module.css';
 const EventPage = async ({
   params,
 }: {
-  params: Promise<{ username: string; archetypeSlug: string; id: string }>;
+  params: Promise<{ username: string; id: string }>;
 }) => {
-  const { username, archetypeSlug, id } = await params;
+  const { username, id } = await params;
   const t = await getTranslations('event');
 
-  const { archetype, event, isOwner } = await getEvent({
+  const { archetype, event, isOwner } = await getEventById({
     ownerUsername: username,
-    archetypeSlug,
     eventId: id,
   });
 
@@ -44,7 +43,7 @@ const EventPage = async ({
           )}
         </div>
         {isOwner && (
-          <Link href={`/${username}/${archetype.slug}/events/${id}/edit`}>
+          <Link href={`/${username}/events/${id}/edit`}>
             <Button variant="primary">{t('editEvent')}</Button>
           </Link>
         )}

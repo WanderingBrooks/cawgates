@@ -38,6 +38,10 @@
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this archetype? All events and matches will be lost."
   },
+  "allEvents": {
+    "title": "Events",
+    "guestTitle": "{username}''s Events"
+  },
   "events": {
     "title": "Events",
     "createEvent": "Create Event",
@@ -46,7 +50,8 @@
   },
   "createEvent": {
     "title": "Create New Event",
-    "viewEvents": "View Events"
+    "viewEvents": "View Events",
+    "createArchetypeFirst": "You need to create an archetype before you can create an event."
   },
   "editEvent": {
     "title": "Edit Event",
@@ -56,6 +61,8 @@
     "eventName": "Event Name *",
     "eventDate": "Event Date *",
     "notes": "Notes",
+    "archetype": "Archetype *",
+    "selectArchetype": "Select an archetype...",
     "cancel": "Cancel",
     "saving": "Saving...",
     "saveEvent": "Save Event"
@@ -132,9 +139,10 @@
   },
   "navMenu": {
     "menu": "Menu",
+    "myEvents": "My Events",
     "myArchetypes": "My Archetypes",
     "archetypes": "{username}''s Archetypes",
-    "events": "Events",
+    "events": "{username}''s Events",
     "record": "Record",
     "edit": "Edit",
     "logout": "Logout"
@@ -172,6 +180,6 @@
   },
   "notFound": {
     "message": "This page could not be found.",
-    "backToHome": "Bring me to the Archetypes page"
+    "backToHome": "Bring me to the Events page"
   }
 }

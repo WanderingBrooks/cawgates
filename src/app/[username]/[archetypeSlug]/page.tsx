@@ -23,7 +23,7 @@ const ArchetypePage = async ({
     <>
       <PageTitle title={t('title')} subtitle={archetype.name} />
       <div className={classes.rightAlignedButton}>
-        <Link href={`/${username}/${archetype.slug}/events`}>
+        <Link href={`/${username}/events`}>
           <Button variant="primary">{t('viewEvents')}</Button>
         </Link>
       </div>

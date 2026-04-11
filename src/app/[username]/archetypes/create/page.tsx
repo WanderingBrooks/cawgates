@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { getUser } from '@/lib/session';
 import { PageTitle } from '@/components';
-import ArchetypeForm from '../ArchetypeForm';
+import ArchetypeForm from '../../ArchetypeForm';
 
 const CreateArchetypePage = async ({
   params,

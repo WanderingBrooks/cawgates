@@ -24,6 +24,8 @@ const getUserArchetypes = async () => {
   });
 };
 
+const RESERVED_SLUGS = ['events', 'archetypes', 'create'];
+
 const createArchetype = async (
   _prevState: ActionResult | null,
   formData: FormData,
@@ -39,6 +41,10 @@ const createArchetype = async (
   const rawSlug = formData.get('slug') as string;
   // Auto-derive slug from name if the user left the field blank
   const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
+
+  if (RESERVED_SLUGS.includes(slug)) {
+    return { success: false, error: `"${slug}" is a reserved name and cannot be used as an archetype slug` };
+  }
 
   const result = createArchetypeSchema.safeParse({ name, slug, isPublic });
 
@@ -89,6 +95,10 @@ const updateArchetype = async (
   const isPublic = formData.get('isPublic') as string;
   const rawSlug = formData.get('slug') as string;
   const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
+
+  if (RESERVED_SLUGS.includes(slug)) {
+    return { success: false, error: `"${slug}" is a reserved name and cannot be used as an archetype slug` };
+  }
 
   const result = createArchetypeSchema.safeParse({ name, slug, isPublic });
 
@@ -156,7 +166,7 @@ const deleteArchetype = async (archetypeId: string): Promise<ActionResult> => {
 
   await prisma.archetype.delete({ where: { id: archetypeId } });
 
-  redirect(`/${user.username}`);
+  redirect(`/${user.username}/archetypes`);
 };
 
 export { getUserArchetypes, createArchetype, updateArchetype, deleteArchetype };

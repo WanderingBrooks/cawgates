@@ -162,6 +162,88 @@ const getOpponentArchetype = async ({
   return { archetype, opponentArchetype, isOwner };
 };
 
+const getEventsForUser = async ({
+  ownerUsername,
+}: {
+  ownerUsername: string;
+}) => {
+  const [viewer, owner] = await Promise.all([
+    getUser(),
+    prisma.user.findUnique({ where: { username: ownerUsername } }),
+  ]);
+
+  if (!owner) {
+    notFound();
+  }
+
+  const isOwner = viewer?.userId === owner.id;
+
+  const archetypes = await prisma.archetype.findMany({
+    where: {
+      userId: owner.id,
+      ...(isOwner ? {} : { isPublic: true }),
+    },
+    select: { id: true },
+  });
+
+  const archetypeIds = archetypes.map(a => a.id);
+
+  const events = await prisma.event.findMany({
+    where: { archetypeId: { in: archetypeIds } },
+    orderBy: { date: 'desc' },
+    include: {
+      matches: true,
+      archetype: { select: { name: true, slug: true } },
+    },
+  });
+
+  return { events, isOwner };
+};
+
+const getEventById = async ({
+  ownerUsername,
+  eventId,
+}: {
+  ownerUsername: string;
+  eventId: string;
+}) => {
+  const [viewer, owner] = await Promise.all([
+    getUser(),
+    prisma.user.findUnique({ where: { username: ownerUsername }, select: { id: true } }),
+  ]);
+
+  if (!owner) {
+    notFound();
+  }
+
+  const event = await prisma.event.findUnique({
+    where: { id: eventId },
+    include: {
+      archetype: true,
+      matches: {
+        orderBy: { createdAt: 'asc' },
+        include: { opponentArchetype: true },
+      },
+    },
+  });
+
+  if (!event) {
+    notFound();
+  }
+
+  if (event.archetype.userId !== owner.id) {
+    notFound();
+  }
+
+  const isOwner = viewer?.userId === event.archetype.userId;
+
+  if (!isOwner && !event.archetype.isPublic) {
+    notFound();
+  }
+
+  return { archetype: event.archetype, event, isOwner };
+};
+
 const getOwnerByUsername = async ({ username }: { username: string }) => {
   const owner = await prisma.user.findUnique({
     where: { username },
@@ -181,5 +263,7 @@ export {
   getArchetype,
   getEvents,
   getEvent,
+  getEventById,
+  getEventsForUser,
   getOpponentArchetype,
 };

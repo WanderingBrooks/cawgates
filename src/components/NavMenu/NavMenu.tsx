@@ -28,7 +28,12 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
   const potentialSlug = segments.length > 1 ? segments[1] : undefined;
 
   const archetypeSlug =
-    potentialSlug && potentialSlug !== 'create' ? potentialSlug : undefined;
+    potentialSlug &&
+    potentialSlug !== 'create' &&
+    potentialSlug !== 'events' &&
+    potentialSlug !== 'archetypes'
+      ? potentialSlug
+      : undefined;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -59,28 +64,52 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
       {open && (
         <div className={classes.dropdown}>
           {viewerUsername !== null && (
-            <Link
-              href={`/${viewerUsername}`}
-              className={cn(
-                classes.item,
-                pathname === `/${viewerUsername}` && classes.itemActive,
-              )}
-              onClick={() => setOpen(false)}
-            >
-              {t('myArchetypes')}
-            </Link>
+            <>
+              <Link
+                href={`/${viewerUsername}/events`}
+                className={cn(
+                  classes.item,
+                  pathname.startsWith(`/${viewerUsername}/events`) && classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('myEvents')}
+              </Link>
+              <Link
+                href={`/${viewerUsername}/archetypes`}
+                className={cn(
+                  classes.item,
+                  pathname.startsWith(`/${viewerUsername}/archetypes`) && classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('myArchetypes')}
+              </Link>
+            </>
           )}
           {!isOwner && (
-            <Link
-              href={`/${username}`}
-              className={cn(
-                classes.item,
-                pathname === `/${username}` && classes.itemActive,
-              )}
-              onClick={() => setOpen(false)}
-            >
-              {t('archetypes', { username })}
-            </Link>
+            <>
+              <Link
+                href={`/${username}/events`}
+                className={cn(
+                  classes.item,
+                  pathname.startsWith(`/${username}/events`) && classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('events', { username })}
+              </Link>
+              <Link
+                href={`/${username}/archetypes`}
+                className={cn(
+                  classes.item,
+                  pathname.startsWith(`/${username}/archetypes`) && classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('archetypes', { username })}
+              </Link>
+            </>
           )}
 
           {(viewerUsername !== null || !isOwner) && (
@@ -102,17 +131,6 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
               >
                 {t('record')}
               </Link>
-              <Link
-                href={`/${username}/${archetypeSlug}/events`}
-                className={cn(
-                  classes.item,
-                  pathname.startsWith(`/${username}/${archetypeSlug}/events`) &&
-                    classes.itemActive,
-                )}
-                onClick={() => setOpen(false)}
-              >
-                {t('events')}
-              </Link>
               {isOwner && (
                 <Link
                   href={`/${username}/${archetypeSlug}/edit`}
@@ -131,9 +149,6 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
             <>
               <span className={cn(classes.item, classes.itemDisabled)}>
                 {t('record')}
-              </span>
-              <span className={cn(classes.item, classes.itemDisabled)}>
-                {t('events')}
               </span>
               {isOwner && (
                 <span className={cn(classes.item, classes.itemDisabled)}>
