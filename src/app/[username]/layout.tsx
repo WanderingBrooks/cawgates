@@ -1,4 +1,3 @@
-import { getUser } from '@/lib/session';
 import { getOwnerByUsername } from '@/lib/dal';
 import { GuestBanner } from '@/components';
 import { ViewerProvider } from '@/components/NavMenu/ViewerContext';
@@ -12,15 +11,14 @@ const UsernameLayout = async ({
 }) => {
   const { username } = await params;
 
-  const [{ owner }, viewer] = await Promise.all([
-    getOwnerByUsername({ username }),
-    getUser(),
-  ]);
-
-  const isOwner = viewer?.userId === owner.id;
+  const { isOwner, viewer } = await getOwnerByUsername({ username });
 
   return (
-    <ViewerProvider isOwner={isOwner} isLoggedIn={viewer !== null} viewerUsername={viewer?.username ?? null}>
+    <ViewerProvider
+      isOwner={isOwner}
+      isLoggedIn={viewer !== null}
+      viewerUsername={viewer?.username ?? null}
+    >
       {!isOwner && (
         <GuestBanner
           ownerUsername={username}
