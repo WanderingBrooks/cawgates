@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getFormatter } from 'next-intl/server';
 import Markdown from 'react-markdown';
 import { Card, CardContent, CardTitle, PageTitle, SectionHeader } from '@/components';
 import { getOpponentArchetype } from '@/lib/dal';
@@ -14,6 +14,7 @@ const OpponentArchetypePage = async ({
 }) => {
   const { username, archetypeSlug, id } = await params;
   const t = await getTranslations('opponentArchetypePage');
+  const formatter = await getFormatter();
 
   const { archetype, opponentArchetype, isOwner } = await getOpponentArchetype({
     ownerUsername: username,
@@ -60,7 +61,7 @@ const OpponentArchetypePage = async ({
                   >
                     {match.event.name}
                   </Link>
-                  <p>{new Date(match.event.date).toLocaleDateString()}</p>
+                  <p>{formatter.dateTime(new Date(match.event.date), { dateStyle: 'medium' })}</p>
                 </div>
                 <span>
                   {t('record', { wins: match.wins, losses: match.losses })}

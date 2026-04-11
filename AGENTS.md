@@ -82,6 +82,24 @@ const calculate = ({
 
 ## Internationalization
 
+### Date Formatting
+
+- **NEVER use `toLocaleDateString()` without a locale argument** — it falls back to the server's locale (en-US), not the user's
+- Always use `getFormatter()` from `next-intl/server` in server components for date rendering
+- Use `{ dateStyle: 'medium' }` as the standard format — gives "Apr 1, 2026" (en-US), "1 apr. 2026" (sv-SE), etc.
+- The locale is auto-detected from the `Accept-Language` header in `src/i18n/request.ts`
+
+```tsx
+// ❌ Bad - uses server locale (en-US), ignores the user's browser locale
+<p>{new Date(event.date).toLocaleDateString()}</p>
+
+// ✅ Good - respects the user's locale
+const formatter = await getFormatter();
+<p>{formatter.dateTime(new Date(event.date), { dateStyle: 'medium' })}</p>
+```
+
+### Text
+
 - **CRITICAL: NEVER hardcode ANY text in components**
 - This includes: button labels, error messages, loading states, placeholders, aria-labels, etc.
 - ALL user-facing text MUST come from `messages/en.json`

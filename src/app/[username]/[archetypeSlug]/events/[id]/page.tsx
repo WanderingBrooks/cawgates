@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getFormatter } from 'next-intl/server';
 import { Button, PageTitle, SectionHeader } from '@/components';
 import { getEvent } from '@/lib/dal';
 import DeleteEventButton from './DeleteEventButton';
@@ -14,6 +14,7 @@ const EventPage = async ({
 }) => {
   const { username, archetypeSlug, id } = await params;
   const t = await getTranslations('event');
+  const formatter = await getFormatter();
 
   const { archetype, event, isOwner } = await getEvent({
     ownerUsername: username,
@@ -31,7 +32,7 @@ const EventPage = async ({
       <div className={classes.headerRow}>
         <div>
           <p className={classes.meta}>
-            {new Date(event.date).toLocaleDateString()}
+            {formatter.dateTime(new Date(event.date), { dateStyle: 'medium' })}
           </p>
           {event.matches.length > 0 && (
             <p className="text-emphasis">

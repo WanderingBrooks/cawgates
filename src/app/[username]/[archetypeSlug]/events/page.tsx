@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { getFormatter } from 'next-intl/server';
 import { Card, CardTitle, Button, PageTitle, SpaceChildrenVertically } from '@/components';
 import { getEvents } from '@/lib/dal';
 import classes from './event.module.css';
@@ -10,6 +11,7 @@ const EventsPage = async ({
   params: Promise<{ username: string; archetypeSlug: string }>;
 }) => {
   const t = await getTranslations('events');
+  const formatter = await getFormatter();
   const { username, archetypeSlug } = await params;
 
   const { archetype, events, isOwner } = await getEvents({ ownerUsername: username, archetypeSlug });
@@ -58,7 +60,7 @@ const EventsPage = async ({
                       {event.name}
                     </Link>
                     <div className={classes.eventMeta}>
-                      <p className={classes.eventDate}>{new Date(event.date).toLocaleDateString()}</p>
+                      <p className={classes.eventDate}>{formatter.dateTime(new Date(event.date), { dateStyle: 'medium' })}</p>
                       <p className={classes.record}>{t('record', record)}</p>
                     </div>
                   </CardTitle>
