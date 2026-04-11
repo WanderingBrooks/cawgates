@@ -83,7 +83,9 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
             </Link>
           )}
 
-          <div className={classes.divider} />
+          {(viewerUsername !== null || !isOwner) && (
+            <div className={classes.divider} />
+          )}
           {archetypeName && (
             <span className={classes.groupLabel}>{archetypeName}</span>
           )}
