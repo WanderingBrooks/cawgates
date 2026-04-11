@@ -37,9 +37,13 @@
   --page-width-desktop: 50vw;
   --page-width-mobile: 92.5vw;
 
+  /* Shadows */
+  --drop-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
   /* Z-Index */
-  --z-index-dialog: 2;
-  --z-index-menu: 3;
+  --z-index-banner: 2;
+  --z-index-dialog: 3;
+  --z-index-menu: 4;
 }
 
 body {

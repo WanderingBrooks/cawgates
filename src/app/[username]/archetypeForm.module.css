@@ -1,0 +1,9 @@
+.actionRow {
+  margin-top: var(--spacing-xxl);
+}
+
+.rightButtons {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}

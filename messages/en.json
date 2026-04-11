@@ -1,6 +1,7 @@
 {
   "archetypes": {
     "title": "My Archetypes",
+    "guestTitle": "{username}''s archetypes",
     "createArchetype": "Create Archetype",
     "noArchetypes": "No archetypes yet — create one to get started",
     "eventCount": "{count, plural, one {# event} other {# events}}"
@@ -22,6 +23,8 @@
     "name": "Archetype Name *",
     "slug": "URL Slug",
     "slugHint": "Auto-generated from name if left blank",
+    "isPublic": "Make archetype public",
+    "isPublicHint": "Public archetypes can be viewed by other users",
     "create": "Create",
     "save": "Save",
     "saving": "Saving...",
@@ -110,6 +113,7 @@
     "title": "Create Account",
     "email": "Email *",
     "username": "Username *",
+    "usernameHint": "May only contain lowercase letters, numbers, and hyphens",
     "password": "Password *",
     "confirmPassword": "Confirm Password *",
     "submit": "Create Account",
@@ -128,7 +132,8 @@
   },
   "navMenu": {
     "menu": "Menu",
-    "archetypes": "All Archetypes",
+    "myArchetypes": "My Archetypes",
+    "archetypes": "{username}''s Archetypes",
     "events": "Events",
     "record": "Record",
     "edit": "Edit",
@@ -160,8 +165,13 @@
   "loading": {
     "title": "Loading..."
   },
+  "guestBanner": {
+    "viewing": "{username}'s profile.",
+    "backToMyDecks": "Back to my decks",
+    "signUpPrompt": "<login>Login</login> or <register>Register</register> to start tracking your own decks"
+  },
   "notFound": {
     "message": "This page could not be found.",
-    "backToArchetypes": "Bring me to the Archetypes page"
+    "backToHome": "Bring me to the Archetypes page"
   }
 }

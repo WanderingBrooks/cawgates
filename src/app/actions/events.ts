@@ -15,6 +15,7 @@ const createEvent = async (
 ): Promise<ActionResult> => {
   let eventId: string;
   let archetypeSlug: string;
+  let username: string;
 
   try {
     const user = await getUser();
@@ -65,6 +66,7 @@ const createEvent = async (
 
     eventId = event.id;
     archetypeSlug = archetype.slug;
+    username = user.username;
   } catch (error) {
     console.error('Failed to create event:', error);
 
@@ -74,7 +76,7 @@ const createEvent = async (
     };
   }
 
-  redirect(`/archetypes/${archetypeSlug}/events/${eventId}`);
+  redirect(`/${username}/${archetypeSlug}/events/${eventId}`);
 };
 
 const updateEvent = async (
@@ -83,6 +85,7 @@ const updateEvent = async (
 ): Promise<ActionResult> => {
   let eventId: string;
   let archetypeSlug: string;
+  let username: string;
 
   try {
     const user = await getUser();
@@ -142,6 +145,7 @@ const updateEvent = async (
 
     eventId = validated.eventId;
     archetypeSlug = existingEvent.archetype.slug;
+    username = user.username;
   } catch (error) {
     console.error('Failed to update event:', error);
 
@@ -151,7 +155,7 @@ const updateEvent = async (
     };
   }
 
-  redirect(`/archetypes/${archetypeSlug}/events/${eventId}`);
+  redirect(`/${username}/${archetypeSlug}/events/${eventId}`);
 };
 
 /**
@@ -159,6 +163,7 @@ const updateEvent = async (
  */
 const deleteEvent = async (eventId: string): Promise<ActionResult> => {
   let archetypeSlug: string;
+  let username: string;
 
   try {
     const user = await getUser();
@@ -190,6 +195,7 @@ const deleteEvent = async (eventId: string): Promise<ActionResult> => {
     }
 
     archetypeSlug = event.archetype.slug;
+    username = user.username;
 
     await prisma.event.delete({
       where: {
@@ -205,7 +211,7 @@ const deleteEvent = async (eventId: string): Promise<ActionResult> => {
     };
   }
 
-  redirect(`/archetypes/${archetypeSlug}/events`);
+  redirect(`/${username}/${archetypeSlug}/events`);
 };
 
 export { createEvent, updateEvent, deleteEvent };

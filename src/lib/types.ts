@@ -82,25 +82,32 @@ export type EventFormData = Pick<
   'eventName' | 'eventDate' | 'notes'
 >;
 
-// Slugs that conflict with static routes under /archetypes/
-const RESERVED_ARCHETYPE_SLUGS = ['create'];
+// Slugs that conflict with static routes
+const RESERVED_SLUGS = ['create', 'login', 'register'];
+
+const slugSchema = z
+  .string()
+  .regex(
+    /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+    'May only contain lowercase letters, numbers, and hyphens',
+  )
+  .trim()
+  .refine(
+    slug => !RESERVED_SLUGS.includes(slug),
+    'This value is reserved and cannot be used',
+  );
 
 // Schema for creating a user archetype (the user's own deck)
 const createArchetypeSchema = z.object({
   name: z.string().min(1, 'Archetype name is required').trim(),
-  slug: z
-    .string()
+  isPublic: z
+    .literal('on')
+    .optional()
+    .nullable()
+    .transform(value => value === 'on'),
+  slug: slugSchema
     .min(1, 'Slug is required')
-    .max(100, 'Slug must be 100 characters or less')
-    .regex(
-      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-      'Slug may only contain lowercase letters, numbers, and hyphens',
-    )
-    .trim()
-    .refine(
-      slug => !RESERVED_ARCHETYPE_SLUGS.includes(slug),
-      'This slug is reserved and cannot be used',
-    ),
+    .max(100, 'Slug must be 100 characters or less'),
 });
 
 // Exported type inferred from Zod schema
@@ -110,10 +117,7 @@ export type CreateArchetypeInput = z.infer<typeof createArchetypeSchema>;
 const registerUserSchema = z
   .object({
     email: z.email('Invalid email address').trim().toLowerCase(),
-    username: z
-      .string()
-      .min(3, 'Username must be at least 3 characters')
-      .trim(),
+    username: slugSchema.min(3, 'Username must be at least 3 characters'),
     password: z.string().min(8, 'Password must be at least 8 characters'),
     confirmPassword: z.string(),
   })

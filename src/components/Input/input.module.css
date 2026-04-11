@@ -11,6 +11,10 @@
   color: var(--color-text);
 }
 
+.input[type='checkbox'] {
+  align-self: flex-start;
+}
+
 .hint {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);

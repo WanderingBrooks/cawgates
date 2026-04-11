@@ -8,6 +8,7 @@ import { logout } from '@/app/actions/auth';
 import classes from './navMenu.module.css';
 import { cn } from '@/lib/utils';
 import Button from '../Button';
+import { useViewer } from './ViewerContext';
 
 type NavMenuProps = {
   disabled?: boolean;
@@ -19,12 +20,12 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { isOwner, isLoggedIn, viewerUsername } = useViewer();
 
   const segments = pathname.split('/').filter(Boolean);
-  const archetypesIndex = segments.indexOf('archetypes');
+  const username = segments[0];
 
-  const potentialSlug =
-    archetypesIndex >= 0 ? segments[archetypesIndex + 1] : undefined;
+  const potentialSlug = segments.length > 1 ? segments[1] : undefined;
 
   const archetypeSlug =
     potentialSlug && potentialSlug !== 'create' ? potentialSlug : undefined;
@@ -57,28 +58,44 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
       </Button>
       {open && (
         <div className={classes.dropdown}>
-          <Link
-            href="/archetypes"
-            className={cn(
-              classes.item,
-              pathname === '/archetypes' && classes.itemActive,
-            )}
-            onClick={() => setOpen(false)}
-          >
-            {t('archetypes')}
-          </Link>
+          {viewerUsername !== null && (
+            <Link
+              href={`/${viewerUsername}`}
+              className={cn(
+                classes.item,
+                pathname === `/${viewerUsername}` && classes.itemActive,
+              )}
+              onClick={() => setOpen(false)}
+            >
+              {t('myArchetypes')}
+            </Link>
+          )}
+          {!isOwner && (
+            <Link
+              href={`/${username}`}
+              className={cn(
+                classes.item,
+                pathname === `/${username}` && classes.itemActive,
+              )}
+              onClick={() => setOpen(false)}
+            >
+              {t('archetypes', { username })}
+            </Link>
+          )}
 
-          <div className={classes.divider} />
+          {(viewerUsername !== null || !isOwner) && (
+            <div className={classes.divider} />
+          )}
           {archetypeName && (
             <span className={classes.groupLabel}>{archetypeName}</span>
           )}
           {archetypeSlug ? (
             <>
               <Link
-                href={`/archetypes/${archetypeSlug}`}
+                href={`/${username}/${archetypeSlug}`}
                 className={cn(
                   classes.item,
-                  pathname === `/archetypes/${archetypeSlug}` &&
+                  pathname === `/${username}/${archetypeSlug}` &&
                     classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}
@@ -86,27 +103,29 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
                 {t('record')}
               </Link>
               <Link
-                href={`/archetypes/${archetypeSlug}/events`}
+                href={`/${username}/${archetypeSlug}/events`}
                 className={cn(
                   classes.item,
-                  pathname.startsWith(`/archetypes/${archetypeSlug}/events`) &&
+                  pathname.startsWith(`/${username}/${archetypeSlug}/events`) &&
                     classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}
               >
                 {t('events')}
               </Link>
-              <Link
-                href={`/archetypes/${archetypeSlug}/edit`}
-                className={cn(
-                  classes.item,
-                  pathname.startsWith(`/archetypes/${archetypeSlug}/edit`) &&
-                    classes.itemActive,
-                )}
-                onClick={() => setOpen(false)}
-              >
-                {t('edit')}
-              </Link>
+              {isOwner && (
+                <Link
+                  href={`/${username}/${archetypeSlug}/edit`}
+                  className={cn(
+                    classes.item,
+                    pathname.startsWith(`/${username}/${archetypeSlug}/edit`) &&
+                      classes.itemActive,
+                  )}
+                  onClick={() => setOpen(false)}
+                >
+                  {t('edit')}
+                </Link>
+              )}
             </>
           ) : (
             <>
@@ -116,19 +135,25 @@ const NavMenu = ({ disabled = false, archetypeName }: NavMenuProps) => {
               <span className={cn(classes.item, classes.itemDisabled)}>
                 {t('events')}
               </span>
-              <span className={cn(classes.item, classes.itemDisabled)}>
-                {t('edit')}
-              </span>
+              {isOwner && (
+                <span className={cn(classes.item, classes.itemDisabled)}>
+                  {t('edit')}
+                </span>
+              )}
             </>
           )}
-          <div className={classes.divider} />
-          <button
-            type="button"
-            className={cn(classes.item, classes.logoutButton)}
-            onClick={handleLogout}
-          >
-            {t('logout')}
-          </button>
+          {isLoggedIn && (
+            <>
+              <div className={classes.divider} />
+              <button
+                type="button"
+                className={cn(classes.item, classes.logoutButton)}
+                onClick={handleLogout}
+              >
+                {t('logout')}
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>

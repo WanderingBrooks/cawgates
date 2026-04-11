@@ -35,11 +35,12 @@ const createArchetype = async (
   }
 
   const name = formData.get('name') as string;
+  const isPublic = formData.get('isPublic') as string;
   const rawSlug = formData.get('slug') as string;
   // Auto-derive slug from name if the user left the field blank
   const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
 
-  const result = createArchetypeSchema.safeParse({ name, slug });
+  const result = createArchetypeSchema.safeParse({ name, slug, isPublic });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
@@ -50,11 +51,12 @@ const createArchetype = async (
       data: {
         name: result.data.name,
         slug: result.data.slug,
+        isPublic: result.data.isPublic,
         userId: user.userId,
       },
     });
 
-    redirect(`/archetypes/${archetype.slug}`);
+    redirect(`/${user.username}/${archetype.slug}`);
   } catch (error: unknown) {
     if (
       typeof error === 'object' &&
@@ -84,10 +86,11 @@ const updateArchetype = async (
 
   const archetypeId = formData.get('archetypeId') as string;
   const name = formData.get('name') as string;
+  const isPublic = formData.get('isPublic') as string;
   const rawSlug = formData.get('slug') as string;
   const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
 
-  const result = createArchetypeSchema.safeParse({ name, slug });
+  const result = createArchetypeSchema.safeParse({ name, slug, isPublic });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
@@ -104,10 +107,14 @@ const updateArchetype = async (
   try {
     const updated = await prisma.archetype.update({
       where: { id: archetypeId },
-      data: { name: result.data.name, slug: result.data.slug },
+      data: {
+        name: result.data.name,
+        slug: result.data.slug,
+        isPublic: result.data.isPublic,
+      },
     });
 
-    redirect(`/archetypes/${updated.slug}`);
+    redirect(`/${user.username}/${updated.slug}`);
   } catch (error: unknown) {
     if (
       typeof error === 'object' &&
@@ -125,9 +132,7 @@ const updateArchetype = async (
   }
 };
 
-const deleteArchetype = async (
-  archetypeId: string,
-): Promise<ActionResult> => {
+const deleteArchetype = async (archetypeId: string): Promise<ActionResult> => {
   const user = await getUser();
 
   if (!user) {
@@ -151,12 +156,7 @@ const deleteArchetype = async (
 
   await prisma.archetype.delete({ where: { id: archetypeId } });
 
-  redirect('/archetypes');
+  redirect(`/${user.username}`);
 };
 
-export {
-  getUserArchetypes,
-  createArchetype,
-  updateArchetype,
-  deleteArchetype,
-};
+export { getUserArchetypes, createArchetype, updateArchetype, deleteArchetype };
