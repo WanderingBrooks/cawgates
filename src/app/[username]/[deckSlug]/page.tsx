@@ -23,8 +23,8 @@ const DeckPage = async ({
     <>
       <PageTitle title={t('title')} subtitle={deck.name} />
       <div className={classes.rightAlignedButton}>
-        <Link href={`/${username}/${deck.slug}/events`}>
-          <Button variant="primary">{t('viewEvents')}</Button>
+        <Link href={`/${username}/${deck.slug}/edit`}>
+          <Button variant="primary">{t('editDeck')}</Button>
         </Link>
       </div>
       {matchStatistics.length === 0 ? (
