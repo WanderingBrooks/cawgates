@@ -8,7 +8,7 @@ import {
   PageTitle,
   SpaceChildrenVertically,
 } from '@/components';
-import { getEvents } from '@/lib/dal';
+import { getEventsForSlug } from '@/lib/dal';
 import classes from './event.module.css';
 
 const EventsPage = async ({
@@ -20,7 +20,7 @@ const EventsPage = async ({
   const formatter = await getFormatter();
   const { username, deckSlug } = await params;
 
-  const { deck, events, isOwner } = await getEvents({
+  const { deck, events, isOwner } = await getEventsForSlug({
     ownerUsername: username,
     deckSlug,
   });
@@ -62,10 +62,7 @@ const EventsPage = async ({
               return (
                 <Card key={event.id}>
                   <CardTitle align="start">
-                    <Link
-                      className={classes.eventName}
-                      href={`/${username}/${deck.slug}/events/${event.id}`}
-                    >
+                    <Link href={`/${username}/${deck.slug}/events/${event.id}`}>
                       {event.name}
                     </Link>
                     <div className={classes.eventMeta}>

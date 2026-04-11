@@ -55,7 +55,10 @@ const getDeck = async ({
 }) => {
   const [viewer, owner] = await Promise.all([
     getUser(),
-    prisma.user.findUnique({ where: { username: ownerUsername }, select: { id: true } }),
+    prisma.user.findUnique({
+      where: { username: ownerUsername },
+      select: { id: true },
+    }),
   ]);
 
   if (!owner) {
@@ -79,7 +82,7 @@ const getDeck = async ({
   return { deck, isOwner };
 };
 
-const getEvents = async ({
+const getEventsForSlug = async ({
   ownerUsername,
   deckSlug,
 }: {
@@ -179,7 +182,7 @@ export {
   getOwnerByUsername,
   getDecksForOwner,
   getDeck,
-  getEvents,
+  getEventsForSlug,
   getEvent,
   getOpponentArchetype,
 };
