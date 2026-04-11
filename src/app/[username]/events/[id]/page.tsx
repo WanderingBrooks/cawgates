@@ -67,6 +67,8 @@ const EventPage = async ({
         eventId={id}
         archetypeId={archetype.id}
         isOwner={isOwner}
+        username={username}
+        archetypeSlug={archetype.slug}
       />
       {isOwner && (
         <>
