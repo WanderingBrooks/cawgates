@@ -34,7 +34,7 @@ type MatchSectionProps = {
   deckId: string;
   isOwner: boolean;
   username: string;
-  archetypeSlug: string;
+  deckSlug: string;
 };
 
 const MatchSection = ({
@@ -43,7 +43,7 @@ const MatchSection = ({
   deckId,
   isOwner,
   username,
-  archetypeSlug,
+  deckSlug,
 }: MatchSectionProps) => {
   const t = useTranslations('event');
   const tDelete = useTranslations('deleteMatchButton');
@@ -100,7 +100,7 @@ const MatchSection = ({
               <CardTitle>
                 <div>
                   <Link
-                    href={`/${username}/${archetypeSlug}/opponents/${match.opponentArchetypeId}`}
+                    href={`/${username}/${deckSlug}/opponents/${match.opponentArchetypeId}`}
                   >
                     {match.opponentArchetype.name}
                   </Link>

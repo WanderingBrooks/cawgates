@@ -63,7 +63,7 @@ const EventPage = async ({
         deckId={deck.id}
         isOwner={isOwner}
         username={username}
-        archetypeSlug={archetype.slug}
+        deckSlug={deck.slug}
       />
       {isOwner && (
         <>

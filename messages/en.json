@@ -132,8 +132,8 @@
   },
   "navMenu": {
     "menu": "Menu",
-    "myArchetypes": "My Decks",
-    "archetypes": "{username}''s Decks",
+    "myDecks": "My Decks",
+    "decks": "{username}''s Decks",
     "events": "Events",
     "record": "Record",
     "edit": "Edit",

@@ -67,7 +67,7 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
               )}
               onClick={() => setOpen(false)}
             >
-              {t('myArchetypes')}
+              {t('myDecks')}
             </Link>
           )}
           {!isOwner && (
@@ -79,24 +79,21 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
               )}
               onClick={() => setOpen(false)}
             >
-              {t('archetypes', { username })}
+              {t('decks', { username })}
             </Link>
           )}
 
           {(viewerUsername !== null || !isOwner) && (
             <div className={classes.divider} />
           )}
-          {deckName && (
-            <span className={classes.groupLabel}>{deckName}</span>
-          )}
+          {deckName && <span className={classes.groupLabel}>{deckName}</span>}
           {deckSlug ? (
             <>
               <Link
                 href={`/${username}/${deckSlug}`}
                 className={cn(
                   classes.item,
-                  pathname === `/${username}/${deckSlug}` &&
-                    classes.itemActive,
+                  pathname === `/${username}/${deckSlug}` && classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}
               >

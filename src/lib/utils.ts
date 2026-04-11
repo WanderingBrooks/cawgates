@@ -6,7 +6,7 @@ const cn = (...classes: (string | undefined | null | false)[]): string => {
 /**
  * Converts a string into a URL-friendly slug.
  * Only allows letters, numbers, and hyphens.
- * Example: "My Archetype Name" -> "my-archetype-name"
+ * Example: "My Deck Name" -> "my-deck-name"
  */
 const slugify = ({ name }: { name: string }) =>
   name
