@@ -15,6 +15,7 @@ import MatchForm from './MatchForm';
 import { MatchInputForm } from '@/lib/types';
 import classes from './matchSection.module.css';
 import Markdown from 'react-markdown';
+import Link from 'next/link';
 
 type Match = {
   id: string;
@@ -32,9 +33,18 @@ type MatchSectionProps = {
   eventId: string;
   archetypeId: string;
   isOwner: boolean;
+  username: string;
+  archetypeSlug: string;
 };
 
-const MatchSection = ({ matches, eventId, archetypeId, isOwner }: MatchSectionProps) => {
+const MatchSection = ({
+  matches,
+  eventId,
+  archetypeId,
+  isOwner,
+  username,
+  archetypeSlug,
+}: MatchSectionProps) => {
   const t = useTranslations('event');
   const tDelete = useTranslations('deleteMatchButton');
   const tCreateMatch = useTranslations('createMatch');
@@ -89,7 +99,11 @@ const MatchSection = ({ matches, eventId, archetypeId, isOwner }: MatchSectionPr
             <Card key={match.id}>
               <CardTitle>
                 <div>
-                  {match.opponentArchetype.name}
+                  <Link
+                    href={`/${username}/${archetypeSlug}/opponents/${match.opponentArchetypeId}`}
+                  >
+                    {match.opponentArchetype.name}
+                  </Link>
                   <p>
                     {t('gameRecord', {
                       wins: match.wins,
