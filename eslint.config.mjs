@@ -56,6 +56,12 @@ const eslintConfig = defineConfig([
           message:
             'Do not use prisma.archetype.findFirst/findFirstOrThrow. Use prisma.archetype.findUnique with the userId_slug compound key ({ userId_slug: { userId, slug } }) to ensure ownership is always checked when querying by slug.',
         },
+        {
+          selector:
+            'CallExpression[callee.type="MemberExpression"][callee.property.name="toLocaleDateString"][arguments.length=0]',
+          message:
+            'Do not use toLocaleDateString() without a locale. Use getFormatter() from next-intl/server with { dateStyle: "medium" } instead.',
+        },
       ],
       // New line between multi line blocks
       'padding-line-between-statements': [
