@@ -82,6 +82,18 @@ const getDeck = async ({
   return { deck, isOwner };
 };
 
+const getEvents = async ({ ownerUsername }: { ownerUsername: string }) => {
+  const { isOwner, decks } = await getDecksForOwner({ ownerUsername });
+
+  const events = await prisma.event.findMany({
+    where: { deckId: { in: decks.map(deck => deck.id) } },
+    orderBy: { date: 'desc' },
+    include: { matches: true },
+  });
+
+  return { isOwner, events };
+};
+
 const getEventsForSlug = async ({
   ownerUsername,
   deckSlug,
@@ -182,6 +194,7 @@ export {
   getOwnerByUsername,
   getDecksForOwner,
   getDeck,
+  getEvents,
   getEventsForSlug,
   getEvent,
   getOpponentArchetype,
