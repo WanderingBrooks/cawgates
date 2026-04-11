@@ -79,7 +79,7 @@ export type ActionResultWithData<T> =
 // Helper type for event form data (event fields only, no matches)
 export type EventFormData = Pick<
   CreateEventInput,
-  'eventName' | 'eventDate' | 'notes'
+  'deckId' | 'eventName' | 'eventDate' | 'notes'
 >;
 
 // Slugs that conflict with static routes

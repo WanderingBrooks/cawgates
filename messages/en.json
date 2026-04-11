@@ -53,6 +53,7 @@
     "backToEvent": "Back to event"
   },
   "eventForm": {
+    "deckId": "Deck *",
     "eventName": "Event Name *",
     "eventDate": "Event Date *",
     "notes": "Notes",
