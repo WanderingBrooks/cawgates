@@ -16,7 +16,7 @@ const ArchetypesPage = async ({
 
   return (
     <>
-      <PageTitle title={t('title')} />
+      <PageTitle title={isOwner ? t('title') : t('guestTitle', { username })} />
       {isOwner && (
         <div className={classes.rightAlignedButton}>
           <Link href={`/${username}/create`}>

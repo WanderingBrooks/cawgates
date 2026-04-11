@@ -1,6 +1,7 @@
 {
   "archetypes": {
     "title": "My Archetypes",
+    "guestTitle": "{username}''s archetypes",
     "createArchetype": "Create Archetype",
     "noArchetypes": "No archetypes yet — create one to get started",
     "eventCount": "{count, plural, one {# event} other {# events}}"
@@ -131,8 +132,8 @@
   },
   "navMenu": {
     "menu": "Menu",
-    "myArchetypes": "My archetypes",
-    "archetypes": "{username}''s archetypes",
+    "myArchetypes": "My Archetypes",
+    "archetypes": "{username}''s Archetypes",
     "events": "Events",
     "record": "Record",
     "edit": "Edit",
