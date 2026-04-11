@@ -13,7 +13,7 @@ const ArchetypePage = async ({
   const { username, archetypeSlug } = await params;
   const t = await getTranslations('archetypePage');
 
-  const { archetype } = await getArchetype({ ownerUsername: username, archetypeSlug });
+  const { archetype, isOwner } = await getArchetype({ ownerUsername: username, archetypeSlug });
 
   const matchStatistics = await getMatchStatistics({
     archetypeId: archetype.id,
@@ -22,11 +22,13 @@ const ArchetypePage = async ({
   return (
     <>
       <PageTitle title={t('title')} subtitle={archetype.name} />
-      <div className={classes.rightAlignedButton}>
-        <Link href={`/${username}/events`}>
-          <Button variant="primary">{t('viewEvents')}</Button>
-        </Link>
-      </div>
+      {isOwner && (
+        <div className={classes.rightAlignedButton}>
+          <Link href={`/${username}/${archetypeSlug}/edit`}>
+            <Button variant="primary">{t('edit')}</Button>
+          </Link>
+        </div>
+      )}
       {matchStatistics.length === 0 ? (
         <p>{t('noMatches')}</p>
       ) : (

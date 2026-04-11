@@ -11,8 +11,7 @@
   },
   "archetypePage": {
     "title": "Record",
-    "viewEvents": "View Events",
-    "edit": "Rename",
+    "edit": "Edit",
     "archetype": "Archetype",
     "matchRecord": "Match Record",
     "gameRecord": "Game Record",
