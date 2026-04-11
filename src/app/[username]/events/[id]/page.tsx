@@ -48,6 +48,12 @@ const EventPage = async ({
           </Link>
         )}
       </div>
+      <div className={classes.archetypeRow}>
+        <p>{archetype.name}</p>
+        <Link href={`/${username}/${archetype.slug}`}>
+          <Button variant="secondary">{t('viewArchetype')}</Button>
+        </Link>
+      </div>
       {event.notes && (
         <>
           <SectionHeader>{t('notesSection')}</SectionHeader>
