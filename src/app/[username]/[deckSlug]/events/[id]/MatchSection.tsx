@@ -31,19 +31,19 @@ type Match = {
 type MatchSectionProps = {
   matches: Match[];
   eventId: string;
-  archetypeId: string;
+  deckId: string;
   isOwner: boolean;
   username: string;
-  archetypeSlug: string;
+  deckSlug: string;
 };
 
 const MatchSection = ({
   matches,
   eventId,
-  archetypeId,
+  deckId,
   isOwner,
   username,
-  archetypeSlug,
+  deckSlug,
 }: MatchSectionProps) => {
   const t = useTranslations('event');
   const tDelete = useTranslations('deleteMatchButton');
@@ -100,7 +100,7 @@ const MatchSection = ({
               <CardTitle>
                 <div>
                   <Link
-                    href={`/${username}/${archetypeSlug}/opponents/${match.opponentArchetypeId}`}
+                    href={`/${username}/${deckSlug}/opponents/${match.opponentArchetypeId}`}
                   >
                     {match.opponentArchetype.name}
                   </Link>
@@ -147,7 +147,7 @@ const MatchSection = ({
             {isAddOpen && (
               <MatchForm
                 mode="create"
-                archetypeId={archetypeId}
+                deckId={deckId}
                 eventId={eventId}
                 onSuccess={() => setIsAddOpen(false)}
                 onCancel={() => setIsAddOpen(false)}
@@ -164,7 +164,7 @@ const MatchSection = ({
               <MatchForm
                 key={editingMatch.id}
                 mode="edit"
-                archetypeId={archetypeId}
+                deckId={deckId}
                 eventId={eventId}
                 matchId={editingMatch.id}
                 initialMatchData={editingMatchData}

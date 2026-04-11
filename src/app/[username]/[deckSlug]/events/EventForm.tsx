@@ -36,8 +36,8 @@ const SubmitButton = () => {
 type EventFormProps = {
   mode: 'create' | 'edit';
   username: string;
-  archetypeId: string;
-  archetypeSlug: string;
+  deckId: string;
+  deckSlug: string;
   eventId?: string;
   initialEventData?: EventFormData;
 };
@@ -45,8 +45,8 @@ type EventFormProps = {
 const EventForm = ({
   mode,
   username,
-  archetypeId,
-  archetypeSlug,
+  deckId,
+  deckSlug,
   eventId,
   initialEventData,
 }: EventFormProps) => {
@@ -78,7 +78,7 @@ const EventForm = ({
   return (
     <Form action={formAction}>
       <SpaceChildrenVertically>
-        <input type="hidden" name="archetypeId" value={archetypeId} />
+        <input type="hidden" name="deckId" value={deckId} />
         <input type="hidden" name="eventId" value={eventId} />
 
         <Input
@@ -113,8 +113,8 @@ const EventForm = ({
           <Link
             href={
               mode === 'create'
-                ? `/${username}/${archetypeSlug}/events`
-                : `/${username}/${archetypeSlug}/events/${eventId}`
+                ? `/${username}/${deckSlug}/events`
+                : `/${username}/${deckSlug}/events/${eventId}`
             }
           >
             <Button variant="secondary">{t('cancel')}</Button>

@@ -10,15 +10,15 @@ import classes from './eventPage.module.css';
 const EventPage = async ({
   params,
 }: {
-  params: Promise<{ username: string; archetypeSlug: string; id: string }>;
+  params: Promise<{ username: string; deckSlug: string; id: string }>;
 }) => {
-  const { username, archetypeSlug, id } = await params;
+  const { username, deckSlug, id } = await params;
   const t = await getTranslations('event');
   const formatter = await getFormatter();
 
-  const { archetype, event, isOwner } = await getEvent({
+  const { deck, event, isOwner } = await getEvent({
     ownerUsername: username,
-    archetypeSlug,
+    deckSlug,
     eventId: id,
   });
 
@@ -28,7 +28,7 @@ const EventPage = async ({
 
   return (
     <>
-      <PageTitle title={event.name} subtitle={archetype.name} />
+      <PageTitle title={event.name} subtitle={deck.name} />
       <div className={classes.headerRow}>
         <div>
           <p className={classes.meta}>
@@ -45,7 +45,7 @@ const EventPage = async ({
           )}
         </div>
         {isOwner && (
-          <Link href={`/${username}/${archetype.slug}/events/${id}/edit`}>
+          <Link href={`/${username}/${deck.slug}/events/${id}/edit`}>
             <Button variant="primary">{t('editEvent')}</Button>
           </Link>
         )}
@@ -60,10 +60,10 @@ const EventPage = async ({
       <MatchSection
         matches={event.matches}
         eventId={id}
-        archetypeId={archetype.id}
+        deckId={deck.id}
         isOwner={isOwner}
         username={username}
-        archetypeSlug={archetype.slug}
+        deckSlug={deck.slug}
       />
       {isOwner && (
         <>

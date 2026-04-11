@@ -4,12 +4,12 @@
  * Centralises data fetching and authorisation checks so they cannot be separated.
  * All functions accept `ownerUsername` (from the URL) rather than inferring the
  * owner from the current session. This allows both the owner and guests to use
- * the same read path — guests are gated by `isPublic` on the archetype.
+ * the same read path — guests are gated by `isPublic` on the deck.
  *
  * Every function returns `isOwner: boolean` so pages can conditionally render
  * edit controls without making a second auth call.
  *
- * Functions compose — e.g. `getEvent` calls `getArchetype` — so the
+ * Functions compose — e.g. `getEvent` calls `getDeck` — so the
  * `isPublic` check is enforced automatically at every level.
  *
  * Server actions do their own auth and should NOT use these functions.
@@ -18,7 +18,7 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 
-const getArchetypesForOwner = async ({
+const getDecksForOwner = async ({
   ownerUsername,
 }: {
   ownerUsername: string;
@@ -34,7 +34,7 @@ const getArchetypesForOwner = async ({
 
   const isOwner = viewer?.userId === owner.id;
 
-  const archetypes = await prisma.archetype.findMany({
+  const decks = await prisma.deck.findMany({
     where: {
       userId: owner.id,
       ...(isOwner ? {} : { isPublic: true }),
@@ -43,15 +43,15 @@ const getArchetypesForOwner = async ({
     include: { _count: { select: { events: true } } },
   });
 
-  return { archetypes, isOwner };
+  return { decks, isOwner };
 };
 
-const getArchetype = async ({
+const getDeck = async ({
   ownerUsername,
-  archetypeSlug,
+  deckSlug,
 }: {
   ownerUsername: string;
-  archetypeSlug: string;
+  deckSlug: string;
 }) => {
   const [viewer, owner] = await Promise.all([
     getUser(),
@@ -62,60 +62,60 @@ const getArchetype = async ({
     notFound();
   }
 
-  const archetype = await prisma.archetype.findUnique({
-    where: { userId_slug: { userId: owner.id, slug: archetypeSlug } },
+  const deck = await prisma.deck.findUnique({
+    where: { userId_slug: { userId: owner.id, slug: deckSlug } },
   });
 
-  if (!archetype) {
+  if (!deck) {
     notFound();
   }
 
-  const isOwner = viewer?.userId === archetype.userId;
+  const isOwner = viewer?.userId === deck.userId;
 
-  if (!isOwner && !archetype.isPublic) {
+  if (!isOwner && !deck.isPublic) {
     notFound();
   }
 
-  return { archetype, isOwner };
+  return { deck, isOwner };
 };
 
 const getEvents = async ({
   ownerUsername,
-  archetypeSlug,
+  deckSlug,
 }: {
   ownerUsername: string;
-  archetypeSlug: string;
+  deckSlug: string;
 }) => {
-  const { archetype, isOwner } = await getArchetype({
+  const { deck, isOwner } = await getDeck({
     ownerUsername,
-    archetypeSlug,
+    deckSlug,
   });
 
   const events = await prisma.event.findMany({
-    where: { archetypeId: archetype.id },
+    where: { deckId: deck.id },
     orderBy: { date: 'desc' },
     include: { matches: true },
   });
 
-  return { archetype, events, isOwner };
+  return { deck, events, isOwner };
 };
 
 const getEvent = async ({
   ownerUsername,
-  archetypeSlug,
+  deckSlug,
   eventId,
 }: {
   ownerUsername: string;
-  archetypeSlug: string;
+  deckSlug: string;
   eventId: string;
 }) => {
-  const { archetype, isOwner } = await getArchetype({
+  const { deck, isOwner } = await getDeck({
     ownerUsername,
-    archetypeSlug,
+    deckSlug,
   });
 
   const event = await prisma.event.findUnique({
-    where: { id: eventId, archetypeId: archetype.id },
+    where: { id: eventId, deckId: deck.id },
     include: {
       matches: {
         orderBy: { createdAt: 'asc' },
@@ -128,25 +128,25 @@ const getEvent = async ({
     notFound();
   }
 
-  return { archetype, event, isOwner };
+  return { deck, event, isOwner };
 };
 
 const getOpponentArchetype = async ({
   ownerUsername,
-  archetypeSlug,
+  deckSlug,
   opponentArchetypeId,
 }: {
   ownerUsername: string;
-  archetypeSlug: string;
+  deckSlug: string;
   opponentArchetypeId: string;
 }) => {
-  const { archetype, isOwner } = await getArchetype({
+  const { deck, isOwner } = await getDeck({
     ownerUsername,
-    archetypeSlug,
+    deckSlug,
   });
 
   const opponentArchetype = await prisma.opponentArchetype.findUnique({
-    where: { id: opponentArchetypeId, archetypeId: archetype.id },
+    where: { id: opponentArchetypeId, deckId: deck.id },
     include: {
       matches: {
         orderBy: { event: { date: 'desc' } },
@@ -159,7 +159,7 @@ const getOpponentArchetype = async ({
     notFound();
   }
 
-  return { archetype, opponentArchetype, isOwner };
+  return { deck, opponentArchetype, isOwner };
 };
 
 const getOwnerByUsername = async ({ username }: { username: string }) => {
@@ -177,8 +177,8 @@ const getOwnerByUsername = async ({ username }: { username: string }) => {
 
 export {
   getOwnerByUsername,
-  getArchetypesForOwner,
-  getArchetype,
+  getDecksForOwner,
+  getDeck,
   getEvents,
   getEvent,
   getOpponentArchetype,

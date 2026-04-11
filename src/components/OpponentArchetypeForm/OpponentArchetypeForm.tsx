@@ -38,13 +38,13 @@ const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
 type OpponentArchetypeFormProps =
   | {
       mode: 'create';
-      archetypeId: string;
+      deckId: string;
       onSuccess: (data: { id: string; name: string }) => void;
       onCancel: () => void;
     }
   | {
       mode: 'edit';
-      archetypeId: string;
+      deckId: string;
       opponentArchetypeId: string;
       initialName: string;
       onSuccess: (data: { id: string; name: string }) => void;
@@ -76,7 +76,7 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
   return (
     <Form action={formAction}>
       <SpaceChildrenVertically>
-        <input type="hidden" name="archetypeId" value={props.archetypeId} />
+        <input type="hidden" name="deckId" value={props.deckId} />
         {props.mode === 'edit' && (
           <input
             type="hidden"

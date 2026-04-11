@@ -14,7 +14,7 @@ const createEvent = async (
   formData: FormData,
 ): Promise<ActionResult> => {
   let eventId: string;
-  let archetypeSlug: string;
+  let deckSlug: string;
   let username: string;
 
   try {
@@ -28,7 +28,7 @@ const createEvent = async (
     }
 
     const data = {
-      archetypeId: formData.get('archetypeId') as string,
+      deckId: formData.get('deckId') as string,
       eventName: formData.get('eventName') as string,
       eventDate: formData.get('eventDate') as string,
       notes: formData.get('notes') as string,
@@ -47,12 +47,12 @@ const createEvent = async (
 
     const validated = result.data;
 
-    const archetype = await prisma.archetype.findUnique({
-      where: { id: validated.archetypeId },
+    const deck = await prisma.deck.findUnique({
+      where: { id: validated.deckId },
     });
 
-    if (!archetype || archetype.userId !== user.userId) {
-      return { success: false, error: 'Archetype not found' };
+    if (!deck || deck.userId !== user.userId) {
+      return { success: false, error: 'Deck not found' };
     }
 
     const event = await prisma.event.create({
@@ -60,12 +60,12 @@ const createEvent = async (
         name: validated.eventName,
         date: new Date(validated.eventDate),
         notes: validated.notes,
-        archetypeId: validated.archetypeId,
+        deckId: validated.deckId,
       },
     });
 
     eventId = event.id;
-    archetypeSlug = archetype.slug;
+    deckSlug = deck.slug;
     username = user.username;
   } catch (error) {
     console.error('Failed to create event:', error);
@@ -76,7 +76,7 @@ const createEvent = async (
     };
   }
 
-  redirect(`/${username}/${archetypeSlug}/events/${eventId}`);
+  redirect(`/${username}/${deckSlug}/events/${eventId}`);
 };
 
 const updateEvent = async (
@@ -84,7 +84,7 @@ const updateEvent = async (
   formData: FormData,
 ): Promise<ActionResult> => {
   let eventId: string;
-  let archetypeSlug: string;
+  let deckSlug: string;
   let username: string;
 
   try {
@@ -98,7 +98,7 @@ const updateEvent = async (
     }
 
     const data = {
-      archetypeId: formData.get('archetypeId') as string,
+      deckId: formData.get('deckId') as string,
       eventId: formData.get('eventId') as string,
       eventName: formData.get('eventName') as string,
       eventDate: formData.get('eventDate') as string,
@@ -120,14 +120,14 @@ const updateEvent = async (
 
     const existingEvent = await prisma.event.findUnique({
       where: { id: validated.eventId },
-      include: { archetype: true },
+      include: { deck: true },
     });
 
     if (!existingEvent) {
       return { success: false, error: 'Event not found' };
     }
 
-    if (existingEvent.archetype.userId !== user.userId) {
+    if (existingEvent.deck.userId !== user.userId) {
       return {
         success: false,
         error: 'You do not have permission to edit this event',
@@ -144,7 +144,7 @@ const updateEvent = async (
     });
 
     eventId = validated.eventId;
-    archetypeSlug = existingEvent.archetype.slug;
+    deckSlug = existingEvent.deck.slug;
     username = user.username;
   } catch (error) {
     console.error('Failed to update event:', error);
@@ -155,14 +155,14 @@ const updateEvent = async (
     };
   }
 
-  redirect(`/${username}/${archetypeSlug}/events/${eventId}`);
+  redirect(`/${username}/${deckSlug}/events/${eventId}`);
 };
 
 /**
  * Delete an event and all associated matches. Redirect back to the event list afterward.
  */
 const deleteEvent = async (eventId: string): Promise<ActionResult> => {
-  let archetypeSlug: string;
+  let deckSlug: string;
   let username: string;
 
   try {
@@ -177,7 +177,7 @@ const deleteEvent = async (eventId: string): Promise<ActionResult> => {
 
     const event = await prisma.event.findUnique({
       where: { id: eventId },
-      include: { archetype: true },
+      include: { deck: true },
     });
 
     if (!event) {
@@ -187,14 +187,14 @@ const deleteEvent = async (eventId: string): Promise<ActionResult> => {
       };
     }
 
-    if (event.archetype.userId !== user.userId) {
+    if (event.deck.userId !== user.userId) {
       return {
         success: false,
         error: 'You do not have permission to delete this event',
       };
     }
 
-    archetypeSlug = event.archetype.slug;
+    deckSlug = event.deck.slug;
     username = user.username;
 
     await prisma.event.delete({
@@ -211,7 +211,7 @@ const deleteEvent = async (eventId: string): Promise<ActionResult> => {
     };
   }
 
-  redirect(`/${username}/${archetypeSlug}/events`);
+  redirect(`/${username}/${deckSlug}/events`);
 };
 
 export { createEvent, updateEvent, deleteEvent };

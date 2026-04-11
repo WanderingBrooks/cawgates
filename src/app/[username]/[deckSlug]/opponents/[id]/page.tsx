@@ -10,15 +10,15 @@ import classes from './opponentArchetypePage.module.css';
 const OpponentArchetypePage = async ({
   params,
 }: {
-  params: Promise<{ username: string; archetypeSlug: string; id: string }>;
+  params: Promise<{ username: string; deckSlug: string; id: string }>;
 }) => {
-  const { username, archetypeSlug, id } = await params;
+  const { username, deckSlug, id } = await params;
   const t = await getTranslations('opponentArchetypePage');
   const formatter = await getFormatter();
 
-  const { archetype, opponentArchetype, isOwner } = await getOpponentArchetype({
+  const { deck, opponentArchetype, isOwner } = await getOpponentArchetype({
     ownerUsername: username,
-    archetypeSlug,
+    deckSlug,
     opponentArchetypeId: id,
   });
 
@@ -36,9 +36,9 @@ const OpponentArchetypePage = async ({
 
   return (
     <>
-      <PageTitle title={opponentArchetype.name} subtitle={archetype.name} />
+      <PageTitle title={opponentArchetype.name} subtitle={deck.name} />
       <OpponentArchetypeSubHeader
-        archetypeId={archetype.id}
+        deckId={deck.id}
         opponentArchetypeId={opponentArchetype.id}
         initialName={opponentArchetype.name}
         totalMatches={opponentArchetype.matches.length}
@@ -57,7 +57,7 @@ const OpponentArchetypePage = async ({
               <CardTitle>
                 <div>
                   <Link
-                    href={`/${username}/${archetypeSlug}/events/${match.event.id}`}
+                    href={`/${username}/${deckSlug}/events/${match.event.id}`}
                   >
                     {match.event.name}
                   </Link>

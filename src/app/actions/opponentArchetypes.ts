@@ -10,9 +10,9 @@ import {
 } from '@/lib/types';
 
 const getOpponentArchetypesForArchetype = async ({
-  archetypeId,
+  deckId,
 }: {
-  archetypeId: string;
+  deckId: string;
 }) => {
   const user = await getUser();
 
@@ -20,16 +20,16 @@ const getOpponentArchetypesForArchetype = async ({
     return [];
   }
 
-  const archetype = await prisma.archetype.findUnique({
-    where: { id: archetypeId },
+  const deck = await prisma.deck.findUnique({
+    where: { id: deckId },
   });
 
-  if (!archetype || archetype.userId !== user.userId) {
+  if (!deck || deck.userId !== user.userId) {
     return [];
   }
 
   return prisma.opponentArchetype.findMany({
-    where: { archetypeId },
+    where: { deckId },
     orderBy: { name: 'asc' },
   });
 };
@@ -44,7 +44,7 @@ const createOpponentArchetype = async (
     return { success: false, error: 'You must be logged in' };
   }
 
-  const archetypeId = formData.get('archetypeId') as string;
+  const deckId = formData.get('deckId') as string;
   const name = formData.get('name') as string;
 
   const result = createOpponentArchetypeSchema.safeParse({ name });
@@ -53,19 +53,19 @@ const createOpponentArchetype = async (
     return { success: false, error: result.error.issues[0].message };
   }
 
-  const archetype = await prisma.archetype.findUnique({
-    where: { id: archetypeId },
+  const deck = await prisma.deck.findUnique({
+    where: { id: deckId },
   });
 
-  if (!archetype || archetype.userId !== user.userId) {
-    return { success: false, error: 'Archetype not found' };
+  if (!deck || deck.userId !== user.userId) {
+    return { success: false, error: 'Deck not found' };
   }
 
   try {
     const created = await prisma.opponentArchetype.create({
       data: {
         name: result.data.name,
-        archetypeId,
+        deckId,
       },
     });
 
@@ -111,12 +111,12 @@ const updateOpponentArchetype = async (
 
   const opponentArchetype = await prisma.opponentArchetype.findUnique({
     where: { id: opponentArchetypeId },
-    include: { archetype: true },
+    include: { deck: true },
   });
 
   if (
     !opponentArchetype ||
-    opponentArchetype.archetype.userId !== user.userId
+    opponentArchetype.deck.userId !== user.userId
   ) {
     return { success: false, error: 'Opponent archetype not found' };
   }
@@ -153,7 +153,7 @@ const deleteOpponentArchetype = async ({
 }: {
   opponentArchetypeId: string;
 }): Promise<ActionResult> => {
-  let archetypeSlug: string;
+  let deckSlug: string;
   let username: string;
 
   try {
@@ -168,7 +168,7 @@ const deleteOpponentArchetype = async ({
 
     const opponentArchetype = await prisma.opponentArchetype.findUnique({
       where: { id: opponentArchetypeId },
-      include: { archetype: true },
+      include: { deck: true },
     });
 
     if (!opponentArchetype) {
@@ -178,7 +178,7 @@ const deleteOpponentArchetype = async ({
       };
     }
 
-    if (opponentArchetype.archetype.userId !== user.userId) {
+    if (opponentArchetype.deck.userId !== user.userId) {
       return {
         success: false,
         error: 'You do not have permission to delete this opponent archetype',
@@ -196,7 +196,7 @@ const deleteOpponentArchetype = async ({
       };
     }
 
-    archetypeSlug = opponentArchetype.archetype.slug;
+    deckSlug = opponentArchetype.deck.slug;
     username = user.username;
 
     await prisma.opponentArchetype.delete({
@@ -211,7 +211,7 @@ const deleteOpponentArchetype = async ({
     };
   }
 
-  redirect(`/${username}/${archetypeSlug}`);
+  redirect(`/${username}/${deckSlug}`);
 };
 
 export {

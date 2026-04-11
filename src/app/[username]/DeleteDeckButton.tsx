@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { deleteArchetype } from '@/app/actions/archetypes';
+import { deleteDeck } from '@/app/actions/decks';
 import { Button, ErrorMessage } from '@/components';
 
-const DeleteArchetypeButton = ({ archetypeId }: { archetypeId: string }) => {
-  const t = useTranslations('deleteArchetypeButton');
+const DeleteDeckButton = ({ deckId }: { deckId: string }) => {
+  const t = useTranslations('deleteDeckButton');
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,7 +18,7 @@ const DeleteArchetypeButton = ({ archetypeId }: { archetypeId: string }) => {
     setIsDeleting(true);
     setError(null);
 
-    const result = await deleteArchetype(archetypeId);
+    const result = await deleteDeck(deckId);
 
     if (result && !result.success) {
       setError(result.error);
@@ -36,4 +36,4 @@ const DeleteArchetypeButton = ({ archetypeId }: { archetypeId: string }) => {
   );
 };
 
-export default DeleteArchetypeButton;
+export default DeleteDeckButton;
