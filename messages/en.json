@@ -44,7 +44,7 @@
   "events": {
     "title": "Events",
     "createEvent": "Create Event",
-    "record": "{wins}W – {losses}L – {ties}T",
+    "record": "{wins}W–{losses}L–{ties}T",
     "noEvents": "No events yet"
   },
   "createEvent": {
@@ -72,11 +72,11 @@
     "addMatch": "Add Match",
     "editMatch": "Edit",
     "noMatches": "No matches yet — add one to get started",
-    "gameRecord": "{wins}W – {losses}L",
+    "gameRecord": "{wins}W–{losses}L",
     "matchesSection": "Matches",
     "notesSection": "Notes",
     "dangerZone": "Danger Zone",
-    "matchRecord": "{wins}W – {losses}L – {ties}T"
+    "matchRecord": "{wins}W–{losses}L–{ties}T"
   },
   "matchForm": {
     "opponentArchetype": "Opponent Archetype *",
@@ -161,8 +161,8 @@
     "edit": "Edit",
     "editTitle": "Edit Opponent Archetype",
     "noMatches": "No matches yet",
-    "record": "{wins}W – {losses}L",
-    "overallRecord": "{wins}W – {losses}L – {ties}T"
+    "record": "{wins}W–{losses}L",
+    "overallRecord": "{wins}W–{losses}L–{ties}T"
   },
   "deleteOpponentArchetypeButton": {
     "delete": "Delete Opponent Archetype",
