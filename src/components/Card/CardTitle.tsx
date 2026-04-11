@@ -10,10 +10,17 @@ const alignClass = {
 type CardTitleProps = {
   children: React.ReactNode;
   align?: keyof typeof alignClass;
+  className?: string;
 };
 
-const CardTitle = ({ children, align = 'start' }: CardTitleProps) => (
-  <div className={cn(classes.cardTitle, alignClass[align])}>{children}</div>
+const CardTitle = ({
+  children,
+  align = 'start',
+  className,
+}: CardTitleProps) => (
+  <div className={cn(classes.cardTitle, alignClass[align], className)}>
+    {children}
+  </div>
 );
 
 export default CardTitle;
