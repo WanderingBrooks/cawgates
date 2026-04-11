@@ -34,22 +34,25 @@ const SubmitButton = () => {
   );
 };
 
-type EventFormProps = {
-  mode: 'create' | 'edit';
+type CreateEventProps = {
+  mode: 'create';
   username: string;
-  eventId?: string;
-  initialEventData?: EventFormData;
   decks: { id: string; name: string }[];
 };
 
-const EventForm = ({
-  mode,
-  username,
-  eventId,
-  initialEventData,
-  decks,
-}: EventFormProps) => {
+type EditEventProps = {
+  mode: 'edit';
+  username: string;
+  eventId: string;
+  initialEventData: EventFormData;
+};
+
+type EventFormProps = CreateEventProps | EditEventProps;
+
+const EventForm = (props: EventFormProps) => {
   const t = useTranslations('eventForm');
+
+  const { mode, username } = props;
 
   const action = mode === 'create' ? createEvent : updateEvent;
 
@@ -60,12 +63,14 @@ const EventForm = ({
 
   // Inline state management
   const [eventData, setEventData] = useState<EventFormData>(
-    initialEventData || {
-      deckId: '',
-      eventName: '',
-      eventDate: '',
-      notes: '',
-    },
+    props.mode === 'edit'
+      ? props.initialEventData
+      : {
+          deckId: '',
+          eventName: '',
+          eventDate: '',
+          notes: '',
+        },
   );
 
   const handleEventChange = (
@@ -81,17 +86,26 @@ const EventForm = ({
   return (
     <Form action={formAction}>
       <SpaceChildrenVertically>
-        <input type="hidden" name="eventId" value={eventId} />
-
-        <Select
-          required
-          id="deckId"
-          name="deckId"
-          label={t('deckId')}
-          value={eventData.deckId}
-          onChange={handleEventChange}
-          options={decks.map(deck => ({ value: deck.id, label: deck.name }))}
-        />
+        {props.mode === 'edit' && (
+          <>
+            <input type="hidden" name="eventId" value={props.eventId} />
+            <input type="hidden" name="deckId" value={eventData.deckId} />
+          </>
+        )}
+        {props.mode === 'create' && (
+          <Select
+            required
+            id="deckId"
+            name="deckId"
+            label={t('deckId')}
+            value={eventData.deckId}
+            onChange={handleEventChange}
+            options={props.decks.map(deck => ({
+              value: deck.id,
+              label: deck.name,
+            }))}
+          />
+        )}
         <Input
           type="text"
           id="eventName"
@@ -125,7 +139,7 @@ const EventForm = ({
             href={
               mode === 'create'
                 ? `/${username}/events`
-                : `/${username}/events/${eventId}`
+                : `/${username}/events/${props.eventId}`
             }
           >
             <Button variant="secondary">{t('cancel')}</Button>

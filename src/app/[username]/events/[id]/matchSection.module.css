@@ -1,0 +1,10 @@
+.matchList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.matchActions {
+  display: flex;
+  gap: var(--spacing-sm);
+}

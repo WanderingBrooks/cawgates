@@ -97,7 +97,7 @@ const getEvents = async ({ ownerUsername }: { ownerUsername: string }) => {
   const events = await prisma.event.findMany({
     where: { deckId: { in: decks.map(deck => deck.id) } },
     orderBy: { date: 'desc' },
-    include: { matches: true, deck: true },
+    include: { matches: true },
   });
 
   return { isOwner, events };
@@ -126,21 +126,19 @@ const getEventsForSlug = async ({
 
 const getEvent = async ({
   ownerUsername,
-  deckSlug,
   eventId,
 }: {
   ownerUsername: string;
-  deckSlug: string;
   eventId: string;
 }) => {
-  const { deck, isOwner } = await getDeck({
-    ownerUsername,
-    deckSlug,
+  const { isOwner } = await getOwnerByUsername({
+    username: ownerUsername,
   });
 
   const event = await prisma.event.findUnique({
-    where: { id: eventId, deckId: deck.id },
+    where: { id: eventId },
     include: {
+      deck: true,
       matches: {
         orderBy: { createdAt: 'asc' },
         include: { opponentArchetype: true },
@@ -152,7 +150,11 @@ const getEvent = async ({
     notFound();
   }
 
-  return { deck, event, isOwner };
+  if (!isOwner && !event.deck.isPublic) {
+    notFound();
+  }
+
+  return { event, isOwner };
 };
 
 const getOpponentArchetype = async ({

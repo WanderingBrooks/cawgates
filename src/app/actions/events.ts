@@ -14,7 +14,6 @@ const createEvent = async (
   formData: FormData,
 ): Promise<ActionResult> => {
   let eventId: string;
-  let deckSlug: string;
   let username: string;
 
   try {
@@ -65,7 +64,6 @@ const createEvent = async (
     });
 
     eventId = event.id;
-    deckSlug = deck.slug;
     username = user.username;
   } catch (error) {
     console.error('Failed to create event:', error);
@@ -76,7 +74,7 @@ const createEvent = async (
     };
   }
 
-  redirect(`/${username}/${deckSlug}/events/${eventId}`);
+  redirect(`/${username}/events/${eventId}`);
 };
 
 const updateEvent = async (
@@ -84,7 +82,6 @@ const updateEvent = async (
   formData: FormData,
 ): Promise<ActionResult> => {
   let eventId: string;
-  let deckSlug: string;
   let username: string;
 
   try {
@@ -144,7 +141,6 @@ const updateEvent = async (
     });
 
     eventId = validated.eventId;
-    deckSlug = existingEvent.deck.slug;
     username = user.username;
   } catch (error) {
     console.error('Failed to update event:', error);
@@ -155,7 +151,7 @@ const updateEvent = async (
     };
   }
 
-  redirect(`/${username}/${deckSlug}/events/${eventId}`);
+  redirect(`/${username}/events/${eventId}`);
 };
 
 /**

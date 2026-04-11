@@ -61,9 +61,7 @@ const EventsPage = async ({
               return (
                 <Card key={event.id}>
                   <CardTitle align="start">
-                    <Link
-                      href={`/${username}/${event.deck.slug}/events/${event.id}`}
-                    >
+                    <Link href={`/${username}/events/${event.id}`}>
                       {event.name}
                     </Link>
                     <div className={classes.eventMeta}>
