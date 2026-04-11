@@ -2,9 +2,9 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { getUser } from '@/lib/session';
 import { PageTitle } from '@/components';
-import ArchetypeForm from '../ArchetypeForm';
+import DeckForm from '../DeckForm';
 
-const CreateArchetypePage = async ({
+const CreateDeckPage = async ({
   params,
 }: {
   params: Promise<{ username: string }>;
@@ -15,14 +15,14 @@ const CreateArchetypePage = async ({
     notFound();
   }
 
-  const t = await getTranslations('createArchetype');
+  const t = await getTranslations('createDeck');
 
   return (
     <>
       <PageTitle title={t('title')} />
-      <ArchetypeForm mode="create" username={username} />
+      <DeckForm mode="create" username={username} />
     </>
   );
 };
 
-export default CreateArchetypePage;
+export default CreateDeckPage;

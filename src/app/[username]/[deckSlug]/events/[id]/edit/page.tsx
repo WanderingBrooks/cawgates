@@ -8,14 +8,14 @@ import { getEvent } from '@/lib/dal';
 const EditEventPage = async ({
   params,
 }: {
-  params: Promise<{ username: string; archetypeSlug: string; id: string }>;
+  params: Promise<{ username: string; deckSlug: string; id: string }>;
 }) => {
-  const { username, archetypeSlug, id } = await params;
+  const { username, deckSlug, id } = await params;
   const t = await getTranslations('editEvent');
 
-  const { archetype, event, isOwner } = await getEvent({
+  const { deck, event, isOwner } = await getEvent({
     ownerUsername: username,
-    archetypeSlug,
+    deckSlug,
     eventId: id,
   });
 
@@ -31,12 +31,12 @@ const EditEventPage = async ({
 
   return (
     <>
-      <PageTitle title={t('title')} subtitle={archetype.name} />
+      <PageTitle title={t('title')} subtitle={deck.name} />
       <EventForm
         mode="edit"
         username={username}
-        archetypeId={archetype.id}
-        archetypeSlug={archetype.slug}
+        deckId={deck.id}
+        deckSlug={deck.slug}
         eventId={id}
         initialEventData={initialEventData}
       />

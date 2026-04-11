@@ -1,18 +1,18 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { PageTitle } from '@/components';
-import { getArchetype } from '@/lib/dal';
+import { getDeck } from '@/lib/dal';
 import EventForm from '../EventForm';
 
 const CreateEventPage = async ({
   params,
 }: {
-  params: Promise<{ username: string; archetypeSlug: string }>;
+  params: Promise<{ username: string; deckSlug: string }>;
 }) => {
   const t = await getTranslations('createEvent');
-  const { username, archetypeSlug } = await params;
+  const { username, deckSlug } = await params;
 
-  const { archetype, isOwner } = await getArchetype({ ownerUsername: username, archetypeSlug });
+  const { deck, isOwner } = await getDeck({ ownerUsername: username, deckSlug });
 
   if (!isOwner) {
     notFound();
@@ -20,12 +20,12 @@ const CreateEventPage = async ({
 
   return (
     <>
-      <PageTitle title={t('title')} subtitle={archetype.name} />
+      <PageTitle title={t('title')} subtitle={deck.name} />
       <EventForm
         mode="create"
         username={username}
-        archetypeId={archetype.id}
-        archetypeSlug={archetype.slug}
+        deckId={deck.id}
+        deckSlug={deck.slug}
       />
     </>
   );

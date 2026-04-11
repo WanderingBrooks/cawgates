@@ -28,7 +28,7 @@ const SubmitButton = () => {
 
 type MatchFormProps = {
   mode: 'create' | 'edit';
-  archetypeId: string;
+  deckId: string;
   eventId: string;
   matchId?: string;
   initialMatchData?: MatchInputForm;
@@ -38,7 +38,7 @@ type MatchFormProps = {
 
 const MatchForm = ({
   mode,
-  archetypeId,
+  deckId,
   eventId,
   matchId,
   initialMatchData,
@@ -95,7 +95,7 @@ const MatchForm = ({
         {matchId && <input type="hidden" name="matchId" value={matchId} />}
 
         <OpponentArchetypeSelect
-          archetypeId={archetypeId}
+          deckId={deckId}
           id="opponentArchetypeId"
           name="opponentArchetypeId"
           label={t('opponentArchetype')}

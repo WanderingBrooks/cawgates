@@ -14,7 +14,7 @@ type OpponentArchetypeOption = {
 };
 
 type OpponentArchetypeSelectProps = {
-  archetypeId: string;
+  deckId: string;
   label?: string;
   id?: string;
   name: string;
@@ -26,7 +26,7 @@ type OpponentArchetypeSelectProps = {
 const ADD_NEW_VALUE = '__ADD_NEW__';
 
 const OpponentArchetypeSelect = ({
-  archetypeId,
+  deckId,
   label,
   id,
   name,
@@ -43,14 +43,14 @@ const OpponentArchetypeSelect = ({
 
   useEffect(() => {
     const loadOptions = async () => {
-      const data = await getOpponentArchetypesForArchetype({ archetypeId });
+      const data = await getOpponentArchetypesForArchetype({ deckId });
 
       setOptions(data.map(o => ({ id: o.id, name: o.name })));
       setIsLoading(false);
     };
 
     loadOptions();
-  }, [archetypeId]);
+  }, [deckId]);
 
   const selectedOption = options.find(o => o.id === value) ?? null;
 
@@ -135,7 +135,7 @@ const OpponentArchetypeSelect = ({
       <Dialog isOpen={isCreateOpen} title={t('createTitle')} usePortal>
         <OpponentArchetypeForm
           mode="create"
-          archetypeId={archetypeId}
+          deckId={deckId}
           onSuccess={handleCreateSuccess}
           onCancel={() => setIsCreateOpen(false)}
         />
@@ -145,7 +145,7 @@ const OpponentArchetypeSelect = ({
         <Dialog isOpen={isEditOpen} title={t('editTitle')} usePortal>
           <OpponentArchetypeForm
             mode="edit"
-            archetypeId={archetypeId}
+            deckId={deckId}
             opponentArchetypeId={selectedOption.id}
             initialName={selectedOption.name}
             onSuccess={handleEditSuccess}

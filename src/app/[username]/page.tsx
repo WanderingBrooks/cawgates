@@ -1,18 +1,18 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { getArchetypesForOwner } from '@/lib/dal';
+import { getDecksForOwner } from '@/lib/dal';
 import { Button, Card, CardTitle, PageTitle } from '@/components';
-import classes from './archetypes.module.css';
+import classes from './decks.module.css';
 
-const ArchetypesPage = async ({
+const DecksPage = async ({
   params,
 }: {
   params: Promise<{ username: string }>;
 }) => {
   const { username } = await params;
-  const t = await getTranslations('archetypes');
+  const t = await getTranslations('decks');
 
-  const { archetypes, isOwner } = await getArchetypesForOwner({ ownerUsername: username });
+  const { decks, isOwner } = await getDecksForOwner({ ownerUsername: username });
 
   return (
     <>
@@ -20,21 +20,21 @@ const ArchetypesPage = async ({
       {isOwner && (
         <div className={classes.rightAlignedButton}>
           <Link href={`/${username}/create`}>
-            <Button variant="primary">{t('createArchetype')}</Button>
+            <Button variant="primary">{t('createDeck')}</Button>
           </Link>
         </div>
       )}
 
-      {archetypes.length === 0 ? (
-        <p>{t('noArchetypes')}</p>
+      {decks.length === 0 ? (
+        <p>{t('noDecks')}</p>
       ) : (
-        archetypes.map(archetype => (
-          <Card key={archetype.id}>
+        decks.map(deck => (
+          <Card key={deck.id}>
             <CardTitle>
-              <Link href={`/${username}/${archetype.slug}`}>
-                {archetype.name}
+              <Link href={`/${username}/${deck.slug}`}>
+                {deck.name}
               </Link>
-              <span>{t('eventCount', { count: archetype._count.events })}</span>
+              <span>{t('eventCount', { count: deck._count.events })}</span>
             </CardTitle>
           </Card>
         ))
@@ -43,4 +43,4 @@ const ArchetypesPage = async ({
   );
 };
 
-export default ArchetypesPage;
+export default DecksPage;

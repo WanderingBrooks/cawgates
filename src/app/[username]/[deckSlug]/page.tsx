@@ -1,29 +1,29 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { PageTitle, Button } from '@/components';
-import { getArchetype } from '@/lib/dal';
+import { getDeck } from '@/lib/dal';
 import getMatchStatistics from './getMatchStatistics';
-import classes from './archetype.module.css';
+import classes from './deck.module.css';
 
-const ArchetypePage = async ({
+const DeckPage = async ({
   params,
 }: {
-  params: Promise<{ username: string; archetypeSlug: string }>;
+  params: Promise<{ username: string; deckSlug: string }>;
 }) => {
-  const { username, archetypeSlug } = await params;
-  const t = await getTranslations('archetypePage');
+  const { username, deckSlug } = await params;
+  const t = await getTranslations('deckPage');
 
-  const { archetype } = await getArchetype({ ownerUsername: username, archetypeSlug });
+  const { deck } = await getDeck({ ownerUsername: username, deckSlug });
 
   const matchStatistics = await getMatchStatistics({
-    archetypeId: archetype.id,
+    deckId: deck.id,
   });
 
   return (
     <>
-      <PageTitle title={t('title')} subtitle={archetype.name} />
+      <PageTitle title={t('title')} subtitle={deck.name} />
       <div className={classes.rightAlignedButton}>
-        <Link href={`/${username}/${archetype.slug}/events`}>
+        <Link href={`/${username}/${deck.slug}/events`}>
           <Button variant="primary">{t('viewEvents')}</Button>
         </Link>
       </div>
@@ -33,7 +33,7 @@ const ArchetypePage = async ({
         <table>
           <thead>
             <tr>
-              <th>{t('archetype')}</th>
+              <th>{t('opponentArchetype')}</th>
               <th>{t('matchRecord')}</th>
               <th>{t('gameRecord')}</th>
               <th>{t('gameWinPct')}</th>
@@ -44,7 +44,7 @@ const ArchetypePage = async ({
               <tr key={row.opponentArchetypeId}>
                 <td>
                   <Link
-                    href={`/${username}/${archetypeSlug}/opponents/${row.opponentArchetypeId}`}
+                    href={`/${username}/${deckSlug}/opponents/${row.opponentArchetypeId}`}
                   >
                     {row.opponentArchetype}
                   </Link>
@@ -61,4 +61,4 @@ const ArchetypePage = async ({
   );
 };
 
-export default ArchetypePage;
+export default DeckPage;

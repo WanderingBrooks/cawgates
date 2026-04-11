@@ -42,10 +42,10 @@ const createMatch = async (
 
     const event = await prisma.event.findUnique({
       where: { id: validated.eventId },
-      include: { archetype: true },
+      include: { deck: true },
     });
 
-    if (!event || event.archetype.userId !== user.userId) {
+    if (!event || event.deck.userId !== user.userId) {
       return { success: false, error: 'Event not found' };
     }
 
@@ -60,7 +60,7 @@ const createMatch = async (
     });
 
     revalidatePath(
-      `/${user.username}/${event.archetype.slug}/events/${validated.eventId}`,
+      `/${user.username}/${event.deck.slug}/events/${validated.eventId}`,
     );
 
     return { success: true };
@@ -114,12 +114,12 @@ const updateMatch = async (
       where: { id: validated.matchId },
       include: {
         event: {
-          include: { archetype: true },
+          include: { deck: true },
         },
       },
     });
 
-    if (!match || match.event.archetype.userId !== user.userId) {
+    if (!match || match.event.deck.userId !== user.userId) {
       return { success: false, error: 'Match not found' };
     }
 
@@ -134,7 +134,7 @@ const updateMatch = async (
     });
 
     revalidatePath(
-      `/${user.username}/${match.event.archetype.slug}/events/${match.eventId}`,
+      `/${user.username}/${match.event.deck.slug}/events/${match.eventId}`,
     );
 
     return { success: true };
@@ -163,19 +163,19 @@ const deleteMatch = async (matchId: string): Promise<ActionResult> => {
       where: { id: matchId },
       include: {
         event: {
-          include: { archetype: true },
+          include: { deck: true },
         },
       },
     });
 
-    if (!match || match.event.archetype.userId !== user.userId) {
+    if (!match || match.event.deck.userId !== user.userId) {
       return { success: false, error: 'Match not found' };
     }
 
     await prisma.match.delete({ where: { id: matchId } });
 
     revalidatePath(
-      `/${user.username}/${match.event.archetype.slug}/events/${match.eventId}`,
+      `/${user.username}/${match.event.deck.slug}/events/${match.eventId}`,
     );
 
     return { success: true };

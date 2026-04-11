@@ -3,7 +3,7 @@
 import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
-import { createArchetype, updateArchetype } from '@/app/actions/archetypes';
+import { createDeck, updateDeck } from '@/app/actions/decks';
 import { type ActionResult } from '@/lib/types';
 import {
   Button,
@@ -14,13 +14,13 @@ import {
   FlexRowBetween,
 } from '@/components';
 import Link from 'next/link';
-import DeleteArchetypeButton from './DeleteArchetypeButton';
-import classes from './archetypeForm.module.css';
+import DeleteDeckButton from './DeleteDeckButton';
+import classes from './deckForm.module.css';
 import { slugify } from '@/lib/utils';
 
 const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();
-  const t = useTranslations('archetypeForm');
+  const t = useTranslations('deckForm');
 
   let label = mode === 'create' ? t('create') : t('save');
 
@@ -35,23 +35,23 @@ const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   );
 };
 
-type ArchetypeFormProps =
+type DeckFormProps =
   | { mode: 'create'; username: string }
   | {
       mode: 'edit';
       username: string;
-      archetypeId: string;
-      archetypeSlug: string;
-      initialArchetypeData: {
+      deckId: string;
+      deckSlug: string;
+      initialDeckData: {
         name: string;
         slug: string;
         isPublic: boolean;
       };
     };
 
-const ArchetypeForm = (props: ArchetypeFormProps) => {
-  const t = useTranslations('archetypeForm');
-  const action = props.mode === 'create' ? createArchetype : updateArchetype;
+const DeckForm = (props: DeckFormProps) => {
+  const t = useTranslations('deckForm');
+  const action = props.mode === 'create' ? createDeck : updateDeck;
 
   const [state, formAction] = useActionState<ActionResult | null, FormData>(
     action,
@@ -59,15 +59,15 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
   );
 
   const [name, setName] = useState(
-    props.mode === 'edit' ? props.initialArchetypeData.name : '',
+    props.mode === 'edit' ? props.initialDeckData.name : '',
   );
 
   const [slug, setSlug] = useState(
-    props.mode === 'edit' ? props.initialArchetypeData.slug : '',
+    props.mode === 'edit' ? props.initialDeckData.slug : '',
   );
 
   const [isPublic, setIsPublic] = useState(
-    props.mode === 'edit' ? props.initialArchetypeData.isPublic : false,
+    props.mode === 'edit' ? props.initialDeckData.isPublic : false,
   );
 
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
@@ -75,7 +75,7 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
   const cancelHref =
     props.mode === 'create'
       ? `/${props.username}`
-      : `/${props.username}/${props.archetypeSlug}`;
+      : `/${props.username}/${props.deckSlug}`;
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -94,7 +94,7 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
     <Form action={formAction}>
       <SpaceChildrenVertically>
         {props.mode === 'edit' && (
-          <input type="hidden" name="archetypeId" value={props.archetypeId} />
+          <input type="hidden" name="deckId" value={props.deckId} />
         )}
         <Input
           type="text"
@@ -127,7 +127,7 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
         <FlexRowBetween className={classes.actionRow}>
           {props.mode === 'edit' ? (
             <>
-              <DeleteArchetypeButton archetypeId={props.archetypeId} />
+              <DeleteDeckButton deckId={props.deckId} />
               <div className={classes.rightButtons}>
                 <Link href={cancelHref}>
                   <Button variant="secondary">{t('cancel')}</Button>
@@ -149,4 +149,4 @@ const ArchetypeForm = (props: ArchetypeFormProps) => {
   );
 };
 
-export default ArchetypeForm;
+export default DeckForm;

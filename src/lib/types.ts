@@ -13,7 +13,7 @@ const matchSchema = z.object({
 
 // Schema for creating an event
 const createEventSchema = z.object({
-  archetypeId: z.string().min(1, 'Archetype ID is required'),
+  deckId: z.string().min(1, 'Deck ID is required'),
   eventName: z.string().min(1, 'Event name is required').trim(),
   eventDate: z.string().min(1, 'Event date is required'),
   notes: z.string().optional().default(''),
@@ -97,9 +97,9 @@ const slugSchema = z
     'This value is reserved and cannot be used',
   );
 
-// Schema for creating a user archetype (the user's own deck)
-const createArchetypeSchema = z.object({
-  name: z.string().min(1, 'Archetype name is required').trim(),
+// Schema for creating a deck
+const createDeckSchema = z.object({
+  name: z.string().min(1, 'Deck name is required').trim(),
   isPublic: z
     .literal('on')
     .optional()
@@ -111,7 +111,7 @@ const createArchetypeSchema = z.object({
 });
 
 // Exported type inferred from Zod schema
-export type CreateArchetypeInput = z.infer<typeof createArchetypeSchema>;
+export type CreateDeckInput = z.infer<typeof createDeckSchema>;
 
 // Schema for user registration
 const registerUserSchema = z
@@ -142,7 +142,7 @@ export {
   updateEventSchema,
   createMatchSchema,
   updateMatchSchema,
-  createArchetypeSchema,
+  createDeckSchema,
   createOpponentArchetypeSchema,
   registerUserSchema,
   loginSchema,
