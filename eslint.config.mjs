@@ -45,7 +45,7 @@ const eslintConfig = defineConfig([
           message:
             'Use the custom <Form> component from @/components instead of <form> to get automatic unsaved changes protection.',
         },
-        // Archetypes have a compound unique index on (userId, slug). When querying
+        // Decks have a compound unique index on (userId, slug). When querying
         // by slug you must always include userId to avoid cross-user data leaks.
         // prisma.deck.findUnique with the userId_slug key already enforces
         // this at the TypeScript level. findFirst/findFirstOrThrow bypass that
