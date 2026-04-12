@@ -100,7 +100,7 @@ const getEvents = async ({ ownerUsername }: { ownerUsername: string }) => {
     include: { matches: true, deck: true },
   });
 
-  return { isOwner, events };
+  return { isOwner, events, hasDecks: decks.length > 0 };
 };
 
 const getEvent = async ({

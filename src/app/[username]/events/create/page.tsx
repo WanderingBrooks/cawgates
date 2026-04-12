@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { PageTitle } from '@/components';
+import Link from 'next/link';
+import { Button, PageTitle } from '@/components';
 import { getDecksForOwner } from '@/lib/dal';
 import EventForm from '../EventForm';
 
@@ -18,6 +19,20 @@ const CreateEventPage = async ({
 
   if (!isOwner) {
     notFound();
+  }
+
+  // If the user doesn't have any decks yet they cannot create an event
+  // Render info text and a button redirecting them to create a deck first.
+  if (decks.length === 0) {
+    return (
+      <>
+        <PageTitle title={t('title')} />
+        <p>{t('noDecksHint')}</p>
+        <Link href={`/${username}/decks/create`}>
+          <Button variant="primary">{t('createDeck')}</Button>
+        </Link>
+      </>
+    );
   }
 
   return (

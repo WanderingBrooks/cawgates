@@ -20,7 +20,7 @@ const EventsPage = async ({
   const formatter = await getFormatter();
   const { username } = await params;
 
-  const { events, isOwner } = await getEvents({
+  const { events, isOwner, hasDecks } = await getEvents({
     ownerUsername: username,
   });
 
@@ -28,17 +28,25 @@ const EventsPage = async ({
     <>
       <PageTitle title={t('title')} />
       <SpaceChildrenVertically>
-        {isOwner && (
-          <div className={classes.rightAlignedButton}>
-            <Link href={`/${username}/events/create`}>
-              <Button variant="primary">{t('createEvent')}</Button>
-            </Link>
-          </div>
-        )}
+        {isOwner &&
+          (hasDecks ? (
+            <div className={classes.rightAlignedButton}>
+              <Link href={`/${username}/events/create`}>
+                <Button variant="primary">{t('createEvent')}</Button>
+              </Link>
+            </div>
+          ) : (
+            <>
+              <p>{t('noDecksHint')}</p>
+              <Link href={`/${username}/decks/create`}>
+                <Button variant="primary">{t('createDeck')}</Button>
+              </Link>
+            </>
+          ))}
 
-        {events.length === 0 ? (
-          <p>{t('noEvents')}</p>
-        ) : (
+        {events.length === 0 && hasDecks && <p>{t('noEvents')}</p>}
+
+        {events.length > 0 && (
           <SpaceChildrenVertically>
             {events.map(event => {
               const record = event.matches.reduce(

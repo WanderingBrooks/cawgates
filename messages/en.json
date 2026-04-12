@@ -7,7 +7,8 @@
     "eventCount": "{count, plural, one {# event} other {# events}}"
   },
   "createDeck": {
-    "title": "Create deck"
+    "title": "Create deck",
+    "firstDeckSubtitle": "Create your first deck to start tracking events"
   },
   "deckPage": {
     "title": "Record",
@@ -41,11 +42,15 @@
     "title": "Events",
     "createEvent": "Create event",
     "record": "{wins}W–{losses}L–{ties}T",
-    "noEvents": "No events yet"
+    "noEvents": "No events yet",
+    "noDecksHint": "You need a deck before you can create an event.",
+    "createDeck": "Create your first deck"
   },
   "createEvent": {
     "title": "Create new event",
-    "viewEvents": "View events"
+    "viewEvents": "View events",
+    "noDecksHint": "You need a deck before you can create an event.",
+    "createEvent": "Create event"
   },
   "editEvent": {
     "title": "Edit event",
