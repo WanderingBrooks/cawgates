@@ -12,14 +12,16 @@ const DecksPage = async ({
   const { username } = await params;
   const t = await getTranslations('decks');
 
-  const { decks, isOwner } = await getDecksForOwner({ ownerUsername: username });
+  const { decks, isOwner } = await getDecksForOwner({
+    ownerUsername: username,
+  });
 
   return (
     <>
       <PageTitle title={isOwner ? t('title') : t('guestTitle', { username })} />
       {isOwner && (
         <div className={classes.rightAlignedButton}>
-          <Link href={`/${username}/create`}>
+          <Link href={`/${username}/decks/create`}>
             <Button variant="primary">{t('createDeck')}</Button>
           </Link>
         </div>
@@ -31,9 +33,7 @@ const DecksPage = async ({
         decks.map(deck => (
           <Card key={deck.id}>
             <CardTitle>
-              <Link href={`/${username}/${deck.slug}`}>
-                {deck.name}
-              </Link>
+              <Link href={`/${username}/${deck.slug}`}>{deck.name}</Link>
               <span>{t('eventCount', { count: deck._count.events })}</span>
             </CardTitle>
           </Card>
