@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
+import { formatDate } from '@/lib/utils';
 import { Button, PageTitle, SectionHeader } from '@/components';
 import { getEvent } from '@/lib/dal';
 import DeleteEventButton from './DeleteEventButton';
@@ -31,7 +32,7 @@ const EventPage = async ({
       <div className={classes.headerRow}>
         <div>
           <p>
-            {formatter.dateTime(new Date(event.date), { dateStyle: 'medium' })}
+            {formatDate({ formatter, date: new Date(event.date) })}
           </p>
           {event.matches.length > 0 && (
             <p className="text-emphasis">

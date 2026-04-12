@@ -62,6 +62,12 @@ const eslintConfig = defineConfig([
           message:
             'Do not use toLocaleDateString() without a locale. Use getFormatter() from next-intl/server with { dateStyle: "medium" } instead.',
         },
+        {
+          selector:
+            'CallExpression[callee.type="MemberExpression"][callee.property.name="dateTime"]',
+          message:
+            'Do not call formatter.dateTime() directly. Use formatDate() from @/lib/utils instead.',
+        },
       ],
       // New line between multi line blocks
       'padding-line-between-statements': [

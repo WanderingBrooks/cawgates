@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
-import { getFormatter } from 'next-intl/server';
+import { getTranslations, getFormatter } from 'next-intl/server';
+import { formatDate } from '@/lib/utils';
 import {
   Card,
   CardTitle,
@@ -77,9 +77,7 @@ const EventsPage = async ({
                     </div>
                     <div className={classes.eventDateAndRecord}>
                       <p>
-                        {formatter.dateTime(new Date(event.date), {
-                          dateStyle: 'medium',
-                        })}
+                        {formatDate({ formatter, date: new Date(event.date) })}
                       </p>
                       <p>{t('record', record)}</p>
                     </div>

@@ -183,6 +183,7 @@
   },
   "notFound": {
     "message": "This page could not be found.",
-    "backToHome": "Bring me to the Decks page"
+    "goToEvents": "Bring me to the Events page",
+    "goToLogin": "Bring me to the Login page"
   }
 }
