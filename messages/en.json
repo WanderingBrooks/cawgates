@@ -62,6 +62,7 @@
   },
   "event": {
     "editEvent": "Edit event",
+    "viewDeck": "View deck",
     "addMatch": "Add match",
     "editMatch": "Edit",
     "noMatches": "No matches yet — add one to get started",

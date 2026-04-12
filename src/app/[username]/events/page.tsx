@@ -61,10 +61,13 @@ const EventsPage = async ({
               return (
                 <Card key={event.id}>
                   <CardTitle align="start">
-                    <Link href={`/${username}/events/${event.id}`}>
-                      {event.name}
-                    </Link>
-                    <div className={classes.eventMeta}>
+                    <div className={classes.eventLinkAndDeckName}>
+                      <Link href={`/${username}/events/${event.id}`}>
+                        {event.name}
+                      </Link>
+                      <p>{event.deck.name}</p>
+                    </div>
+                    <div className={classes.eventDateAndRecord}>
                       <p>
                         {formatter.dateTime(new Date(event.date), {
                           dateStyle: 'medium',
