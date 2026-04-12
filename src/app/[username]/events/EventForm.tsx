@@ -100,10 +100,14 @@ const EventForm = (props: EventFormProps) => {
             label={t('deckId')}
             value={eventData.deckId}
             onChange={handleEventChange}
-            options={props.decks.map(deck => ({
-              value: deck.id,
-              label: deck.name,
-            }))}
+            options={[
+              // Placeholder empty value
+              { value: '', label: '' },
+              ...props.decks.map(deck => ({
+                value: deck.id,
+                label: deck.name,
+              })),
+            ]}
           />
         )}
         <Input
