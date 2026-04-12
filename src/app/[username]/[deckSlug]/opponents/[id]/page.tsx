@@ -70,6 +70,7 @@ const OpponentArchetypePage = async ({
                   <p>
                     {formatter.dateTime(new Date(match.event.date), {
                       dateStyle: 'medium',
+                      year: '2-digit',
                     })}
                   </p>
                 </div>

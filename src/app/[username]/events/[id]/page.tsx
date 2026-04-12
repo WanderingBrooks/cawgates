@@ -31,7 +31,10 @@ const EventPage = async ({
       <div className={classes.headerRow}>
         <div>
           <p>
-            {formatter.dateTime(new Date(event.date), { dateStyle: 'medium' })}
+            {formatter.dateTime(new Date(event.date), {
+              dateStyle: 'medium',
+              year: '2-digit',
+            })}
           </p>
           {event.matches.length > 0 && (
             <p className="text-emphasis">

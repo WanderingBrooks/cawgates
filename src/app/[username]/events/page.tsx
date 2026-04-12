@@ -79,6 +79,7 @@ const EventsPage = async ({
                       <p>
                         {formatter.dateTime(new Date(event.date), {
                           dateStyle: 'medium',
+                          year: '2-digit',
                         })}
                       </p>
                       <p>{t('record', record)}</p>
