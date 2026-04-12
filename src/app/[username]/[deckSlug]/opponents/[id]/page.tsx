@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
+import { formatDate } from '@/lib/utils';
 import Markdown from 'react-markdown';
 import {
   Card,
@@ -68,9 +69,9 @@ const OpponentArchetypePage = async ({
                     {match.event.name}
                   </Link>
                   <p>
-                    {formatter.dateTime(new Date(match.event.date), {
-                      dateStyle: 'medium',
-                      year: '2-digit',
+                    {formatDate({
+                      formatter,
+                      date: new Date(match.event.date),
                     })}
                   </p>
                 </div>
