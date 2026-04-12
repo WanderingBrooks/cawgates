@@ -67,7 +67,7 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
                 href={`/${viewerUsername}/decks`}
                 className={cn(
                   classes.item,
-                  pathname === `/${viewerUsername}` && classes.itemActive,
+                  pathname === `/${viewerUsername}/decks` && classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}
               >
@@ -92,7 +92,7 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
                 href={`/${username}/decks`}
                 className={cn(
                   classes.item,
-                  pathname === `/${username}` && classes.itemActive,
+                  pathname === `/${username}/decks` && classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}
               >
