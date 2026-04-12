@@ -2,3 +2,9 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.eventMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}

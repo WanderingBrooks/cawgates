@@ -65,12 +65,12 @@ const EventsPage = async ({
                       {event.name}
                     </Link>
                     <div className={classes.eventMeta}>
-                      <p className={classes.eventDate}>
+                      <p>
                         {formatter.dateTime(new Date(event.date), {
                           dateStyle: 'medium',
                         })}
                       </p>
-                      <p className={classes.record}>{t('record', record)}</p>
+                      <p>{t('record', record)}</p>
                     </div>
                   </CardTitle>
                 </Card>
