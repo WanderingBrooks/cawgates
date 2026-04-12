@@ -64,16 +64,6 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
           {viewerUsername !== null && (
             <>
               <Link
-                href={`/${viewerUsername}/decks`}
-                className={cn(
-                  classes.item,
-                  pathname === `/${viewerUsername}/decks` && classes.itemActive,
-                )}
-                onClick={() => setOpen(false)}
-              >
-                {t('myDecks')}
-              </Link>
-              <Link
                 href={`/${viewerUsername}/events`}
                 className={cn(
                   classes.item,
@@ -84,20 +74,20 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
               >
                 {t('myEvents')}
               </Link>
+              <Link
+                href={`/${viewerUsername}/decks`}
+                className={cn(
+                  classes.item,
+                  pathname === `/${viewerUsername}/decks` && classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('myDecks')}
+              </Link>
             </>
           )}
           {!isOwner && (
             <>
-              <Link
-                href={`/${username}/decks`}
-                className={cn(
-                  classes.item,
-                  pathname === `/${username}/decks` && classes.itemActive,
-                )}
-                onClick={() => setOpen(false)}
-              >
-                {t('decks', { username })}
-              </Link>
               <Link
                 href={`/${username}/events`}
                 className={cn(
@@ -107,6 +97,16 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
                 onClick={() => setOpen(false)}
               >
                 {t('events', { username })}
+              </Link>
+              <Link
+                href={`/${username}/decks`}
+                className={cn(
+                  classes.item,
+                  pathname === `/${username}/decks` && classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('decks', { username })}
               </Link>
             </>
           )}
