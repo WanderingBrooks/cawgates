@@ -10,16 +10,15 @@ import classes from './eventPage.module.css';
 const EventPage = async ({
   params,
 }: {
-  params: Promise<{ username: string; deckSlug: string; id: string }>;
+  params: Promise<{ username: string; id: string }>;
 }) => {
-  const { username, deckSlug, id } = await params;
+  const { username, id } = await params;
   const t = await getTranslations('event');
   const formatter = await getFormatter();
 
-  const { deck, event, isOwner } = await getEvent({
-    ownerUsername: username,
-    deckSlug,
+  const { event, isOwner } = await getEvent({
     eventId: id,
+    ownerUsername: username,
   });
 
   const matchWins = event.matches.filter(m => m.wins > m.losses).length;
@@ -28,10 +27,10 @@ const EventPage = async ({
 
   return (
     <>
-      <PageTitle title={event.name} subtitle={deck.name} />
+      <PageTitle title={event.name} subtitle={event.deck.name} />
       <div className={classes.headerRow}>
         <div>
-          <p className={classes.meta}>
+          <p>
             {formatter.dateTime(new Date(event.date), { dateStyle: 'medium' })}
           </p>
           {event.matches.length > 0 && (
@@ -44,11 +43,16 @@ const EventPage = async ({
             </p>
           )}
         </div>
-        {isOwner && (
-          <Link href={`/${username}/${deck.slug}/events/${id}/edit`}>
-            <Button variant="primary">{t('editEvent')}</Button>
+        <div className={classes.rightButtons}>
+          {isOwner && (
+            <Link href={`/${username}/events/${id}/edit`}>
+              <Button variant="primary">{t('editEvent')}</Button>
+            </Link>
+          )}
+          <Link href={`/${username}/${event.deck.slug}`}>
+            <Button variant="secondary">{t('viewDeck')}</Button>
           </Link>
-        )}
+        </div>
       </div>
       {event.notes && (
         <>
@@ -60,10 +64,10 @@ const EventPage = async ({
       <MatchSection
         matches={event.matches}
         eventId={id}
-        deckId={deck.id}
+        deckId={event.deckId}
         isOwner={isOwner}
         username={username}
-        deckSlug={deck.slug}
+        deckSlug={event.deck.slug}
       />
       {isOwner && (
         <>

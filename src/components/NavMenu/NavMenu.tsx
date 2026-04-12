@@ -12,10 +12,9 @@ import { useViewer } from './ViewerContext';
 
 type NavMenuProps = {
   disabled?: boolean;
-  deckName?: string;
 };
 
-const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
+const NavMenu = ({ disabled = false }: NavMenuProps) => {
   const t = useTranslations('navMenu');
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -24,11 +23,6 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
 
   const segments = pathname.split('/').filter(Boolean);
   const username = segments[0];
-
-  const potentialSlug = segments.length > 1 ? segments[1] : undefined;
-
-  const deckSlug =
-    potentialSlug && potentialSlug !== 'create' ? potentialSlug : undefined;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -59,84 +53,53 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
       {open && (
         <div className={classes.dropdown}>
           {viewerUsername !== null && (
-            <Link
-              href={`/${viewerUsername}`}
-              className={cn(
-                classes.item,
-                pathname === `/${viewerUsername}` && classes.itemActive,
-              )}
-              onClick={() => setOpen(false)}
-            >
-              {t('myDecks')}
-            </Link>
-          )}
-          {!isOwner && (
-            <Link
-              href={`/${username}`}
-              className={cn(
-                classes.item,
-                pathname === `/${username}` && classes.itemActive,
-              )}
-              onClick={() => setOpen(false)}
-            >
-              {t('decks', { username })}
-            </Link>
-          )}
-
-          {(viewerUsername !== null || !isOwner) && (
-            <div className={classes.divider} />
-          )}
-          {deckName && <span className={classes.groupLabel}>{deckName}</span>}
-          {deckSlug ? (
             <>
               <Link
-                href={`/${username}/${deckSlug}`}
+                href={`/${viewerUsername}/events`}
                 className={cn(
                   classes.item,
-                  pathname === `/${username}/${deckSlug}` && classes.itemActive,
-                )}
-                onClick={() => setOpen(false)}
-              >
-                {t('record')}
-              </Link>
-              <Link
-                href={`/${username}/${deckSlug}/events`}
-                className={cn(
-                  classes.item,
-                  pathname.startsWith(`/${username}/${deckSlug}/events`) &&
+                  pathname === `/${viewerUsername}/events` &&
                     classes.itemActive,
                 )}
                 onClick={() => setOpen(false)}
               >
-                {t('events')}
+                {t('myEvents')}
               </Link>
-              {isOwner && (
-                <Link
-                  href={`/${username}/${deckSlug}/edit`}
-                  className={cn(
-                    classes.item,
-                    pathname.startsWith(`/${username}/${deckSlug}/edit`) &&
-                      classes.itemActive,
-                  )}
-                  onClick={() => setOpen(false)}
-                >
-                  {t('edit')}
-                </Link>
-              )}
+              <Link
+                href={`/${viewerUsername}/decks`}
+                className={cn(
+                  classes.item,
+                  pathname === `/${viewerUsername}/decks` && classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('myDecks')}
+              </Link>
             </>
-          ) : (
+          )}
+          {!isOwner && (
             <>
-              <span className={cn(classes.item, classes.itemDisabled)}>
-                {t('record')}
-              </span>
-              <span className={cn(classes.item, classes.itemDisabled)}>
-                {t('events')}
-              </span>
-              {isOwner && (
-                <span className={cn(classes.item, classes.itemDisabled)}>
-                  {t('edit')}
-                </span>
-              )}
+              <div className={classes.divider} />
+              <Link
+                href={`/${username}/events`}
+                className={cn(
+                  classes.item,
+                  pathname === `/${username}/events` && classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('events', { username })}
+              </Link>
+              <Link
+                href={`/${username}/decks`}
+                className={cn(
+                  classes.item,
+                  pathname === `/${username}/decks` && classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('decks', { username })}
+              </Link>
             </>
           )}
           {isLoggedIn && (

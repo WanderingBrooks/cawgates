@@ -1,0 +1,16 @@
+.rightAlignedButton {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.eventDateAndRecord {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.eventLinkAndDeckName {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}

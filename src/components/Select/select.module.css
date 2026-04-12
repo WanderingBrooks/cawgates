@@ -1,17 +1,13 @@
-.inputContainer {
+.selectContainer {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
 }
 
-.input {
+.select {
   padding: var(--spacing-sm) var(--spacing-md);
   background-color: var(--color-input-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   color: var(--color-text);
-}
-
-.input[type='checkbox'] {
-  align-self: flex-start;
 }

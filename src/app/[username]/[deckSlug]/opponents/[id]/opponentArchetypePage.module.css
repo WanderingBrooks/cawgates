@@ -5,6 +5,13 @@
   gap: var(--spacing-md);
 }
 
+.rightButtons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+}
+
 .matchList {
   display: flex;
   flex-direction: column;

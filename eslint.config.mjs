@@ -121,6 +121,24 @@ const eslintConfig = defineConfig([
   },
 
   {
+    files: ['src/components/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/components', '@/components/*'],
+              message:
+                'Components must not import from the barrel (@/components). Use relative imports (e.g. ../Button) to avoid circular dependencies.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
     files: ['**/page.tsx'],
     rules: {
       'no-restricted-imports': [

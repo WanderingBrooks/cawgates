@@ -114,10 +114,7 @@ const updateOpponentArchetype = async (
     include: { deck: true },
   });
 
-  if (
-    !opponentArchetype ||
-    opponentArchetype.deck.userId !== user.userId
-  ) {
+  if (!opponentArchetype || opponentArchetype.deck.userId !== user.userId) {
     return { success: false, error: 'Opponent archetype not found' };
   }
 

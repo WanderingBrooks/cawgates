@@ -13,6 +13,7 @@ import {
   SpaceChildrenVertically,
   FlexRowBetween,
   TextArea,
+  Select,
 } from '@/components';
 import { EventFormData } from '@/lib/types';
 import Link from 'next/link';
@@ -33,24 +34,25 @@ const SubmitButton = () => {
   );
 };
 
-type EventFormProps = {
-  mode: 'create' | 'edit';
+type CreateEventProps = {
+  mode: 'create';
   username: string;
-  deckId: string;
-  deckSlug: string;
-  eventId?: string;
-  initialEventData?: EventFormData;
+  decks: { id: string; name: string }[];
 };
 
-const EventForm = ({
-  mode,
-  username,
-  deckId,
-  deckSlug,
-  eventId,
-  initialEventData,
-}: EventFormProps) => {
+type EditEventProps = {
+  mode: 'edit';
+  username: string;
+  eventId: string;
+  initialEventData: EventFormData;
+};
+
+type EventFormProps = CreateEventProps | EditEventProps;
+
+const EventForm = (props: EventFormProps) => {
   const t = useTranslations('eventForm');
+
+  const { mode, username } = props;
 
   const action = mode === 'create' ? createEvent : updateEvent;
 
@@ -61,26 +63,58 @@ const EventForm = ({
 
   // Inline state management
   const [eventData, setEventData] = useState<EventFormData>(
-    initialEventData || {
-      eventName: '',
-      eventDate: '',
-      notes: '',
-    },
+    props.mode === 'edit'
+      ? props.initialEventData
+      : {
+          deckId: '',
+          eventName: '',
+          eventDate: '',
+          notes: '',
+        },
   );
 
   const handleEventChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value } = e.target;
+
     setEventData(prev => ({ ...prev, [name]: value }));
   };
 
   return (
     <Form action={formAction}>
       <SpaceChildrenVertically>
-        <input type="hidden" name="deckId" value={deckId} />
-        <input type="hidden" name="eventId" value={eventId} />
-
+        {props.mode === 'edit' && (
+          <>
+            <input type="hidden" name="eventId" value={props.eventId} />
+            <input type="hidden" name="deckId" value={eventData.deckId} />
+          </>
+        )}
+        {props.mode === 'create' && (
+          <Select
+            required
+            id="deckId"
+            name="deckId"
+            label={t('deckId')}
+            hint={t.rich('deckIdHint', {
+              link: chunks => (
+                <Link href={`/${username}/decks/create`}>{chunks}</Link>
+              ),
+            })}
+            value={eventData.deckId}
+            onChange={handleEventChange}
+            options={[
+              // Placeholder empty value
+              { value: '', label: '' },
+              ...props.decks.map(deck => ({
+                value: deck.id,
+                label: deck.name,
+              })),
+            ]}
+          />
+        )}
         <Input
           type="text"
           id="eventName"
@@ -113,8 +147,8 @@ const EventForm = ({
           <Link
             href={
               mode === 'create'
-                ? `/${username}/${deckSlug}/events`
-                : `/${username}/${deckSlug}/events/${eventId}`
+                ? `/${username}/events`
+                : `/${username}/events/${props.eventId}`
             }
           >
             <Button variant="secondary">{t('cancel')}</Button>

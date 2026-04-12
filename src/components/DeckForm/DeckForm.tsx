@@ -5,14 +5,12 @@ import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { createDeck, updateDeck } from '@/app/actions/decks';
 import { type ActionResult } from '@/lib/types';
-import {
-  Button,
-  ErrorMessage,
-  Form,
-  Input,
-  SpaceChildrenVertically,
-  FlexRowBetween,
-} from '@/components';
+import Button from '../Button';
+import ErrorMessage from '../ErrorMessage';
+import Form from '../Form';
+import Input from '../Input';
+import SpaceChildrenVertically from '../SpaceChildrenVertically';
+import FlexRowBetween from '../FlexRowBetween';
 import Link from 'next/link';
 import DeleteDeckButton from './DeleteDeckButton';
 import classes from './deckForm.module.css';

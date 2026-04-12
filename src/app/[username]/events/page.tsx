@@ -14,32 +14,39 @@ import classes from './event.module.css';
 const EventsPage = async ({
   params,
 }: {
-  params: Promise<{ username: string; deckSlug: string }>;
+  params: Promise<{ username: string }>;
 }) => {
   const t = await getTranslations('events');
   const formatter = await getFormatter();
-  const { username, deckSlug } = await params;
+  const { username } = await params;
 
-  const { deck, events, isOwner } = await getEvents({
+  const { events, isOwner, hasDecks } = await getEvents({
     ownerUsername: username,
-    deckSlug,
   });
 
   return (
     <>
-      <PageTitle title={t('title')} subtitle={deck.name} />
+      <PageTitle title={t('title')} />
       <SpaceChildrenVertically>
-        {isOwner && (
-          <div className={classes.rightAlignedButton}>
-            <Link href={`/${username}/${deck.slug}/events/create`}>
-              <Button variant="primary">{t('createEvent')}</Button>
-            </Link>
-          </div>
-        )}
+        {isOwner &&
+          (hasDecks ? (
+            <div className={classes.rightAlignedButton}>
+              <Link href={`/${username}/events/create`}>
+                <Button variant="primary">{t('createEvent')}</Button>
+              </Link>
+            </div>
+          ) : (
+            <>
+              <p>{t('noDecksHint')}</p>
+              <Link href={`/${username}/decks/create`}>
+                <Button variant="primary">{t('createDeck')}</Button>
+              </Link>
+            </>
+          ))}
 
-        {events.length === 0 ? (
-          <p>{t('noEvents')}</p>
-        ) : (
+        {events.length === 0 && hasDecks && <p>{t('noEvents')}</p>}
+
+        {events.length > 0 && (
           <SpaceChildrenVertically>
             {events.map(event => {
               const record = event.matches.reduce(
@@ -62,19 +69,19 @@ const EventsPage = async ({
               return (
                 <Card key={event.id}>
                   <CardTitle align="start">
-                    <Link
-                      className={classes.eventName}
-                      href={`/${username}/${deck.slug}/events/${event.id}`}
-                    >
-                      {event.name}
-                    </Link>
-                    <div className={classes.eventMeta}>
-                      <p className={classes.eventDate}>
+                    <div className={classes.eventLinkAndDeckName}>
+                      <Link href={`/${username}/events/${event.id}`}>
+                        {event.name}
+                      </Link>
+                      <p>{event.deck.name}</p>
+                    </div>
+                    <div className={classes.eventDateAndRecord}>
+                      <p>
                         {formatter.dateTime(new Date(event.date), {
                           dateStyle: 'medium',
                         })}
                       </p>
-                      <p className={classes.record}>{t('record', record)}</p>
+                      <p>{t('record', record)}</p>
                     </div>
                   </CardTitle>
                 </Card>

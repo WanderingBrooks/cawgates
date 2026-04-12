@@ -1,4 +1,4 @@
-import SpaceChildrenVertically from '@/components/SpaceChildrenVertically';
+import SpaceChildrenVertically from '../SpaceChildrenVertically';
 import { cn } from '@/lib/utils';
 import classes from './card.module.css';
 

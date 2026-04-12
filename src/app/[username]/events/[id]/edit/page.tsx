@@ -8,15 +8,14 @@ import { getEvent } from '@/lib/dal';
 const EditEventPage = async ({
   params,
 }: {
-  params: Promise<{ username: string; deckSlug: string; id: string }>;
+  params: Promise<{ username: string; id: string }>;
 }) => {
-  const { username, deckSlug, id } = await params;
+  const { username, id } = await params;
   const t = await getTranslations('editEvent');
 
-  const { deck, event, isOwner } = await getEvent({
-    ownerUsername: username,
-    deckSlug,
+  const { event, isOwner } = await getEvent({
     eventId: id,
+    ownerUsername: username,
   });
 
   if (!isOwner) {
@@ -24,6 +23,7 @@ const EditEventPage = async ({
   }
 
   const initialEventData: EventFormData = {
+    deckId: event.deck.id,
     eventName: event.name || '',
     eventDate: event.date.toISOString().split('T')[0],
     notes: event.notes || '',
@@ -31,13 +31,11 @@ const EditEventPage = async ({
 
   return (
     <>
-      <PageTitle title={t('title')} subtitle={deck.name} />
+      <PageTitle title={t('title')} subtitle={event.deck.name} />
       <EventForm
         mode="edit"
-        username={username}
-        deckId={deck.id}
-        deckSlug={deck.slug}
         eventId={id}
+        username={username}
         initialEventData={initialEventData}
       />
     </>

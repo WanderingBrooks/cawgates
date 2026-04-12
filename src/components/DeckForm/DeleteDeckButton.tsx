@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { deleteDeck } from '@/app/actions/decks';
-import { Button, ErrorMessage } from '@/components';
+import Button from '../Button';
+import ErrorMessage from '../ErrorMessage';
 
 const DeleteDeckButton = ({ deckId }: { deckId: string }) => {
   const t = useTranslations('deleteDeckButton');

@@ -17,6 +17,8 @@ const registerUser = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
+  let username: string;
+
   try {
     const data = {
       email: formData.get('email') as string,
@@ -80,6 +82,8 @@ const registerUser = async (
       email: user.email,
       username: user.username,
     });
+
+    username = user.username;
   } catch (error) {
     console.error('Error registering user:', error);
 
@@ -89,7 +93,9 @@ const registerUser = async (
     };
   }
 
-  redirect('/');
+  // Redirect to deck creation after registration.
+  // Get the user setup with what they need.
+  redirect(`/${username}/decks/create`);
 };
 
 export { registerUser };

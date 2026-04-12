@@ -18,14 +18,13 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 
-const getDecksForOwner = async ({
-  ownerUsername,
-}: {
-  ownerUsername: string;
-}) => {
+const getOwnerByUsername = async ({ username }: { username: string }) => {
   const [viewer, owner] = await Promise.all([
     getUser(),
-    prisma.user.findUnique({ where: { username: ownerUsername } }),
+    prisma.user.findUnique({
+      where: { username },
+      select: { id: true },
+    }),
   ]);
 
   if (!owner) {
@@ -33,6 +32,22 @@ const getDecksForOwner = async ({
   }
 
   const isOwner = viewer?.userId === owner.id;
+
+  return { viewer, owner, isOwner };
+};
+
+const getDecksForOwner = async ({
+  ownerUsername,
+}: {
+  ownerUsername: string;
+}) => {
+  const { owner, isOwner } = await getOwnerByUsername({
+    username: ownerUsername,
+  });
+
+  if (!owner) {
+    notFound();
+  }
 
   const decks = await prisma.deck.findMany({
     where: {
@@ -53,10 +68,9 @@ const getDeck = async ({
   ownerUsername: string;
   deckSlug: string;
 }) => {
-  const [viewer, owner] = await Promise.all([
-    getUser(),
-    prisma.user.findUnique({ where: { username: ownerUsername }, select: { id: true } }),
-  ]);
+  const { owner, isOwner } = await getOwnerByUsername({
+    username: ownerUsername,
+  });
 
   if (!owner) {
     notFound();
@@ -70,8 +84,6 @@ const getDeck = async ({
     notFound();
   }
 
-  const isOwner = viewer?.userId === deck.userId;
-
   if (!isOwner && !deck.isPublic) {
     notFound();
   }
@@ -79,44 +91,33 @@ const getDeck = async ({
   return { deck, isOwner };
 };
 
-const getEvents = async ({
-  ownerUsername,
-  deckSlug,
-}: {
-  ownerUsername: string;
-  deckSlug: string;
-}) => {
-  const { deck, isOwner } = await getDeck({
-    ownerUsername,
-    deckSlug,
-  });
+const getEvents = async ({ ownerUsername }: { ownerUsername: string }) => {
+  const { isOwner, decks } = await getDecksForOwner({ ownerUsername });
 
   const events = await prisma.event.findMany({
-    where: { deckId: deck.id },
+    where: { deckId: { in: decks.map(deck => deck.id) } },
     orderBy: { date: 'desc' },
-    include: { matches: true },
+    include: { matches: true, deck: true },
   });
 
-  return { deck, events, isOwner };
+  return { isOwner, events, hasDecks: decks.length > 0 };
 };
 
 const getEvent = async ({
   ownerUsername,
-  deckSlug,
   eventId,
 }: {
   ownerUsername: string;
-  deckSlug: string;
   eventId: string;
 }) => {
-  const { deck, isOwner } = await getDeck({
-    ownerUsername,
-    deckSlug,
+  const { owner, isOwner } = await getOwnerByUsername({
+    username: ownerUsername,
   });
 
   const event = await prisma.event.findUnique({
-    where: { id: eventId, deckId: deck.id },
+    where: { id: eventId },
     include: {
+      deck: true,
       matches: {
         orderBy: { createdAt: 'asc' },
         include: { opponentArchetype: true },
@@ -128,7 +129,18 @@ const getEvent = async ({
     notFound();
   }
 
-  return { deck, event, isOwner };
+  // Verify the event belongs to the profile in the URL. Without this, a logged-in
+  // user could read any event by visiting /{their-own-username}/events/{any-id},
+  // since isOwner would be true for their own username and bypass the public check below.
+  if (event.deck.userId !== owner.id) {
+    notFound();
+  }
+
+  if (!isOwner && !event.deck.isPublic) {
+    notFound();
+  }
+
+  return { event, isOwner };
 };
 
 const getOpponentArchetype = async ({
@@ -160,19 +172,6 @@ const getOpponentArchetype = async ({
   }
 
   return { deck, opponentArchetype, isOwner };
-};
-
-const getOwnerByUsername = async ({ username }: { username: string }) => {
-  const owner = await prisma.user.findUnique({
-    where: { username },
-    select: { id: true },
-  });
-
-  if (!owner) {
-    notFound();
-  }
-
-  return { owner };
 };
 
 export {

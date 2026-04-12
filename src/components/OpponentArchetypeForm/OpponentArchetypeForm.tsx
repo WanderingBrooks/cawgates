@@ -9,14 +9,12 @@ import {
   updateOpponentArchetype,
 } from '@/app/actions/opponentArchetypes';
 import { type ActionResultWithData } from '@/lib/types';
-import {
-  Button,
-  ErrorMessage,
-  Form,
-  Input,
-  SpaceChildrenVertically,
-  FlexRowBetween,
-} from '@/components';
+import Button from '../Button';
+import ErrorMessage from '../ErrorMessage';
+import Form from '../Form';
+import Input from '../Input';
+import SpaceChildrenVertically from '../SpaceChildrenVertically';
+import FlexRowBetween from '../FlexRowBetween';
 
 const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();

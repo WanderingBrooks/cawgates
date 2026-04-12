@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { PageTitle } from '@/components';
 import { getDeck } from '@/lib/dal';
-import DeckForm from '../../DeckForm';
+import { DeckForm } from '@/components';
 
 const EditDeckPage = async ({
   params,

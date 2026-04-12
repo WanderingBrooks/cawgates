@@ -1,7 +1,13 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import Markdown from 'react-markdown';
-import { Card, CardContent, CardTitle, PageTitle, SectionHeader } from '@/components';
+import {
+  Card,
+  CardContent,
+  CardTitle,
+  PageTitle,
+  SectionHeader,
+} from '@/components';
 import { getOpponentArchetype } from '@/lib/dal';
 import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
 import OpponentArchetypeSubHeader from './OpponentArchetypeSubHeader';
@@ -46,6 +52,8 @@ const OpponentArchetypePage = async ({
         matchLosses={matchLosses}
         matchDraws={matchDraws}
         isOwner={isOwner}
+        username={username}
+        deckSlug={deckSlug}
       />
       <SectionHeader>{t('matchesSection')}</SectionHeader>
       {opponentArchetype.matches.length === 0 ? (
@@ -56,12 +64,14 @@ const OpponentArchetypePage = async ({
             <Card key={match.id}>
               <CardTitle>
                 <div>
-                  <Link
-                    href={`/${username}/${deckSlug}/events/${match.event.id}`}
-                  >
+                  <Link href={`/${username}/events/${match.event.id}`}>
                     {match.event.name}
                   </Link>
-                  <p>{formatter.dateTime(new Date(match.event.date), { dateStyle: 'medium' })}</p>
+                  <p>
+                    {formatter.dateTime(new Date(match.event.date), {
+                      dateStyle: 'medium',
+                    })}
+                  </p>
                 </div>
                 <span>
                   {t('record', { wins: match.wins, losses: match.losses })}

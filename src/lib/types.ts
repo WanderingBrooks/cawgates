@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { RESERVED_SLUGS } from './utils';
 
 // Schema for a single match
 const matchSchema = z.object({
@@ -79,11 +80,8 @@ export type ActionResultWithData<T> =
 // Helper type for event form data (event fields only, no matches)
 export type EventFormData = Pick<
   CreateEventInput,
-  'eventName' | 'eventDate' | 'notes'
+  'deckId' | 'eventName' | 'eventDate' | 'notes'
 >;
-
-// Slugs that conflict with static routes
-const RESERVED_SLUGS = ['create', 'login', 'register'];
 
 const slugSchema = z
   .string()

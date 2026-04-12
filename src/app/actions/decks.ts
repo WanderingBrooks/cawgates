@@ -156,7 +156,7 @@ const deleteDeck = async (deckId: string): Promise<ActionResult> => {
 
   await prisma.deck.delete({ where: { id: deckId } });
 
-  redirect(`/${user.username}`);
+  redirect(`/${user.username}/decks`);
 };
 
 export { getUserDecks, createDeck, updateDeck, deleteDeck };
