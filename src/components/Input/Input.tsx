@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
-  hint?: string;
+  hint?: React.ReactNode;
 };
 
 const Input = ({ className = '', label, hint, ...props }: InputProps) => {

@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
   label?: string;
-  hint?: string;
+  hint?: React.ReactNode;
   options: { value: string; label: string }[];
 };
 

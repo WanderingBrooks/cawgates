@@ -58,6 +58,7 @@
   },
   "eventForm": {
     "deckId": "Deck *",
+    "deckIdHint": "Need a new deck? <link>Create one here</link>",
     "eventName": "Event name *",
     "eventDate": "Event date *",
     "notes": "Notes",

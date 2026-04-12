@@ -98,6 +98,11 @@ const EventForm = (props: EventFormProps) => {
             id="deckId"
             name="deckId"
             label={t('deckId')}
+            hint={t.rich('deckIdHint', {
+              link: chunks => (
+                <Link href={`/${username}/decks/create`}>{chunks}</Link>
+              ),
+            })}
             value={eventData.deckId}
             onChange={handleEventChange}
             options={[
