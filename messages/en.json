@@ -177,7 +177,7 @@
   },
   "guestBanner": {
     "viewing": "{username}'s profile.",
-    "backToMyDecks": "Back to my decks",
+    "backToMyEvents": "Back to my events",
     "signUpPrompt": "<login>Login</login> or <register>Register</register> to start tracking your own decks"
   },
   "notFound": {
