@@ -1,4 +1,4 @@
-import { PageTitle } from '@/components';
+import PageTitle from './PageTitle';
 import { getTranslations } from 'next-intl/server';
 
 /**
