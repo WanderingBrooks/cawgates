@@ -14,7 +14,7 @@ import {
   FlexRowBetween,
 } from '@/components';
 import Link from 'next/link';
-import DeleteDeckButton from '../../app/[username]/decks/DeleteDeckButton';
+import DeleteDeckButton from './DeleteDeckButton';
 import classes from './deckForm.module.css';
 import { slugify } from '@/lib/utils';
 
