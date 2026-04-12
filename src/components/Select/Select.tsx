@@ -17,7 +17,7 @@ const Select = ({
   return (
     <div className={classes.selectContainer}>
       {label && <label htmlFor={props.id}>{label}</label>}
-      {hint && <span className={classes.hint}>{hint}</span>}
+      {hint && <span className="hint">{hint}</span>}
       <select
         {...(props as React.SelectHTMLAttributes<HTMLSelectElement>)}
         className={cn(classes.select, className)}

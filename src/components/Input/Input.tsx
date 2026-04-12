@@ -10,7 +10,7 @@ const Input = ({ className = '', label, hint, ...props }: InputProps) => {
   return (
     <div className={classes.inputContainer}>
       {label && <label htmlFor={props.id}>{label}</label>}
-      {hint && <span className={classes.hint}>{hint}</span>}
+      {hint && <span className="hint">{hint}</span>}
       <input
         {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
         className={cn(classes.input, className)}

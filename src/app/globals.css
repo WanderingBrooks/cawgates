@@ -124,3 +124,8 @@ tbody td {
   font-weight: bold;
   font-size: var(--font-size-emphasis);
 }
+
+.hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
