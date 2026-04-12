@@ -62,9 +62,7 @@ const OpponentArchetypePage = async ({
             <Card key={match.id}>
               <CardTitle>
                 <div>
-                  <Link
-                    href={`/${username}/${deckSlug}/events/${match.event.id}`}
-                  >
+                  <Link href={`/${username}/events/${match.event.id}`}>
                     {match.event.name}
                   </Link>
                   <p>
