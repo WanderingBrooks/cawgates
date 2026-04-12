@@ -17,7 +17,9 @@
     "matchRecord": "Match record",
     "gameRecord": "Game record",
     "gameWinPct": "Game win %",
-    "noMatches": "No matches found"
+    "noMatchesOwner": "No matches yet — create an event to start tracking",
+    "noMatchesViewer": "No matches found",
+    "createEvent": "Create event"
   },
   "deckForm": {
     "name": "Deck name *",

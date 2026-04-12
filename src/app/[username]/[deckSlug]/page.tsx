@@ -13,7 +13,10 @@ const DeckPage = async ({
   const { username, deckSlug } = await params;
   const t = await getTranslations('deckPage');
 
-  const { deck } = await getDeck({ ownerUsername: username, deckSlug });
+  const { deck, isOwner } = await getDeck({
+    ownerUsername: username,
+    deckSlug,
+  });
 
   const matchStatistics = await getMatchStatistics({
     deckId: deck.id,
@@ -22,13 +25,26 @@ const DeckPage = async ({
   return (
     <>
       <PageTitle title={t('title')} subtitle={deck.name} />
-      <div className={classes.rightAlignedButton}>
-        <Link href={`/${username}/${deck.slug}/edit`}>
-          <Button variant="primary">{t('editDeck')}</Button>
-        </Link>
-      </div>
+      {isOwner && (
+        <div className={classes.rightAlignedButton}>
+          <Link href={`/${username}/${deck.slug}/edit`}>
+            <Button variant="primary">{t('editDeck')}</Button>
+          </Link>
+        </div>
+      )}
       {matchStatistics.length === 0 ? (
-        <p>{t('noMatches')}</p>
+        <>
+          {isOwner ? (
+            <>
+              <p>{t('noMatchesOwner')}</p>
+              <Link href={`/${username}/events/create`}>
+                <Button variant="primary">{t('createEvent')}</Button>
+              </Link>
+            </>
+          ) : (
+            <p>{t('noMatchesViewer')}</p>
+          )}
+        </>
       ) : (
         <table>
           <thead>
