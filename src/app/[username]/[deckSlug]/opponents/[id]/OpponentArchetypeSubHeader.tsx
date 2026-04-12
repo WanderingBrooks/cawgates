@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { Button, Dialog, OpponentArchetypeForm } from '@/components';
 import classes from './opponentArchetypePage.module.css';
 
@@ -15,6 +16,8 @@ const OpponentArchetypeSubHeader = ({
   matchLosses,
   matchDraws,
   isOwner,
+  username,
+  deckSlug,
 }: {
   deckId: string;
   opponentArchetypeId: string;
@@ -24,6 +27,8 @@ const OpponentArchetypeSubHeader = ({
   matchLosses: number;
   matchDraws: number;
   isOwner: boolean;
+  username: string;
+  deckSlug: string;
 }) => {
   const t = useTranslations('opponentArchetypePage');
   const router = useRouter();
@@ -45,11 +50,16 @@ const OpponentArchetypeSubHeader = ({
             </p>
           )}
         </div>
-        {isOwner && (
-          <Button variant="primary" onClick={() => setIsDialogOpen(true)}>
-            {t('edit')}
-          </Button>
-        )}
+        <div className={classes.rightButtons}>
+          {isOwner && (
+            <Button variant="primary" onClick={() => setIsDialogOpen(true)}>
+              {t('edit')}
+            </Button>
+          )}
+          <Link href={`/${username}/${deckSlug}`}>
+            <Button variant="secondary">{t('viewDeck')}</Button>
+          </Link>
+        </div>
       </div>
       {isOwner && (
         <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>

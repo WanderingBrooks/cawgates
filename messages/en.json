@@ -162,6 +162,7 @@
     "dangerZone": "Danger zone",
     "edit": "Edit",
     "editTitle": "Edit opponent archetype",
+    "viewDeck": "View deck",
     "noMatches": "No matches yet",
     "record": "{wins}W–{losses}L",
     "overallRecord": "{wins}W–{losses}L–{ties}T"

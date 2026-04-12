@@ -52,6 +52,8 @@ const OpponentArchetypePage = async ({
         matchLosses={matchLosses}
         matchDraws={matchDraws}
         isOwner={isOwner}
+        username={username}
+        deckSlug={deckSlug}
       />
       <SectionHeader>{t('matchesSection')}</SectionHeader>
       {opponentArchetype.matches.length === 0 ? (
