@@ -9,7 +9,7 @@ import classes from './navMenu.module.css';
 import { cn } from '@/lib/utils';
 import Button from '../Button';
 import { useViewer } from './ViewerContext';
-import { RESERVED_SLUGS } from '../../lib/utils';
+import { RESERVED_SLUGS } from '@/lib/utils';
 
 type NavMenuProps = {
   disabled?: boolean;
