@@ -9,14 +9,12 @@ import classes from './navMenu.module.css';
 import { cn } from '@/lib/utils';
 import Button from '../Button';
 import { useViewer } from './ViewerContext';
-import { RESERVED_SLUGS } from '@/lib/utils';
 
 type NavMenuProps = {
   disabled?: boolean;
-  deckName?: string;
 };
 
-const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
+const NavMenu = ({ disabled = false }: NavMenuProps) => {
   const t = useTranslations('navMenu');
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -25,13 +23,6 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
 
   const segments = pathname.split('/').filter(Boolean);
   const username = segments[0];
-
-  const potentialSlug = segments.length > 1 ? segments[1] : undefined;
-
-  const deckSlug =
-    potentialSlug && !RESERVED_SLUGS.includes(potentialSlug)
-      ? potentialSlug
-      : undefined;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -88,6 +79,7 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
           )}
           {!isOwner && (
             <>
+              <div className={classes.divider} />
               <Link
                 href={`/${username}/events`}
                 className={cn(
@@ -108,31 +100,6 @@ const NavMenu = ({ disabled = false, deckName }: NavMenuProps) => {
               >
                 {t('decks', { username })}
               </Link>
-            </>
-          )}
-
-          {(viewerUsername !== null || !isOwner) && (
-            <div className={classes.divider} />
-          )}
-          {deckName && <span className={classes.groupLabel}>{deckName}</span>}
-          {deckSlug ? (
-            <>
-              <Link
-                href={`/${username}/${deckSlug}`}
-                className={cn(
-                  classes.item,
-                  pathname === `/${username}/${deckSlug}` && classes.itemActive,
-                )}
-                onClick={() => setOpen(false)}
-              >
-                {t('record')}
-              </Link>
-            </>
-          ) : (
-            <>
-              <span className={cn(classes.item, classes.itemDisabled)}>
-                {t('record')}
-              </span>
             </>
           )}
           {isLoggedIn && (
