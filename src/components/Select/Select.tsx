@@ -15,12 +15,12 @@ const Select = ({
   ...props
 }: SelectProps) => {
   return (
-    <div className={classes.inputContainer}>
+    <div className={classes.selectContainer}>
       {label && <label htmlFor={props.id}>{label}</label>}
       {hint && <span className={classes.hint}>{hint}</span>}
       <select
         {...(props as React.SelectHTMLAttributes<HTMLSelectElement>)}
-        className={cn(classes.input, className)}
+        className={cn(classes.select, className)}
       >
         {options.map(option => (
           <option key={option.value} value={option.value}>
