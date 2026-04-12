@@ -110,7 +110,7 @@ const getEvent = async ({
   ownerUsername: string;
   eventId: string;
 }) => {
-  const { isOwner } = await getOwnerByUsername({
+  const { owner, isOwner } = await getOwnerByUsername({
     username: ownerUsername,
   });
 
@@ -126,6 +126,13 @@ const getEvent = async ({
   });
 
   if (!event) {
+    notFound();
+  }
+
+  // Verify the event belongs to the profile in the URL. Without this, a logged-in
+  // user could read any event by visiting /{their-own-username}/events/{any-id},
+  // since isOwner would be true for their own username and bypass the public check below.
+  if (event.deck.userId !== owner.id) {
     notFound();
   }
 
