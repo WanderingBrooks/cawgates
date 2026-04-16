@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { deleteMatch } from '@/app/actions/matches';
@@ -8,14 +9,13 @@ import {
   ErrorMessage,
   Dialog,
   Card,
-  CardTitle,
   CardContent,
+  CardTitle,
 } from '@/components';
 import MatchForm from './MatchForm';
 import { MatchInputForm } from '@/lib/types';
 import classes from './matchSection.module.css';
 import Markdown from 'react-markdown';
-import Link from 'next/link';
 
 type Match = {
   id: string;
@@ -97,44 +97,39 @@ const MatchSection = ({
         <div className={classes.matchList}>
           {matches.map(match => (
             <Card key={match.id}>
-              <CardTitle>
-                <div>
-                  <Link
-                    href={`/${username}/${deckSlug}/opponents/${match.opponentArchetypeId}`}
-                  >
+              <CardTitle align="start">
+                <div className={classes.matchLinkAndArchetype}>
+                  <Link href={`/${username}/${deckSlug}/opponents/${match.opponentArchetypeId}`}>
                     {match.opponentArchetype.name}
                   </Link>
-                  <p>
-                    {t('gameRecord', {
-                      wins: match.wins,
-                      losses: match.losses,
-                    })}
-                  </p>
                 </div>
-                {isOwner && (
-                  <div className={classes.matchActions}>
-                    <Button
-                      variant="secondary"
-                      onClick={() => setEditingMatch(match)}
-                    >
-                      {t('editMatch')}
-                    </Button>
-                    <Button
-                      variant="danger"
-                      disabled={deletingId === match.id}
-                      onClick={() => handleDelete({ matchId: match.id })}
-                    >
-                      {deletingId === match.id
-                        ? tDelete('deleting')
-                        : tDelete('delete')}
-                    </Button>
-                  </div>
-                )}
+                <div className={classes.matchRecord}>
+                  <p>{t('gameRecord', { wins: match.wins, losses: match.losses })}</p>
+                </div>
               </CardTitle>
               {isOwner && match.notes && (
                 <CardContent>
                   <Markdown>{match.notes}</Markdown>
                 </CardContent>
+              )}
+              {isOwner && (
+                <div className={classes.matchActions}>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setEditingMatch(match)}
+                  >
+                    {t('editMatch')}
+                  </Button>
+                  <Button
+                    variant="danger"
+                    disabled={deletingId === match.id}
+                    onClick={() => handleDelete({ matchId: match.id })}
+                  >
+                    {deletingId === match.id
+                      ? tDelete('deleting')
+                      : tDelete('delete')}
+                  </Button>
+                </div>
               )}
             </Card>
           ))}

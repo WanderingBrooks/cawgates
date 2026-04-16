@@ -63,21 +63,23 @@ const OpponentArchetypePage = async ({
         <div className={classes.matchList}>
           {opponentArchetype.matches.map(match => (
             <Card key={match.id}>
-              <CardTitle>
-                <div>
+              <CardTitle align="start">
+                <div className={classes.matchLink}>
                   <Link href={`/${username}/events/${match.event.id}`}>
                     {match.event.name}
                   </Link>
+                </div>
+                <div className={classes.matchRecordAndDate}>
                   <p>
                     {formatDate({
                       formatter,
                       date: new Date(match.event.date),
                     })}
                   </p>
+                  <p>
+                    {t('record', { wins: match.wins, losses: match.losses })}
+                  </p>
                 </div>
-                <span>
-                  {t('record', { wins: match.wins, losses: match.losses })}
-                </span>
               </CardTitle>
               {isOwner && match.notes && (
                 <CardContent>
