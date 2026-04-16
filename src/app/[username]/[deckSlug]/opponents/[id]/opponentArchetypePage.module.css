@@ -12,6 +12,18 @@
   gap: var(--spacing-sm);
 }
 
+.matchLink {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.matchRecordAndDate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 .matchList {
   display: flex;
   flex-direction: column;
