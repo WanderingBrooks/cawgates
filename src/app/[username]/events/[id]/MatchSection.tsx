@@ -131,7 +131,7 @@ const MatchSection = ({
                   </div>
                 )}
               </CardTitle>
-              {match.notes && (
+              {isOwner && match.notes && (
                 <CardContent>
                   <Markdown>{match.notes}</Markdown>
                 </CardContent>

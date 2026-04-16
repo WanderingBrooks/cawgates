@@ -31,9 +31,7 @@ const EventPage = async ({
       <PageTitle title={event.name} subtitle={event.deck.name} />
       <div className={classes.headerRow}>
         <div>
-          <p>
-            {formatDate({ formatter, date: new Date(event.date) })}
-          </p>
+          <p>{formatDate({ formatter, date: new Date(event.date) })}</p>
           {event.matches.length > 0 && (
             <p className="text-emphasis">
               {t('matchRecord', {
@@ -55,7 +53,7 @@ const EventPage = async ({
           </Link>
         </div>
       </div>
-      {event.notes && (
+      {isOwner && event.notes && (
         <>
           <SectionHeader>{t('notesSection')}</SectionHeader>
           <Markdown>{event.notes}</Markdown>
