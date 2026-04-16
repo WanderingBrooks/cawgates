@@ -79,7 +79,7 @@ const OpponentArchetypePage = async ({
                   {t('record', { wins: match.wins, losses: match.losses })}
                 </span>
               </CardTitle>
-              {match.notes && (
+              {isOwner && match.notes && (
                 <CardContent>
                   <Markdown>{match.notes}</Markdown>
                 </CardContent>
