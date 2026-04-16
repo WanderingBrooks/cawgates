@@ -79,7 +79,6 @@ const NavMenu = ({ disabled = false }: NavMenuProps) => {
           )}
           {!isOwner && (
             <>
-              <div className={classes.divider} />
               <Link
                 href={`/${username}/events`}
                 className={cn(

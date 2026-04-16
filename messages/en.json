@@ -178,8 +178,8 @@
   },
   "guestBanner": {
     "viewing": "{username}'s profile.",
-    "backToMyEvents": "Back to my events",
-    "signUpPrompt": "<login>Login</login> or <register>Register</register> to start tracking your own decks"
+    "backToMyEvents": "Back to my events.",
+    "signUpPrompt": "<login>Login</login> or <register>Register</register> to track your decks."
   },
   "notFound": {
     "message": "This page could not be found.",
