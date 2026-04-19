@@ -45,7 +45,7 @@ A Magic: The Gathering match tracker. Track your tournament events, record match
 
 ## Production
 
-The app is currently deployed at **[cawgates.ajasonb.com](https://cawgates.ajasonb.com/)** and running on [Vercel](https://vercel.com) with a [Supabase](https://supabase.com) postgres instance.
+The app is currently deployed at **[cawgates.ajasonb.xyz](https://cawgates.ajasonb.xyz)** and running on [Vercel](https://vercel.com) with a [Supabase](https://supabase.com) postgres instance.
 
 Migrations are run through a github action which is run before the deployment to Vercel. Migrations are thus written
 to be backwards compatible to the previous deployment.
