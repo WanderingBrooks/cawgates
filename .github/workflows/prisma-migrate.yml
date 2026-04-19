@@ -15,9 +15,9 @@ jobs:
       cancel-in-progress: false
 
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       NODE_ENV: production
-      JWT_SECRET: zyxwvutsrqponmlkjihgfedcbaabcdefghijklmnopqrstuvwxyzs
+      JWT_SECRET: dummy-jwt-secret
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
       - name: Checkout repo
