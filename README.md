@@ -7,6 +7,7 @@ A Magic: The Gathering match tracker. Track your tournament events, record match
 ### Prerequisites
 
 - Node.js 24.13.1 (see `.nvmrc`)
+- pnpm 10+ (`npm install -g pnpm`)
 - PostgreSQL database
 
 ### Installation
@@ -16,7 +17,7 @@ A Magic: The Gathering match tracker. Track your tournament events, record match
    ```bash
    git clone https://github.com/WanderingBrooks/cawgates.git
    cd cawgates
-   npm install
+   pnpm install
    ```
 
 2. **Configure environment variables**
@@ -32,13 +33,13 @@ A Magic: The Gathering match tracker. Track your tournament events, record match
 3. **Run database migrations**
 
    ```bash
-   npx prisma migrate dev
+   pnpm exec prisma migrate dev
    ```
 
 4. **Start development server**
 
    ```bash
-   npm run dev
+   pnpm dev
    ```
 
    Open [http://localhost:3000](http://localhost:3000)
