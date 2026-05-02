@@ -2,7 +2,11 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { createMatchSchema, updateMatchSchema, type ActionResult } from '@/lib/types';
+import {
+  createMatchSchema,
+  updateMatchSchema,
+  type ActionResult,
+} from '@/lib/types';
 import { getUser } from '@/lib/session';
 
 const createMatch = async (
