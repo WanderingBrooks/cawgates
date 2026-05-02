@@ -130,7 +130,7 @@
   },
   "login": {
     "title": "Login",
-    "username": "Username *",
+    "usernameOrEmail": "Username or Email *",
     "password": "Password *",
     "submit": "Login",
     "submitting": "Logging in...",

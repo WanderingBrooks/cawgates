@@ -126,7 +126,7 @@ const registerUserSchema = z
 
 // Schema for user login
 const loginSchema = z.object({
-  username: z.string().trim().toLowerCase().min(1, 'Username is required'),
+  usernameOrEmail: z.string().trim().toLowerCase().min(1, 'Username or Email are required'),
   password: z.string().min(1, 'Password is required'),
 });
 
