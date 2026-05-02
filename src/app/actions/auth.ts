@@ -35,10 +35,19 @@ const login = async (
 
     // Find user by username
     const user = await prisma.user.findFirst({
-      where: { OR: [
-        { username: { equals: result.data.usernameOrEmail, mode: 'insensitive' } },
-        { email: { equals: result.data.usernameOrEmail, mode: 'insensitive' } },
-      ] },
+      where: {
+        OR: [
+          {
+            username: {
+              equals: result.data.usernameOrEmail,
+              mode: 'insensitive',
+            },
+          },
+          {
+            email: { equals: result.data.usernameOrEmail, mode: 'insensitive' },
+          },
+        ],
+      },
     });
 
     if (!user) {

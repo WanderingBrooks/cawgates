@@ -99,12 +99,19 @@ const MatchSection = ({
             <Card key={match.id}>
               <CardTitle align="start">
                 <div className={classes.matchLinkAndArchetype}>
-                  <Link href={`/${username}/${deckSlug}/opponents/${match.opponentArchetypeId}`}>
+                  <Link
+                    href={`/${username}/${deckSlug}/opponents/${match.opponentArchetypeId}`}
+                  >
                     {match.opponentArchetype.name}
                   </Link>
                 </div>
                 <div className={classes.matchRecord}>
-                  <p>{t('gameRecord', { wins: match.wins, losses: match.losses })}</p>
+                  <p>
+                    {t('gameRecord', {
+                      wins: match.wins,
+                      losses: match.losses,
+                    })}
+                  </p>
                 </div>
               </CardTitle>
               {isOwner && match.notes && (

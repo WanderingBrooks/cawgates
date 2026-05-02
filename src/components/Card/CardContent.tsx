@@ -15,7 +15,13 @@ const CardContent = ({
 }: CardContentProps) => {
   if (direction === 'horizontal') {
     return (
-      <div className={cn(classes.cardContent, classes.cardContentHorizontal, className)}>
+      <div
+        className={cn(
+          classes.cardContent,
+          classes.cardContentHorizontal,
+          className,
+        )}
+      >
         {children}
       </div>
     );
