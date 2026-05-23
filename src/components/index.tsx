@@ -1,6 +1,7 @@
 import Button from './Button';
 import GuestBanner from './GuestBanner/GuestBanner';
 import { Card, CardContent, CardTitle } from './Card';
+import DiscardChangesConfirm from './DiscardChangesConfirm';
 import Form from './Form';
 import Dialog from './Dialog';
 import DeckForm from './DeckForm';
@@ -18,6 +19,7 @@ import TextArea from './TextArea';
 
 export {
   Button,
+  DiscardChangesConfirm,
   GuestBanner,
   Card,
   Form,

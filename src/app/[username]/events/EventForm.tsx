@@ -3,10 +3,12 @@
 import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { createEvent, updateEvent } from '@/app/actions/events';
 import { type ActionResult } from '@/lib/types';
 import {
   Button,
+  DiscardChangesConfirm,
   ErrorMessage,
   Form,
   Input,
@@ -51,8 +53,14 @@ type EventFormProps = CreateEventProps | EditEventProps;
 
 const EventForm = (props: EventFormProps) => {
   const t = useTranslations('eventForm');
+  const router = useRouter();
 
   const { mode, username } = props;
+
+  const cancelHref =
+    mode === 'create'
+      ? `/${username}/events`
+      : `/${username}/events/${props.eventId}`;
 
   const action = mode === 'create' ? createEvent : updateEvent;
 
@@ -60,6 +68,17 @@ const EventForm = (props: EventFormProps) => {
     action,
     null,
   );
+
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [hasFormDataChanged, setHasFormDataChanged] = useState(false);
+
+  const handleCancel = () => {
+    if (hasFormDataChanged) {
+      setShowCancelConfirm(true);
+    } else {
+      router.push(cancelHref);
+    }
+  };
 
   // Inline state management
   const [eventData, setEventData] = useState<EventFormData>(
@@ -81,6 +100,7 @@ const EventForm = (props: EventFormProps) => {
     const { name, value } = e.target;
 
     setEventData(prev => ({ ...prev, [name]: value }));
+    setHasFormDataChanged(true);
   };
 
   return (
@@ -143,18 +163,19 @@ const EventForm = (props: EventFormProps) => {
         />
 
         {state?.error && <ErrorMessage error={state.error} />}
-        <FlexRowBetween>
-          <Link
-            href={
-              mode === 'create'
-                ? `/${username}/events`
-                : `/${username}/events/${props.eventId}`
-            }
-          >
-            <Button variant="secondary">{t('cancel')}</Button>
-          </Link>
-          <SubmitButton />
-        </FlexRowBetween>
+        {showCancelConfirm ? (
+          <DiscardChangesConfirm
+            onKeepEditing={() => setShowCancelConfirm(false)}
+            onDiscard={() => router.push(cancelHref)}
+          />
+        ) : (
+          <FlexRowBetween>
+            <Button variant="secondary" type="button" onClick={handleCancel}>
+              {t('cancel')}
+            </Button>
+            <SubmitButton />
+          </FlexRowBetween>
+        )}
       </SpaceChildrenVertically>
     </Form>
   );

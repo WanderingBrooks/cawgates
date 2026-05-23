@@ -7,6 +7,7 @@ import { createMatch, updateMatch } from '@/app/actions/matches';
 import { type ActionResult, MatchInputForm } from '@/lib/types';
 import {
   Button,
+  DiscardChangesConfirm,
   ErrorMessage,
   FlexRowBetween,
   Form,
@@ -65,17 +66,10 @@ const MatchForm = ({
   );
 
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
-
-  const isDirty = initialMatchData
-    ? Object.keys(initialMatchData).some(
-        key =>
-          matchData[key as keyof MatchInputForm] !==
-          initialMatchData[key as keyof MatchInputForm],
-      )
-    : Object.values(matchData).some(v => v !== '');
+  const [hasFormDataChanged, setHasFormDataChanged] = useState(false);
 
   const handleCancel = () => {
-    if (isDirty) {
+    if (hasFormDataChanged) {
       setShowCancelConfirm(true);
     } else {
       onCancel();
@@ -105,6 +99,7 @@ const MatchForm = ({
       ...prev,
       [name]: value,
     }));
+    setHasFormDataChanged(true);
   };
 
   return (
@@ -152,21 +147,10 @@ const MatchForm = ({
 
         {state?.error && <ErrorMessage error={state.error} />}
         {showCancelConfirm ? (
-          <SpaceChildrenVertically>
-            <span>{t('discardChanges')}</span>
-            <FlexRowBetween>
-              <Button
-                variant="secondary"
-                type="button"
-                onClick={() => setShowCancelConfirm(false)}
-              >
-                {t('keepEditing')}
-              </Button>
-              <Button variant="danger" type="button" onClick={onCancel}>
-                {t('discard')}
-              </Button>
-            </FlexRowBetween>
-          </SpaceChildrenVertically>
+          <DiscardChangesConfirm
+            onKeepEditing={() => setShowCancelConfirm(false)}
+            onDiscard={onCancel}
+          />
         ) : (
           <FlexRowBetween>
             <Button variant="secondary" type="button" onClick={handleCancel}>

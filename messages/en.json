@@ -89,10 +89,7 @@
     "closeNotes": "Close notes",
     "saveMatch": "Save Match",
     "saving": "Saving...",
-    "cancel": "Cancel",
-    "discardChanges": "Discard changes?",
-    "keepEditing": "Keep editing",
-    "discard": "Discard"
+    "cancel": "Cancel"
   },
   "createMatch": {
     "title": "Add match"
@@ -175,6 +172,11 @@
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this opponent archetype?",
     "hasMatchesHint": "To delete this opponent archetype, all matches must first be moved to another archetype or deleted."
+  },
+  "discardConfirm": {
+    "discardChanges": "Discard changes?",
+    "keepEditing": "Keep editing",
+    "discard": "Discard"
   },
   "loading": {
     "title": "Loading..."
