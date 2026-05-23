@@ -89,7 +89,10 @@
     "closeNotes": "Close notes",
     "saveMatch": "Save Match",
     "saving": "Saving...",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "discardChanges": "Discard changes?",
+    "keepEditing": "Keep editing",
+    "discard": "Discard"
   },
   "createMatch": {
     "title": "Add match"
