@@ -12,32 +12,31 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.4.0",
-    "@prisma/client": "^7.4.2",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2",
-    "jose": "^6.1.3",
-    "lucide-react": "^0.564.0",
+    "jose": "^6.2.3",
     "next": "16.1.6",
-    "next-intl": "^4.8.2",
+    "next-intl": "^4.12.0",
     "radix-ui": "^1.4.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-markdown": "^10.1.0",
-    "use-intl": "^4.11.0",
-    "zod": "^4.3.6"
+    "use-intl": "^4.12.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
-    "@types/node": "^20",
-    "@types/react": "^19",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.15",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
-    "prettier": "^3.8.1",
-    "prisma": "^7.4.2",
+    "prettier": "^3.8.3",
+    "prisma": "^7.8.0",
     "typescript": "^5"
   }
 }
