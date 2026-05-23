@@ -173,6 +173,11 @@
     "deleteConfirm": "Are you sure you want to delete this opponent archetype?",
     "hasMatchesHint": "To delete this opponent archetype, all matches must first be moved to another archetype or deleted."
   },
+  "discardConfirm": {
+    "discardChanges": "Discard changes?",
+    "keepEditing": "Keep editing",
+    "discard": "Discard"
+  },
   "loading": {
     "title": "Loading..."
   },

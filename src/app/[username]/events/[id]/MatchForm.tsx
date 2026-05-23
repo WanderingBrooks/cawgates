@@ -7,7 +7,9 @@ import { createMatch, updateMatch } from '@/app/actions/matches';
 import { type ActionResult, MatchInputForm } from '@/lib/types';
 import {
   Button,
+  DiscardChangesConfirm,
   ErrorMessage,
+  FlexRowBetween,
   Form,
   Input,
   SpaceChildrenVertically,
@@ -63,6 +65,17 @@ const MatchForm = ({
     },
   );
 
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [hasFormDataChanged, setHasFormDataChanged] = useState(false);
+
+  const handleCancel = () => {
+    if (hasFormDataChanged) {
+      setShowCancelConfirm(true);
+    } else {
+      onCancel();
+    }
+  };
+
   useEffect(() => {
     if (state?.success) {
       onSuccess();
@@ -86,6 +99,7 @@ const MatchForm = ({
       ...prev,
       [name]: value,
     }));
+    setHasFormDataChanged(true);
   };
 
   return (
@@ -132,10 +146,19 @@ const MatchForm = ({
         />
 
         {state?.error && <ErrorMessage error={state.error} />}
-        <Button variant="secondary" type="button" onClick={onCancel}>
-          {t('cancel')}
-        </Button>
-        <SubmitButton />
+        {showCancelConfirm ? (
+          <DiscardChangesConfirm
+            onKeepEditing={() => setShowCancelConfirm(false)}
+            onDiscard={onCancel}
+          />
+        ) : (
+          <FlexRowBetween>
+            <Button variant="secondary" type="button" onClick={handleCancel}>
+              {t('cancel')}
+            </Button>
+            <SubmitButton />
+          </FlexRowBetween>
+        )}
       </SpaceChildrenVertically>
     </Form>
   );
