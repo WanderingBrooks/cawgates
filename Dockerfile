@@ -11,18 +11,17 @@ WORKDIR /app
 # deps — install all dependencies (including devDependencies — next build
 # type-checks and lints by default, and typescript/eslint are devDependencies).
 #
-# DATABASE_URL / JWT_SECRET are BUILD-TIME PLACEHOLDERS ONLY. prisma.config.ts
-# imports src/lib/env.ts, which eagerly Zod-validates env vars at import time,
-# so even `prisma generate` (run by postinstall) needs *some* value present.
+# SKIP_ENV_VALIDATION=1 tells src/lib/env.ts to skip its Zod validation.
+# prisma.config.ts imports that module, so even `prisma generate` (run by
+# postinstall) would otherwise need real-looking DATABASE_URL/JWT_SECRET
+# values just to satisfy the schema, despite never actually using them.
 # Real secrets are injected at container runtime via the homelab-docker-compose
-# repo's env_file — they never appear in the final runtime image.
+# repo's env_file — this flag is never set there, so validation still runs
+# for real wherever it actually matters.
 ################################################################################
 FROM base AS deps
 
-ARG DATABASE_URL="postgresql://user:password@localhost:5432/db"
-ARG JWT_SECRET="build-time-placeholder-secret-min-32-characters"
-ENV DATABASE_URL=${DATABASE_URL} \
-    JWT_SECRET=${JWT_SECRET} \
+ENV SKIP_ENV_VALIDATION=1 \
     NODE_ENV=development
 
 COPY package.json pnpm-lock.yaml ./
@@ -37,10 +36,7 @@ RUN pnpm install --frozen-lockfile
 ################################################################################
 FROM base AS builder
 
-ARG DATABASE_URL="postgresql://user:password@localhost:5432/db"
-ARG JWT_SECRET="build-time-placeholder-secret-min-32-characters"
-ENV DATABASE_URL=${DATABASE_URL} \
-    JWT_SECRET=${JWT_SECRET} \
+ENV SKIP_ENV_VALIDATION=1 \
     NODE_ENV=production
 
 COPY --from=deps /app/node_modules ./node_modules
