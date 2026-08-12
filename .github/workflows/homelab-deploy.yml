@@ -1,0 +1,33 @@
+name: Deploy to homelab
+
+on:
+  push:
+    branches:
+      - trunk
+
+concurrency:
+  group: homelab-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build, migrate, and redeploy
+    runs-on: [self-hosted, homelab]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build app image
+        run: docker build -t cawgates:latest .
+
+      - name: Build migration image
+        run: docker build --target=builder -t cawgates:migrate .
+
+      - name: Run migrations
+        working-directory: /home/jason/homelab-docker-compose
+        run: docker compose run --rm migrate
+
+      - name: Deploy app
+        working-directory: /home/jason/homelab-docker-compose
+        run: docker compose up -d cawgates
