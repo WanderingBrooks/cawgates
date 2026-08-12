@@ -13,18 +13,32 @@ const envSchema = z.object({
 // validates them at runtime. If the validation fails, it logs the errors and
 // throws an exception to prevent the application from running with invalid
 // configuration.
+//
+// SKIP_ENV_VALIDATION bypasses this for contexts that load app code without
+// real secrets available — Docker image builds and `prisma generate` (which
+// builds the client from the schema and never connects to a database). Real
+// deployments never set this, so the fail-fast check still applies wherever
+// it actually matters.
+let env: z.infer<typeof envSchema>;
+
 // eslint-disable-next-line no-restricted-properties
-const _env = envSchema.safeParse(process.env);
+if (process.env.SKIP_ENV_VALIDATION) {
+  // eslint-disable-next-line no-restricted-properties
+  env = process.env as unknown as z.infer<typeof envSchema>;
+} else {
+  // eslint-disable-next-line no-restricted-properties
+  const _env = envSchema.safeParse(process.env);
 
-if (!_env.success) {
-  console.error(
-    'Invalid environment variables:',
-    JSON.stringify(z.treeifyError(_env.error), null, 2),
-  );
+  if (!_env.success) {
+    console.error(
+      'Invalid environment variables:',
+      JSON.stringify(z.treeifyError(_env.error), null, 2),
+    );
 
-  throw new Error('Environment validation failed');
+    throw new Error('Environment validation failed');
+  }
+
+  env = _env.data;
 }
-
-const env = _env.data;
 
 export { env };

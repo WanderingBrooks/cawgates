@@ -1,0 +1,27 @@
+# dependencies
+node_modules
+
+# next.js build output
+.next
+out
+
+# generated prisma client — regenerated fresh during the image build
+src/generated
+
+# env files — never bake secrets into the image; runtime env comes from compose
+.env
+.env.*
+
+# git
+.git
+.gitignore
+
+# docker
+Dockerfile
+.dockerignore
+
+# misc
+.DS_Store
+*.log
+coverage
+.vercel
