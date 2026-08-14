@@ -4,6 +4,11 @@
 # base — shared by all stages.
 ################################################################################
 FROM node:24-slim AS base
+# node:24-slim has no libssl at all — Prisma's query engine can't detect
+# an OpenSSL version to link against and silently guesses, which is
+# worth not leaving to chance now that both prod and dev depend on it.
+RUN apt-get update && apt-get install -y --no-install-recommends openssl \
+    && rm -rf /var/lib/apt/lists/*
 RUN corepack enable && corepack prepare pnpm@10 --activate
 WORKDIR /app
 
