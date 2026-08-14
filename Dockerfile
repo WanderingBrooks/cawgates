@@ -4,6 +4,14 @@
 # base — shared by all stages.
 ################################################################################
 FROM node:24-slim AS base
+# node:24-slim ships with no libssl — without it, Prisma's query engine
+# can't detect which OpenSSL version to link against and silently
+# defaults to a guess (openssl-1.1.x) that may not match what's actually
+# available. Only the deps/builder stages need this (prisma generate,
+# migrate) — the runner stage doesn't inherit from base and has no such
+# dependency at runtime.
+RUN apt-get update && apt-get install -y --no-install-recommends openssl \
+    && rm -rf /var/lib/apt/lists/*
 RUN corepack enable && corepack prepare pnpm@10 --activate
 WORKDIR /app
 
