@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
-import { PageTitle, Button } from '@/components';
+import { getTranslations, getFormatter } from 'next-intl/server';
+import { PageTitle, Button, Card, Tooltip } from '@/components';
 import { getDeck } from '@/lib/dal';
 import getMatchStatistics from './getMatchStatistics';
 import classes from './deck.module.css';
@@ -12,13 +12,14 @@ const DeckPage = async ({
 }) => {
   const { username, deckSlug } = await params;
   const t = await getTranslations('deckPage');
+  const formatter = await getFormatter();
 
   const { deck, isOwner } = await getDeck({
     ownerUsername: username,
     deckSlug,
   });
 
-  const matchStatistics = await getMatchStatistics({
+  const { rows: matchStatistics, totals } = await getMatchStatistics({
     deckId: deck.id,
   });
 
@@ -31,6 +32,33 @@ const DeckPage = async ({
             <Button variant="primary">{t('editDeck')}</Button>
           </Link>
         </div>
+      )}
+      {totals.totalMatches > 0 && (
+        <Card className={classes.summaryCard}>
+          <div className={classes.summaryRow}>
+            <div className={classes.summaryStat}>
+              <p className="text-label">{t('totalMatchWins')}</p>
+              <p className="text-emphasis">{totals.matchWins}</p>
+            </div>
+            <div className={classes.summaryStat}>
+              <p className="text-label">{t('totalMatchLosses')}</p>
+              <p className="text-emphasis">{totals.matchLosses}</p>
+            </div>
+            <div className={classes.summaryStat}>
+              <p className="text-label">
+                <Tooltip content={t('matchWinPctExplainer')}>
+                  {t('matchWinPct')}
+                </Tooltip>
+              </p>
+              <p className="text-emphasis">
+                {formatter.number(totals.matchWinRate, {
+                  style: 'percent',
+                  maximumFractionDigits: 1,
+                })}
+              </p>
+            </div>
+          </div>
+        </Card>
       )}
       {matchStatistics.length === 0 ? (
         <>
@@ -67,7 +95,12 @@ const DeckPage = async ({
                 </td>
                 <td>{`${row.matchWins}-${row.matchLosses}-${row.matchDraws}`}</td>
                 <td>{`${row.wins}-${row.losses}`}</td>
-                <td>{`${(row.winRate * 100).toFixed(1)}%`}</td>
+                <td>
+                  {formatter.number(row.winRate, {
+                    style: 'percent',
+                    maximumFractionDigits: 1,
+                  })}
+                </td>
               </tr>
             ))}
           </tbody>

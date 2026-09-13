@@ -16,6 +16,7 @@ import Loading from './Loading';
 import OpponentArchetypeForm from './OpponentArchetypeForm';
 import OpponentArchetypeSelect from './OpponentArchetypeSelect';
 import TextArea from './TextArea';
+import { Tooltip } from './Tooltip';
 
 export {
   Button,
@@ -38,4 +39,5 @@ export {
   SpaceChildrenVertically,
   Loading,
   TextArea,
+  Tooltip,
 };
