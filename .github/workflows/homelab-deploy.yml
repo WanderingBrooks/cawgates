@@ -30,4 +30,4 @@ jobs:
 
       - name: Deploy app
         working-directory: /home/jason/homelab-docker-compose
-        run: docker compose up -d cawgates
+        run: docker compose --env-file .env.cawgates up -d cawgates
