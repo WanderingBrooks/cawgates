@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getFormatter } from 'next-intl/server';
 import { PageTitle, Button, Card, CardContent } from '@/components';
 import { getDeck } from '@/lib/dal';
 import getMatchStatistics from './getMatchStatistics';
@@ -12,6 +12,7 @@ const DeckPage = async ({
 }) => {
   const { username, deckSlug } = await params;
   const t = await getTranslations('deckPage');
+  const formatter = await getFormatter();
 
   const { deck, isOwner } = await getDeck({
     ownerUsername: username,
@@ -46,7 +47,10 @@ const DeckPage = async ({
             <div className={classes.summaryStat}>
               <p className="text-label">{t('matchWinPct')}</p>
               <p className="text-emphasis">
-                {`${(totals.matchWinRate * 100).toFixed(1)}%`}
+                {formatter.number(totals.matchWinRate, {
+                  style: 'percent',
+                  maximumFractionDigits: 1,
+                })}
               </p>
             </div>
           </CardContent>
@@ -87,7 +91,12 @@ const DeckPage = async ({
                 </td>
                 <td>{`${row.matchWins}-${row.matchLosses}-${row.matchDraws}`}</td>
                 <td>{`${row.wins}-${row.losses}`}</td>
-                <td>{`${(row.winRate * 100).toFixed(1)}%`}</td>
+                <td>
+                  {formatter.number(row.winRate, {
+                    style: 'percent',
+                    maximumFractionDigits: 1,
+                  })}
+                </td>
               </tr>
             ))}
           </tbody>
