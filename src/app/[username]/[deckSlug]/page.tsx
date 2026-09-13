@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { PageTitle, Button, Card, CardContent, Tooltip } from '@/components';
+import { PageTitle, Button, Card, Tooltip } from '@/components';
 import { getDeck } from '@/lib/dal';
 import getMatchStatistics from './getMatchStatistics';
 import classes from './deck.module.css';
@@ -35,7 +35,7 @@ const DeckPage = async ({
       )}
       {totals.totalMatches > 0 && (
         <Card className={classes.summaryCard}>
-          <CardContent direction="horizontal" className={classes.summaryRow}>
+          <div className={classes.summaryRow}>
             <div className={classes.summaryStat}>
               <p className="text-label">{t('totalMatchWins')}</p>
               <p className="text-emphasis">{totals.matchWins}</p>
@@ -57,7 +57,7 @@ const DeckPage = async ({
                 })}
               </p>
             </div>
-          </CardContent>
+          </div>
         </Card>
       )}
       {matchStatistics.length === 0 ? (

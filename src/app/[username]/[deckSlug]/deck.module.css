@@ -3,12 +3,16 @@
   justify-content: flex-end;
 }
 
-.summaryCard {
+.summaryCard.summaryCard {
+  padding: var(--spacing-lg) 0;
   margin-bottom: var(--spacing-lg);
 }
 
 .summaryRow {
+  display: flex;
+  flex-direction: row;
   justify-content: space-around;
+  gap: var(--spacing-md);
 }
 
 .summaryStat {
