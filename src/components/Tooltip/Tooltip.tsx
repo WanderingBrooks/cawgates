@@ -10,6 +10,8 @@ type TooltipProps = {
   className?: string;
 };
 
+// Renders `children` with a dotted underline; hovering, focusing, or
+// tapping it shows a small popover above the text containing `content`.
 const Tooltip = ({ content, children, className }: TooltipProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const tooltipId = useId();
