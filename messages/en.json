@@ -13,8 +13,8 @@
   "deckPage": {
     "title": "Record",
     "editDeck": "Edit deck",
-    "totalMatchWins": "Total match wins",
-    "totalMatchLosses": "Total match losses",
+    "totalMatchWins": "Match wins",
+    "totalMatchLosses": "Match losses",
     "matchWinPct": "Match win %",
     "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
     "opponentArchetype": "Opponent archetype",
