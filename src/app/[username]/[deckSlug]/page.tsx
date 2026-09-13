@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { PageTitle, Button } from '@/components';
+import { PageTitle, Button, Card, CardContent } from '@/components';
 import { getDeck } from '@/lib/dal';
 import getMatchStatistics from './getMatchStatistics';
 import classes from './deck.module.css';
@@ -18,7 +18,7 @@ const DeckPage = async ({
     deckSlug,
   });
 
-  const matchStatistics = await getMatchStatistics({
+  const { rows: matchStatistics, totals } = await getMatchStatistics({
     deckId: deck.id,
   });
 
@@ -31,6 +31,26 @@ const DeckPage = async ({
             <Button variant="primary">{t('editDeck')}</Button>
           </Link>
         </div>
+      )}
+      {totals.totalMatches > 0 && (
+        <Card className={classes.summaryCard}>
+          <CardContent direction="horizontal" className={classes.summaryRow}>
+            <div className={classes.summaryStat}>
+              <p className="text-label">{t('totalMatchWins')}</p>
+              <p className="text-emphasis">{totals.matchWins}</p>
+            </div>
+            <div className={classes.summaryStat}>
+              <p className="text-label">{t('totalMatchLosses')}</p>
+              <p className="text-emphasis">{totals.matchLosses}</p>
+            </div>
+            <div className={classes.summaryStat}>
+              <p className="text-label">{t('matchWinPct')}</p>
+              <p className="text-emphasis">
+                {`${(totals.matchWinRate * 100).toFixed(1)}%`}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       )}
       {matchStatistics.length === 0 ? (
         <>

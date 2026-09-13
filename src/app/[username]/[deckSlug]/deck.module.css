@@ -3,6 +3,21 @@
   justify-content: flex-end;
 }
 
+.summaryCard {
+  margin-bottom: var(--spacing-lg);
+}
+
+.summaryRow {
+  justify-content: space-around;
+}
+
+.summaryStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
 .eventName {
   font-weight: bold;
 }

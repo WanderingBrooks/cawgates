@@ -53,7 +53,7 @@ const getMatchStatistics = async ({ deckId }: { deckId: string }) => {
   // 1) Total games played (wins + losses) descending — more data first.
   // 2) Win rate descending for ties in total games (wins/total).
   // 3) Alphabetical ascending fallback for deterministic ordering.
-  return deckStats.sort((a, b) => {
+  const rows = deckStats.sort((a, b) => {
     if (b.total !== a.total) {
       return b.total - a.total;
     }
@@ -64,6 +64,27 @@ const getMatchStatistics = async ({ deckId }: { deckId: string }) => {
 
     return a.opponentArchetype.localeCompare(b.opponentArchetype);
   });
+
+  const totals = rows.reduce(
+    (acc, row) => ({
+      matchWins: acc.matchWins + row.matchWins,
+      matchLosses: acc.matchLosses + row.matchLosses,
+      matchDraws: acc.matchDraws + row.matchDraws,
+    }),
+    { matchWins: 0, matchLosses: 0, matchDraws: 0 },
+  );
+
+  const totalMatches =
+    totals.matchWins + totals.matchLosses + totals.matchDraws;
+
+  return {
+    rows,
+    totals: {
+      ...totals,
+      totalMatches,
+      matchWinRate: totalMatches === 0 ? 0 : totals.matchWins / totalMatches,
+    },
+  };
 };
 
 export default getMatchStatistics;
