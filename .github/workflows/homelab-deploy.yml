@@ -24,10 +24,5 @@ jobs:
       - name: Build migration image
         run: docker build --target=builder -t cawgates:migrate .
 
-      - name: Run migrations
-        working-directory: /home/jason/homelab-docker-compose
-        run: docker compose run --rm migrate
-
-      - name: Deploy app
-        working-directory: /home/jason/homelab-docker-compose
-        run: docker compose up -d cawgates
+      - name: Migrate and deploy
+        run: /home/jason/homelab-docker-compose/deploy-cawgates.sh
