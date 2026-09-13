@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { PageTitle, Button, Card, CardContent } from '@/components';
+import { PageTitle, Button, Card, CardContent, Tooltip } from '@/components';
 import { getDeck } from '@/lib/dal';
 import getMatchStatistics from './getMatchStatistics';
 import classes from './deck.module.css';
@@ -45,7 +45,11 @@ const DeckPage = async ({
               <p className="text-emphasis">{totals.matchLosses}</p>
             </div>
             <div className={classes.summaryStat}>
-              <p className="text-label">{t('matchWinPct')}</p>
+              <p className="text-label">
+                <Tooltip content={t('matchWinPctExplainer')}>
+                  {t('matchWinPct')}
+                </Tooltip>
+              </p>
               <p className="text-emphasis">
                 {formatter.number(totals.matchWinRate, {
                   style: 'percent',

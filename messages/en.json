@@ -16,6 +16,7 @@
     "totalMatchWins": "Total match wins",
     "totalMatchLosses": "Total match losses",
     "matchWinPct": "Match win %",
+    "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
     "opponentArchetype": "Opponent archetype",
     "matchRecord": "Match record",
     "gameRecord": "Game record",
