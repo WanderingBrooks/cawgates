@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { registerUserSchema } from '@/lib/types';
 import { createSession } from '@/lib/session';
-import { elapsedMs, logEvent } from '@/lib/log';
+import { logEvent } from '@/lib/log';
 import bcrypt from 'bcrypt';
 
 export type ActionResult = {
@@ -18,7 +18,6 @@ const registerUser = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
-  const startedAt = performance.now();
   let username: string;
 
   try {
@@ -87,14 +86,9 @@ const registerUser = async (
 
     username = user.username;
 
-    logEvent('user.registered', {
-      userId: user.id,
-      durationMs: elapsedMs(startedAt),
-    });
+    logEvent('user.registered', { userId: user.id });
   } catch (error) {
-    console.error('Error registering user:', error, {
-      durationMs: elapsedMs(startedAt),
-    });
+    console.error('Error registering user:', error);
 
     return {
       success: false,

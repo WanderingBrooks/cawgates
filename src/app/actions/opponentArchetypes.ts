@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
-import { elapsedMs, logEvent } from '@/lib/log';
+import { logEvent } from '@/lib/log';
 import {
   createOpponentArchetypeSchema,
   type ActionResult,
@@ -39,7 +39,6 @@ const createOpponentArchetype = async (
   _prevState: ActionResultWithData<{ id: string; name: string }> | null,
   formData: FormData,
 ): Promise<ActionResultWithData<{ id: string; name: string }>> => {
-  const startedAt = performance.now();
   const user = await getUser();
 
   if (!user) {
@@ -75,7 +74,6 @@ const createOpponentArchetype = async (
       userId: user.userId,
       deckId,
       opponentArchetypeId: created.id,
-      durationMs: elapsedMs(startedAt),
     });
 
     return {
@@ -103,7 +101,6 @@ const updateOpponentArchetype = async (
   _prevState: ActionResultWithData<{ id: string; name: string }> | null,
   formData: FormData,
 ): Promise<ActionResultWithData<{ id: string; name: string }>> => {
-  const startedAt = performance.now();
   const user = await getUser();
 
   if (!user) {
@@ -138,7 +135,6 @@ const updateOpponentArchetype = async (
       userId: user.userId,
       deckId: updated.deckId,
       opponentArchetypeId: updated.id,
-      durationMs: elapsedMs(startedAt),
     });
 
     return {
@@ -167,7 +163,6 @@ const deleteOpponentArchetype = async ({
 }: {
   opponentArchetypeId: string;
 }): Promise<ActionResult> => {
-  const startedAt = performance.now();
   let deckSlug: string;
   let username: string;
 
@@ -222,12 +217,9 @@ const deleteOpponentArchetype = async ({
       userId: user.userId,
       deckId: opponentArchetype.deckId,
       opponentArchetypeId,
-      durationMs: elapsedMs(startedAt),
     });
   } catch (error) {
-    console.error('Failed to delete opponent archetype:', error, {
-      durationMs: elapsedMs(startedAt),
-    });
+    console.error('Failed to delete opponent archetype:', error);
 
     return {
       success: false,

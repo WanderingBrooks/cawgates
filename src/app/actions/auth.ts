@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import { prisma } from '@/lib/prisma';
 import { loginSchema } from '@/lib/types';
 import { createSession, destroySession, getUser } from '@/lib/session';
-import { elapsedMs, logEvent } from '@/lib/log';
+import { logEvent } from '@/lib/log';
 
 export type ActionResult = {
   success: boolean;
@@ -16,8 +16,6 @@ const login = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
-  const startedAt = performance.now();
-
   try {
     const data = {
       usernameOrEmail: formData.get('usernameOrEmail') as string,
@@ -55,10 +53,7 @@ const login = async (
 
     if (!user) {
       // The attempted username/email is deliberately not logged
-      logEvent('auth.loginFailed', {
-        reason: 'unknownUser',
-        durationMs: elapsedMs(startedAt),
-      });
+      logEvent('auth.loginFailed', { reason: 'unknownUser' });
 
       return {
         success: false,
@@ -76,7 +71,6 @@ const login = async (
       logEvent('auth.loginFailed', {
         reason: 'badPassword',
         userId: user.id,
-        durationMs: elapsedMs(startedAt),
       });
 
       return {
@@ -92,14 +86,9 @@ const login = async (
       username: user.username,
     });
 
-    logEvent('auth.login', {
-      userId: user.id,
-      durationMs: elapsedMs(startedAt),
-    });
+    logEvent('auth.login', { userId: user.id });
   } catch (error) {
-    console.error('Error during login:', error, {
-      durationMs: elapsedMs(startedAt),
-    });
+    console.error('Error during login:', error);
 
     return {
       success: false,

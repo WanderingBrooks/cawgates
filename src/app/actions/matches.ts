@@ -8,14 +8,12 @@ import {
   type ActionResult,
 } from '@/lib/types';
 import { getUser } from '@/lib/session';
-import { elapsedMs, logEvent } from '@/lib/log';
+import { logEvent } from '@/lib/log';
 
 const createMatch = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
-  const startedAt = performance.now();
-
   try {
     const user = await getUser();
 
@@ -74,14 +72,11 @@ const createMatch = async (
       userId: user.userId,
       eventId: validated.eventId,
       matchId: match.id,
-      durationMs: elapsedMs(startedAt),
     });
 
     return { success: true };
   } catch (error) {
-    console.error('Failed to create match:', error, {
-      durationMs: elapsedMs(startedAt),
-    });
+    console.error('Failed to create match:', error);
 
     return {
       success: false,
@@ -94,8 +89,6 @@ const updateMatch = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
-  const startedAt = performance.now();
-
   try {
     const user = await getUser();
 
@@ -159,14 +152,11 @@ const updateMatch = async (
       userId: user.userId,
       eventId: match.eventId,
       matchId: match.id,
-      durationMs: elapsedMs(startedAt),
     });
 
     return { success: true };
   } catch (error) {
-    console.error('Failed to update match:', error, {
-      durationMs: elapsedMs(startedAt),
-    });
+    console.error('Failed to update match:', error);
 
     return {
       success: false,
@@ -176,8 +166,6 @@ const updateMatch = async (
 };
 
 const deleteMatch = async (matchId: string): Promise<ActionResult> => {
-  const startedAt = performance.now();
-
   try {
     const user = await getUser();
 
@@ -211,14 +199,11 @@ const deleteMatch = async (matchId: string): Promise<ActionResult> => {
       userId: user.userId,
       eventId: match.eventId,
       matchId: match.id,
-      durationMs: elapsedMs(startedAt),
     });
 
     return { success: true };
   } catch (error) {
-    console.error('Failed to delete match:', error, {
-      durationMs: elapsedMs(startedAt),
-    });
+    console.error('Failed to delete match:', error);
 
     return {
       success: false,
