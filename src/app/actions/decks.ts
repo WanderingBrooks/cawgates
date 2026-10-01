@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 import { createDeckSchema, type ActionResult } from '@/lib/types';
 import { slugify } from '@/lib/utils';
+import { elapsedMs, logEvent } from '@/lib/log';
 import { redirect } from 'next/navigation';
 
 // --- User's own decks ---
@@ -28,6 +29,7 @@ const createDeck = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
+  const startedAt = performance.now();
   const user = await getUser();
 
   if (!user) {
@@ -56,6 +58,12 @@ const createDeck = async (
       },
     });
 
+    logEvent('deck.created', {
+      userId: user.userId,
+      deckId: deck.id,
+      durationMs: elapsedMs(startedAt),
+    });
+
     redirect(`/${user.username}/${deck.slug}`);
   } catch (error: unknown) {
     if (
@@ -78,6 +86,7 @@ const updateDeck = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
+  const startedAt = performance.now();
   const user = await getUser();
 
   if (!user) {
@@ -114,6 +123,12 @@ const updateDeck = async (
       },
     });
 
+    logEvent('deck.updated', {
+      userId: user.userId,
+      deckId: updated.id,
+      durationMs: elapsedMs(startedAt),
+    });
+
     redirect(`/${user.username}/${updated.slug}`);
   } catch (error: unknown) {
     if (
@@ -133,6 +148,7 @@ const updateDeck = async (
 };
 
 const deleteDeck = async (deckId: string): Promise<ActionResult> => {
+  const startedAt = performance.now();
   const user = await getUser();
 
   if (!user) {
@@ -155,6 +171,12 @@ const deleteDeck = async (deckId: string): Promise<ActionResult> => {
   }
 
   await prisma.deck.delete({ where: { id: deckId } });
+
+  logEvent('deck.deleted', {
+    userId: user.userId,
+    deckId,
+    durationMs: elapsedMs(startedAt),
+  });
 
   redirect(`/${user.username}/decks`);
 };

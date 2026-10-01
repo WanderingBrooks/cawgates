@@ -4,7 +4,8 @@ import { redirect } from 'next/navigation';
 import bcrypt from 'bcrypt';
 import { prisma } from '@/lib/prisma';
 import { loginSchema } from '@/lib/types';
-import { createSession, destroySession } from '@/lib/session';
+import { createSession, destroySession, getUser } from '@/lib/session';
+import { elapsedMs, logEvent } from '@/lib/log';
 
 export type ActionResult = {
   success: boolean;
@@ -15,6 +16,8 @@ const login = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
+  const startedAt = performance.now();
+
   try {
     const data = {
       usernameOrEmail: formData.get('usernameOrEmail') as string,
@@ -51,6 +54,12 @@ const login = async (
     });
 
     if (!user) {
+      // The attempted username/email is deliberately not logged
+      logEvent('auth.loginFailed', {
+        reason: 'unknownUser',
+        durationMs: elapsedMs(startedAt),
+      });
+
       return {
         success: false,
         error: 'Invalid username/email or password',
@@ -64,6 +73,12 @@ const login = async (
     );
 
     if (!isPasswordValid) {
+      logEvent('auth.loginFailed', {
+        reason: 'badPassword',
+        userId: user.id,
+        durationMs: elapsedMs(startedAt),
+      });
+
       return {
         success: false,
         error: 'Invalid username or password',
@@ -76,8 +91,15 @@ const login = async (
       email: user.email,
       username: user.username,
     });
+
+    logEvent('auth.login', {
+      userId: user.id,
+      durationMs: elapsedMs(startedAt),
+    });
   } catch (error) {
-    console.error('Error during login:', error);
+    console.error('Error during login:', error, {
+      durationMs: elapsedMs(startedAt),
+    });
 
     return {
       success: false,
@@ -89,7 +111,11 @@ const login = async (
 };
 
 const logout = async (): Promise<void> => {
+  const user = await getUser();
+
   await destroySession();
+
+  logEvent('auth.logout', { userId: user?.userId ?? null });
   redirect('/login');
 };
 

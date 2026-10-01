@@ -8,11 +8,13 @@ import {
   type ActionResult,
 } from '@/lib/types';
 import { getUser } from '@/lib/session';
+import { elapsedMs, logEvent } from '@/lib/log';
 
 const createEvent = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
+  const startedAt = performance.now();
   let eventId: string;
   let username: string;
 
@@ -65,8 +67,17 @@ const createEvent = async (
 
     eventId = event.id;
     username = user.username;
+
+    logEvent('event.created', {
+      userId: user.userId,
+      deckId: validated.deckId,
+      eventId,
+      durationMs: elapsedMs(startedAt),
+    });
   } catch (error) {
-    console.error('Failed to create event:', error);
+    console.error('Failed to create event:', error, {
+      durationMs: elapsedMs(startedAt),
+    });
 
     return {
       success: false,
@@ -81,6 +92,7 @@ const updateEvent = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
+  const startedAt = performance.now();
   let eventId: string;
   let username: string;
 
@@ -142,8 +154,17 @@ const updateEvent = async (
 
     eventId = validated.eventId;
     username = user.username;
+
+    logEvent('event.updated', {
+      userId: user.userId,
+      deckId: existingEvent.deckId,
+      eventId,
+      durationMs: elapsedMs(startedAt),
+    });
   } catch (error) {
-    console.error('Failed to update event:', error);
+    console.error('Failed to update event:', error, {
+      durationMs: elapsedMs(startedAt),
+    });
 
     return {
       success: false,
@@ -158,6 +179,7 @@ const updateEvent = async (
  * Delete an event and all associated matches. Redirect back to the event list afterward.
  */
 const deleteEvent = async (eventId: string): Promise<ActionResult> => {
+  const startedAt = performance.now();
   let username: string;
 
   try {
@@ -196,8 +218,17 @@ const deleteEvent = async (eventId: string): Promise<ActionResult> => {
         id: eventId,
       },
     });
+
+    logEvent('event.deleted', {
+      userId: user.userId,
+      deckId: event.deckId,
+      eventId,
+      durationMs: elapsedMs(startedAt),
+    });
   } catch (error) {
-    console.error('Failed to delete event:', error);
+    console.error('Failed to delete event:', error, {
+      durationMs: elapsedMs(startedAt),
+    });
 
     return {
       success: false,

@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
+import { elapsedMs, logEvent } from '@/lib/log';
 import {
   createOpponentArchetypeSchema,
   type ActionResult,
@@ -38,6 +39,7 @@ const createOpponentArchetype = async (
   _prevState: ActionResultWithData<{ id: string; name: string }> | null,
   formData: FormData,
 ): Promise<ActionResultWithData<{ id: string; name: string }>> => {
+  const startedAt = performance.now();
   const user = await getUser();
 
   if (!user) {
@@ -69,6 +71,13 @@ const createOpponentArchetype = async (
       },
     });
 
+    logEvent('opponentArchetype.created', {
+      userId: user.userId,
+      deckId,
+      opponentArchetypeId: created.id,
+      durationMs: elapsedMs(startedAt),
+    });
+
     return {
       success: true,
       data: { id: created.id, name: created.name },
@@ -94,6 +103,7 @@ const updateOpponentArchetype = async (
   _prevState: ActionResultWithData<{ id: string; name: string }> | null,
   formData: FormData,
 ): Promise<ActionResultWithData<{ id: string; name: string }>> => {
+  const startedAt = performance.now();
   const user = await getUser();
 
   if (!user) {
@@ -124,6 +134,13 @@ const updateOpponentArchetype = async (
       data: { name: result.data.name },
     });
 
+    logEvent('opponentArchetype.updated', {
+      userId: user.userId,
+      deckId: updated.deckId,
+      opponentArchetypeId: updated.id,
+      durationMs: elapsedMs(startedAt),
+    });
+
     return {
       success: true,
       data: { id: updated.id, name: updated.name },
@@ -150,6 +167,7 @@ const deleteOpponentArchetype = async ({
 }: {
   opponentArchetypeId: string;
 }): Promise<ActionResult> => {
+  const startedAt = performance.now();
   let deckSlug: string;
   let username: string;
 
@@ -199,8 +217,17 @@ const deleteOpponentArchetype = async ({
     await prisma.opponentArchetype.delete({
       where: { id: opponentArchetypeId },
     });
+
+    logEvent('opponentArchetype.deleted', {
+      userId: user.userId,
+      deckId: opponentArchetype.deckId,
+      opponentArchetypeId,
+      durationMs: elapsedMs(startedAt),
+    });
   } catch (error) {
-    console.error('Failed to delete opponent archetype:', error);
+    console.error('Failed to delete opponent archetype:', error, {
+      durationMs: elapsedMs(startedAt),
+    });
 
     return {
       success: false,
