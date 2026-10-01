@@ -55,48 +55,26 @@ const createMatch = async (
       return { success: false, error: 'Event not found' };
     }
 
-    let isRetry = false;
-
-    try {
-      await prisma.match.create({
-        data: {
-          id: validated.matchId,
-          eventId: validated.eventId,
-          opponentArchetypeId: validated.opponentArchetypeId,
-          wins: validated.wins,
-          losses: validated.losses,
-          notes: validated.notes,
-        },
-      });
-    } catch (error: unknown) {
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'code' in error &&
-        (error as { code: string }).code === 'P2002'
-      ) {
-        // A match with this id already exists. If it's in the same event
-        // (which this user owns, checked above) it was created by an earlier
-        // submit of this same form, so report success instead of duplicating.
-        const existing = await prisma.match.findUnique({
-          where: { id: validated.matchId },
-        });
-
-        if (existing?.eventId !== validated.eventId) {
-          return { success: false, error: 'Failed to create match' };
-        }
-
-        isRetry = true;
-      } else {
-        throw error;
-      }
-    }
+    // Upsert so a resubmit of the same form (same matchId) doesn't create a
+    // duplicate. The empty update leaves an already-saved match untouched.
+    await prisma.match.upsert({
+      where: { id: validated.matchId },
+      create: {
+        id: validated.matchId,
+        eventId: validated.eventId,
+        opponentArchetypeId: validated.opponentArchetypeId,
+        wins: validated.wins,
+        losses: validated.losses,
+        notes: validated.notes,
+      },
+      update: {},
+    });
 
     revalidatePath(
       `/${user.username}/${event.deck.slug}/events/${validated.eventId}`,
     );
 
-    logEvent(isRetry ? 'match.createRetried' : 'match.created', {
+    logEvent('match.created', {
       userId: user.userId,
       eventId: validated.eventId,
       matchId: validated.matchId,
