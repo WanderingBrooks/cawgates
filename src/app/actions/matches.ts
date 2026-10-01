@@ -25,6 +25,7 @@ const createMatch = async (
     }
 
     const data = {
+      matchId: formData.get('matchId') as string,
       eventId: formData.get('eventId') as string,
       opponentArchetypeId: formData.get('opponentArchetypeId') as string,
       wins: parseInt(formData.get('wins') as string) || 0,
@@ -54,24 +55,51 @@ const createMatch = async (
       return { success: false, error: 'Event not found' };
     }
 
-    const match = await prisma.match.create({
-      data: {
-        eventId: validated.eventId,
-        opponentArchetypeId: validated.opponentArchetypeId,
-        wins: validated.wins,
-        losses: validated.losses,
-        notes: validated.notes,
-      },
-    });
+    let isRetry = false;
+
+    try {
+      await prisma.match.create({
+        data: {
+          id: validated.matchId,
+          eventId: validated.eventId,
+          opponentArchetypeId: validated.opponentArchetypeId,
+          wins: validated.wins,
+          losses: validated.losses,
+          notes: validated.notes,
+        },
+      });
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        (error as { code: string }).code === 'P2002'
+      ) {
+        // A match with this id already exists. If it's in the same event
+        // (which this user owns, checked above) it was created by an earlier
+        // submit of this same form, so report success instead of duplicating.
+        const existing = await prisma.match.findUnique({
+          where: { id: validated.matchId },
+        });
+
+        if (existing?.eventId !== validated.eventId) {
+          return { success: false, error: 'Failed to create match' };
+        }
+
+        isRetry = true;
+      } else {
+        throw error;
+      }
+    }
 
     revalidatePath(
       `/${user.username}/${event.deck.slug}/events/${validated.eventId}`,
     );
 
-    logEvent('match.created', {
+    logEvent(isRetry ? 'match.createRetried' : 'match.created', {
       userId: user.userId,
       eventId: validated.eventId,
-      matchId: match.id,
+      matchId: validated.matchId,
     });
 
     return { success: true };

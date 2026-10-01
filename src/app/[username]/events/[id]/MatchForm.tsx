@@ -65,6 +65,10 @@ const MatchForm = ({
     },
   );
 
+  // Stable for the life of this form, so submitting it again (e.g. after a
+  // lost response) reuses the id and the server won't create a duplicate
+  const [newMatchId] = useState(() => crypto.randomUUID());
+
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [hasFormDataChanged, setHasFormDataChanged] = useState(false);
 
@@ -99,6 +103,7 @@ const MatchForm = ({
       ...prev,
       [name]: value,
     }));
+
     setHasFormDataChanged(true);
   };
 
@@ -106,7 +111,11 @@ const MatchForm = ({
     <Form action={formAction}>
       <SpaceChildrenVertically>
         <input type="hidden" name="eventId" value={eventId} />
-        {matchId && <input type="hidden" name="matchId" value={matchId} />}
+        <input
+          type="hidden"
+          name="matchId"
+          value={mode === 'create' ? newMatchId : matchId}
+        />
 
         <OpponentArchetypeSelect
           deckId={deckId}
