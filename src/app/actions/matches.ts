@@ -8,11 +8,14 @@ import {
   type ActionResult,
 } from '@/lib/types';
 import { getUser } from '@/lib/session';
+import { elapsedMs, logEvent } from '@/lib/log';
 
 const createMatch = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
+  const startedAt = performance.now();
+
   try {
     const user = await getUser();
 
@@ -53,7 +56,7 @@ const createMatch = async (
       return { success: false, error: 'Event not found' };
     }
 
-    await prisma.match.create({
+    const match = await prisma.match.create({
       data: {
         eventId: validated.eventId,
         opponentArchetypeId: validated.opponentArchetypeId,
@@ -67,9 +70,18 @@ const createMatch = async (
       `/${user.username}/${event.deck.slug}/events/${validated.eventId}`,
     );
 
+    logEvent('match.created', {
+      userId: user.userId,
+      eventId: validated.eventId,
+      matchId: match.id,
+      durationMs: elapsedMs(startedAt),
+    });
+
     return { success: true };
   } catch (error) {
-    console.error('Failed to create match:', error);
+    console.error('Failed to create match:', error, {
+      durationMs: elapsedMs(startedAt),
+    });
 
     return {
       success: false,
@@ -82,6 +94,8 @@ const updateMatch = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
+  const startedAt = performance.now();
+
   try {
     const user = await getUser();
 
@@ -141,9 +155,18 @@ const updateMatch = async (
       `/${user.username}/${match.event.deck.slug}/events/${match.eventId}`,
     );
 
+    logEvent('match.updated', {
+      userId: user.userId,
+      eventId: match.eventId,
+      matchId: match.id,
+      durationMs: elapsedMs(startedAt),
+    });
+
     return { success: true };
   } catch (error) {
-    console.error('Failed to update match:', error);
+    console.error('Failed to update match:', error, {
+      durationMs: elapsedMs(startedAt),
+    });
 
     return {
       success: false,
@@ -153,6 +176,8 @@ const updateMatch = async (
 };
 
 const deleteMatch = async (matchId: string): Promise<ActionResult> => {
+  const startedAt = performance.now();
+
   try {
     const user = await getUser();
 
@@ -182,9 +207,18 @@ const deleteMatch = async (matchId: string): Promise<ActionResult> => {
       `/${user.username}/${match.event.deck.slug}/events/${match.eventId}`,
     );
 
+    logEvent('match.deleted', {
+      userId: user.userId,
+      eventId: match.eventId,
+      matchId: match.id,
+      durationMs: elapsedMs(startedAt),
+    });
+
     return { success: true };
   } catch (error) {
-    console.error('Failed to delete match:', error);
+    console.error('Failed to delete match:', error, {
+      durationMs: elapsedMs(startedAt),
+    });
 
     return {
       success: false,
