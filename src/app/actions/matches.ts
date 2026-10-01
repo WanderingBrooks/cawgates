@@ -8,6 +8,7 @@ import {
   type ActionResult,
 } from '@/lib/types';
 import { getUser } from '@/lib/session';
+import { logEvent } from '@/lib/log';
 
 const createMatch = async (
   _prevState: ActionResult | null,
@@ -53,7 +54,7 @@ const createMatch = async (
       return { success: false, error: 'Event not found' };
     }
 
-    await prisma.match.create({
+    const match = await prisma.match.create({
       data: {
         eventId: validated.eventId,
         opponentArchetypeId: validated.opponentArchetypeId,
@@ -66,6 +67,12 @@ const createMatch = async (
     revalidatePath(
       `/${user.username}/${event.deck.slug}/events/${validated.eventId}`,
     );
+
+    logEvent('match.created', {
+      userId: user.userId,
+      eventId: validated.eventId,
+      matchId: match.id,
+    });
 
     return { success: true };
   } catch (error) {
@@ -141,6 +148,12 @@ const updateMatch = async (
       `/${user.username}/${match.event.deck.slug}/events/${match.eventId}`,
     );
 
+    logEvent('match.updated', {
+      userId: user.userId,
+      eventId: match.eventId,
+      matchId: match.id,
+    });
+
     return { success: true };
   } catch (error) {
     console.error('Failed to update match:', error);
@@ -181,6 +194,12 @@ const deleteMatch = async (matchId: string): Promise<ActionResult> => {
     revalidatePath(
       `/${user.username}/${match.event.deck.slug}/events/${match.eventId}`,
     );
+
+    logEvent('match.deleted', {
+      userId: user.userId,
+      eventId: match.eventId,
+      matchId: match.id,
+    });
 
     return { success: true };
   } catch (error) {

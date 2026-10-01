@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
+import { logEvent } from '@/lib/log';
 import {
   createOpponentArchetypeSchema,
   type ActionResult,
@@ -69,6 +70,12 @@ const createOpponentArchetype = async (
       },
     });
 
+    logEvent('opponentArchetype.created', {
+      userId: user.userId,
+      deckId,
+      opponentArchetypeId: created.id,
+    });
+
     return {
       success: true,
       data: { id: created.id, name: created.name },
@@ -122,6 +129,12 @@ const updateOpponentArchetype = async (
     const updated = await prisma.opponentArchetype.update({
       where: { id: opponentArchetypeId },
       data: { name: result.data.name },
+    });
+
+    logEvent('opponentArchetype.updated', {
+      userId: user.userId,
+      deckId: updated.deckId,
+      opponentArchetypeId: updated.id,
     });
 
     return {
@@ -198,6 +211,12 @@ const deleteOpponentArchetype = async ({
 
     await prisma.opponentArchetype.delete({
       where: { id: opponentArchetypeId },
+    });
+
+    logEvent('opponentArchetype.deleted', {
+      userId: user.userId,
+      deckId: opponentArchetype.deckId,
+      opponentArchetypeId,
     });
   } catch (error) {
     console.error('Failed to delete opponent archetype:', error);

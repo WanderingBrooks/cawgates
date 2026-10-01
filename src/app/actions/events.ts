@@ -8,6 +8,7 @@ import {
   type ActionResult,
 } from '@/lib/types';
 import { getUser } from '@/lib/session';
+import { logEvent } from '@/lib/log';
 
 const createEvent = async (
   _prevState: ActionResult | null,
@@ -65,6 +66,12 @@ const createEvent = async (
 
     eventId = event.id;
     username = user.username;
+
+    logEvent('event.created', {
+      userId: user.userId,
+      deckId: validated.deckId,
+      eventId,
+    });
   } catch (error) {
     console.error('Failed to create event:', error);
 
@@ -142,6 +149,12 @@ const updateEvent = async (
 
     eventId = validated.eventId;
     username = user.username;
+
+    logEvent('event.updated', {
+      userId: user.userId,
+      deckId: existingEvent.deckId,
+      eventId,
+    });
   } catch (error) {
     console.error('Failed to update event:', error);
 
@@ -195,6 +208,12 @@ const deleteEvent = async (eventId: string): Promise<ActionResult> => {
       where: {
         id: eventId,
       },
+    });
+
+    logEvent('event.deleted', {
+      userId: user.userId,
+      deckId: event.deckId,
+      eventId,
     });
   } catch (error) {
     console.error('Failed to delete event:', error);

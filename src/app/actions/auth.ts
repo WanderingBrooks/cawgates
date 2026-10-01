@@ -4,7 +4,8 @@ import { redirect } from 'next/navigation';
 import bcrypt from 'bcrypt';
 import { prisma } from '@/lib/prisma';
 import { loginSchema } from '@/lib/types';
-import { createSession, destroySession } from '@/lib/session';
+import { createSession, destroySession, getUser } from '@/lib/session';
+import { logEvent } from '@/lib/log';
 
 export type ActionResult = {
   success: boolean;
@@ -51,6 +52,9 @@ const login = async (
     });
 
     if (!user) {
+      // The attempted username/email is deliberately not logged
+      logEvent('auth.loginFailed', { reason: 'unknownUser' });
+
       return {
         success: false,
         error: 'Invalid username/email or password',
@@ -64,6 +68,11 @@ const login = async (
     );
 
     if (!isPasswordValid) {
+      logEvent('auth.loginFailed', {
+        reason: 'badPassword',
+        userId: user.id,
+      });
+
       return {
         success: false,
         error: 'Invalid username or password',
@@ -76,6 +85,8 @@ const login = async (
       email: user.email,
       username: user.username,
     });
+
+    logEvent('auth.login', { userId: user.id });
   } catch (error) {
     console.error('Error during login:', error);
 
@@ -89,7 +100,11 @@ const login = async (
 };
 
 const logout = async (): Promise<void> => {
+  const user = await getUser();
+
   await destroySession();
+
+  logEvent('auth.logout', { userId: user?.userId ?? null });
   redirect('/login');
 };
 

@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 import { createDeckSchema, type ActionResult } from '@/lib/types';
 import { slugify } from '@/lib/utils';
+import { logEvent } from '@/lib/log';
 import { redirect } from 'next/navigation';
 
 // --- User's own decks ---
@@ -54,6 +55,11 @@ const createDeck = async (
         isPublic: result.data.isPublic,
         userId: user.userId,
       },
+    });
+
+    logEvent('deck.created', {
+      userId: user.userId,
+      deckId: deck.id,
     });
 
     redirect(`/${user.username}/${deck.slug}`);
@@ -114,6 +120,11 @@ const updateDeck = async (
       },
     });
 
+    logEvent('deck.updated', {
+      userId: user.userId,
+      deckId: updated.id,
+    });
+
     redirect(`/${user.username}/${updated.slug}`);
   } catch (error: unknown) {
     if (
@@ -155,6 +166,11 @@ const deleteDeck = async (deckId: string): Promise<ActionResult> => {
   }
 
   await prisma.deck.delete({ where: { id: deckId } });
+
+  logEvent('deck.deleted', {
+    userId: user.userId,
+    deckId,
+  });
 
   redirect(`/${user.username}/decks`);
 };
