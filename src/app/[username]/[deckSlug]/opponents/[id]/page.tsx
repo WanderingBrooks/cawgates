@@ -43,7 +43,10 @@ const OpponentArchetypePage = async ({
 
   return (
     <>
-      <PageTitle title={opponentArchetype.name} subtitle={deck.name} />
+      <PageTitle
+        title={opponentArchetype.name}
+        subtitle={opponentArchetype.format.name}
+      />
       <OpponentArchetypeSubHeader
         deckId={deck.id}
         opponentArchetypeId={opponentArchetype.id}
@@ -67,6 +70,12 @@ const OpponentArchetypePage = async ({
                 <div className={classes.matchLink}>
                   <Link href={`/${username}/events/${match.event.id}`}>
                     {match.event.name}
+                  </Link>
+                  <Link
+                    href={`/${username}/${match.event.deck.slug}`}
+                    className="text-label"
+                  >
+                    {match.event.deck.name}
                   </Link>
                 </div>
                 <div className={classes.matchRecordAndDate}>
@@ -95,6 +104,7 @@ const OpponentArchetypePage = async ({
           <SectionHeader>{t('dangerZone')}</SectionHeader>
           <DeleteOpponentArchetypeButton
             opponentArchetypeId={opponentArchetype.id}
+            deckId={deck.id}
             hasMatches={opponentArchetype.matches.length > 0}
           />
         </>
