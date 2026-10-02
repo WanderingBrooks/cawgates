@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { PageTitle } from '@/components';
-import { getDeck } from '@/lib/dal';
+import { getDeckForEdit } from '@/lib/dal';
 import { DeckForm } from '@/components';
 
 const EditDeckPage = async ({
@@ -12,7 +12,7 @@ const EditDeckPage = async ({
   const t = await getTranslations('editDeck');
   const { username, deckSlug } = await params;
 
-  const { deck, isOwner } = await getDeck({
+  const { deck, isOwner, hasMatches } = await getDeckForEdit({
     ownerUsername: username,
     deckSlug,
   });
@@ -30,6 +30,7 @@ const EditDeckPage = async ({
         deckId={deck.id}
         deckSlug={deck.slug}
         initialDeckData={deck}
+        isFormatLocked={hasMatches}
       />
     </>
   );
