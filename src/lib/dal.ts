@@ -173,12 +173,16 @@ const getOpponentArchetype = async ({
     deckSlug,
   });
 
+  // Shows matches from every deck in the format. Guests only see matches
+  // played with public decks, even when they arrived via a public deck.
   const opponentArchetype = await prisma.opponentArchetype.findUnique({
-    where: { id: opponentArchetypeId, deckId: deck.id },
+    where: { id: opponentArchetypeId, formatId: deck.formatId },
     include: {
+      format: true,
       matches: {
+        where: isOwner ? {} : { event: { deck: { isPublic: true } } },
         orderBy: { event: { date: 'desc' } },
-        include: { event: true },
+        include: { event: { include: { deck: true } } },
       },
     },
   });
