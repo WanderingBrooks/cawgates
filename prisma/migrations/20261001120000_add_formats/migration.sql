@@ -65,12 +65,15 @@ DROP TABLE "archetype_merge";
 
 UPDATE "OpponentArchetype" SET "name" = trim("name") WHERE "name" <> trim("name");
 
--- Drop the old deck scoping
+-- Remove the old deck scoping. "deckId" itself is kept (nullable, no FK) so the
+-- previous deployment can keep reading it until the new one is live; it's dropped
+-- in a later migration (see COLUMNS_TO_DROP.md). The FK must go now: it cascades,
+-- and deleting a deck must no longer delete archetypes shared across the format.
 ALTER TABLE "OpponentArchetype" DROP CONSTRAINT "OpponentArchetype_deckId_fkey";
 
 DROP INDEX "OpponentArchetype_deckId_name_key";
 
-ALTER TABLE "OpponentArchetype" DROP COLUMN "deckId";
+ALTER TABLE "OpponentArchetype" ALTER COLUMN "deckId" DROP NOT NULL;
 
 ALTER TABLE "OpponentArchetype" ALTER COLUMN "formatId" SET NOT NULL;
 
