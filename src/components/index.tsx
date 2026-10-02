@@ -7,6 +7,8 @@ import Dialog from './Dialog';
 import DeckForm from './DeckForm';
 import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
+import FormatForm from './FormatForm';
+import FormatSelect from './FormatSelect';
 import Input from './Input';
 import PageTitle from './PageTitle';
 import Select from './Select';
@@ -30,6 +32,8 @@ export {
   Dialog,
   ErrorMessage,
   FlexRowBetween,
+  FormatForm,
+  FormatSelect,
   Input,
   OpponentArchetypeForm,
   OpponentArchetypeSelect,
