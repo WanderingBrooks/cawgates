@@ -119,6 +119,21 @@
     "createTitle": "Create opponent archetype",
     "editTitle": "Edit opponent archetype"
   },
+  "formatSelect": {
+    "selectFormat": "Select a format...",
+    "loading": "Loading...",
+    "addNew": "+ Add new...",
+    "edit": "Edit",
+    "createTitle": "Create format",
+    "editTitle": "Edit format"
+  },
+  "formatForm": {
+    "name": "Name *",
+    "create": "Create",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel"
+  },
   "errorMessage": {
     "message": "<strong>Error:</strong> {error}"
   },

@@ -65,6 +65,13 @@ export type CreateOpponentArchetypeInput = z.infer<
   typeof createOpponentArchetypeSchema
 >;
 
+// Schema for creating/updating a format
+const createFormatSchema = z.object({
+  name: z.string().min(1, 'Name is required').trim(),
+});
+
+export type CreateFormatInput = z.infer<typeof createFormatSchema>;
+
 /**
  * Return type of server actions that return success or failure.
  * Use ActionResultWithData<T> when the success case includes data.
@@ -146,6 +153,7 @@ export {
   updateMatchSchema,
   createDeckSchema,
   createOpponentArchetypeSchema,
+  createFormatSchema,
   registerUserSchema,
   loginSchema,
 };
