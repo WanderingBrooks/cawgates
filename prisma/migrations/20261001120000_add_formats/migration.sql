@@ -40,6 +40,33 @@ SET "formatId" = d."formatId"
 FROM "Deck" d
 WHERE d."id" = oa."deckId";
 
+-- The old per-deck uniqueness goes first, so renames below can't collide within a deck
+DROP INDEX "OpponentArchetype_deckId_name_key";
+
+-- One-off cleanup of existing prod data: archetypes that are the same deck under
+-- different names. Renaming them to one name lets the merge below combine them.
+-- Matches usernames, so this is a no-op on any database without these users.
+UPDATE "OpponentArchetype" oa
+SET "name" = alias."toName"
+FROM
+    (VALUES
+        ('jason', 'UB Affinity', 'Dimir Affinity'),
+        ('jason', 'U Terror', 'Mono U Terror'),
+        ('jason', 'WW', 'White Weenie'),
+        ('jason', 'Mono Red Rallyish', 'Mono R Rally'),
+        ('jason', 'Black artifacts', 'Mono B Artifacts'),
+        ('jason', 'Mono b artifacts', 'Mono B Artifacts'),
+        ('jason', 'Tron', 'Monster Tron'),
+        ('jason', 'Monster tron', 'Monster Tron'),
+        ('alexander', 'Red Madness', 'Mono R Madness')
+    ) AS alias ("username", "fromName", "toName"),
+    "Format" f,
+    "User" u
+WHERE f."id" = oa."formatId"
+  AND u."id" = f."userId"
+  AND u."username" = alias."username"
+  AND trim(oa."name") = alias."fromName";
+
 -- Merge duplicate archetypes within a format. The oldest one survives.
 CREATE TEMP TABLE "archetype_merge" AS
 SELECT
@@ -70,8 +97,6 @@ UPDATE "OpponentArchetype" SET "name" = trim("name") WHERE "name" <> trim("name"
 -- in a later migration (see COLUMNS_TO_DROP.md). The FK must go now: it cascades,
 -- and deleting a deck must no longer delete archetypes shared across the format.
 ALTER TABLE "OpponentArchetype" DROP CONSTRAINT "OpponentArchetype_deckId_fkey";
-
-DROP INDEX "OpponentArchetype_deckId_name_key";
 
 ALTER TABLE "OpponentArchetype" ALTER COLUMN "deckId" DROP NOT NULL;
 
