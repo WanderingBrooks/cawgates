@@ -40,11 +40,20 @@ const createDeck = async (
   const rawSlug = formData.get('slug') as string;
   // Auto-derive slug from name if the user left the field blank
   const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
+  const formatId = formData.get('formatId') as string;
 
-  const result = createDeckSchema.safeParse({ name, slug, isPublic });
+  const result = createDeckSchema.safeParse({ name, slug, isPublic, formatId });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
+  }
+
+  const format = await prisma.format.findUnique({
+    where: { id: result.data.formatId },
+  });
+
+  if (!format || format.userId !== user.userId) {
+    return { success: false, error: 'Format not found' };
   }
 
   try {
@@ -54,12 +63,14 @@ const createDeck = async (
         slug: result.data.slug,
         isPublic: result.data.isPublic,
         userId: user.userId,
+        formatId: format.id,
       },
     });
 
     logEvent('deck.created', {
       userId: user.userId,
       deckId: deck.id,
+      formatId: deck.formatId,
     });
 
     redirect(`/${user.username}/${deck.slug}`);
@@ -95,8 +106,9 @@ const updateDeck = async (
   const isPublic = formData.get('isPublic') as string;
   const rawSlug = formData.get('slug') as string;
   const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
+  const formatId = formData.get('formatId') as string;
 
-  const result = createDeckSchema.safeParse({ name, slug, isPublic });
+  const result = createDeckSchema.safeParse({ name, slug, isPublic, formatId });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
@@ -110,6 +122,29 @@ const updateDeck = async (
     return { success: false, error: 'Deck not found' };
   }
 
+  if (result.data.formatId !== deck.formatId) {
+    const format = await prisma.format.findUnique({
+      where: { id: result.data.formatId },
+    });
+
+    if (!format || format.userId !== user.userId) {
+      return { success: false, error: 'Format not found' };
+    }
+
+    // Matches point at archetypes in the deck's current format, so moving a
+    // deck with matches to another format is not supported (yet)
+    const matchCount = await prisma.match.count({
+      where: { event: { deckId } },
+    });
+
+    if (matchCount > 0) {
+      return {
+        success: false,
+        error: 'You cannot change the format of a deck that has matches',
+      };
+    }
+  }
+
   try {
     const updated = await prisma.deck.update({
       where: { id: deckId },
@@ -117,12 +152,14 @@ const updateDeck = async (
         name: result.data.name,
         slug: result.data.slug,
         isPublic: result.data.isPublic,
+        formatId: result.data.formatId,
       },
     });
 
     logEvent('deck.updated', {
       userId: user.userId,
       deckId: updated.id,
+      formatId: updated.formatId,
     });
 
     redirect(`/${user.username}/${updated.slug}`);

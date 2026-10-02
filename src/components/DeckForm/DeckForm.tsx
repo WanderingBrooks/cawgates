@@ -11,6 +11,7 @@ import Form from '../Form';
 import Input from '../Input';
 import SpaceChildrenVertically from '../SpaceChildrenVertically';
 import FlexRowBetween from '../FlexRowBetween';
+import FormatSelect from '../FormatSelect';
 import Link from 'next/link';
 import DeleteDeckButton from './DeleteDeckButton';
 import classes from './deckForm.module.css';
@@ -44,7 +45,9 @@ type DeckFormProps =
         name: string;
         slug: string;
         isPublic: boolean;
+        formatId: string;
       };
+      isFormatLocked: boolean;
     };
 
 const DeckForm = (props: DeckFormProps) => {
@@ -68,7 +71,13 @@ const DeckForm = (props: DeckFormProps) => {
     props.mode === 'edit' ? props.initialDeckData.isPublic : false,
   );
 
+  const [formatId, setFormatId] = useState(
+    props.mode === 'edit' ? props.initialDeckData.formatId : '',
+  );
+
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
+
+  const isFormatLocked = props.mode === 'edit' && props.isFormatLocked;
 
   const cancelHref =
     props.mode === 'create'
@@ -111,6 +120,16 @@ const DeckForm = (props: DeckFormProps) => {
           hint={t('slugHint')}
           value={slug}
           onChange={handleSlugChange}
+        />
+        <FormatSelect
+          id="formatId"
+          name="formatId"
+          label={t('format')}
+          hint={isFormatLocked ? t('formatLockedHint') : undefined}
+          value={formatId}
+          onChange={setFormatId}
+          isLocked={isFormatLocked}
+          required
         />
         <Input
           type="checkbox"

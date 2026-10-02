@@ -91,6 +91,22 @@ const getDeck = async ({
   return { deck, isOwner };
 };
 
+const getDeckForEdit = async ({
+  ownerUsername,
+  deckSlug,
+}: {
+  ownerUsername: string;
+  deckSlug: string;
+}) => {
+  const { deck, isOwner } = await getDeck({ ownerUsername, deckSlug });
+
+  const matchCount = await prisma.match.count({
+    where: { event: { deckId: deck.id } },
+  });
+
+  return { deck, isOwner, hasMatches: matchCount > 0 };
+};
+
 const getEvents = async ({ ownerUsername }: { ownerUsername: string }) => {
   const { isOwner, decks } = await getDecksForOwner({ ownerUsername });
 
@@ -178,6 +194,7 @@ export {
   getOwnerByUsername,
   getDecksForOwner,
   getDeck,
+  getDeckForEdit,
   getEvents,
   getEvent,
   getOpponentArchetype,
