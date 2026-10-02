@@ -21,6 +21,7 @@ const DeckPage = async ({
 
   const { rows: matchStatistics, totals } = await getMatchStatistics({
     deckId: deck.id,
+    formatId: deck.formatId,
   });
 
   return (

@@ -1,14 +1,24 @@
 import { prisma } from '@/lib/prisma';
 
-const getMatchStatistics = async ({ deckId }: { deckId: string }) => {
+const getMatchStatistics = async ({
+  deckId,
+  formatId,
+}: {
+  deckId: string;
+  formatId: string;
+}) => {
+  // Archetypes are shared by every deck in the format, so only count the
+  // archetypes and matches this deck has actually played
   const opponentArchetypes = await prisma.opponentArchetype.findMany({
     where: {
-      deckId,
+      formatId,
+      matches: { some: { event: { deckId } } },
     },
     select: {
       id: true,
       name: true,
       matches: {
+        where: { event: { deckId } },
         select: { wins: true, losses: true },
       },
     },

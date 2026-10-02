@@ -7,9 +7,11 @@ import { Button, ErrorMessage } from '@/components';
 
 const DeleteOpponentArchetypeButton = ({
   opponentArchetypeId,
+  deckId,
   hasMatches,
 }: {
   opponentArchetypeId: string;
+  deckId: string;
   hasMatches: boolean;
 }) => {
   const t = useTranslations('deleteOpponentArchetypeButton');
@@ -24,7 +26,10 @@ const DeleteOpponentArchetypeButton = ({
     setIsDeleting(true);
     setError(null);
 
-    const result = await deleteOpponentArchetype({ opponentArchetypeId });
+    const result = await deleteOpponentArchetype({
+      opponentArchetypeId,
+      deckId,
+    });
 
     if (result && !result.success) {
       setError(result.error);
