@@ -54,6 +54,17 @@ const createMatch = async (
       return { success: false, error: 'Event not found' };
     }
 
+    const opponentArchetype = await prisma.opponentArchetype.findUnique({
+      where: { id: validated.opponentArchetypeId },
+    });
+
+    if (
+      !opponentArchetype ||
+      opponentArchetype.formatId !== event.deck.formatId
+    ) {
+      return { success: false, error: 'Opponent archetype not found' };
+    }
+
     const match = await prisma.match.create({
       data: {
         eventId: validated.eventId,
@@ -132,6 +143,17 @@ const updateMatch = async (
 
     if (!match || match.event.deck.userId !== user.userId) {
       return { success: false, error: 'Match not found' };
+    }
+
+    const opponentArchetype = await prisma.opponentArchetype.findUnique({
+      where: { id: validated.opponentArchetypeId },
+    });
+
+    if (
+      !opponentArchetype ||
+      opponentArchetype.formatId !== match.event.deck.formatId
+    ) {
+      return { success: false, error: 'Opponent archetype not found' };
     }
 
     await prisma.match.update({

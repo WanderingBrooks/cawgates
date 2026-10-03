@@ -14,13 +14,27 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(uuid())
-  email      String   @unique
-  username   String   @unique
-  password   String
-  createdAt  DateTime @default(now())
+  id        String   @id @default(uuid())
+  email     String   @unique
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
 
-  decks Deck[]
+  decks   Deck[]
+  formats Format[]
+}
+
+model Format {
+  id        String   @id @default(uuid())
+  name      String
+  userId    String
+  createdAt DateTime @default(now())
+
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  decks              Deck[]
+  opponentArchetypes OpponentArchetype[]
+
+  @@unique([userId, name])
 }
 
 model Deck {
@@ -29,11 +43,12 @@ model Deck {
   slug      String
   isPublic  Boolean  @default(false)
   userId    String
+  formatId  String
   createdAt DateTime @default(now())
 
-  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  events             Event[]
-  opponentArchetypes OpponentArchetype[]
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  format Format  @relation(fields: [formatId], references: [id], onDelete: NoAction)
+  events Event[]
 
   @@unique([userId, name])
   @@unique([userId, slug])
@@ -42,13 +57,13 @@ model Deck {
 model OpponentArchetype {
   id        String   @id @default(uuid())
   name      String
-  deckId    String
+  formatId  String
   createdAt DateTime @default(now())
 
-  deck    Deck    @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  format  Format  @relation(fields: [formatId], references: [id], onDelete: Cascade)
   matches Match[]
 
-  @@unique([deckId, name])
+  @@unique([formatId, name])
 }
 
 model Event {
@@ -64,13 +79,13 @@ model Event {
 }
 
 model Match {
-  id                       String   @id @default(uuid())
-  eventId                  String
-  opponentArchetypeId      String
-  wins                     Int
-  losses                   Int
-  notes                    String?
-  createdAt                DateTime @default(now())
+  id                  String   @id @default(uuid())
+  eventId             String
+  opponentArchetypeId String
+  wins                Int
+  losses              Int
+  notes               String?
+  createdAt           DateTime @default(now())
 
   event             Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
   opponentArchetype OpponentArchetype @relation(fields: [opponentArchetypeId], references: [id])

@@ -91,6 +91,22 @@ const getDeck = async ({
   return { deck, isOwner };
 };
 
+const getDeckForEdit = async ({
+  ownerUsername,
+  deckSlug,
+}: {
+  ownerUsername: string;
+  deckSlug: string;
+}) => {
+  const { deck, isOwner } = await getDeck({ ownerUsername, deckSlug });
+
+  const matchCount = await prisma.match.count({
+    where: { event: { deckId: deck.id } },
+  });
+
+  return { deck, isOwner, hasMatches: matchCount > 0 };
+};
+
 const getEvents = async ({ ownerUsername }: { ownerUsername: string }) => {
   const { isOwner, decks } = await getDecksForOwner({ ownerUsername });
 
@@ -157,12 +173,16 @@ const getOpponentArchetype = async ({
     deckSlug,
   });
 
+  // Shows matches from every deck in the format. Guests only see matches
+  // played with public decks, even when they arrived via a public deck.
   const opponentArchetype = await prisma.opponentArchetype.findUnique({
-    where: { id: opponentArchetypeId, deckId: deck.id },
+    where: { id: opponentArchetypeId, formatId: deck.formatId },
     include: {
+      format: true,
       matches: {
+        where: isOwner ? {} : { event: { deck: { isPublic: true } } },
         orderBy: { event: { date: 'desc' } },
-        include: { event: true },
+        include: { event: { include: { deck: true } } },
       },
     },
   });
@@ -178,6 +198,7 @@ export {
   getOwnerByUsername,
   getDecksForOwner,
   getDeck,
+  getDeckForEdit,
   getEvents,
   getEvent,
   getOpponentArchetype,

@@ -65,6 +65,13 @@ export type CreateOpponentArchetypeInput = z.infer<
   typeof createOpponentArchetypeSchema
 >;
 
+// Schema for creating/updating a format
+const createFormatSchema = z.object({
+  name: z.string().min(1, 'Name is required').trim(),
+});
+
+export type CreateFormatInput = z.infer<typeof createFormatSchema>;
+
 /**
  * Return type of server actions that return success or failure.
  * Use ActionResultWithData<T> when the success case includes data.
@@ -106,6 +113,7 @@ const createDeckSchema = z.object({
   slug: slugSchema
     .min(1, 'Slug is required')
     .max(100, 'Slug must be 100 characters or less'),
+  formatId: z.string().min(1, 'Format is required'),
 });
 
 // Exported type inferred from Zod schema
@@ -146,6 +154,7 @@ export {
   updateMatchSchema,
   createDeckSchema,
   createOpponentArchetypeSchema,
+  createFormatSchema,
   registerUserSchema,
   loginSchema,
 };

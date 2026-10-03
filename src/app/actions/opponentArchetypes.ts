@@ -30,7 +30,7 @@ const getOpponentArchetypesForArchetype = async ({
   }
 
   return prisma.opponentArchetype.findMany({
-    where: { deckId },
+    where: { formatId: deck.formatId },
     orderBy: { name: 'asc' },
   });
 };
@@ -66,13 +66,14 @@ const createOpponentArchetype = async (
     const created = await prisma.opponentArchetype.create({
       data: {
         name: result.data.name,
-        deckId,
+        formatId: deck.formatId,
       },
     });
 
     logEvent('opponentArchetype.created', {
       userId: user.userId,
       deckId,
+      formatId: created.formatId,
       opponentArchetypeId: created.id,
     });
 
@@ -118,10 +119,10 @@ const updateOpponentArchetype = async (
 
   const opponentArchetype = await prisma.opponentArchetype.findUnique({
     where: { id: opponentArchetypeId },
-    include: { deck: true },
+    include: { format: true },
   });
 
-  if (!opponentArchetype || opponentArchetype.deck.userId !== user.userId) {
+  if (!opponentArchetype || opponentArchetype.format.userId !== user.userId) {
     return { success: false, error: 'Opponent archetype not found' };
   }
 
@@ -133,7 +134,7 @@ const updateOpponentArchetype = async (
 
     logEvent('opponentArchetype.updated', {
       userId: user.userId,
-      deckId: updated.deckId,
+      formatId: updated.formatId,
       opponentArchetypeId: updated.id,
     });
 
@@ -160,8 +161,10 @@ const updateOpponentArchetype = async (
 
 const deleteOpponentArchetype = async ({
   opponentArchetypeId,
+  deckId,
 }: {
   opponentArchetypeId: string;
+  deckId: string;
 }): Promise<ActionResult> => {
   let deckSlug: string;
   let username: string;
@@ -178,7 +181,7 @@ const deleteOpponentArchetype = async ({
 
     const opponentArchetype = await prisma.opponentArchetype.findUnique({
       where: { id: opponentArchetypeId },
-      include: { deck: true },
+      include: { format: true },
     });
 
     if (!opponentArchetype) {
@@ -188,7 +191,7 @@ const deleteOpponentArchetype = async ({
       };
     }
 
-    if (opponentArchetype.deck.userId !== user.userId) {
+    if (opponentArchetype.format.userId !== user.userId) {
       return {
         success: false,
         error: 'You do not have permission to delete this opponent archetype',
@@ -206,7 +209,17 @@ const deleteOpponentArchetype = async ({
       };
     }
 
-    deckSlug = opponentArchetype.deck.slug;
+    // The deck the user deleted from, to redirect back to. It must be in the
+    // archetype's format, which also proves it belongs to the user.
+    const deck = await prisma.deck.findUnique({
+      where: { id: deckId },
+    });
+
+    if (!deck || deck.formatId !== opponentArchetype.formatId) {
+      return { success: false, error: 'Deck not found' };
+    }
+
+    deckSlug = deck.slug;
     username = user.username;
 
     await prisma.opponentArchetype.delete({
@@ -215,7 +228,7 @@ const deleteOpponentArchetype = async ({
 
     logEvent('opponentArchetype.deleted', {
       userId: user.userId,
-      deckId: opponentArchetype.deckId,
+      formatId: opponentArchetype.formatId,
       opponentArchetypeId,
     });
   } catch (error) {
