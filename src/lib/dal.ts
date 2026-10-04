@@ -78,6 +78,7 @@ const getDeck = async ({
 
   const deck = await prisma.deck.findUnique({
     where: { userId_slug: { userId: owner.id, slug: deckSlug } },
+    include: { format: true },
   });
 
   if (!deck) {

@@ -26,7 +26,13 @@ const DeckPage = async ({
 
   return (
     <>
-      <PageTitle title={t('title')} subtitle={deck.name} />
+      <PageTitle
+        title={t('title')}
+        subtitle={t('deckAndFormat', {
+          deck: deck.name,
+          format: deck.format.name,
+        })}
+      />
       {isOwner && (
         <div className={classes.rightAlignedButton}>
           <Link href={`/${username}/${deck.slug}/edit`}>

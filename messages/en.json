@@ -23,7 +23,8 @@
     "gameWinPct": "Game win %",
     "noMatchesOwner": "No matches yet — create an event to start tracking",
     "noMatchesViewer": "No matches found",
-    "createEvent": "Create event"
+    "createEvent": "Create event",
+    "deckAndFormat": "{deck} - {format}"
   },
   "deckForm": {
     "name": "Deck name *",
