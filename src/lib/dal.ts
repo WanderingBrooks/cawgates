@@ -55,7 +55,7 @@ const getDecksForOwner = async ({
       ...(isOwner ? {} : { isPublic: true }),
     },
     orderBy: { createdAt: 'asc' },
-    include: { _count: { select: { events: true } } },
+    include: { _count: { select: { events: true } }, format: true },
   });
 
   return { decks, isOwner };

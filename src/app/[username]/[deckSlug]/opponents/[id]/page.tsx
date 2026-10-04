@@ -71,9 +71,9 @@ const OpponentArchetypePage = async ({
                   <Link href={`/${username}/events/${match.event.id}`}>
                     {match.event.name}
                   </Link>
-                  <p>
+                  <span>
                     {match.event.deck.name}
-                  </p>
+                  </span>
                 </div>
                 <div className={classes.matchRecordAndDate}>
                   <p>
