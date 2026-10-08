@@ -17,14 +17,15 @@ import {
   TextArea,
 } from '@/components';
 
-// Saving while either the form or the action reports pending. The action's
-// isPending is the one that matters: the opponent archetype dialog renders
-// its own <form> inside this one (via a portal), and once that inner form has
-// been submitted useFormStatus here stops reporting pending, which left Save
-// clickable mid-request and allowed duplicate matches.
 const SubmitButton = ({ isActionPending }: { isActionPending: boolean }) => {
   const { pending: isFormPending } = useFormStatus();
   const t = useTranslations('matchForm');
+
+  // Saving while either the form or the action reports pending. The action's
+  // isPending is the one that matters: the opponent archetype dialog renders
+  // its own <form> inside this one (via a portal), and once that inner form
+  // has been submitted useFormStatus here stops reporting pending, which left
+  // Save clickable mid-request and allowed duplicate matches.
   const isSaving = isFormPending || isActionPending;
 
   return (
