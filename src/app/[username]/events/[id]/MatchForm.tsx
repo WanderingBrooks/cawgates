@@ -21,6 +21,11 @@ import {
 // this one (via a portal), and once that inner form has been submitted
 // useFormStatus here stops reporting pending, leaving Save clickable
 // mid-request and allowing duplicate matches.
+//
+// There's no need to combine the two: submitting the form starts the action,
+// so both flags turn on together and stay on until the action's result is
+// applied. isPending is therefore true whenever useFormStatus's pending would
+// be, and also in the case above where useFormStatus is wrong.
 const SubmitButton = ({ isPending }: { isPending: boolean }) => {
   const t = useTranslations('matchForm');
 
