@@ -17,18 +17,31 @@ import DeleteDeckButton from './DeleteDeckButton';
 import classes from './deckForm.module.css';
 import { slugify } from '@/lib/utils';
 
-const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
-  const { pending } = useFormStatus();
+const SubmitButton = ({
+  mode,
+  isActionPending,
+}: {
+  mode: 'create' | 'edit';
+  isActionPending: boolean;
+}) => {
+  const { pending: isFormPending } = useFormStatus();
   const t = useTranslations('deckForm');
+
+  // Saving while either the form or the action reports pending. The action's
+  // isPending is the one that matters: the format dialog renders its own
+  // <form> inside this one (via a portal), and once that inner form has been
+  // submitted useFormStatus here stops reporting pending, which left the
+  // button clickable mid-request and allowed duplicate submits.
+  const isSaving = isFormPending || isActionPending;
 
   let label = mode === 'create' ? t('create') : t('save');
 
-  if (pending) {
+  if (isSaving) {
     label = t('saving');
   }
 
   return (
-    <Button type="submit" disabled={pending} variant="primary">
+    <Button type="submit" disabled={isSaving} variant="primary">
       {label}
     </Button>
   );
@@ -54,10 +67,10 @@ const DeckForm = (props: DeckFormProps) => {
   const t = useTranslations('deckForm');
   const action = props.mode === 'create' ? createDeck : updateDeck;
 
-  const [state, formAction] = useActionState<ActionResult | null, FormData>(
-    action,
-    null,
-  );
+  const [state, formAction, isPending] = useActionState<
+    ActionResult | null,
+    FormData
+  >(action, null);
 
   const [name, setName] = useState(
     props.mode === 'edit' ? props.initialDeckData.name : '',
@@ -149,7 +162,7 @@ const DeckForm = (props: DeckFormProps) => {
                 <Link href={cancelHref}>
                   <Button variant="secondary">{t('cancel')}</Button>
                 </Link>
-                <SubmitButton mode={props.mode} />
+                <SubmitButton mode={props.mode} isActionPending={isPending} />
               </div>
             </>
           ) : (
@@ -157,7 +170,7 @@ const DeckForm = (props: DeckFormProps) => {
               <Link href={cancelHref}>
                 <Button variant="secondary">{t('cancel')}</Button>
               </Link>
-              <SubmitButton mode={props.mode} />
+              <SubmitButton mode={props.mode} isActionPending={isPending} />
             </>
           )}
         </FlexRowBetween>
