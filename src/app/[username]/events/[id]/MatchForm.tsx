@@ -1,6 +1,7 @@
 'use client';
 
 import { useActionState, useEffect, useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { createMatch, updateMatch } from '@/app/actions/matches';
 import { type ActionResult, MatchInputForm } from '@/lib/types';
@@ -16,22 +17,19 @@ import {
   TextArea,
 } from '@/components';
 
-// Takes the pending state from MatchForm's useActionState rather than
-// useFormStatus: the opponent archetype dialog renders its own <form> inside
-// this one (via a portal), and once that inner form has been submitted
-// useFormStatus here stops reporting pending, leaving Save clickable
-// mid-request and allowing duplicate matches.
-//
-// There's no need to combine the two: submitting the form starts the action,
-// so both flags turn on together and stay on until the action's result is
-// applied. isPending is therefore true whenever useFormStatus's pending would
-// be, and also in the case above where useFormStatus is wrong.
-const SubmitButton = ({ isPending }: { isPending: boolean }) => {
+// Saving while either the form or the action reports pending. The action's
+// isPending is the one that matters: the opponent archetype dialog renders
+// its own <form> inside this one (via a portal), and once that inner form has
+// been submitted useFormStatus here stops reporting pending, which left Save
+// clickable mid-request and allowed duplicate matches.
+const SubmitButton = ({ isActionPending }: { isActionPending: boolean }) => {
+  const { pending: isFormPending } = useFormStatus();
   const t = useTranslations('matchForm');
+  const isSaving = isFormPending || isActionPending;
 
   return (
-    <Button type="submit" disabled={isPending} variant="primary">
-      {isPending ? t('saving') : t('saveMatch')}
+    <Button type="submit" disabled={isSaving} variant="primary">
+      {isSaving ? t('saving') : t('saveMatch')}
     </Button>
   );
 };
@@ -165,7 +163,7 @@ const MatchForm = ({
             <Button variant="secondary" type="button" onClick={handleCancel}>
               {t('cancel')}
             </Button>
-            <SubmitButton isPending={isPending} />
+            <SubmitButton isActionPending={isPending} />
           </FlexRowBetween>
         )}
       </SpaceChildrenVertically>
