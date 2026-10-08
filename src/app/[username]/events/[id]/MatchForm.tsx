@@ -17,13 +17,20 @@ import {
   TextArea,
 } from '@/components';
 
-const SubmitButton = () => {
-  const { pending } = useFormStatus();
+const SubmitButton = ({ isActionPending }: { isActionPending: boolean }) => {
+  const { pending: isFormPending } = useFormStatus();
   const t = useTranslations('matchForm');
 
+  // Saving while either the form or the action reports pending. The action's
+  // isPending is the one that matters: the opponent archetype dialog renders
+  // its own <form> inside this one (via a portal), and once that inner form
+  // has been submitted useFormStatus here stops reporting pending, which left
+  // Save clickable mid-request and allowed duplicate matches.
+  const isSaving = isFormPending || isActionPending;
+
   return (
-    <Button type="submit" disabled={pending} variant="primary">
-      {pending ? t('saving') : t('saveMatch')}
+    <Button type="submit" disabled={isSaving} variant="primary">
+      {isSaving ? t('saving') : t('saveMatch')}
     </Button>
   );
 };
@@ -51,10 +58,10 @@ const MatchForm = ({
 
   const action = mode === 'create' ? createMatch : updateMatch;
 
-  const [state, formAction] = useActionState<ActionResult | null, FormData>(
-    action,
-    null,
-  );
+  const [state, formAction, isPending] = useActionState<
+    ActionResult | null,
+    FormData
+  >(action, null);
 
   const [matchData, setMatchData] = useState<MatchInputForm>(
     initialMatchData || {
@@ -99,6 +106,7 @@ const MatchForm = ({
       ...prev,
       [name]: value,
     }));
+
     setHasFormDataChanged(true);
   };
 
@@ -156,7 +164,7 @@ const MatchForm = ({
             <Button variant="secondary" type="button" onClick={handleCancel}>
               {t('cancel')}
             </Button>
-            <SubmitButton />
+            <SubmitButton isActionPending={isPending} />
           </FlexRowBetween>
         )}
       </SpaceChildrenVertically>
