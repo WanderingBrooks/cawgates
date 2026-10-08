@@ -58,7 +58,10 @@ FROM
         ('jason', 'Mono b artifacts', 'Mono B Artifacts'),
         ('jason', 'Tron', 'Monster Tron'),
         ('jason', 'Monster tron', 'Monster Tron'),
-        ('alexander', 'Red Madness', 'Mono R Madness')
+        ('jason', 'Mono Red Madness', 'Mono R Madness'),
+        ('jason', 'Mono U Fae', 'Mono U Faeries'),
+        ('alexander', 'Red Madness', 'Mono R Madness'),
+        ('discher420', 'Dimir Faeries', 'Dimir fae')
     ) AS alias ("username", "fromName", "toName"),
     "Format" f,
     "User" u
