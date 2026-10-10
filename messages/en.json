@@ -158,7 +158,8 @@
     "renameTitle": "Rename opponent archetype",
     "delete": "Delete",
     "deleting": "Deleting...",
-    "deleteConfirm": "Are you sure you want to delete {name}?"
+    "deleteConfirm": "Are you sure you want to delete {name}?",
+    "hasMatchesHint": "Opponent archetypes with matches can't be deleted"
   },
   "deleteUnusedOpponentArchetypesButton": {
     "delete": "{count, plural, one {Delete # unused opponent archetype} other {Delete # unused opponent archetypes}}",

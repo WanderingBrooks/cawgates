@@ -11,6 +11,7 @@ import {
   Dialog,
   ErrorMessage,
   OpponentArchetypeForm,
+  Tooltip,
 } from '@/components';
 import classes from './formatPage.module.css';
 
@@ -51,7 +52,13 @@ const OpponentArchetypeRow = ({
     <Card>
       <CardTitle>
         <span>{name}</span>
-        <span>{t('matchCount', { count: matchCount })}</span>
+        {matchCount > 0 ? (
+          <Tooltip content={t('hasMatchesHint')}>
+            {t('matchCount', { count: matchCount })}
+          </Tooltip>
+        ) : (
+          <span>{t('matchCount', { count: matchCount })}</span>
+        )}
       </CardTitle>
       {error && <ErrorMessage error={error} />}
       <div className={classes.rowActions}>
