@@ -137,6 +137,41 @@
     "saving": "Saving...",
     "cancel": "Cancel"
   },
+  "formats": {
+    "title": "My formats",
+    "noFormats": "No formats yet — create one when you create a deck",
+    "deckCount": "{count, plural, one {# deck} other {# decks}}",
+    "opponentArchetypeCount": "{count, plural, one {# opponent archetype} other {# opponent archetypes}}"
+  },
+  "formatPage": {
+    "edit": "Edit",
+    "editTitle": "Edit format",
+    "decksSection": "Decks",
+    "noDecks": "No decks use this format",
+    "opponentArchetypesSection": "Opponent archetypes",
+    "noOpponentArchetypes": "No opponent archetypes yet",
+    "dangerZone": "Danger zone"
+  },
+  "formatOpponentArchetype": {
+    "matchCount": "{count, plural, one {# match} other {# matches}}",
+    "rename": "Rename",
+    "renameTitle": "Rename opponent archetype",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "deleteConfirm": "Are you sure you want to delete {name}?"
+  },
+  "deleteUnusedOpponentArchetypesButton": {
+    "delete": "{count, plural, one {Delete # unused opponent archetype} other {Delete # unused opponent archetypes}}",
+    "deleting": "Deleting...",
+    "deleteConfirm": "{count, plural, one {Delete # opponent archetype with no matches?} other {Delete # opponent archetypes with no matches?}}"
+  },
+  "deleteFormatButton": {
+    "delete": "Delete format",
+    "deleting": "Deleting...",
+    "deleteConfirm": "Are you sure you want to delete this format?",
+    "deleteConfirmWithArchetypes": "{count, plural, one {Are you sure you want to delete this format? This also deletes # unused opponent archetype.} other {Are you sure you want to delete this format? This also deletes # unused opponent archetypes.}}",
+    "hasDecksHint": "To delete this format, all of its decks must first be moved to another format or deleted."
+  },
   "errorMessage": {
     "message": "<strong>Error:</strong> {error}"
   },
@@ -164,6 +199,7 @@
   "navMenu": {
     "menu": "Menu",
     "myDecks": "My decks",
+    "myFormats": "My formats",
     "myEvents": "My events",
     "decks": "{username}''s decks",
     "events": "{username}''s events",
