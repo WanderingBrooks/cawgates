@@ -76,36 +76,26 @@ const getDeck = async ({
     notFound();
   }
 
-  const deck = await prisma.deck.findUnique({
+  const deckWithCount = await prisma.deck.findUnique({
     where: { userId_slug: { userId: owner.id, slug: deckSlug } },
-    include: { format: true },
+    include: {
+      format: true,
+      // Events that have at least one match, so hasMatches needs no extra query
+      _count: { select: { events: { where: { matches: { some: {} } } } } },
+    },
   });
 
-  if (!deck) {
+  if (!deckWithCount) {
     notFound();
   }
 
-  if (!isOwner && !deck.isPublic) {
+  if (!isOwner && !deckWithCount.isPublic) {
     notFound();
   }
 
-  return { deck, isOwner };
-};
+  const { _count, ...deck } = deckWithCount;
 
-const getDeckForEdit = async ({
-  ownerUsername,
-  deckSlug,
-}: {
-  ownerUsername: string;
-  deckSlug: string;
-}) => {
-  const { deck, isOwner } = await getDeck({ ownerUsername, deckSlug });
-
-  const matchCount = await prisma.match.count({
-    where: { event: { deckId: deck.id } },
-  });
-
-  return { deck, isOwner, hasMatches: matchCount > 0 };
+  return { deck, isOwner, hasMatches: _count.events > 0 };
 };
 
 const getEvents = async ({ ownerUsername }: { ownerUsername: string }) => {
@@ -199,7 +189,6 @@ export {
   getOwnerByUsername,
   getDecksForOwner,
   getDeck,
-  getDeckForEdit,
   getEvents,
   getEvent,
   getOpponentArchetype,
