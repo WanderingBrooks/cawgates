@@ -42,7 +42,6 @@ type OpponentArchetypeFormProps =
     }
   | {
       mode: 'edit';
-      deckId: string;
       opponentArchetypeId: string;
       initialName: string;
       onSuccess: (data: { id: string; name: string }) => void;
@@ -74,7 +73,9 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
   return (
     <Form action={formAction}>
       <SpaceChildrenVertically>
-        <input type="hidden" name="deckId" value={props.deckId} />
+        {props.mode === 'create' && (
+          <input type="hidden" name="deckId" value={props.deckId} />
+        )}
         {props.mode === 'edit' && (
           <input
             type="hidden"

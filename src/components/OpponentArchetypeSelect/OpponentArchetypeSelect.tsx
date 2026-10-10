@@ -150,7 +150,6 @@ const OpponentArchetypeSelect = ({
         <Dialog isOpen={isEditOpen} title={t('editTitle')} usePortal>
           <OpponentArchetypeForm
             mode="edit"
-            deckId={deckId}
             opponentArchetypeId={selectedOption.id}
             initialName={selectedOption.name}
             onSuccess={handleEditSuccess}
