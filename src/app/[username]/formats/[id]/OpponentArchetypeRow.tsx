@@ -60,15 +60,13 @@ const OpponentArchetypeRow = ({
           <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
             {t('rename')}
           </Button>
-          {matchCount === 0 && (
-            <Button
-              variant="danger"
-              onClick={handleDelete}
-              disabled={isDeleting}
-            >
-              {isDeleting ? t('deleting') : t('delete')}
-            </Button>
-          )}
+          <Button
+            variant="danger"
+            onClick={handleDelete}
+            disabled={isDeleting || matchCount > 0}
+          >
+            {isDeleting ? t('deleting') : t('delete')}
+          </Button>
         </div>
       </CardContent>
       <Dialog isOpen={isDialogOpen} title={t('renameTitle')} usePortal>
