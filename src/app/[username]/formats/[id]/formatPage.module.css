@@ -10,6 +10,8 @@
 }
 
 .rowActions {
+  margin-top: var(--spacing-md);
   display: flex;
+  justify-content: flex-end;
   gap: var(--spacing-sm);
 }

@@ -7,7 +7,6 @@ import { deleteOpponentArchetypeFromFormat } from '@/app/actions/opponentArchety
 import {
   Button,
   Card,
-  CardContent,
   CardTitle,
   Dialog,
   ErrorMessage,
@@ -54,21 +53,19 @@ const OpponentArchetypeRow = ({
         <span>{name}</span>
         <span>{t('matchCount', { count: matchCount })}</span>
       </CardTitle>
-      <CardContent>
-        {error && <ErrorMessage error={error} />}
-        <div className={classes.rowActions}>
-          <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
-            {t('rename')}
-          </Button>
-          <Button
-            variant="danger"
-            onClick={handleDelete}
-            disabled={isDeleting || matchCount > 0}
-          >
-            {isDeleting ? t('deleting') : t('delete')}
-          </Button>
-        </div>
-      </CardContent>
+      {error && <ErrorMessage error={error} />}
+      <div className={classes.rowActions}>
+        <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
+          {t('rename')}
+        </Button>
+        <Button
+          variant="danger"
+          onClick={handleDelete}
+          disabled={isDeleting || matchCount > 0}
+        >
+          {isDeleting ? t('deleting') : t('delete')}
+        </Button>
+      </div>
       <Dialog isOpen={isDialogOpen} title={t('renameTitle')} usePortal>
         <OpponentArchetypeForm
           mode="edit"
