@@ -1,9 +1,15 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 import { logEvent } from '@/lib/log';
-import { createFormatSchema, type ActionResultWithData } from '@/lib/types';
+import {
+  createFormatSchema,
+  type ActionResult,
+  type ActionResultWithData,
+} from '@/lib/types';
 
 const getUserFormats = async () => {
   const user = await getUser();
@@ -129,4 +135,93 @@ const updateFormat = async (
   }
 };
 
-export { getUserFormats, createFormat, updateFormat };
+// Also deletes the format's opponent archetypes (onDelete: Cascade). A format
+// without decks has no matches, so those archetypes are all unused.
+const deleteFormat = async ({
+  formatId,
+}: {
+  formatId: string;
+}): Promise<ActionResult> => {
+  const user = await getUser();
+
+  if (!user) {
+    return { success: false, error: 'You must be logged in' };
+  }
+
+  const format = await prisma.format.findUnique({
+    where: { id: formatId },
+    include: { _count: { select: { decks: true } } },
+  });
+
+  if (!format || format.userId !== user.userId) {
+    return { success: false, error: 'Format not found' };
+  }
+
+  if (format._count.decks > 0) {
+    return {
+      success: false,
+      error: 'Cannot delete a format that has decks.',
+    };
+  }
+
+  try {
+    await prisma.format.delete({ where: { id: formatId } });
+  } catch (error) {
+    // A deck created after the count above blocks the delete (onDelete: NoAction)
+    console.error('Failed to delete format:', error);
+
+    return {
+      success: false,
+      error: 'Failed to delete format. Please try again.',
+    };
+  }
+
+  logEvent('format.deleted', {
+    userId: user.userId,
+    formatId,
+  });
+
+  redirect(`/${user.username}/formats`);
+};
+
+const deleteUnusedOpponentArchetypes = async ({
+  formatId,
+}: {
+  formatId: string;
+}): Promise<ActionResult> => {
+  const user = await getUser();
+
+  if (!user) {
+    return { success: false, error: 'You must be logged in' };
+  }
+
+  const format = await prisma.format.findUnique({
+    where: { id: formatId },
+  });
+
+  if (!format || format.userId !== user.userId) {
+    return { success: false, error: 'Format not found' };
+  }
+
+  const { count } = await prisma.opponentArchetype.deleteMany({
+    where: { formatId, matches: { none: {} } },
+  });
+
+  logEvent('opponentArchetype.unusedDeleted', {
+    userId: user.userId,
+    formatId,
+    count,
+  });
+
+  revalidatePath(`/${user.username}/formats/${formatId}`);
+
+  return { success: true };
+};
+
+export {
+  getUserFormats,
+  createFormat,
+  updateFormat,
+  deleteFormat,
+  deleteUnusedOpponentArchetypes,
+};
