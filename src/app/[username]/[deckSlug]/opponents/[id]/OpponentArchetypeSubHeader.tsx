@@ -8,7 +8,6 @@ import { Button, Dialog, OpponentArchetypeForm } from '@/components';
 import classes from './opponentArchetypePage.module.css';
 
 const OpponentArchetypeSubHeader = ({
-  deckId,
   opponentArchetypeId,
   initialName,
   totalMatches,
@@ -19,7 +18,6 @@ const OpponentArchetypeSubHeader = ({
   username,
   deckSlug,
 }: {
-  deckId: string;
   opponentArchetypeId: string;
   initialName: string;
   totalMatches: number;
@@ -65,7 +63,6 @@ const OpponentArchetypeSubHeader = ({
         <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
           <OpponentArchetypeForm
             mode="edit"
-            deckId={deckId}
             opponentArchetypeId={opponentArchetypeId}
             initialName={initialName}
             onSuccess={() => {
