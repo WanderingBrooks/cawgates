@@ -75,6 +75,17 @@ const NavMenu = ({ disabled = false }: NavMenuProps) => {
               >
                 {t('myDecks')}
               </Link>
+              <Link
+                href={`/${viewerUsername}/formats`}
+                className={cn(
+                  classes.item,
+                  pathname === `/${viewerUsername}/formats` &&
+                    classes.itemActive,
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {t('myFormats')}
+              </Link>
             </>
           )}
           {!isOwner && (
