@@ -185,8 +185,66 @@ const getOpponentArchetype = async ({
   return { deck, opponentArchetype, isOwner };
 };
 
+// Formats have no public flag, so only the owner can see the formats pages
+const getFormatsForOwner = async ({
+  ownerUsername,
+}: {
+  ownerUsername: string;
+}) => {
+  const { owner, isOwner } = await getOwnerByUsername({
+    username: ownerUsername,
+  });
+
+  if (!isOwner) {
+    notFound();
+  }
+
+  const formats = await prisma.format.findMany({
+    where: { userId: owner.id },
+    orderBy: { name: 'asc' },
+    include: { _count: { select: { decks: true, opponentArchetypes: true } } },
+  });
+
+  return { formats };
+};
+
+const getFormat = async ({
+  ownerUsername,
+  formatId,
+}: {
+  ownerUsername: string;
+  formatId: string;
+}) => {
+  const { owner, isOwner } = await getOwnerByUsername({
+    username: ownerUsername,
+  });
+
+  if (!isOwner) {
+    notFound();
+  }
+
+  const format = await prisma.format.findUnique({
+    where: { id: formatId, userId: owner.id },
+    include: {
+      decks: { orderBy: { createdAt: 'asc' } },
+      opponentArchetypes: {
+        orderBy: { name: 'asc' },
+        include: { _count: { select: { matches: true } } },
+      },
+    },
+  });
+
+  if (!format) {
+    notFound();
+  }
+
+  return { format };
+};
+
 export {
   getOwnerByUsername,
+  getFormatsForOwner,
+  getFormat,
   getDecksForOwner,
   getDeck,
   getEvents,
