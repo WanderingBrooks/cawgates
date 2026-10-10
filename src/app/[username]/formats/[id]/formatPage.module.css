@@ -1,0 +1,15 @@
+.rightAlignedButton {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.rowActions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
