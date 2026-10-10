@@ -2,10 +2,14 @@
 -- Every existing user gets a single "Pauper" format containing all their decks, and
 -- opponent archetypes with the same name (trimmed, case-insensitive) are merged.
 
+-- Format and opponent archetype names are case-insensitive (citext ships with
+-- Postgres), so their unique constraints treat "Pauper" and "pauper" as the same
+CREATE EXTENSION IF NOT EXISTS citext;
+
 -- CreateTable
 CREATE TABLE "Format" (
     "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
+    "name" CITEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -104,6 +108,8 @@ ALTER TABLE "OpponentArchetype" DROP CONSTRAINT "OpponentArchetype_deckId_fkey";
 ALTER TABLE "OpponentArchetype" ALTER COLUMN "deckId" DROP NOT NULL;
 
 ALTER TABLE "OpponentArchetype" ALTER COLUMN "formatId" SET NOT NULL;
+
+ALTER TABLE "OpponentArchetype" ALTER COLUMN "name" SET DATA TYPE CITEXT;
 
 CREATE UNIQUE INDEX "OpponentArchetype_formatId_name_key" ON "OpponentArchetype"("formatId", "name");
 
