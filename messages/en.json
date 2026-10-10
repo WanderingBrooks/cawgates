@@ -161,11 +161,6 @@
     "deleteConfirm": "Are you sure you want to delete {name}?",
     "hasMatchesHint": "Opponent archetypes with matches can't be deleted"
   },
-  "deleteUnusedOpponentArchetypesButton": {
-    "delete": "{count, plural, one {Delete # unused opponent archetype} other {Delete # unused opponent archetypes}}",
-    "deleting": "Deleting...",
-    "deleteConfirm": "{count, plural, one {Delete # opponent archetype with no matches?} other {Delete # opponent archetypes with no matches?}}"
-  },
   "deleteFormatButton": {
     "delete": "Delete format",
     "deleting": "Deleting...",
