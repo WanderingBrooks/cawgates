@@ -55,7 +55,7 @@ const getDecksForOwner = async ({
       ...(isOwner ? {} : { isPublic: true }),
     },
     orderBy: { createdAt: 'asc' },
-    include: { _count: { select: { events: true } } },
+    include: { _count: { select: { events: true } }, format: true },
   });
 
   return { decks, isOwner };
@@ -76,19 +76,26 @@ const getDeck = async ({
     notFound();
   }
 
-  const deck = await prisma.deck.findUnique({
+  const deckWithCount = await prisma.deck.findUnique({
     where: { userId_slug: { userId: owner.id, slug: deckSlug } },
+    include: {
+      format: true,
+      // Events that have at least one match, so hasMatches needs no extra query
+      _count: { select: { events: { where: { matches: { some: {} } } } } },
+    },
   });
 
-  if (!deck) {
+  if (!deckWithCount) {
     notFound();
   }
 
-  if (!isOwner && !deck.isPublic) {
+  if (!isOwner && !deckWithCount.isPublic) {
     notFound();
   }
 
-  return { deck, isOwner };
+  const { _count, ...deck } = deckWithCount;
+
+  return { deck, isOwner, hasMatches: _count.events > 0 };
 };
 
 const getEvents = async ({ ownerUsername }: { ownerUsername: string }) => {
@@ -157,12 +164,16 @@ const getOpponentArchetype = async ({
     deckSlug,
   });
 
+  // Shows matches from every deck in the format. Guests only see matches
+  // played with public decks, even when they arrived via a public deck.
   const opponentArchetype = await prisma.opponentArchetype.findUnique({
-    where: { id: opponentArchetypeId, deckId: deck.id },
+    where: { id: opponentArchetypeId, formatId: deck.formatId },
     include: {
+      format: true,
       matches: {
+        where: isOwner ? {} : { event: { deck: { isPublic: true } } },
         orderBy: { event: { date: 'desc' } },
-        include: { event: true },
+        include: { event: { include: { deck: true } } },
       },
     },
   });

@@ -36,6 +36,9 @@ const DecksPage = async ({
               <Link href={`/${username}/${deck.slug}`}>{deck.name}</Link>
               <span>{t('eventCount', { count: deck._count.events })}</span>
             </CardTitle>
+            <div>
+              <span>{deck.format.name}</span>
+            </div>
           </Card>
         ))
       )}

@@ -23,7 +23,8 @@
     "gameWinPct": "Game win %",
     "noMatchesOwner": "No matches yet — create an event to start tracking",
     "noMatchesViewer": "No matches found",
-    "createEvent": "Create event"
+    "createEvent": "Create event",
+    "deckAndFormat": "{deck} - {format}"
   },
   "deckForm": {
     "name": "Deck name *",
@@ -31,6 +32,8 @@
     "slugHint": "Auto-generated from name if left blank",
     "isPublic": "Make deck public",
     "isPublicHint": "Public decks can be viewed by other users",
+    "format": "Format *",
+    "formatLockedHint": "The format can't be changed once the deck has matches",
     "create": "Create",
     "save": "Save",
     "saving": "Saving...",
@@ -118,6 +121,21 @@
     "edit": "Edit",
     "createTitle": "Create opponent archetype",
     "editTitle": "Edit opponent archetype"
+  },
+  "formatSelect": {
+    "selectFormat": "Select a format...",
+    "loading": "Loading...",
+    "addNew": "+ Add new...",
+    "edit": "Edit",
+    "createTitle": "Create format",
+    "editTitle": "Edit format"
+  },
+  "formatForm": {
+    "name": "Name *",
+    "create": "Create",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel"
   },
   "errorMessage": {
     "message": "<strong>Error:</strong> {error}"

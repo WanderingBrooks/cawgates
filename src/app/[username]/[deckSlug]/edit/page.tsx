@@ -12,7 +12,7 @@ const EditDeckPage = async ({
   const t = await getTranslations('editDeck');
   const { username, deckSlug } = await params;
 
-  const { deck, isOwner } = await getDeck({
+  const { deck, isOwner, hasMatches } = await getDeck({
     ownerUsername: username,
     deckSlug,
   });
@@ -30,6 +30,7 @@ const EditDeckPage = async ({
         deckId={deck.id}
         deckSlug={deck.slug}
         initialDeckData={deck}
+        isFormatLocked={hasMatches}
       />
     </>
   );

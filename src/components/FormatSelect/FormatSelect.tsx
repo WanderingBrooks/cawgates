@@ -2,60 +2,62 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { getOpponentArchetypesForArchetype } from '@/app/actions/opponentArchetypes';
+import { getUserFormats } from '@/app/actions/formats';
 import Dialog from '../Dialog';
 import Button from '../Button';
-import OpponentArchetypeForm from '../OpponentArchetypeForm';
-import classes from './opponentArchetypeSelect.module.css';
+import FormatForm from '../FormatForm';
+import classes from './formatSelect.module.css';
 
 // TODO: FormatSelect and OpponentArchetypeSelect (and FormatForm /
 // OpponentArchetypeForm) are ~90% identical: same select + "Add new" + edit
 // dialog flow, identical CSS. They differ only in how options load, which
 // actions save, translation namespace and onChange shape. Worth merging into
 // one shared CreatableSelect + name form so fixes (like #62) land once.
-type OpponentArchetypeOption = {
+type FormatOption = {
   id: string;
   name: string;
 };
 
-type OpponentArchetypeSelectProps = {
-  deckId: string;
+type FormatSelectProps = {
   label?: string;
+  hint?: string;
   id?: string;
   name: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (formatId: string) => void;
+  isLocked?: boolean;
   required?: boolean;
 };
 
 const ADD_NEW_VALUE = '__ADD_NEW__';
 
-const OpponentArchetypeSelect = ({
-  deckId,
+const FormatSelect = ({
   label,
+  hint,
   id,
   name,
   value,
   onChange,
+  isLocked = false,
   required,
-}: OpponentArchetypeSelectProps) => {
-  const t = useTranslations('opponentArchetypeSelect');
+}: FormatSelectProps) => {
+  const t = useTranslations('formatSelect');
 
-  const [options, setOptions] = useState<OpponentArchetypeOption[]>([]);
+  const [options, setOptions] = useState<FormatOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   useEffect(() => {
     const loadOptions = async () => {
-      const data = await getOpponentArchetypesForArchetype({ deckId });
+      const data = await getUserFormats();
 
       setOptions(data.map(o => ({ id: o.id, name: o.name })));
       setIsLoading(false);
     };
 
     loadOptions();
-  }, [deckId]);
+  }, []);
 
   const selectedOption = options.find(o => o.id === value) ?? null;
 
@@ -65,27 +67,19 @@ const OpponentArchetypeSelect = ({
       return;
     }
 
-    const syntheticEvent = {
-      target: { name: name, value: e.target.value },
-    } as React.ChangeEvent<HTMLInputElement>;
-
-    onChange(syntheticEvent);
+    onChange(e.target.value);
   };
 
-  const handleCreateSuccess = (data: { id: string; name: string }) => {
+  const handleCreateSuccess = (data: FormatOption) => {
     setOptions(prev =>
       [...prev, data].sort((a, b) => a.name.localeCompare(b.name)),
     );
 
-    const syntheticEvent = {
-      target: { name: name, value: data.id },
-    } as React.ChangeEvent<HTMLInputElement>;
-
-    onChange(syntheticEvent);
+    onChange(data.id);
     setIsCreateOpen(false);
   };
 
-  const handleEditSuccess = (data: { id: string; name: string }) => {
+  const handleEditSuccess = (data: FormatOption) => {
     setOptions(prev =>
       prev
         .map(o => (o.id === data.id ? data : o))
@@ -98,9 +92,9 @@ const OpponentArchetypeSelect = ({
   return (
     <div className={classes.container}>
       {label && <label htmlFor={id}>{label}</label>}
-      {/* Hidden input for the label association (via id) and to carry the clean form value —
-          the visible <select> may hold the sentinel "__ADD_NEW__" value, so form submission
-          reads from here instead, which always contains a real opponentArchetypeId or empty string */}
+      {hint && <span className="hint">{hint}</span>}
+      {/* Hidden input carries the clean form value — the visible <select> may hold the
+          sentinel "__ADD_NEW__" value, and a disabled <select> is not submitted at all */}
       <input
         type="hidden"
         id={id}
@@ -113,11 +107,11 @@ const OpponentArchetypeSelect = ({
           value={value}
           onChange={handleSelectChange}
           required={required}
-          disabled={isLoading}
+          disabled={isLoading || isLocked}
           className={classes.select}
         >
           <option value="">
-            {isLoading ? t('loading') : t('selectArchetype')}
+            {isLoading ? t('loading') : t('selectFormat')}
           </option>
           {options.map(option => (
             <option key={option.id} value={option.id}>
@@ -138,9 +132,8 @@ const OpponentArchetypeSelect = ({
       </div>
 
       <Dialog isOpen={isCreateOpen} title={t('createTitle')} usePortal>
-        <OpponentArchetypeForm
+        <FormatForm
           mode="create"
-          deckId={deckId}
           onSuccess={handleCreateSuccess}
           onCancel={() => setIsCreateOpen(false)}
         />
@@ -148,10 +141,9 @@ const OpponentArchetypeSelect = ({
 
       {selectedOption && (
         <Dialog isOpen={isEditOpen} title={t('editTitle')} usePortal>
-          <OpponentArchetypeForm
+          <FormatForm
             mode="edit"
-            deckId={deckId}
-            opponentArchetypeId={selectedOption.id}
+            formatId={selectedOption.id}
             initialName={selectedOption.name}
             onSuccess={handleEditSuccess}
             onCancel={() => setIsEditOpen(false)}
@@ -162,4 +154,4 @@ const OpponentArchetypeSelect = ({
   );
 };
 
-export default OpponentArchetypeSelect;
+export default FormatSelect;

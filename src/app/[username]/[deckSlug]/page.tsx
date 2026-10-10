@@ -21,11 +21,18 @@ const DeckPage = async ({
 
   const { rows: matchStatistics, totals } = await getMatchStatistics({
     deckId: deck.id,
+    formatId: deck.formatId,
   });
 
   return (
     <>
-      <PageTitle title={t('title')} subtitle={deck.name} />
+      <PageTitle
+        title={t('title')}
+        subtitle={t('deckAndFormat', {
+          deck: deck.name,
+          format: deck.format.name,
+        })}
+      />
       {isOwner && (
         <div className={classes.rightAlignedButton}>
           <Link href={`/${username}/${deck.slug}/edit`}>
