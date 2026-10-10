@@ -1,6 +1,5 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
@@ -184,44 +183,4 @@ const deleteFormat = async ({
   redirect(`/${user.username}/formats`);
 };
 
-const deleteUnusedOpponentArchetypes = async ({
-  formatId,
-}: {
-  formatId: string;
-}): Promise<ActionResult> => {
-  const user = await getUser();
-
-  if (!user) {
-    return { success: false, error: 'You must be logged in' };
-  }
-
-  const format = await prisma.format.findUnique({
-    where: { id: formatId },
-  });
-
-  if (!format || format.userId !== user.userId) {
-    return { success: false, error: 'Format not found' };
-  }
-
-  const { count } = await prisma.opponentArchetype.deleteMany({
-    where: { formatId, matches: { none: {} } },
-  });
-
-  logEvent('opponentArchetype.unusedDeleted', {
-    userId: user.userId,
-    formatId,
-    count,
-  });
-
-  revalidatePath(`/${user.username}/formats/${formatId}`);
-
-  return { success: true };
-};
-
-export {
-  getUserFormats,
-  createFormat,
-  updateFormat,
-  deleteFormat,
-  deleteUnusedOpponentArchetypes,
-};
+export { getUserFormats, createFormat, updateFormat, deleteFormat };

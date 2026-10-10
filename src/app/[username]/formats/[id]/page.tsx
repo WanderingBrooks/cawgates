@@ -3,7 +3,6 @@ import { getTranslations } from 'next-intl/server';
 import { getFormat } from '@/lib/dal';
 import { Card, CardTitle, PageTitle, SectionHeader } from '@/components';
 import DeleteFormatButton from './DeleteFormatButton';
-import DeleteUnusedOpponentArchetypesButton from './DeleteUnusedOpponentArchetypesButton';
 import FormatSubHeader from './FormatSubHeader';
 import OpponentArchetypeRow from './OpponentArchetypeRow';
 import classes from './formatPage.module.css';
@@ -20,10 +19,6 @@ const FormatPage = async ({
     ownerUsername: username,
     formatId: id,
   });
-
-  const unusedCount = format.opponentArchetypes.filter(
-    opponentArchetype => opponentArchetype._count.matches === 0,
-  ).length;
 
   return (
     <>
@@ -46,12 +41,6 @@ const FormatPage = async ({
       )}
 
       <SectionHeader>{t('opponentArchetypesSection')}</SectionHeader>
-      {unusedCount > 0 && (
-        <DeleteUnusedOpponentArchetypesButton
-          formatId={format.id}
-          count={unusedCount}
-        />
-      )}
       {format.opponentArchetypes.length === 0 ? (
         <p>{t('noOpponentArchetypes')}</p>
       ) : (
