@@ -1,6 +1,11 @@
 import { z } from 'zod';
 import { RESERVED_SLUGS } from './utils';
 
+// trim() must come before min(1): checks run in order, so min-then-trim lets
+// a value of only spaces pass and be saved as an empty string
+const requiredTrimmedString = (message: string) =>
+  z.string().trim().min(1, message);
+
 // Schema for a single match
 const matchSchema = z.object({
   id: z.string().optional(),
@@ -15,7 +20,7 @@ const matchSchema = z.object({
 // Schema for creating an event
 const createEventSchema = z.object({
   deckId: z.string().min(1, 'Deck ID is required'),
-  eventName: z.string().min(1, 'Event name is required').trim(),
+  eventName: requiredTrimmedString('Event name is required'),
   eventDate: z.string().min(1, 'Event date is required'),
   notes: z.string().optional().default(''),
 });
@@ -58,9 +63,7 @@ export type MatchInputForm = Omit<MatchInput, 'wins' | 'losses'> & {
 
 // Schema for creating/updating an opponent archetype
 const createOpponentArchetypeSchema = z.object({
-  // trim() must come before min(1): checks run in order, so min-then-trim lets
-  // a name of only spaces pass and be saved as an empty string
-  name: z.string().trim().min(1, 'Name is required'),
+  name: requiredTrimmedString('Name is required'),
 });
 
 export type CreateOpponentArchetypeInput = z.infer<
@@ -69,9 +72,7 @@ export type CreateOpponentArchetypeInput = z.infer<
 
 // Schema for creating/updating a format
 const createFormatSchema = z.object({
-  // trim() must come before min(1): checks run in order, so min-then-trim lets
-  // a name of only spaces pass and be saved as an empty string
-  name: z.string().trim().min(1, 'Name is required'),
+  name: requiredTrimmedString('Name is required'),
 });
 
 export type CreateFormatInput = z.infer<typeof createFormatSchema>;
@@ -108,7 +109,7 @@ const slugSchema = z
 
 // Schema for creating a deck
 const createDeckSchema = z.object({
-  name: z.string().min(1, 'Deck name is required').trim(),
+  name: requiredTrimmedString('Deck name is required'),
   isPublic: z
     .literal('on')
     .optional()
