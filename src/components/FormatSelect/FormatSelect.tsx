@@ -8,6 +8,11 @@ import Button from '../Button';
 import FormatForm from '../FormatForm';
 import classes from './formatSelect.module.css';
 
+// TODO: FormatSelect and OpponentArchetypeSelect (and FormatForm /
+// OpponentArchetypeForm) are ~90% identical: same select + "Add new" + edit
+// dialog flow, identical CSS. They differ only in how options load, which
+// actions save, translation namespace and onChange shape. Worth merging into
+// one shared CreatableSelect + name form so fixes (like #62) land once.
 type FormatOption = {
   id: string;
   name: string;
