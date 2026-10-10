@@ -38,7 +38,9 @@ const Dialog = ({
     <div className={cn(classes.dialogContainer, isOpen && classes.open)}>
       <Card className={cn(classes.dialog, className)}>
         <CardTitle>{title}</CardTitle>
-        {children}
+        {/* Children only mount while open, so forms inside start fresh each time
+            instead of keeping state (e.g. a typed name) from the last open */}
+        {isOpen && children}
       </Card>
     </div>
   );

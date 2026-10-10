@@ -131,29 +131,23 @@ const FormatSelect = ({
         )}
       </div>
 
-      {/* Forms render only while their dialog is open: Dialog keeps hidden children
-          mounted, so a form left mounted would reopen with the previous name */}
       <Dialog isOpen={isCreateOpen} title={t('createTitle')} usePortal>
-        {isCreateOpen && (
-          <FormatForm
-            mode="create"
-            onSuccess={handleCreateSuccess}
-            onCancel={() => setIsCreateOpen(false)}
-          />
-        )}
+        <FormatForm
+          mode="create"
+          onSuccess={handleCreateSuccess}
+          onCancel={() => setIsCreateOpen(false)}
+        />
       </Dialog>
 
       {selectedOption && (
         <Dialog isOpen={isEditOpen} title={t('editTitle')} usePortal>
-          {isEditOpen && (
-            <FormatForm
-              mode="edit"
-              formatId={selectedOption.id}
-              initialName={selectedOption.name}
-              onSuccess={handleEditSuccess}
-              onCancel={() => setIsEditOpen(false)}
-            />
-          )}
+          <FormatForm
+            mode="edit"
+            formatId={selectedOption.id}
+            initialName={selectedOption.name}
+            onSuccess={handleEditSuccess}
+            onCancel={() => setIsEditOpen(false)}
+          />
         </Dialog>
       )}
     </div>

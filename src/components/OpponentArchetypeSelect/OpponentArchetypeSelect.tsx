@@ -137,31 +137,25 @@ const OpponentArchetypeSelect = ({
         )}
       </div>
 
-      {/* Forms render only while their dialog is open: Dialog keeps hidden children
-          mounted, so a form left mounted would reopen with the previous name */}
       <Dialog isOpen={isCreateOpen} title={t('createTitle')} usePortal>
-        {isCreateOpen && (
-          <OpponentArchetypeForm
-            mode="create"
-            deckId={deckId}
-            onSuccess={handleCreateSuccess}
-            onCancel={() => setIsCreateOpen(false)}
-          />
-        )}
+        <OpponentArchetypeForm
+          mode="create"
+          deckId={deckId}
+          onSuccess={handleCreateSuccess}
+          onCancel={() => setIsCreateOpen(false)}
+        />
       </Dialog>
 
       {selectedOption && (
         <Dialog isOpen={isEditOpen} title={t('editTitle')} usePortal>
-          {isEditOpen && (
-            <OpponentArchetypeForm
-              mode="edit"
-              deckId={deckId}
-              opponentArchetypeId={selectedOption.id}
-              initialName={selectedOption.name}
-              onSuccess={handleEditSuccess}
-              onCancel={() => setIsEditOpen(false)}
-            />
-          )}
+          <OpponentArchetypeForm
+            mode="edit"
+            deckId={deckId}
+            opponentArchetypeId={selectedOption.id}
+            initialName={selectedOption.name}
+            onSuccess={handleEditSuccess}
+            onCancel={() => setIsEditOpen(false)}
+          />
         </Dialog>
       )}
     </div>

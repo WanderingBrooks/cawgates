@@ -146,15 +146,13 @@ const MatchSection = ({
       {isOwner && (
         <>
           <Dialog isOpen={isAddOpen} title={tCreateMatch('title')} usePortal>
-            {isAddOpen && (
-              <MatchForm
-                mode="create"
-                deckId={deckId}
-                eventId={eventId}
-                onSuccess={() => setIsAddOpen(false)}
-                onCancel={() => setIsAddOpen(false)}
-              />
-            )}
+            <MatchForm
+              mode="create"
+              deckId={deckId}
+              eventId={eventId}
+              onSuccess={() => setIsAddOpen(false)}
+              onCancel={() => setIsAddOpen(false)}
+            />
           </Dialog>
 
           <Dialog
