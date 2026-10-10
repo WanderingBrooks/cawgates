@@ -17,7 +17,14 @@ const slugify = ({ name }: { name: string }) =>
     .replace(/^-|-$/g, '');
 
 // Slugs that conflict with static routes
-const RESERVED_SLUGS = ['create', 'login', 'register', 'events', 'decks'];
+const RESERVED_SLUGS = [
+  'create',
+  'login',
+  'register',
+  'events',
+  'decks',
+  'formats',
+];
 
 /**
  * Formats a date consistently across the app.
