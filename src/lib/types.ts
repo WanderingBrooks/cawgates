@@ -58,6 +58,8 @@ export type MatchInputForm = Omit<MatchInput, 'wins' | 'losses'> & {
 
 // Schema for creating/updating an opponent archetype
 const createOpponentArchetypeSchema = z.object({
+  // trim() must come before min(1): checks run in order, so min-then-trim lets
+  // a name of only spaces pass and be saved as an empty string
   name: z.string().trim().min(1, 'Name is required'),
 });
 
@@ -67,6 +69,8 @@ export type CreateOpponentArchetypeInput = z.infer<
 
 // Schema for creating/updating a format
 const createFormatSchema = z.object({
+  // trim() must come before min(1): checks run in order, so min-then-trim lets
+  // a name of only spaces pass and be saved as an empty string
   name: z.string().trim().min(1, 'Name is required'),
 });
 
