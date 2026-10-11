@@ -5,7 +5,7 @@ import { logout } from '@/app/actions/auth';
 import Button from '../Button';
 
 const LogoutButton = () => {
-  const t = useTranslations('pageTitle');
+  const t = useTranslations('siteHeader');
 
   const handleLogout = async () => {
     await logout();

@@ -138,6 +138,10 @@ textarea {
   font: inherit;
 }
 
+textarea {
+  line-height: var(--line-height-prose);
+}
+
 button {
   font: inherit;
   font-weight: 500;
@@ -214,6 +218,14 @@ tbody tr:last-child td {
 
 .text-strong {
   font-weight: 600;
+}
+
+.text-bold {
+  font-weight: 700;
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
 }
 
 /* Monospace digits that line up in columns, e.g. records and percentages */

@@ -1,20 +1,5 @@
 .pageContainer {
-  padding-bottom: var(--spacing-xxl);
-
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-
-.pageContent {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: var(--page-max-width);
-  padding: var(--spacing-xl) var(--spacing-xl) 0;
-}
-
-@media (max-width: 767px) {
-  .pageContent {
-    padding: var(--spacing-lg) var(--spacing-lg) 0;
-  }
 }

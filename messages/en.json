@@ -189,18 +189,16 @@
     "submitting": "Logging in...",
     "clickHereToRegister": "Don't have an account? Click here to register."
   },
-  "pageTitle": {
-    "logout": "Logout"
-  },
-  "navMenu": {
-    "menu": "Menu",
-    "myDecks": "My decks",
-    "myFormats": "My formats",
-    "myEvents": "My events",
-    "decks": "{username}''s decks",
-    "events": "{username}''s events",
-    "record": "Record",
-    "edit": "Edit",
+  "siteHeader": {
+    "appName": "Cawgates",
+    "mainNavigation": "Main navigation",
+    "events": "Events",
+    "decks": "Decks",
+    "formats": "Formats",
+    "ownerEvents": "{username}''s events",
+    "ownerDecks": "{username}''s decks",
+    "login": "Login",
+    "register": "Register",
     "logout": "Logout"
   },
   "opponentArchetypeForm": {

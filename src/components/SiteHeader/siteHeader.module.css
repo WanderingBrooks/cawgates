@@ -1,0 +1,139 @@
+.header {
+  background-color: var(--color-header-bg);
+  border-bottom: 1px solid var(--color-header-border);
+}
+
+.bar {
+  box-sizing: border-box;
+  max-width: var(--page-max-width);
+  min-height: var(--header-height);
+  margin: 0 auto;
+  padding: 0 var(--spacing-xl);
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+.appName,
+.appName:hover {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.navLink,
+.navLink:hover {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--spacing-md);
+}
+
+.navLink:hover {
+  color: var(--color-text);
+}
+
+.navLinkActive,
+.navLinkActive:hover {
+  color: var(--color-text);
+  box-shadow: inset 0 -3px 0 var(--color-primary);
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.username {
+  margin-right: var(--spacing-xs);
+  color: var(--color-text-secondary);
+}
+
+.strip {
+  background-color: var(--color-surface-muted);
+  border-top: 1px solid var(--color-header-border);
+}
+
+.stripText {
+  box-sizing: border-box;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-sm) var(--spacing-xl);
+  color: var(--color-text-secondary);
+}
+
+/* Phones get the navigation as a tab bar at the bottom, in thumb reach */
+.tabBar {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .bar {
+    padding: 0 var(--spacing-lg);
+    min-height: 48px;
+  }
+
+  .nav,
+  .username {
+    display: none;
+  }
+
+  .stripText {
+    padding: var(--spacing-sm) var(--spacing-lg);
+  }
+
+  .tabBar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-index-banner);
+
+    display: flex;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background-color: var(--color-header-bg);
+    border-top: 1px solid var(--color-header-border);
+  }
+
+  .tab,
+  .tab:hover {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+  }
+
+  .tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--tab-bar-height);
+    padding: 0 var(--spacing-xs);
+    text-align: center;
+  }
+
+  .tabActive,
+  .tabActive:hover {
+    color: var(--color-text);
+    box-shadow: inset 0 3px 0 var(--color-primary);
+  }
+}

@@ -1,3 +1,10 @@
-import { Loading } from '@/components';
+import { Loading, PageContent } from '@/components';
 
-export default Loading;
+// Root-level routes have no layout of their own to supply PageContent
+const RootLoading = () => (
+  <PageContent>
+    <Loading />
+  </PageContent>
+);
+
+export default RootLoading;

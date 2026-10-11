@@ -1,32 +1,27 @@
 import { cn } from '@/lib/utils';
 import classes from './pageTitle.module.css';
-import NavMenu from '../NavMenu/NavMenu';
 
 type PageTitleProps = {
   title: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
+  // Buttons for the page, shown beside the title on wide screens and
+  // below it on phones
+  actions?: React.ReactNode;
   className?: string;
-  disableMenu?: boolean;
 };
 
-const PageTitle = ({
-  title,
-  subtitle,
-  className,
-  disableMenu = false,
-}: PageTitleProps) => {
+const PageTitle = ({ title, subtitle, actions, className }: PageTitleProps) => {
   return (
     <div className={cn(classes.pageTitle, className)}>
-      <div>
+      <div className={classes.text}>
         <h1>{title}</h1>
-        {/*
-         * Render h2 even when subtitle is not passed in
-         * to maintain consistent spacing between title
-         * and page content.
-         */}
-        <h2 className={classes.subtitle}>{subtitle}</h2>
+        {subtitle && (
+          <div className={cn('text-secondary', classes.subtitle)}>
+            {subtitle}
+          </div>
+        )}
       </div>
-      <NavMenu disabled={disableMenu} />
+      {actions && <div className={classes.actions}>{actions}</div>}
     </div>
   );
 };
