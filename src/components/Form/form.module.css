@@ -1,0 +1,6 @@
+/* Forms on full pages stay as wide as a dialog instead of stretching
+   across the whole content column */
+.form {
+  width: 100%;
+  max-width: var(--dialog-max-width);
+}
