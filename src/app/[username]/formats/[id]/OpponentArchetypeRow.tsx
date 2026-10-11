@@ -6,12 +6,9 @@ import { useTranslations } from 'next-intl';
 import { deleteOpponentArchetype } from '@/app/actions/opponentArchetypes';
 import {
   Button,
-  Card,
-  CardTitle,
   Dialog,
   ErrorMessage,
   OpponentArchetypeForm,
-  Tooltip,
 } from '@/components';
 import classes from './formatPage.module.css';
 
@@ -49,43 +46,46 @@ const OpponentArchetypeRow = ({
   };
 
   return (
-    <Card>
-      <CardTitle>
-        <span>{name}</span>
-        {matchCount > 0 ? (
-          <Tooltip content={t('hasMatchesHint')}>
-            {t('matchCount', { count: matchCount })}
-          </Tooltip>
-        ) : (
-          <span>{t('matchCount', { count: matchCount })}</span>
-        )}
-      </CardTitle>
-      {error && <ErrorMessage error={error} />}
-      <div className={classes.rowActions}>
-        <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
-          {t('rename')}
-        </Button>
-        <Button
-          variant="danger"
-          onClick={handleDelete}
-          disabled={isDeleting || matchCount > 0}
-        >
-          {isDeleting ? t('deleting') : t('delete')}
-        </Button>
-      </div>
-      <Dialog isOpen={isDialogOpen} title={t('renameTitle')} usePortal>
-        <OpponentArchetypeForm
-          mode="edit"
-          opponentArchetypeId={opponentArchetypeId}
-          initialName={name}
-          onSuccess={() => {
-            setIsDialogOpen(false);
-            router.refresh();
-          }}
-          onCancel={() => setIsDialogOpen(false)}
-        />
-      </Dialog>
-    </Card>
+    <tr>
+      <td>
+        {name}
+        {error && <ErrorMessage error={error} className={classes.rowError} />}
+      </td>
+      <td className="text-number">{matchCount}</td>
+      <td>
+        <div className={classes.rowActions}>
+          <Button
+            variant="secondary"
+            size="small"
+            onClick={() => setIsDialogOpen(true)}
+          >
+            {t('edit')}
+          </Button>
+          {/* Archetypes with matches can't be deleted; the format page
+              explains why in a hint above the table */}
+          <Button
+            variant="danger"
+            size="small"
+            onClick={handleDelete}
+            disabled={isDeleting || matchCount > 0}
+          >
+            {isDeleting ? t('deleting') : t('delete')}
+          </Button>
+        </div>
+        <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
+          <OpponentArchetypeForm
+            mode="edit"
+            opponentArchetypeId={opponentArchetypeId}
+            initialName={name}
+            onSuccess={() => {
+              setIsDialogOpen(false);
+              router.refresh();
+            }}
+            onCancel={() => setIsDialogOpen(false)}
+          />
+        </Dialog>
+      </td>
+    </tr>
   );
 };
 

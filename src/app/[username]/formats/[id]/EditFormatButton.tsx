@@ -4,9 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Button, Dialog, FormatForm } from '@/components';
-import classes from './formatPage.module.css';
 
-const FormatSubHeader = ({
+const EditFormatButton = ({
   formatId,
   initialName,
 }: {
@@ -19,11 +18,9 @@ const FormatSubHeader = ({
 
   return (
     <>
-      <div className={classes.rightAlignedButton}>
-        <Button variant="primary" onClick={() => setIsDialogOpen(true)}>
-          {t('edit')}
-        </Button>
-      </div>
+      <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
+        {t('edit')}
+      </Button>
       <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
         <FormatForm
           mode="edit"
@@ -40,4 +37,4 @@ const FormatSubHeader = ({
   );
 };
 
-export default FormatSubHeader;
+export default EditFormatButton;

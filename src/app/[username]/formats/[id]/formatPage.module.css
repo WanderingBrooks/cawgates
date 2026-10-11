@@ -1,17 +1,62 @@
-.rightAlignedButton {
+.columns {
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--spacing-xl);
 }
 
-.list {
+.section {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  align-items: stretch;
+  gap: var(--spacing-sm);
+}
+
+.decksColumn {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.archetypesColumn {
+  flex: 1.8 1 440px;
+  min-width: 0;
+}
+
+/* Delete format beside the title, with its hint lined up underneath */
+.titleDelete {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-xs);
+  max-width: 360px;
+  text-align: right;
 }
 
 .rowActions {
-  margin-top: var(--spacing-md);
   display: flex;
   justify-content: flex-end;
-  gap: var(--spacing-sm);
+  gap: 6px;
+}
+
+.rowError {
+  margin: var(--spacing-xs) 0 0;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .desktopOnly {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .archetypesColumn {
+    flex-basis: 100%;
+  }
 }

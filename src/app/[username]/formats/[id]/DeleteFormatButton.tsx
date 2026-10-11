@@ -51,7 +51,7 @@ const DeleteFormatButton = ({
       >
         {isDeleting ? t('deleting') : t('delete')}
       </Button>
-      {hasDecks && <p>{t('hasDecksHint')}</p>}
+      {hasDecks && <p className="hint">{t('hasDecksHint')}</p>}
     </>
   );
 };

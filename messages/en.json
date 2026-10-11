@@ -153,14 +153,17 @@
     "editTitle": "Edit format",
     "decksSection": "Decks",
     "noDecks": "No decks use this format",
+    "deck": "Deck",
     "opponentArchetypesSection": "Opponent archetypes",
     "noOpponentArchetypes": "No opponent archetypes yet",
+    "archetype": "Archetype",
+    "matches": "Matches",
+    "actions": "Actions",
     "dangerZone": "Danger zone"
   },
   "formatOpponentArchetype": {
-    "matchCount": "{count, plural, one {# match} other {# matches}}",
-    "rename": "Rename",
-    "renameTitle": "Rename opponent archetype",
+    "edit": "Edit",
+    "editTitle": "Edit opponent archetype",
     "delete": "Delete",
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete {name}?",
@@ -171,7 +174,7 @@
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this format?",
     "deleteConfirmWithArchetypes": "{count, plural, one {Are you sure you want to delete this format? This also deletes # unused opponent archetype.} other {Are you sure you want to delete this format? This also deletes # unused opponent archetypes.}}",
-    "hasDecksHint": "To delete this format, all of its decks must first be moved to another format or deleted."
+    "hasDecksHint": "To delete this format, first delete its decks. Decks without matches can also be moved to another format."
   },
   "errorMessage": {
     "message": "<strong>Error:</strong> {error}"
