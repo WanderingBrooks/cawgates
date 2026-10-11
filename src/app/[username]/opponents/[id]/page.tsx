@@ -1,16 +1,10 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { formatDate } from '@/lib/utils';
+import { cn, formatDate, getMatchResultTint } from '@/lib/utils';
 import Markdown from 'react-markdown';
-import {
-  Card,
-  CardContent,
-  CardTitle,
-  PageTitle,
-  SectionHeader,
-} from '@/components';
+import { PageTitle, SectionHeader } from '@/components';
 import { getOpponentArchetype } from '@/lib/dal';
-import OpponentArchetypeSubHeader from './OpponentArchetypeSubHeader';
+import OpponentArchetypeActions from './OpponentArchetypeActions';
 import classes from './opponentArchetypePage.module.css';
 
 const OpponentArchetypePage = async ({
@@ -43,54 +37,84 @@ const OpponentArchetypePage = async ({
     <>
       <PageTitle
         title={opponentArchetype.name}
-        subtitle={opponentArchetype.format.name}
+        subtitle={
+          <>
+            <span>{opponentArchetype.format.name}</span>
+            {opponentArchetype.matches.length > 0 && (
+              <strong className="text-number">
+                {t('overallRecord', {
+                  wins: matchWins,
+                  losses: matchLosses,
+                  ties: matchDraws,
+                })}
+              </strong>
+            )}
+          </>
+        }
+        actions={
+          <OpponentArchetypeActions
+            opponentArchetypeId={opponentArchetype.id}
+            formatId={opponentArchetype.formatId}
+            initialName={opponentArchetype.name}
+            isOwner={isOwner}
+            username={username}
+          />
+        }
       />
-      <OpponentArchetypeSubHeader
-        opponentArchetypeId={opponentArchetype.id}
-        formatId={opponentArchetype.formatId}
-        initialName={opponentArchetype.name}
-        totalMatches={opponentArchetype.matches.length}
-        matchWins={matchWins}
-        matchLosses={matchLosses}
-        matchDraws={matchDraws}
-        isOwner={isOwner}
-        username={username}
-      />
-      <SectionHeader>{t('matchesSection')}</SectionHeader>
-      {opponentArchetype.matches.length === 0 ? (
-        <p>{t('noMatches')}</p>
-      ) : (
-        <div className={classes.matchList}>
-          {opponentArchetype.matches.map(match => (
-            <Card key={match.id}>
-              <CardTitle align="start">
-                <div className={classes.matchLink}>
-                  <Link href={`/${username}/events/${match.event.id}`}>
-                    {match.event.name}
-                  </Link>
-                  <span>{match.event.deck.name}</span>
+      <section className={classes.section}>
+        <SectionHeader>{t('matchesSection')}</SectionHeader>
+        {opponentArchetype.matches.length === 0 ? (
+          <p>{t('noMatches')}</p>
+        ) : (
+          <div className={classes.matchList}>
+            {opponentArchetype.matches.map(match => (
+              <article key={match.id} className={classes.matchCard}>
+                <div className={classes.matchHeader}>
+                  <div className={classes.matchEvent}>
+                    <Link
+                      href={`/${username}/events/${match.event.id}`}
+                      className="text-strong"
+                    >
+                      {match.event.name}
+                    </Link>
+                    <span className="text-secondary">
+                      {match.event.deck.name}
+                    </span>
+                  </div>
+                  <div className={classes.matchResult}>
+                    <span className="text-secondary">
+                      {formatDate({
+                        formatter,
+                        date: new Date(match.event.date),
+                      })}
+                    </span>
+                    <span
+                      className={cn(
+                        'text-number',
+                        'text-strong',
+                        classes.record,
+                        getMatchResultTint({
+                          wins: match.wins,
+                          losses: match.losses,
+                        }),
+                      )}
+                    >
+                      {t('record', { wins: match.wins, losses: match.losses })}
+                    </span>
+                  </div>
                 </div>
-                <div className={classes.matchRecordAndDate}>
-                  <p>
-                    {formatDate({
-                      formatter,
-                      date: new Date(match.event.date),
-                    })}
-                  </p>
-                  <p>
-                    {t('record', { wins: match.wins, losses: match.losses })}
-                  </p>
-                </div>
-              </CardTitle>
-              {isOwner && match.notes && (
-                <CardContent>
-                  <Markdown>{match.notes}</Markdown>
-                </CardContent>
-              )}
-            </Card>
-          ))}
-        </div>
-      )}
+                {isOwner && match.notes && (
+                  <div className={classes.matchNotes}>
+                    <div className="prose">
+                      <Markdown>{match.notes}</Markdown>
+                    </div>
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
     </>
   );
 };

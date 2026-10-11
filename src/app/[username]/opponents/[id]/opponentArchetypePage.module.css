@@ -1,31 +1,62 @@
-.headerRow {
+.section {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  flex-direction: column;
   gap: var(--spacing-md);
-}
-
-.rightButtons {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--spacing-sm);
-}
-
-.matchLink {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.matchRecordAndDate {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
 }
 
 .matchList {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+}
+
+.matchCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.matchHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm) var(--spacing-lg);
+  padding: 10px var(--spacing-lg);
+  background-color: var(--color-surface-muted);
+}
+
+.matchEvent,
+.matchResult {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--spacing-xs) var(--spacing-md);
+}
+
+.matchResult {
+  align-items: center;
+}
+
+.record {
+  padding: 1px var(--spacing-sm);
+}
+
+.matchNotes {
+  padding: 14px 20px 18px;
+  border-top: 1px solid var(--color-border);
+}
+
+@media (max-width: 767px) {
+  .matchHeader {
+    padding: 10px 14px;
+  }
+
+  .matchResult {
+    flex: 1 1 100%;
+    justify-content: space-between;
+  }
+
+  .matchNotes {
+    padding: 14px 14px 18px;
+  }
 }
