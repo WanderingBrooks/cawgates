@@ -81,6 +81,12 @@
   --z-index-menu: 4;
 }
 
+/* Always reserve room for the scrollbar so the centred column doesn't shift
+   between pages that scroll and pages that don't */
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
