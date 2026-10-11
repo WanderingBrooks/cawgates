@@ -2,34 +2,38 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { deleteOpponentArchetype } from '@/app/actions/opponentArchetypes';
+import { deleteFormat } from '@/app/actions/formats';
 import { Button, ErrorMessage } from '@/components';
 
-const DeleteOpponentArchetypeButton = ({
-  opponentArchetypeId,
-  deckId,
-  hasMatches,
+const DeleteFormatButton = ({
+  formatId,
+  deckCount,
+  opponentArchetypeCount,
 }: {
-  opponentArchetypeId: string;
-  deckId: string;
-  hasMatches: boolean;
+  formatId: string;
+  deckCount: number;
+  opponentArchetypeCount: number;
 }) => {
-  const t = useTranslations('deleteOpponentArchetypeButton');
+  const t = useTranslations('deleteFormatButton');
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const hasDecks = deckCount > 0;
+
   const handleDelete = async () => {
-    if (!confirm(t('deleteConfirm'))) {
+    const message =
+      opponentArchetypeCount > 0
+        ? t('deleteConfirmWithArchetypes', { count: opponentArchetypeCount })
+        : t('deleteConfirm');
+
+    if (!confirm(message)) {
       return;
     }
 
     setIsDeleting(true);
     setError(null);
 
-    const result = await deleteOpponentArchetype({
-      opponentArchetypeId,
-      deckId,
-    });
+    const result = await deleteFormat({ formatId });
 
     if (result && !result.success) {
       setError(result.error);
@@ -42,14 +46,14 @@ const DeleteOpponentArchetypeButton = ({
       {error && <ErrorMessage error={error} />}
       <Button
         onClick={handleDelete}
-        disabled={isDeleting || hasMatches}
+        disabled={isDeleting || hasDecks}
         variant="danger"
       >
         {isDeleting ? t('deleting') : t('delete')}
       </Button>
-      {hasMatches && <p>{t('hasMatchesHint')}</p>}
+      {hasDecks && <p>{t('hasDecksHint')}</p>}
     </>
   );
 };
 
-export default DeleteOpponentArchetypeButton;
+export default DeleteFormatButton;

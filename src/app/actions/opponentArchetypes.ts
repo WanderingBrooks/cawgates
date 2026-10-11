@@ -1,6 +1,6 @@
 'use server';
 
-import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 import { logEvent } from '@/lib/log';
@@ -161,77 +161,37 @@ const updateOpponentArchetype = async (
 
 const deleteOpponentArchetype = async ({
   opponentArchetypeId,
-  deckId,
 }: {
   opponentArchetypeId: string;
-  deckId: string;
 }): Promise<ActionResult> => {
-  let deckSlug: string;
-  let username: string;
+  const user = await getUser();
+
+  if (!user) {
+    return { success: false, error: 'You must be logged in' };
+  }
+
+  const opponentArchetype = await prisma.opponentArchetype.findUnique({
+    where: { id: opponentArchetypeId },
+    include: { format: true, _count: { select: { matches: true } } },
+  });
+
+  if (!opponentArchetype || opponentArchetype.format.userId !== user.userId) {
+    return { success: false, error: 'Opponent archetype not found' };
+  }
+
+  if (opponentArchetype._count.matches > 0) {
+    return {
+      success: false,
+      error: 'Cannot delete an opponent archetype that has matches.',
+    };
+  }
 
   try {
-    const user = await getUser();
-
-    if (!user) {
-      return {
-        success: false,
-        error: 'You must be logged in to delete an opponent archetype',
-      };
-    }
-
-    const opponentArchetype = await prisma.opponentArchetype.findUnique({
-      where: { id: opponentArchetypeId },
-      include: { format: true },
-    });
-
-    if (!opponentArchetype) {
-      return {
-        success: false,
-        error: 'Opponent archetype not found',
-      };
-    }
-
-    if (opponentArchetype.format.userId !== user.userId) {
-      return {
-        success: false,
-        error: 'You do not have permission to delete this opponent archetype',
-      };
-    }
-
-    const matchCount = await prisma.match.count({
-      where: { opponentArchetypeId },
-    });
-
-    if (matchCount > 0) {
-      return {
-        success: false,
-        error: 'Cannot delete an opponent archetype that has matches.',
-      };
-    }
-
-    // The deck the user deleted from, to redirect back to. It must be in the
-    // archetype's format, which also proves it belongs to the user.
-    const deck = await prisma.deck.findUnique({
-      where: { id: deckId },
-    });
-
-    if (!deck || deck.formatId !== opponentArchetype.formatId) {
-      return { success: false, error: 'Deck not found' };
-    }
-
-    deckSlug = deck.slug;
-    username = user.username;
-
     await prisma.opponentArchetype.delete({
       where: { id: opponentArchetypeId },
     });
-
-    logEvent('opponentArchetype.deleted', {
-      userId: user.userId,
-      formatId: opponentArchetype.formatId,
-      opponentArchetypeId,
-    });
   } catch (error) {
+    // A match added after the count above blocks the delete
     console.error('Failed to delete opponent archetype:', error);
 
     return {
@@ -240,12 +200,20 @@ const deleteOpponentArchetype = async ({
     };
   }
 
-  redirect(`/${username}/${deckSlug}`);
+  logEvent('opponentArchetype.deleted', {
+    userId: user.userId,
+    formatId: opponentArchetype.formatId,
+    opponentArchetypeId,
+  });
+
+  revalidatePath(`/${user.username}/formats/${opponentArchetype.formatId}`);
+
+  return { success: true };
 };
 
 export {
   getOpponentArchetypesForArchetype,
+  deleteOpponentArchetype,
   createOpponentArchetype,
   updateOpponentArchetype,
-  deleteOpponentArchetype,
 };
