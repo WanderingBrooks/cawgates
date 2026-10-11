@@ -48,6 +48,7 @@ const OpponentArchetypePage = async ({
       />
       <OpponentArchetypeSubHeader
         opponentArchetypeId={opponentArchetype.id}
+        formatId={opponentArchetype.formatId}
         initialName={opponentArchetype.name}
         totalMatches={opponentArchetype.matches.length}
         matchWins={matchWins}

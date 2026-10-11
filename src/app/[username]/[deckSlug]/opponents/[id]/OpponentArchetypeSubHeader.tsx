@@ -9,6 +9,7 @@ import classes from './opponentArchetypePage.module.css';
 
 const OpponentArchetypeSubHeader = ({
   opponentArchetypeId,
+  formatId,
   initialName,
   totalMatches,
   matchWins,
@@ -19,6 +20,7 @@ const OpponentArchetypeSubHeader = ({
   deckSlug,
 }: {
   opponentArchetypeId: string;
+  formatId: string;
   initialName: string;
   totalMatches: number;
   matchWins: number;
@@ -57,6 +59,11 @@ const OpponentArchetypeSubHeader = ({
           <Link href={`/${username}/${deckSlug}`}>
             <Button variant="secondary">{t('viewDeck')}</Button>
           </Link>
+          {isOwner && (
+            <Link href={`/${username}/formats/${formatId}`}>
+              <Button variant="secondary">{t('viewFormat')}</Button>
+            </Link>
+          )}
         </div>
       </div>
       {isOwner && (

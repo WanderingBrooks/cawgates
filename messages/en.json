@@ -216,6 +216,7 @@
     "edit": "Edit",
     "editTitle": "Edit opponent archetype",
     "viewDeck": "View deck",
+    "viewFormat": "View format",
     "noMatches": "No matches yet",
     "record": "{wins}W–{losses}L",
     "overallRecord": "{wins}W–{losses}L–{ties}T"
