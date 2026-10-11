@@ -11,7 +11,6 @@
     "firstDeckSubtitle": "Create your first deck to start tracking events"
   },
   "deckPage": {
-    "title": "Record",
     "editDeck": "Edit deck",
     "totalMatchWins": "Match wins",
     "totalMatchLosses": "Match losses",
@@ -23,8 +22,7 @@
     "gameWinPct": "Game win %",
     "noMatchesOwner": "No matches yet — create an event to start tracking",
     "noMatchesViewer": "No matches found",
-    "createEvent": "Create event",
-    "deckAndFormat": "{deck} - {format}"
+    "createEvent": "Create event"
   },
   "deckForm": {
     "name": "Deck name *",
