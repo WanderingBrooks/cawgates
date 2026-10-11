@@ -119,12 +119,12 @@ const OpponentArchetypeSelect = ({
           <option value="">
             {isLoading ? t('loading') : t('selectArchetype')}
           </option>
+          <option value={ADD_NEW_VALUE}>{t('addNew')}</option>
           {options.map(option => (
             <option key={option.id} value={option.id}>
               {option.name}
             </option>
           ))}
-          <option value={ADD_NEW_VALUE}>{t('addNew')}</option>
         </select>
         {selectedOption && (
           <Button
