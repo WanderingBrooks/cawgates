@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { formatDate } from '@/lib/utils';
+import { cn, formatDate } from '@/lib/utils';
 import { Button, PageTitle, SectionHeader } from '@/components';
 import { getEvent } from '@/lib/dal';
 import DeleteEventButton from './DeleteEventButton';
@@ -28,38 +28,51 @@ const EventPage = async ({
 
   return (
     <>
-      <PageTitle title={event.name} subtitle={event.deck.name} />
-      <div className={classes.headerRow}>
-        <div>
-          <p>{formatDate({ formatter, date: new Date(event.date) })}</p>
-          {event.matches.length > 0 && (
-            <p className="text-emphasis">
-              {t('matchRecord', {
-                wins: matchWins,
-                losses: matchLosses,
-                ties: matchTies,
-              })}
-            </p>
-          )}
-        </div>
-        <div className={classes.rightButtons}>
-          {isOwner && (
-            <Link href={`/${username}/events/${id}/edit`}>
-              <Button variant="primary">{t('editEvent')}</Button>
+      <PageTitle
+        title={event.name}
+        subtitle={
+          <>
+            <span>{event.deck.name}</span>
+            <span>{formatDate({ formatter, date: new Date(event.date) })}</span>
+            {event.matches.length > 0 && (
+              <strong className="text-number">
+                {t('matchRecord', {
+                  wins: matchWins,
+                  losses: matchLosses,
+                  ties: matchTies,
+                })}
+              </strong>
+            )}
+          </>
+        }
+        actions={
+          <>
+            {isOwner && (
+              <Link href={`/${username}/events/${id}/edit`}>
+                <Button variant="secondary">{t('editEvent')}</Button>
+              </Link>
+            )}
+            <Link href={`/${username}/${event.deck.slug}`}>
+              <Button variant="secondary">{t('viewDeck')}</Button>
             </Link>
-          )}
-          <Link href={`/${username}/${event.deck.slug}`}>
-            <Button variant="secondary">{t('viewDeck')}</Button>
-          </Link>
-        </div>
-      </div>
+            {isOwner && (
+              <div className={classes.desktopOnly}>
+                <DeleteEventButton eventId={id} />
+              </div>
+            )}
+          </>
+        }
+      />
       {isOwner && event.notes && (
-        <>
+        <section className={classes.section}>
           <SectionHeader>{t('notesSection')}</SectionHeader>
-          <Markdown>{event.notes}</Markdown>
-        </>
+          <div className={classes.notes}>
+            <div className="prose">
+              <Markdown>{event.notes}</Markdown>
+            </div>
+          </div>
+        </section>
       )}
-      <SectionHeader>{t('matchesSection')}</SectionHeader>
       <MatchSection
         matches={event.matches}
         eventId={id}
@@ -67,11 +80,12 @@ const EventPage = async ({
         isOwner={isOwner}
         username={username}
       />
+      {/* On phones the delete button moves from the title down here */}
       {isOwner && (
-        <>
+        <section className={cn(classes.section, classes.mobileOnly)}>
           <SectionHeader>{t('dangerZone')}</SectionHeader>
           <DeleteEventButton eventId={id} />
-        </>
+        </section>
       )}
     </>
   );

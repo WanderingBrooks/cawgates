@@ -1,16 +1,17 @@
-.rightAlignedButton {
-  display: flex;
-  justify-content: flex-end;
+.date {
+  white-space: nowrap;
 }
 
-.eventDateAndRecord {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+.deckInline {
+  display: none;
 }
 
-.eventLinkAndDeckName {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+@media (max-width: 767px) {
+  .deckColumn {
+    display: none;
+  }
+
+  .deckInline {
+    display: block;
+  }
 }

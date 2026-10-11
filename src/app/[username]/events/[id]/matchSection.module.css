@@ -1,13 +1,19 @@
-.matchLinkAndArchetype {
+.section {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  gap: var(--spacing-md);
 }
 
-.matchRecord {
+.sectionHeader {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.sectionHeader > h2 {
+  margin-top: 0;
 }
 
 .matchList {
@@ -16,9 +22,65 @@
   gap: var(--spacing-md);
 }
 
-.matchActions {
-  margin-top: var(--spacing-md);
+.matchCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.matchHeader {
   display: flex;
-  justify-content: flex-end;
-  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm) var(--spacing-lg);
+  padding: 10px var(--spacing-lg);
+  background-color: var(--color-surface-muted);
+}
+
+.matchSummary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-xs) var(--spacing-md);
+}
+
+.record {
+  padding: 1px var(--spacing-sm);
+}
+
+.matchActions {
+  display: flex;
+  gap: 6px;
+}
+
+.matchNotes {
+  padding: 14px 20px 18px;
+  border-top: 1px solid var(--color-border);
+}
+
+@media (max-width: 767px) {
+  .sectionHeader > button {
+    width: 100%;
+  }
+
+  .matchHeader {
+    padding: 10px 14px;
+  }
+
+  .matchSummary {
+    flex: 1 1 100%;
+    justify-content: space-between;
+  }
+
+  .matchActions {
+    flex: 1 1 100%;
+  }
+
+  .matchActions > button {
+    flex: 1;
+  }
+
+  .matchNotes {
+    padding: 14px 14px 18px;
+  }
 }

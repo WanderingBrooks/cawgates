@@ -1,13 +1,26 @@
-.headerRow {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--spacing-md);
-}
-
-.rightButtons {
+.section {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   gap: var(--spacing-sm);
+}
+
+.notes {
+  box-sizing: border-box;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.mobileOnly {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .desktopOnly {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: flex;
+  }
 }

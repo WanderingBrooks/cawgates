@@ -48,6 +48,10 @@
   "events": {
     "title": "Events",
     "createEvent": "Create event",
+    "date": "Date",
+    "event": "Event",
+    "deck": "Deck",
+    "recordHeader": "Record",
     "record": "{wins}-{losses}-{ties}",
     "noEvents": "No events yet",
     "noDecksHint": "You need a deck before you can create an event.",
