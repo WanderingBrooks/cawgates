@@ -4,7 +4,9 @@
     "guestTitle": "{username}''s decks",
     "createDeck": "Create deck",
     "noDecks": "No decks yet — create one to get started",
-    "eventCount": "{count, plural, one {# event} other {# events}}"
+    "deck": "Deck",
+    "format": "Format",
+    "events": "Events"
   },
   "createDeck": {
     "title": "Create deck",
@@ -142,8 +144,9 @@
   "formats": {
     "title": "My formats",
     "noFormats": "No formats yet — create one when you create a deck",
-    "deckCount": "{count, plural, one {# deck} other {# decks}}",
-    "opponentArchetypeCount": "{count, plural, one {# opponent archetype} other {# opponent archetypes}}"
+    "format": "Format",
+    "decks": "Decks",
+    "opponentArchetypes": "Opponent archetypes"
   },
   "formatPage": {
     "edit": "Edit",

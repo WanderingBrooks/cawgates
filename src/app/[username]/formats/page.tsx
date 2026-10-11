@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { getFormatsForOwner } from '@/lib/dal';
-import { Card, CardTitle, PageTitle } from '@/components';
+import { PageTitle } from '@/components';
 
 const FormatsPage = async ({
   params,
@@ -19,23 +19,32 @@ const FormatsPage = async ({
       {formats.length === 0 ? (
         <p>{t('noFormats')}</p>
       ) : (
-        formats.map(format => (
-          <Card key={format.id}>
-            <CardTitle>
-              <Link href={`/${username}/formats/${format.id}`}>
-                {format.name}
-              </Link>
-              <span>{t('deckCount', { count: format._count.decks })}</span>
-            </CardTitle>
-            <div>
-              <span>
-                {t('opponentArchetypeCount', {
-                  count: format._count.opponentArchetypes,
-                })}
-              </span>
-            </div>
-          </Card>
-        ))
+        <div className="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>{t('format')}</th>
+                <th className="text-number">{t('decks')}</th>
+                <th className="text-number">{t('opponentArchetypes')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {formats.map(format => (
+                <tr key={format.id}>
+                  <td>
+                    <Link href={`/${username}/formats/${format.id}`}>
+                      {format.name}
+                    </Link>
+                  </td>
+                  <td className="text-number">{format._count.decks}</td>
+                  <td className="text-number">
+                    {format._count.opponentArchetypes}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </>
   );
