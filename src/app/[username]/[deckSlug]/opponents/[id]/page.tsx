@@ -10,7 +10,6 @@ import {
   SectionHeader,
 } from '@/components';
 import { getOpponentArchetype } from '@/lib/dal';
-import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
 import OpponentArchetypeSubHeader from './OpponentArchetypeSubHeader';
 import classes from './opponentArchetypePage.module.css';
 
@@ -23,7 +22,7 @@ const OpponentArchetypePage = async ({
   const t = await getTranslations('opponentArchetypePage');
   const formatter = await getFormatter();
 
-  const { deck, opponentArchetype, isOwner } = await getOpponentArchetype({
+  const { opponentArchetype, isOwner } = await getOpponentArchetype({
     ownerUsername: username,
     deckSlug,
     opponentArchetypeId: id,
@@ -92,16 +91,6 @@ const OpponentArchetypePage = async ({
             </Card>
           ))}
         </div>
-      )}
-      {isOwner && (
-        <>
-          <SectionHeader>{t('dangerZone')}</SectionHeader>
-          <DeleteOpponentArchetypeButton
-            opponentArchetypeId={opponentArchetype.id}
-            deckId={deck.id}
-            hasMatches={opponentArchetype.matches.length > 0}
-          />
-        </>
       )}
     </>
   );

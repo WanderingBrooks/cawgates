@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { deleteOpponentArchetypeFromFormat } from '@/app/actions/opponentArchetypes';
+import { deleteOpponentArchetype } from '@/app/actions/opponentArchetypes';
 import {
   Button,
   Card,
@@ -38,7 +38,7 @@ const OpponentArchetypeRow = ({
     setIsDeleting(true);
     setError(null);
 
-    const result = await deleteOpponentArchetypeFromFormat({
+    const result = await deleteOpponentArchetype({
       opponentArchetypeId,
     });
 

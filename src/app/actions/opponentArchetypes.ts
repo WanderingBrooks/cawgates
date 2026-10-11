@@ -1,7 +1,6 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 import { logEvent } from '@/lib/log';
@@ -162,92 +161,6 @@ const updateOpponentArchetype = async (
 
 const deleteOpponentArchetype = async ({
   opponentArchetypeId,
-  deckId,
-}: {
-  opponentArchetypeId: string;
-  deckId: string;
-}): Promise<ActionResult> => {
-  let deckSlug: string;
-  let username: string;
-
-  try {
-    const user = await getUser();
-
-    if (!user) {
-      return {
-        success: false,
-        error: 'You must be logged in to delete an opponent archetype',
-      };
-    }
-
-    const opponentArchetype = await prisma.opponentArchetype.findUnique({
-      where: { id: opponentArchetypeId },
-      include: { format: true },
-    });
-
-    if (!opponentArchetype) {
-      return {
-        success: false,
-        error: 'Opponent archetype not found',
-      };
-    }
-
-    if (opponentArchetype.format.userId !== user.userId) {
-      return {
-        success: false,
-        error: 'You do not have permission to delete this opponent archetype',
-      };
-    }
-
-    const matchCount = await prisma.match.count({
-      where: { opponentArchetypeId },
-    });
-
-    if (matchCount > 0) {
-      return {
-        success: false,
-        error: 'Cannot delete an opponent archetype that has matches.',
-      };
-    }
-
-    // The deck the user deleted from, to redirect back to. It must be in the
-    // archetype's format, which also proves it belongs to the user.
-    const deck = await prisma.deck.findUnique({
-      where: { id: deckId },
-    });
-
-    if (!deck || deck.formatId !== opponentArchetype.formatId) {
-      return { success: false, error: 'Deck not found' };
-    }
-
-    deckSlug = deck.slug;
-    username = user.username;
-
-    await prisma.opponentArchetype.delete({
-      where: { id: opponentArchetypeId },
-    });
-
-    logEvent('opponentArchetype.deleted', {
-      userId: user.userId,
-      formatId: opponentArchetype.formatId,
-      opponentArchetypeId,
-    });
-  } catch (error) {
-    console.error('Failed to delete opponent archetype:', error);
-
-    return {
-      success: false,
-      error: 'Failed to delete opponent archetype. Please try again.',
-    };
-  }
-
-  redirect(`/${username}/${deckSlug}`);
-};
-
-// Deletes from the format page, which has no deck to redirect back to, so the
-// page is revalidated instead
-const deleteOpponentArchetypeFromFormat = async ({
-  opponentArchetypeId,
 }: {
   opponentArchetypeId: string;
 }): Promise<ActionResult> => {
@@ -300,8 +213,7 @@ const deleteOpponentArchetypeFromFormat = async ({
 
 export {
   getOpponentArchetypesForArchetype,
-  deleteOpponentArchetypeFromFormat,
+  deleteOpponentArchetype,
   createOpponentArchetype,
   updateOpponentArchetype,
-  deleteOpponentArchetype,
 };
