@@ -8,11 +8,7 @@ type SectionHeaderProps = {
 };
 
 const SectionHeader = ({ children, className }: SectionHeaderProps) => {
-  return (
-    <p className={cn('text-label', classes.sectionHeader, className)}>
-      {children}
-    </p>
-  );
+  return <h2 className={cn(classes.sectionHeader, className)}>{children}</h2>;
 };
 
 export default SectionHeader;

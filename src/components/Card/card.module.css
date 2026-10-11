@@ -8,6 +8,7 @@
 .cardTitle {
   display: flex;
   justify-content: space-between;
+  gap: var(--spacing-md);
 }
 
 .cardContent {

@@ -1,5 +1,4 @@
 .pageContainer {
-  width: 100vw;
   padding-bottom: var(--spacing-xxl);
 
   display: flex;
@@ -8,13 +7,14 @@
 }
 
 .pageContent {
-  max-width: var(--page-width-mobile);
-  width: var(--page-width-mobile);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--page-max-width);
+  padding: var(--spacing-xl) var(--spacing-xl) 0;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 767px) {
   .pageContent {
-    width: var(--page-width-desktop);
-    max-width: var(--page-width-desktop);
+    padding: var(--spacing-lg) var(--spacing-lg) 0;
   }
 }

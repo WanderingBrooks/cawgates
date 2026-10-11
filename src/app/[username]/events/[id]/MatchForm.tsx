@@ -16,6 +16,7 @@ import {
   OpponentArchetypeSelect,
   TextArea,
 } from '@/components';
+import classes from './matchForm.module.css';
 
 const SubmitButton = ({ isActionPending }: { isActionPending: boolean }) => {
   const { pending: isFormPending } = useFormStatus();
@@ -125,24 +126,30 @@ const MatchForm = ({
           onChange={handleChange}
           required
         />
-        <Input
-          type="number"
-          id="wins"
-          name="wins"
-          label={t('wins')}
-          value={matchData.wins}
-          onChange={handleChange}
-          required
-        />
-        <Input
-          type="number"
-          id="losses"
-          name="losses"
-          label={t('losses')}
-          value={matchData.losses}
-          onChange={handleChange}
-          required
-        />
+        <div className={classes.recordRow}>
+          <Input
+            type="number"
+            inputMode="numeric"
+            id="wins"
+            name="wins"
+            label={t('wins')}
+            value={matchData.wins}
+            onChange={handleChange}
+            className="text-number"
+            required
+          />
+          <Input
+            type="number"
+            inputMode="numeric"
+            id="losses"
+            name="losses"
+            label={t('losses')}
+            value={matchData.losses}
+            onChange={handleChange}
+            className="text-number"
+            required
+          />
+        </div>
 
         <TextArea
           id="notes"

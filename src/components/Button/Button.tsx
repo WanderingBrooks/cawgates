@@ -8,6 +8,7 @@ type ButtonProps = {
   disabled?: boolean;
   className?: string;
   variant: 'primary' | 'secondary' | 'danger';
+  size?: 'default' | 'small';
 };
 
 const Button = ({
@@ -17,13 +18,19 @@ const Button = ({
   disabled = false,
   className = '',
   variant,
+  size = 'default',
 }: ButtonProps) => {
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={cn(classes.button, variant && classes[variant], className)}
+      className={cn(
+        classes.button,
+        variant && classes[variant],
+        size === 'small' && cn(classes.small, 'text-small'),
+        className,
+      )}
     >
       {children}
     </button>

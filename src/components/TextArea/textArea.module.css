@@ -1,13 +1,23 @@
 .textAreaContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
 }
 
 .textArea {
-  padding: var(--spacing-sm) var(--spacing-md);
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--spacing-sm) 10px;
   background-color: var(--color-input-bg);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-control-border);
   border-radius: var(--radius);
   color: var(--color-text);
+  line-height: var(--line-height-prose);
+  resize: vertical;
+}
+
+.textArea:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -1px;
+  border-color: var(--color-primary);
 }
