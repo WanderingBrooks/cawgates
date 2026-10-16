@@ -205,7 +205,14 @@ const getFormatsForOwner = async ({
   const formats = await prisma.format.findMany({
     where: { userId: owner.id },
     orderBy: { name: 'asc' },
-    include: { _count: { select: { decks: true, opponentArchetypes: true } } },
+    include: {
+      _count: { select: { decks: true, opponentArchetypes: true } },
+      // Every match is against an archetype in its format, so this covers
+      // all of the format's matches
+      opponentArchetypes: {
+        select: { matches: { select: { wins: true, losses: true } } },
+      },
+    },
   });
 
   return { formats };

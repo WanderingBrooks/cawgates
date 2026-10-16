@@ -146,7 +146,11 @@
     "noFormats": "No formats yet — create one when you create a deck",
     "format": "Format",
     "decks": "Decks",
-    "opponentArchetypes": "Opponent archetypes"
+    "opponentArchetypes": "Opponent archetypes",
+    "matches": "Matches",
+    "matchWinPct": "Match win %",
+    "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
+    "noMatches": "–"
   },
   "formatPage": {
     "edit": "Edit",

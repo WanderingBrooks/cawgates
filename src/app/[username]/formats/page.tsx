@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { getFormatter, getTranslations } from 'next-intl/server';
 import { getFormatsForOwner } from '@/lib/dal';
-import { PageTitle } from '@/components';
+import { cn, getWinRateTint } from '@/lib/utils';
+import { PageTitle, Tooltip } from '@/components';
 
 const FormatsPage = async ({
   params,
@@ -10,8 +11,34 @@ const FormatsPage = async ({
 }) => {
   const { username } = await params;
   const t = await getTranslations('formats');
+  const formatter = await getFormatter();
 
   const { formats } = await getFormatsForOwner({ ownerUsername: username });
+
+  const formatRows = formats
+    .map(format => {
+      const matches = format.opponentArchetypes.flatMap(
+        opponentArchetype => opponentArchetype.matches,
+      );
+
+      const matchWins = matches.filter(
+        match => match.wins > match.losses,
+      ).length;
+
+      return {
+        ...format,
+        matchCount: matches.length,
+        matchWinRate: matches.length === 0 ? 0 : matchWins / matches.length,
+      };
+    })
+    // Most played formats first, alphabetical when tied
+    .sort((a, b) => {
+      if (b.matchCount !== a.matchCount) {
+        return b.matchCount - a.matchCount;
+      }
+
+      return a.name.localeCompare(b.name);
+    });
 
   return (
     <>
@@ -26,10 +53,16 @@ const FormatsPage = async ({
                 <th>{t('format')}</th>
                 <th className="text-number">{t('decks')}</th>
                 <th className="text-number">{t('opponentArchetypes')}</th>
+                <th className="text-number">{t('matches')}</th>
+                <th className="text-number">
+                  <Tooltip content={t('matchWinPctExplainer')}>
+                    {t('matchWinPct')}
+                  </Tooltip>
+                </th>
               </tr>
             </thead>
             <tbody>
-              {formats.map(format => (
+              {formatRows.map(format => (
                 <tr key={format.id}>
                   <td>
                     <Link href={`/${username}/formats/${format.id}`}>
@@ -39,6 +72,23 @@ const FormatsPage = async ({
                   <td className="text-number">{format._count.decks}</td>
                   <td className="text-number">
                     {format._count.opponentArchetypes}
+                  </td>
+                  <td className="text-number">{format.matchCount}</td>
+                  <td
+                    className={cn(
+                      'text-number',
+                      getWinRateTint({
+                        winRate: format.matchWinRate,
+                        matchCount: format.matchCount,
+                      }),
+                    )}
+                  >
+                    {format.matchCount === 0
+                      ? t('noMatches')
+                      : formatter.number(format.matchWinRate, {
+                          style: 'percent',
+                          maximumFractionDigits: 1,
+                        })}
                   </td>
                 </tr>
               ))}
