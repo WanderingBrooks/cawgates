@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormatter, useTranslations } from 'next-intl';
 import { deleteOpponentArchetype } from '@/app/actions/opponentArchetypes';
@@ -18,7 +19,13 @@ type MatchStatisticsRow = Awaited<
   ReturnType<typeof getMatchStatistics>
 >['rows'][number];
 
-const OpponentArchetypeRow = ({ row }: { row: MatchStatisticsRow }) => {
+const OpponentArchetypeRow = ({
+  row,
+  username,
+}: {
+  row: MatchStatisticsRow;
+  username: string;
+}) => {
   const {
     opponentArchetypeId,
     opponentArchetype: name,
@@ -53,7 +60,9 @@ const OpponentArchetypeRow = ({ row }: { row: MatchStatisticsRow }) => {
   return (
     <tr>
       <td>
-        {name}
+        <Link href={`/${username}/opponents/${opponentArchetypeId}`}>
+          {name}
+        </Link>
         {error && <ErrorMessage error={error} className={classes.rowError} />}
       </td>
       {matchCount === 0 ? (

@@ -119,6 +119,7 @@ const FormatPage = async ({
                       <OpponentArchetypeRow
                         key={row.opponentArchetypeId}
                         row={row}
+                        username={username}
                       />
                     ))}
                   </tbody>
