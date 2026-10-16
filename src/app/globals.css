@@ -251,6 +251,19 @@ td.text-number {
   color: var(--color-text-muted);
 }
 
+/* Tooltip text. Sets every inherited text style, because a tooltip inside
+   e.g. a table header would otherwise pick up its nowrap and uppercase */
+.text-tooltip {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: normal;
+  font-variant-numeric: normal;
+  text-align: center;
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: normal;
+}
+
 /* Long-form markdown such as event and match notes */
 .prose {
   max-width: 68ch;

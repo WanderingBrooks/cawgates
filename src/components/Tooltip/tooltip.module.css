@@ -22,12 +22,14 @@
   border-color: var(--color-text);
 }
 
+/* Shown as a popover in the top layer; Tooltip.tsx sets its position */
 .bubble {
-  position: absolute;
-  bottom: calc(100% + var(--spacing-xs));
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
+  position: fixed;
+  inset: auto;
+  top: var(--tooltip-top, 0);
+  left: var(--tooltip-left, 0);
+  margin: 0;
+  overflow: visible;
   width: max-content;
   max-width: 12rem;
   padding: var(--spacing-xs) var(--spacing-sm);
@@ -35,8 +37,5 @@
   border-radius: var(--radius);
   background-color: var(--color-surface);
   color: var(--color-text);
-  font-size: var(--font-size-sm);
-  font-weight: normal;
-  text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
