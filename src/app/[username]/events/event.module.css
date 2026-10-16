@@ -1,17 +1,3 @@
 .date {
   white-space: nowrap;
 }
-
-.deckInline {
-  display: none;
-}
-
-@media (max-width: 767px) {
-  .deckColumn {
-    display: none;
-  }
-
-  .deckInline {
-    display: block;
-  }
-}

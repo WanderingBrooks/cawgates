@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { cn, formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 import { Button, PageTitle } from '@/components';
 import { getEvents } from '@/lib/dal';
 import classes from './event.module.css';
@@ -52,7 +52,7 @@ const EventsPage = async ({
               <tr>
                 <th>{t('date')}</th>
                 <th>{t('event')}</th>
-                <th className={classes.deckColumn}>{t('deck')}</th>
+                <th>{t('deck')}</th>
                 <th className="text-number">{t('recordHeader')}</th>
               </tr>
             </thead>
@@ -84,19 +84,8 @@ const EventsPage = async ({
                       <Link href={`/${username}/events/${event.id}`}>
                         {event.name}
                       </Link>
-                      {/* On phones the deck column is hidden and the deck
-                          shows under the event name instead */}
-                      <span
-                        className={cn(
-                          'text-small',
-                          'text-secondary',
-                          classes.deckInline,
-                        )}
-                      >
-                        {event.deck.name}
-                      </span>
                     </td>
-                    <td className={classes.deckColumn}>{event.deck.name}</td>
+                    <td>{event.deck.name}</td>
                     <td className="text-number">{t('record', record)}</td>
                   </tr>
                 );
