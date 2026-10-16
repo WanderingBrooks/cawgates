@@ -17,7 +17,6 @@ const OpponentArchetypeSubHeader = ({
   matchDraws,
   isOwner,
   username,
-  deckSlug,
 }: {
   opponentArchetypeId: string;
   formatId: string;
@@ -28,7 +27,6 @@ const OpponentArchetypeSubHeader = ({
   matchDraws: number;
   isOwner: boolean;
   username: string;
-  deckSlug: string;
 }) => {
   const t = useTranslations('opponentArchetypePage');
   const router = useRouter();
@@ -56,9 +54,6 @@ const OpponentArchetypeSubHeader = ({
               {t('edit')}
             </Button>
           )}
-          <Link href={`/${username}/${deckSlug}`}>
-            <Button variant="secondary">{t('viewDeck')}</Button>
-          </Link>
           {isOwner && (
             <Link href={`/${username}/formats/${formatId}`}>
               <Button variant="secondary">{t('viewFormat')}</Button>
