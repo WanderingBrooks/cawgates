@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 import { deleteOpponentArchetype } from '@/app/actions/opponentArchetypes';
 import {
   Button,
@@ -10,18 +10,23 @@ import {
   ErrorMessage,
   OpponentArchetypeForm,
 } from '@/components';
+import type getMatchStatistics from '@/lib/getMatchStatistics';
+import { cn, getWinRateTint } from '@/lib/utils';
 import classes from './formatPage.module.css';
 
-const OpponentArchetypeRow = ({
-  opponentArchetypeId,
-  name,
-  matchCount,
-}: {
-  opponentArchetypeId: string;
-  name: string;
-  matchCount: number;
-}) => {
+type MatchStatisticsRow = Awaited<
+  ReturnType<typeof getMatchStatistics>
+>['rows'][number];
+
+const OpponentArchetypeRow = ({ row }: { row: MatchStatisticsRow }) => {
+  const {
+    opponentArchetypeId,
+    opponentArchetype: name,
+    totalMatches: matchCount,
+  } = row;
+
   const t = useTranslations('formatOpponentArchetype');
+  const formatter = useFormatter();
   const router = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -51,7 +56,29 @@ const OpponentArchetypeRow = ({
         {name}
         {error && <ErrorMessage error={error} className={classes.rowError} />}
       </td>
-      <td className="text-number">{matchCount}</td>
+      {matchCount === 0 ? (
+        <>
+          <td className="text-number">{t('noMatches')}</td>
+          <td className="text-number">{t('noMatches')}</td>
+          <td className="text-number">{t('noMatches')}</td>
+        </>
+      ) : (
+        <>
+          <td className="text-number">{`${row.matchWins}-${row.matchLosses}-${row.matchDraws}`}</td>
+          <td className="text-number">{`${row.wins}-${row.losses}`}</td>
+          <td
+            className={cn(
+              'text-number',
+              getWinRateTint({ winRate: row.winRate, matchCount }),
+            )}
+          >
+            {formatter.number(row.winRate, {
+              style: 'percent',
+              maximumFractionDigits: 1,
+            })}
+          </td>
+        </>
+      )}
       <td>
         <div className={classes.rowActions}>
           <Button

@@ -3,7 +3,7 @@ import { getTranslations, getFormatter } from 'next-intl/server';
 import { PageTitle, Button, Tooltip } from '@/components';
 import { getDeck } from '@/lib/dal';
 import { cn, getWinRateTint } from '@/lib/utils';
-import getMatchStatistics from './getMatchStatistics';
+import getMatchStatistics from '@/lib/getMatchStatistics';
 
 const DeckPage = async ({
   params,

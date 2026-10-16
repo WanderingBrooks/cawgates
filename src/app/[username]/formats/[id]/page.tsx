@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { getFormat } from '@/lib/dal';
+import getMatchStatistics from '@/lib/getMatchStatistics';
 import { cn } from '@/lib/utils';
 import { PageTitle, SectionHeader } from '@/components';
 import DeleteFormatButton from './DeleteFormatButton';
@@ -36,6 +37,10 @@ const FormatPage = async ({
   );
 
   const hasDecks = format.decks.length > 0;
+
+  const { rows: matchStatistics } = await getMatchStatistics({
+    formatId: format.id,
+  });
 
   return (
     <>
@@ -101,19 +106,19 @@ const FormatPage = async ({
                   <thead>
                     <tr>
                       <th>{t('archetype')}</th>
-                      <th className="text-number">{t('matches')}</th>
+                      <th className="text-number">{t('matchRecord')}</th>
+                      <th className="text-number">{t('gameRecord')}</th>
+                      <th className="text-number">{t('gameWinPct')}</th>
                       <th>
                         <span className="visually-hidden">{t('actions')}</span>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {format.opponentArchetypes.map(opponentArchetype => (
+                    {matchStatistics.map(row => (
                       <OpponentArchetypeRow
-                        key={opponentArchetype.id}
-                        opponentArchetypeId={opponentArchetype.id}
-                        name={opponentArchetype.name}
-                        matchCount={opponentArchetype._count.matches}
+                        key={row.opponentArchetypeId}
+                        row={row}
                       />
                     ))}
                   </tbody>

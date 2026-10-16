@@ -1,24 +1,32 @@
 import { prisma } from '@/lib/prisma';
 
+/**
+ * Match statistics per opponent archetype in a format. With a deckId only
+ * that deck's matches count, and only archetypes it has played are
+ * returned. Without one, every deck's matches count and every archetype
+ * in the format is returned, including ones with no matches yet.
+ */
 const getMatchStatistics = async ({
   deckId,
   formatId,
 }: {
-  deckId: string;
+  deckId?: string;
   formatId: string;
 }) => {
-  // Archetypes are shared by every deck in the format, so only count the
-  // archetypes and matches this deck has actually played
+  // Archetypes are shared by every deck in the format, so for a deck only
+  // count the archetypes and matches it has actually played
+  const deckMatches = deckId ? { event: { deckId } } : undefined;
+
   const opponentArchetypes = await prisma.opponentArchetype.findMany({
     where: {
       formatId,
-      matches: { some: { event: { deckId } } },
+      ...(deckMatches && { matches: { some: deckMatches } }),
     },
     select: {
       id: true,
       name: true,
       matches: {
-        where: { event: { deckId } },
+        where: deckMatches,
         select: { wins: true, losses: true },
       },
     },

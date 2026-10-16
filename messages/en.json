@@ -157,7 +157,9 @@
     "opponentArchetypesSection": "Opponent archetypes",
     "noOpponentArchetypes": "No opponent archetypes yet",
     "archetype": "Archetype",
-    "matches": "Matches",
+    "matchRecord": "Match record",
+    "gameRecord": "Game record",
+    "gameWinPct": "Game win %",
     "actions": "Actions",
     "dangerZone": "Danger zone"
   },
@@ -167,7 +169,8 @@
     "delete": "Delete",
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete {name}?",
-    "hasMatchesHint": "Opponent archetypes with matches can't be deleted"
+    "hasMatchesHint": "Opponent archetypes with matches can't be deleted",
+    "noMatches": "–"
   },
   "deleteFormatButton": {
     "delete": "Delete format",
