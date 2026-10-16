@@ -22,12 +22,20 @@
   min-width: 0;
 }
 
-/* Delete format beside the title, with its hint lined up underneath */
-.titleDelete {
+/* Edit and Delete side by side, with the delete hint underneath */
+.titleActions {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: var(--spacing-xs);
+}
+
+.titleButtons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.titleHint {
   max-width: 360px;
   text-align: right;
 }
@@ -58,5 +66,13 @@
 
   .archetypesColumn {
     flex-basis: 100%;
+  }
+
+  .titleActions {
+    align-items: stretch;
+  }
+
+  .titleButtons > * {
+    flex: 1;
   }
 }

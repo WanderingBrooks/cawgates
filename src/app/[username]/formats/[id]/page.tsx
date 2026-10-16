@@ -16,6 +16,7 @@ const FormatPage = async ({
   const { username, id } = await params;
   const t = await getTranslations('formatPage');
   const tArchetype = await getTranslations('formatOpponentArchetype');
+  const tDelete = await getTranslations('deleteFormatButton');
 
   const { format } = await getFormat({
     ownerUsername: username,
@@ -34,17 +35,28 @@ const FormatPage = async ({
     />
   );
 
+  const hasDecks = format.decks.length > 0;
+
   return (
     <>
       <PageTitle
         title={format.name}
         actions={
-          <>
-            <EditFormatButton formatId={format.id} initialName={format.name} />
-            <div className={cn(classes.titleDelete, classes.desktopOnly)}>
-              {deleteFormatButton}
+          <div className={classes.titleActions}>
+            <div className={classes.titleButtons}>
+              <EditFormatButton
+                formatId={format.id}
+                initialName={format.name}
+              />
+              <div className={classes.desktopOnly}>{deleteFormatButton}</div>
             </div>
-          </>
+            {/* Kept outside the button row so its width doesn't push the buttons apart */}
+            {hasDecks && (
+              <p className={cn('hint', classes.titleHint, classes.desktopOnly)}>
+                {tDelete('hasDecksHint')}
+              </p>
+            )}
+          </div>
         }
       />
 
@@ -116,6 +128,7 @@ const FormatPage = async ({
       <section className={cn(classes.section, classes.mobileOnly)}>
         <SectionHeader>{t('dangerZone')}</SectionHeader>
         {deleteFormatButton}
+        {hasDecks && <p className="hint">{tDelete('hasDecksHint')}</p>}
       </section>
     </>
   );
