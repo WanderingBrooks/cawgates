@@ -16,15 +16,14 @@ import classes from './opponentArchetypePage.module.css';
 const OpponentArchetypePage = async ({
   params,
 }: {
-  params: Promise<{ username: string; deckSlug: string; id: string }>;
+  params: Promise<{ username: string; id: string }>;
 }) => {
-  const { username, deckSlug, id } = await params;
+  const { username, id } = await params;
   const t = await getTranslations('opponentArchetypePage');
   const formatter = await getFormatter();
 
   const { opponentArchetype, isOwner } = await getOpponentArchetype({
     ownerUsername: username,
-    deckSlug,
     opponentArchetypeId: id,
   });
 
@@ -56,7 +55,6 @@ const OpponentArchetypePage = async ({
         matchDraws={matchDraws}
         isOwner={isOwner}
         username={username}
-        deckSlug={deckSlug}
       />
       <SectionHeader>{t('matchesSection')}</SectionHeader>
       {opponentArchetype.matches.length === 0 ? (

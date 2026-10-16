@@ -152,22 +152,19 @@ const getEvent = async ({
 
 const getOpponentArchetype = async ({
   ownerUsername,
-  deckSlug,
   opponentArchetypeId,
 }: {
   ownerUsername: string;
-  deckSlug: string;
   opponentArchetypeId: string;
 }) => {
-  const { deck, isOwner } = await getDeck({
-    ownerUsername,
-    deckSlug,
+  const { owner, isOwner } = await getOwnerByUsername({
+    username: ownerUsername,
   });
 
   // Shows matches from every deck in the format. Guests only see matches
-  // played with public decks, even when they arrived via a public deck.
+  // played with public decks.
   const opponentArchetype = await prisma.opponentArchetype.findUnique({
-    where: { id: opponentArchetypeId, formatId: deck.formatId },
+    where: { id: opponentArchetypeId, format: { userId: owner.id } },
     include: {
       format: true,
       matches: {
@@ -182,7 +179,13 @@ const getOpponentArchetype = async ({
     notFound();
   }
 
-  return { deck, opponentArchetype, isOwner };
+  // Without a public match a guest has nothing to see, and the page would
+  // otherwise reveal the archetype's name
+  if (!isOwner && opponentArchetype.matches.length === 0) {
+    notFound();
+  }
+
+  return { opponentArchetype, isOwner };
 };
 
 // Formats have no public flag, so only the owner can see the formats pages

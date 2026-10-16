@@ -95,7 +95,7 @@ const DeckPage = async ({
               <tr key={row.opponentArchetypeId}>
                 <td>
                   <Link
-                    href={`/${username}/${deckSlug}/opponents/${row.opponentArchetypeId}`}
+                    href={`/${username}/opponents/${row.opponentArchetypeId}`}
                   >
                     {row.opponentArchetype}
                   </Link>
