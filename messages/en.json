@@ -38,8 +38,6 @@
     "name": "Deck name *",
     "slug": "URL slug",
     "slugHint": "Auto-generated from name if left blank",
-    "isPublic": "Make deck public",
-    "isPublicHint": "Public decks can be viewed by other users",
     "format": "Format *",
     "formatLockedHint": "The format can't be changed once the deck has matches",
     "create": "Create",

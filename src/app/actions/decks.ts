@@ -36,13 +36,12 @@ const createDeck = async (
   }
 
   const name = formData.get('name') as string;
-  const isPublic = formData.get('isPublic') as string;
   const rawSlug = formData.get('slug') as string;
   // Auto-derive slug from name if the user left the field blank
   const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
   const formatId = formData.get('formatId') as string;
 
-  const result = createDeckSchema.safeParse({ name, slug, isPublic, formatId });
+  const result = createDeckSchema.safeParse({ name, slug, formatId });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
@@ -61,7 +60,6 @@ const createDeck = async (
       data: {
         name: result.data.name,
         slug: result.data.slug,
-        isPublic: result.data.isPublic,
         userId: user.userId,
         formatId: format.id,
       },
@@ -103,12 +101,11 @@ const updateDeck = async (
 
   const deckId = formData.get('deckId') as string;
   const name = formData.get('name') as string;
-  const isPublic = formData.get('isPublic') as string;
   const rawSlug = formData.get('slug') as string;
   const slug = rawSlug?.trim() ? rawSlug.trim() : slugify({ name });
   const formatId = formData.get('formatId') as string;
 
-  const result = createDeckSchema.safeParse({ name, slug, isPublic, formatId });
+  const result = createDeckSchema.safeParse({ name, slug, formatId });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
@@ -151,7 +148,6 @@ const updateDeck = async (
       data: {
         name: result.data.name,
         slug: result.data.slug,
-        isPublic: result.data.isPublic,
         formatId: result.data.formatId,
       },
     });
