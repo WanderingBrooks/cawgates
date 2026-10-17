@@ -68,13 +68,11 @@
   },
   "createEvent": {
     "title": "Create new event",
-    "viewEvents": "View events",
     "noDecksHint": "You need a deck before you can create an event.",
     "createEvent": "Create event"
   },
   "editEvent": {
-    "title": "Edit event",
-    "backToEvent": "Back to event"
+    "title": "Edit event"
   },
   "eventForm": {
     "deckId": "Deck *",
@@ -101,8 +99,6 @@
     "wins": "Wins *",
     "losses": "Losses *",
     "notes": "Notes",
-    "openNotes": "Open notes",
-    "closeNotes": "Close notes",
     "saveMatch": "Save Match",
     "saving": "Saving...",
     "cancel": "Cancel"
@@ -219,7 +215,6 @@
     "cancel": "Cancel"
   },
   "opponentArchetypePage": {
-    "editSection": "Edit archetype",
     "matchesSection": "Matches",
     "edit": "Edit",
     "editTitle": "Edit opponent archetype",
