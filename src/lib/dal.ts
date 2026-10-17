@@ -17,6 +17,7 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
+import { getMatchRecord } from '@/lib/utils';
 
 /**
  * Match statistics per opponent archetype in a format. With a deckId only
@@ -55,23 +56,9 @@ const queryMatchStatistics = async ({
   });
 
   const deckStats = opponentArchetypes.map(opponentArchetype => {
-    const { wins, losses, matchWins, matchLosses, matchDraws } =
-      opponentArchetype.matches.reduce<{
-        wins: number;
-        losses: number;
-        matchWins: number;
-        matchLosses: number;
-        matchDraws: number;
-      }>(
-        (acc, match) => ({
-          wins: acc.wins + match.wins,
-          losses: acc.losses + match.losses,
-          matchWins: acc.matchWins + (match.wins > match.losses ? 1 : 0),
-          matchLosses: acc.matchLosses + (match.losses > match.wins ? 1 : 0),
-          matchDraws: acc.matchDraws + (match.wins === match.losses ? 1 : 0),
-        }),
-        { wins: 0, losses: 0, matchWins: 0, matchLosses: 0, matchDraws: 0 },
-      );
+    const { wins, losses, matchWins, matchLosses, matchDraws } = getMatchRecord(
+      { matches: opponentArchetype.matches },
+    );
 
     const total = wins + losses;
 
@@ -105,24 +92,22 @@ const queryMatchStatistics = async ({
     return a.opponentArchetype.localeCompare(b.opponentArchetype);
   });
 
-  const totals = rows.reduce(
-    (acc, row) => ({
-      matchWins: acc.matchWins + row.matchWins,
-      matchLosses: acc.matchLosses + row.matchLosses,
-      matchDraws: acc.matchDraws + row.matchDraws,
-    }),
-    { matchWins: 0, matchLosses: 0, matchDraws: 0 },
-  );
+  const { matchWins, matchLosses, matchDraws } = getMatchRecord({
+    matches: opponentArchetypes.flatMap(
+      opponentArchetype => opponentArchetype.matches,
+    ),
+  });
 
-  const totalMatches =
-    totals.matchWins + totals.matchLosses + totals.matchDraws;
+  const totalMatches = matchWins + matchLosses + matchDraws;
 
   return {
     rows,
     totals: {
-      ...totals,
+      matchWins,
+      matchLosses,
+      matchDraws,
       totalMatches,
-      matchWinRate: totalMatches === 0 ? 0 : totals.matchWins / totalMatches,
+      matchWinRate: totalMatches === 0 ? 0 : matchWins / totalMatches,
     },
   };
 };

@@ -1,6 +1,11 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { cn, formatDate, getMatchResultTint } from '@/lib/utils';
+import {
+  cn,
+  formatDate,
+  getMatchRecord,
+  getMatchResultTint,
+} from '@/lib/utils';
 import Markdown from 'react-markdown';
 import {
   Card,
@@ -28,17 +33,9 @@ const OpponentArchetypePage = async ({
     opponentArchetypeId: id,
   });
 
-  const matchWins = opponentArchetype.matches.filter(
-    m => m.wins > m.losses,
-  ).length;
-
-  const matchLosses = opponentArchetype.matches.filter(
-    m => m.losses > m.wins,
-  ).length;
-
-  const matchDraws = opponentArchetype.matches.filter(
-    m => m.wins === m.losses,
-  ).length;
+  const { matchWins, matchLosses, matchDraws } = getMatchRecord({
+    matches: opponentArchetype.matches,
+  });
 
   return (
     <>

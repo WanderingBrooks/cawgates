@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { formatDate } from '@/lib/utils';
+import { formatDate, getMatchRecord } from '@/lib/utils';
 import { Button, PageTitle } from '@/components';
 import { getEvents } from '@/lib/dal';
 import classes from './event.module.css';
@@ -59,22 +59,9 @@ const EventsPage = async ({
             </thead>
             <tbody>
               {events.map(event => {
-                const record = event.matches.reduce(
-                  (recordSoFar, match) => {
-                    const copyOfRecordSoFar = { ...recordSoFar };
-
-                    if (match.wins > match.losses) {
-                      copyOfRecordSoFar.wins += 1;
-                    } else if (match.losses > match.wins) {
-                      copyOfRecordSoFar.losses += 1;
-                    } else {
-                      copyOfRecordSoFar.ties += 1;
-                    }
-
-                    return copyOfRecordSoFar;
-                  },
-                  { wins: 0, losses: 0, ties: 0 },
-                );
+                const { matchWins, matchLosses, matchDraws } = getMatchRecord({
+                  matches: event.matches,
+                });
 
                 return (
                   <tr key={event.id}>
@@ -88,7 +75,11 @@ const EventsPage = async ({
                     </td>
                     <td>{event.deck.name}</td>
                     <td className="text-number">
-                      {tCommon('matchRecord', record)}
+                      {tCommon('matchRecord', {
+                        wins: matchWins,
+                        losses: matchLosses,
+                        ties: matchDraws,
+                      })}
                     </td>
                   </tr>
                 );

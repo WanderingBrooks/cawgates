@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getFormatter, getTranslations } from 'next-intl/server';
 import { getFormatsForOwner } from '@/lib/dal';
-import { cn, getWinRateTint } from '@/lib/utils';
+import { cn, getMatchRecord, getWinRateTint } from '@/lib/utils';
 import { PageTitle, Tooltip } from '@/components';
 
 const FormatsPage = async ({
@@ -21,9 +21,7 @@ const FormatsPage = async ({
         opponentArchetype => opponentArchetype.matches,
       );
 
-      const matchWins = matches.filter(
-        match => match.wins > match.losses,
-      ).length;
+      const { matchWins } = getMatchRecord({ matches });
 
       return {
         ...format,

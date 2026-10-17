@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { cn, formatDate } from '@/lib/utils';
+import { cn, formatDate, getMatchRecord } from '@/lib/utils';
 import {
   Button,
   Card,
@@ -29,9 +29,9 @@ const EventPage = async ({
     ownerUsername: username,
   });
 
-  const matchWins = event.matches.filter(m => m.wins > m.losses).length;
-  const matchLosses = event.matches.filter(m => m.losses > m.wins).length;
-  const matchTies = event.matches.filter(m => m.wins === m.losses).length;
+  const { matchWins, matchLosses, matchDraws } = getMatchRecord({
+    matches: event.matches,
+  });
 
   return (
     <>
@@ -47,7 +47,7 @@ const EventPage = async ({
               {tCommon('matchRecord', {
                 wins: matchWins,
                 losses: matchLosses,
-                ties: matchTies,
+                ties: matchDraws,
               })}
             </strong>
           ),

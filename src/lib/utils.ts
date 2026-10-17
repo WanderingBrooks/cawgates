@@ -81,6 +81,33 @@ const getMatchResultTint = ({
   return wins > losses ? 'tint-win' : 'tint-loss';
 };
 
+/**
+ * Sums a list of matches into a game record (wins, losses) and a match
+ * record (matchWins, matchLosses, matchDraws). A match is won by whoever
+ * won more games; equal games count as a draw.
+ */
+const getMatchRecord = ({
+  matches,
+}: {
+  matches: { wins: number; losses: number }[];
+}) =>
+  matches.reduce<{
+    wins: number;
+    losses: number;
+    matchWins: number;
+    matchLosses: number;
+    matchDraws: number;
+  }>(
+    (record, match) => ({
+      wins: record.wins + match.wins,
+      losses: record.losses + match.losses,
+      matchWins: record.matchWins + (match.wins > match.losses ? 1 : 0),
+      matchLosses: record.matchLosses + (match.losses > match.wins ? 1 : 0),
+      matchDraws: record.matchDraws + (match.wins === match.losses ? 1 : 0),
+    }),
+    { wins: 0, losses: 0, matchWins: 0, matchLosses: 0, matchDraws: 0 },
+  );
+
 export {
   cn,
   slugify,
@@ -88,4 +115,5 @@ export {
   formatDate,
   getWinRateTint,
   getMatchResultTint,
+  getMatchRecord,
 };
