@@ -166,9 +166,9 @@ const myActionWithData = async (): Promise<ActionResultWithData<{ id: string }>>
 
 ## Code Quality
 
-- After generating or modifying code, always run both `npm run lint` and `npm run typecheck` to catch errors
-- `npm run lint` catches style and ESLint rule violations
-- `npm run typecheck` runs `tsc --noEmit` to catch cross-file type errors that ESLint misses
+- After generating or modifying code, always run both `pnpm lint` and `pnpm typecheck` to catch errors
+- `pnpm lint` catches style and ESLint rule violations
+- `pnpm typecheck` runs `tsc --noEmit` to catch cross-file type errors that ESLint misses
 
 ## Data Access
 
