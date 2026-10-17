@@ -18,9 +18,9 @@
   },
   "deckPage": {
     "editDeck": "Edit deck",
-    "totalMatchWins": "Match wins",
-    "totalMatchLosses": "Match losses",
-    "matchWinPct": "Match win %",
+    "totalMatchWins": "Match wins <num>{count}</num>",
+    "totalMatchLosses": "Match losses <num>{count}</num>",
+    "totalMatchWinPct": "<explainer>Match win %</explainer> <num>{rate}</num>",
     "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
     "opponentArchetype": "Opponent archetype",
     "matchRecord": "Match record",
@@ -241,9 +241,8 @@
     "title": "Loading..."
   },
   "guestBanner": {
-    "viewing": "{username}'s profile.",
-    "backToMyEvents": "Back to my events.",
-    "signUpPrompt": "<login>Login</login> or <register>Register</register> to track your decks."
+    "viewingSignedIn": "{username}'s profile. <back>Back to my events.</back>",
+    "viewingSignedOut": "{username}'s profile. <login>Login</login> or <register>Register</register> to track your decks."
   },
   "notFound": {
     "message": "This page could not be found.",

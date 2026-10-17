@@ -1,9 +1,14 @@
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { PageTitle, Button, Tooltip } from '@/components';
 import { getDeck } from '@/lib/dal';
 import { cn, getWinRateTint } from '@/lib/utils';
 import getMatchStatistics from '@/lib/getMatchStatistics';
+
+const renderNumber = (chunks: ReactNode) => (
+  <strong className="text-number">{chunks}</strong>
+);
 
 const DeckPage = async ({
   params,
@@ -35,23 +40,30 @@ const DeckPage = async ({
             {totals.totalMatches > 0 && (
               <>
                 <span>
-                  {t('totalMatchWins')}{' '}
-                  <strong className="text-number">{totals.matchWins}</strong>
+                  {t.rich('totalMatchWins', {
+                    count: totals.matchWins,
+                    num: renderNumber,
+                  })}
                 </span>
                 <span>
-                  {t('totalMatchLosses')}{' '}
-                  <strong className="text-number">{totals.matchLosses}</strong>
+                  {t.rich('totalMatchLosses', {
+                    count: totals.matchLosses,
+                    num: renderNumber,
+                  })}
                 </span>
                 <span>
-                  <Tooltip content={t('matchWinPctExplainer')}>
-                    {t('matchWinPct')}
-                  </Tooltip>{' '}
-                  <strong className="text-number">
-                    {formatter.number(totals.matchWinRate, {
+                  {t.rich('totalMatchWinPct', {
+                    rate: formatter.number(totals.matchWinRate, {
                       style: 'percent',
                       maximumFractionDigits: 1,
-                    })}
-                  </strong>
+                    }),
+                    num: renderNumber,
+                    explainer: chunks => (
+                      <Tooltip content={t('matchWinPctExplainer')}>
+                        {chunks}
+                      </Tooltip>
+                    ),
+                  })}
                 </span>
               </>
             )}

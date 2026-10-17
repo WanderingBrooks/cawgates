@@ -106,17 +106,18 @@ const SiteHeader = async ({
         {isViewingOtherProfile && (
           <div className={classes.strip}>
             <p className={cn('text-small', classes.stripText)}>
-              {tGuest('viewing', { username: ownerUsername })}{' '}
-              {viewerUsername ? (
-                <Link href={`/${viewerUsername}/events`}>
-                  {tGuest('backToMyEvents')}
-                </Link>
-              ) : (
-                tGuest.rich('signUpPrompt', {
-                  login: chunks => <Link href="/login">{chunks}</Link>,
-                  register: chunks => <Link href="/register">{chunks}</Link>,
-                })
-              )}
+              {viewerUsername
+                ? tGuest.rich('viewingSignedIn', {
+                    username: ownerUsername,
+                    back: chunks => (
+                      <Link href={`/${viewerUsername}/events`}>{chunks}</Link>
+                    ),
+                  })
+                : tGuest.rich('viewingSignedOut', {
+                    username: ownerUsername,
+                    login: chunks => <Link href="/login">{chunks}</Link>,
+                    register: chunks => <Link href="/register">{chunks}</Link>,
+                  })}
             </p>
           </div>
         )}
