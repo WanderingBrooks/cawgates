@@ -1,22 +1,9 @@
+/* Same look as Input, including its focus ring */
 .textAreaContainer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+  composes: inputContainer from '../Input/input.module.css';
 }
 
 .textArea {
-  box-sizing: border-box;
-  width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-control-border);
-  border-radius: var(--radius);
-  color: var(--color-text);
+  composes: input from '../Input/input.module.css';
   resize: vertical;
-}
-
-.textArea:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: -1px;
-  border-color: var(--color-primary);
 }

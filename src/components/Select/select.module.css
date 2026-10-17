@@ -1,38 +1,17 @@
+/* Same look as Input, including its focus ring */
 .selectContainer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+  composes: inputContainer from '../Input/input.module.css';
 }
 
-/* Native select styled to match the other controls. appearance: none
-   removes the browser's own arrow, which looks different in every browser,
-   and the background image draws our chevron instead. The right padding
-   keeps the text from running under it. FormatSelect and
-   OpponentArchetypeSelect compose this class. */
+/* appearance: none removes the browser's own arrow, which looks different
+   in every browser, and the background image draws our chevron instead.
+   The extra right padding keeps the text from running under it.
+   FormatSelect and OpponentArchetypeSelect compose this class. */
 .select {
-  box-sizing: border-box;
-  width: 100%;
-  min-height: var(--control-height-mobile);
-  padding: var(--spacing-sm) var(--spacing-xxl) var(--spacing-sm)
-    var(--spacing-md);
+  composes: input from '../Input/input.module.css';
+  padding-right: var(--spacing-xxl);
   appearance: none;
-  background-color: var(--color-surface);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%236a5b3c' stroke-width='1.5'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right var(--spacing-md) center;
-  border: 1px solid var(--color-control-border);
-  border-radius: var(--radius);
-  color: var(--color-text);
-}
-
-.select:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: -1px;
-  border-color: var(--color-primary);
-}
-
-@media (min-width: 768px) {
-  .select {
-    min-height: var(--control-height);
-  }
 }
