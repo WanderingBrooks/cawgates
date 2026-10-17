@@ -7,7 +7,7 @@
 .input {
   box-sizing: border-box;
   width: 100%;
-  min-height: var(--control-height);
+  min-height: var(--control-height-mobile);
   padding: var(--spacing-sm) 10px;
   background-color: var(--color-input-bg);
   border: 1px solid var(--color-control-border);
@@ -27,9 +27,9 @@
   min-height: 0;
 }
 
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .input {
-    min-height: var(--control-height-mobile);
+    min-height: var(--control-height);
   }
 
   .input[type='checkbox'] {

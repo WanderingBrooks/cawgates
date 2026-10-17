@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-sm) var(--spacing-lg);
-  padding: 10px var(--spacing-lg);
+  padding: 10px 14px;
   background-color: var(--color-surface-muted);
 }
 
@@ -34,7 +34,9 @@
 }
 
 .matchResult {
+  flex: 1 1 100%;
   align-items: center;
+  justify-content: space-between;
 }
 
 .record {
@@ -42,21 +44,21 @@
 }
 
 .matchNotes {
-  padding: 14px 20px 18px;
+  padding: 14px 14px 18px;
   border-top: 1px solid var(--color-border);
 }
 
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .matchHeader {
-    padding: 10px 14px;
+    padding: 10px var(--spacing-lg);
   }
 
   .matchResult {
-    flex: 1 1 100%;
-    justify-content: space-between;
+    flex: initial;
+    justify-content: normal;
   }
 
   .matchNotes {
-    padding: 14px 14px 18px;
+    padding: 14px 20px 18px;
   }
 }

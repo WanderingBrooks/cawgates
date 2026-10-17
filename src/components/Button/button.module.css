@@ -3,7 +3,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: var(--button-height);
+  min-height: var(--control-height-mobile);
   padding: 0 14px;
   border: 1px solid var(--color-control-border);
   border-radius: var(--radius);
@@ -27,17 +27,17 @@
 }
 
 .small {
-  min-height: var(--button-height-small);
+  min-height: var(--control-height);
   padding: 0 10px;
 }
 
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .button {
-    min-height: var(--control-height-mobile);
+    min-height: var(--button-height);
   }
 
   .small {
-    min-height: var(--control-height);
+    min-height: var(--button-height-small);
   }
 }
 

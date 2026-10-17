@@ -29,24 +29,33 @@
 }
 
 .actions {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  justify-content: flex-end;
+  justify-content: stretch;
   gap: var(--spacing-sm);
 }
 
-@media (max-width: 767px) {
+.actions > * {
+  flex: 1;
+}
+
+.actions > a > button {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
   .actions {
-    width: 100%;
-    justify-content: stretch;
+    width: auto;
+    justify-content: flex-end;
   }
 
   .actions > * {
-    flex: 1;
+    flex: initial;
   }
 
   .actions > a > button {
-    width: 100%;
+    width: auto;
   }
 }

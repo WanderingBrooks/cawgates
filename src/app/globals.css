@@ -117,7 +117,7 @@ h3 {
 }
 
 h1 {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-xl-mobile);
   font-weight: 700;
   line-height: 1.25;
 }
@@ -142,6 +142,8 @@ input,
 select,
 textarea {
   font: inherit;
+  /* 16px or larger stops iOS from zooming in when a field is focused */
+  font-size: var(--font-size-input-mobile);
 }
 
 textarea {
@@ -153,16 +155,15 @@ button {
   font-weight: 500;
 }
 
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   h1 {
-    font-size: var(--font-size-xl-mobile);
+    font-size: var(--font-size-xl);
   }
 
-  /* 16px or larger stops iOS from zooming in when a field is focused */
   input,
   select,
   textarea {
-    font-size: var(--font-size-input-mobile);
+    font-size: inherit;
   }
 }
 
@@ -176,7 +177,7 @@ table {
 
 th,
 td {
-  padding: 6px var(--spacing-md);
+  padding: 7px var(--spacing-sm);
   text-align: left;
   vertical-align: top;
   border-bottom: 1px solid var(--color-row-border);
@@ -197,10 +198,10 @@ tbody tr:last-child td {
   border-bottom: none;
 }
 
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   th,
   td {
-    padding: 7px var(--spacing-sm);
+    padding: 6px var(--spacing-md);
   }
 }
 

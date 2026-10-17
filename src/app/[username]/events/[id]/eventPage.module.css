@@ -11,16 +11,20 @@
   border: 1px solid var(--color-border);
 }
 
-.mobileOnly {
+.desktopOnly {
   display: none;
 }
 
-@media (max-width: 767px) {
+.mobileOnly {
+  display: flex;
+}
+
+@media (min-width: 768px) {
   .desktopOnly {
-    display: none;
+    display: block;
   }
 
   .mobileOnly {
-    display: flex;
+    display: none;
   }
 }

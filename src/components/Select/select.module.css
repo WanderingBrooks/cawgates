@@ -8,7 +8,7 @@
 .select {
   box-sizing: border-box;
   width: 100%;
-  min-height: var(--control-height);
+  min-height: var(--control-height-mobile);
   padding: var(--spacing-sm) 32px var(--spacing-sm) 10px;
   appearance: none;
   background-color: var(--color-input-bg);
@@ -26,8 +26,8 @@
   border-color: var(--color-primary);
 }
 
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .select {
-    min-height: var(--control-height-mobile);
+    min-height: var(--control-height);
   }
 }

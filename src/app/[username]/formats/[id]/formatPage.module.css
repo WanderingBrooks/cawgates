@@ -18,7 +18,7 @@
 }
 
 .archetypesColumn {
-  flex: 1.8 1 440px;
+  flex: 1.8 1 100%;
   min-width: 0;
 }
 
@@ -26,13 +26,17 @@
 .titleActions {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: stretch;
   gap: var(--spacing-xs);
 }
 
 .titleButtons {
   display: flex;
   gap: var(--spacing-sm);
+}
+
+.titleButtons > * {
+  flex: 1;
 }
 
 .titleHint {
@@ -50,29 +54,33 @@
   margin: var(--spacing-xs) 0 0;
 }
 
-.mobileOnly {
+.desktopOnly {
   display: none;
 }
 
-@media (max-width: 767px) {
+.mobileOnly {
+  display: flex;
+  align-items: flex-start;
+}
+
+@media (min-width: 768px) {
   .desktopOnly {
-    display: none;
+    display: block;
   }
 
   .mobileOnly {
-    display: flex;
-    align-items: flex-start;
+    display: none;
   }
 
   .archetypesColumn {
-    flex-basis: 100%;
+    flex-basis: 440px;
   }
 
   .titleActions {
-    align-items: stretch;
+    align-items: flex-end;
   }
 
   .titleButtons > * {
-    flex: 1;
+    flex: initial;
   }
 }
