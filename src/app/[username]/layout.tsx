@@ -1,5 +1,5 @@
 import { PageContent, SiteHeader } from '@/components';
-import { getFormatsForOwner, getOwnerByUsername } from '@/lib/dal';
+import { getOwnerByUsername } from '@/lib/dal';
 
 const UsernameLayout = async ({
   children,
@@ -10,17 +10,13 @@ const UsernameLayout = async ({
 }) => {
   const { username } = await params;
 
-  const [{ isOwner, viewer }, { formats }] = await Promise.all([
-    getOwnerByUsername({ username }),
-    getFormatsForOwner({ ownerUsername: username }),
-  ]);
+  const { isOwner, viewer } = await getOwnerByUsername({ username });
 
   return (
     <>
       <SiteHeader
         ownerUsername={username}
         isOwner={isOwner}
-        formats={formats}
         viewerUsername={viewer?.username ?? null}
       />
       <PageContent>{children}</PageContent>

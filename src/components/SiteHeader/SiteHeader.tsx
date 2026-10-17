@@ -11,8 +11,6 @@ type SiteHeaderProps = {
   // belong to anyone (login, register), which then show only the app name.
   ownerUsername?: string;
   isOwner?: boolean;
-  // The owner's formats that the viewer can see
-  formats?: { id: string; name: string }[];
   viewerUsername: string | null;
 };
 
@@ -22,16 +20,13 @@ type SiteHeaderProps = {
  * tab bar fixed to the bottom of the screen.
  *
  * When someone views another user's profile the links point at that
- * user's events and formats. The strip under the header says whose profile
- * it is, with a way back to the viewer's own events or a prompt to sign up.
- *
- * With a single format the link is named after it and opens it directly,
- * otherwise it's "Formats" and opens the most played one.
+ * user's events and matchups. The strip under the header says whose
+ * profile it is, with a way back to the viewer's own events or a prompt to
+ * sign up.
  */
 const SiteHeader = async ({
   ownerUsername,
   isOwner = false,
-  formats = [],
   viewerUsername,
 }: SiteHeaderProps) => {
   const t = await getTranslations('siteHeader');
@@ -44,22 +39,11 @@ const SiteHeader = async ({
           label: t('events'),
           section: 'events',
         },
-        // Guests without a visible format would only reach a 404
-        ...(isOwner || formats.length > 0
-          ? [
-              formats.length === 1
-                ? {
-                    href: `/${ownerUsername}/matchups/${formats[0].id}`,
-                    label: formats[0].name,
-                    section: 'matchups' as const,
-                  }
-                : {
-                    href: `/${ownerUsername}/matchups`,
-                    label: t('matchups'),
-                    section: 'matchups' as const,
-                  },
-            ]
-          : []),
+        {
+          href: `/${ownerUsername}/matchups`,
+          label: t('matchups'),
+          section: 'matchups',
+        },
       ]
     : [];
 

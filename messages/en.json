@@ -132,6 +132,7 @@
   "matchups": {
     "title": "Matchups",
     "noFormats": "No formats yet — create a deck to get started",
+    "noFormatsGuest": "No public matchups yet",
     "createDeck": "Create deck"
   },
   "formatPage": {

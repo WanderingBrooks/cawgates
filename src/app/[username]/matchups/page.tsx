@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { getFormatsForOwner } from '@/lib/dal';
 import { Button, PageTitle } from '@/components';
@@ -21,21 +21,20 @@ const MatchupsPage = async ({
     redirect(`/${username}/matchups/${formats[0].id}`);
   }
 
-  if (!isOwner) {
-    notFound();
-  }
-
   const t = await getTranslations('matchups');
 
+  // The menu always links here, so guests get a message instead of a 404
   return (
     <>
       <PageTitle title={t('title')} />
-      <p>{t('noFormats')}</p>
-      <div>
-        <Link href={`/${username}/decks/create`}>
-          <Button variant="primary">{t('createDeck')}</Button>
-        </Link>
-      </div>
+      <p>{isOwner ? t('noFormats') : t('noFormatsGuest')}</p>
+      {isOwner && (
+        <div>
+          <Link href={`/${username}/decks/create`}>
+            <Button variant="primary">{t('createDeck')}</Button>
+          </Link>
+        </div>
+      )}
     </>
   );
 };
