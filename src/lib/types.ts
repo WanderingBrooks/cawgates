@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { RESERVED_SLUGS } from './utils';
+import { RESERVED_USERNAMES } from './utils';
 
 // trim() must come before min(1): checks run in order, so min-then-trim lets
 // a value of only spaces pass and be saved as an empty string
@@ -110,11 +110,7 @@ const slugSchema = z
     /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
     'May only contain lowercase letters, numbers, and hyphens',
   )
-  .trim()
-  .refine(
-    slug => !RESERVED_SLUGS.includes(slug),
-    'This value is reserved and cannot be used',
-  );
+  .trim();
 
 // Schema for creating a deck
 const createDeckSchema = z.object({
@@ -132,7 +128,12 @@ export type CreateDeckInput = z.infer<typeof createDeckSchema>;
 const registerUserSchema = z
   .object({
     email: z.email('Invalid email address').trim().toLowerCase(),
-    username: slugSchema.min(3, 'Username must be at least 3 characters'),
+    username: slugSchema
+      .min(3, 'Username must be at least 3 characters')
+      .refine(
+        username => !RESERVED_USERNAMES.includes(username),
+        'This value is reserved and cannot be used',
+      ),
     password: z.string().min(8, 'Password must be at least 8 characters'),
     confirmPassword: z.string(),
   })
