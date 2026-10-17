@@ -71,8 +71,7 @@
     "editMatch": "Edit",
     "noMatches": "No matches yet — add one to get started",
     "matchesSection": "Matches",
-    "notesSection": "Notes",
-    "dangerZone": "Danger zone"
+    "notesSection": "Notes"
   },
   "matchForm": {
     "opponentArchetype": "Opponent archetype *",

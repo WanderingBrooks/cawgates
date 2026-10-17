@@ -3,21 +3,3 @@
   flex-direction: column;
   gap: var(--spacing-sm);
 }
-
-.desktopOnly {
-  display: none;
-}
-
-.mobileOnly {
-  display: flex;
-}
-
-@media (min-width: 768px) {
-  .desktopOnly {
-    display: block;
-  }
-
-  .mobileOnly {
-    display: none;
-  }
-}

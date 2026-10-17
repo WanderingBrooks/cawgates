@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { cn, formatDate, getMatchRecord } from '@/lib/utils';
+import { formatDate, getMatchRecord } from '@/lib/utils';
 import {
   Button,
   Card,
@@ -9,7 +9,6 @@ import {
   SectionHeader,
 } from '@/components';
 import { getEvent } from '@/lib/dal';
-import DeleteEventButton from './DeleteEventButton';
 import MatchSection from './MatchSection';
 import Markdown from 'react-markdown';
 import classes from './eventPage.module.css';
@@ -64,11 +63,6 @@ const EventPage = async ({
                 <Button variant="secondary">{t('editEvent')}</Button>
               </Link>
             )}
-            {isOwner && (
-              <div className={classes.desktopOnly}>
-                <DeleteEventButton eventId={id} />
-              </div>
-            )}
           </>
         }
       />
@@ -91,13 +85,6 @@ const EventPage = async ({
         isOwner={isOwner}
         username={username}
       />
-      {/* On phones the delete button moves from the title down here */}
-      {isOwner && (
-        <section className={cn(classes.section, classes.mobileOnly)}>
-          <SectionHeader>{t('dangerZone')}</SectionHeader>
-          <DeleteEventButton eventId={id} />
-        </section>
-      )}
     </>
   );
 };
