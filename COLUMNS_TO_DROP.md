@@ -1,12 +1,10 @@
-## "Deck"."isPublic"
+# Columns to drop
 
-Decks are no longer public or private: every deck is visible to everyone, and
-only event and match notes stay private to their author. The app stops reading
-and writing the column, but it's kept so the previous deployment can keep
-reading it while the new one rolls out. New decks get the column's default
-(`false`), which nothing reads. Once the deploy is complete, nothing uses it and
-this migration can be safely run:
+Columns are dropped in two steps, so the running deployment never reads a
+column that's gone:
 
-```sql
-ALTER TABLE "Deck" DROP COLUMN "isPublic";
-```
+1. A PR stops the app reading and writing the column, and lists it here.
+2. Once that PR is deployed, a later PR drops it in a migration and removes it
+   from this list.
+
+Nothing is waiting to be dropped right now.
