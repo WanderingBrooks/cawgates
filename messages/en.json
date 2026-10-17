@@ -199,8 +199,7 @@
     "delete": "Delete",
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete {name}?",
-    "hasMatchesHint": "Opponent archetypes with matches can't be deleted",
-    "dangerZone": "Danger zone"
+    "hasMatchesHint": "Opponent archetypes with matches can't be deleted"
   },
   "discardConfirm": {
     "discardChanges": "Discard changes?",

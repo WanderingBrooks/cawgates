@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Button, Dialog, OpponentArchetypeForm } from '@/components';
+import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
 
 const OpponentArchetypeActions = ({
   opponentArchetypeId,
@@ -13,6 +14,7 @@ const OpponentArchetypeActions = ({
   username,
   isOwner,
   deckSlug,
+  hasMatches,
 }: {
   opponentArchetypeId: string;
   formatId: string;
@@ -21,6 +23,8 @@ const OpponentArchetypeActions = ({
   isOwner: boolean;
   // Carried back to the format page so it keeps the same deck filter
   deckSlug: string | null;
+  // Any match blocks deleting, whatever the deck filter shows
+  hasMatches: boolean;
 }) => {
   const t = useTranslations('opponentArchetypePage');
   const router = useRouter();
@@ -51,6 +55,14 @@ const OpponentArchetypeActions = ({
               router.refresh();
             }}
             onCancel={() => setIsDialogOpen(false)}
+            deleteButton={
+              <DeleteOpponentArchetypeButton
+                opponentArchetypeId={opponentArchetypeId}
+                name={initialName}
+                hasMatches={hasMatches}
+              />
+            }
+            deleteHint={hasMatches ? t('hasMatchesHint') : undefined}
           />
         </Dialog>
       )}
