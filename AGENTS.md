@@ -105,6 +105,8 @@ const calculate = ({
 <p className={cn('text-label', classes.sectionHeader)} />
 ```
 
+- **No screen reader support**: the app doesn't support screen readers, so don't add markup that only they use: `aria-*` attributes, `role`, or visually hidden text
+
 ## Internationalization
 
 ### Date Formatting
