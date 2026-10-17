@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { getFormatter, getTranslations } from 'next-intl/server';
-import { getFormatWithMatchStatistics } from '@/lib/dal';
+import { getFormatsForOwner, getFormatWithMatchStatistics } from '@/lib/dal';
 import { cn } from '@/lib/utils';
 import {
   Button,
   DeckFilter,
+  FormatFilter,
   PageTitle,
   SectionHeader,
   Tooltip,
@@ -37,12 +38,17 @@ const FormatPage = async ({
   const tDelete = await getTranslations('deleteFormatButton');
   const formatter = await getFormatter();
 
-  const { format, isOwner, selectedDeck, matchStatistics, totals } =
-    await getFormatWithMatchStatistics({
+  const [
+    { format, isOwner, selectedDeck, matchStatistics, totals },
+    { formats },
+  ] = await Promise.all([
+    getFormatWithMatchStatistics({
       ownerUsername: username,
       formatId: id,
       deckSlug: typeof deck === 'string' ? deck : undefined,
-    });
+    }),
+    getFormatsForOwner({ ownerUsername: username }),
+  ]);
 
   const hasArchetypesWithMatches = format.opponentArchetypes.some(
     opponentArchetype => opponentArchetype._count.matches > 0,
@@ -116,6 +122,14 @@ const FormatPage = async ({
       />
 
       <div className={classes.filterRow}>
+        {/* With one format its name is already in the menu and the title */}
+        {formats.length > 1 && (
+          <FormatFilter
+            username={username}
+            formats={formats}
+            selectedFormatId={format.id}
+          />
+        )}
         <DeckFilter
           decks={format.decks}
           selectedDeckSlug={selectedDeck?.slug ?? null}

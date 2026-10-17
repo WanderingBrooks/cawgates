@@ -138,6 +138,9 @@
     "allDecks": "All decks",
     "privateDeck": "{name} (private)"
   },
+  "formatFilter": {
+    "label": "Format"
+  },
   "formatForm": {
     "name": "Name *",
     "create": "Create",
@@ -147,12 +150,8 @@
   },
   "formats": {
     "title": "My formats",
-    "noFormats": "No formats yet — create one when you create a deck",
-    "format": "Format",
-    "decks": "Decks",
-    "opponentArchetypes": "Opponent archetypes",
-    "matches": "Matches",
-    "matchWinPct": "Match win %"
+    "noFormats": "No formats yet — create a deck to get started",
+    "createDeck": "Create deck"
   },
   "formatPage": {
     "edit": "Edit",

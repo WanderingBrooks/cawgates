@@ -342,7 +342,11 @@ const getOpponentArchetype = async ({
   };
 };
 
-// Only the owner can see the formats list for now
+/**
+ * The formats the viewer can see, most played first. Guests only see
+ * formats with a public deck, and only matches played with public decks
+ * count towards the order.
+ */
 const getFormatsForOwner = async ({
   ownerUsername,
 }: {
@@ -352,24 +356,44 @@ const getFormatsForOwner = async ({
     username: ownerUsername,
   });
 
-  if (!isOwner) {
-    notFound();
-  }
-
   const formats = await prisma.format.findMany({
-    where: { userId: owner.id },
-    orderBy: { name: 'asc' },
-    include: {
-      _count: { select: { decks: true, opponentArchetypes: true } },
+    where: {
+      userId: owner.id,
+      ...(!isOwner && { decks: { some: { isPublic: true } } }),
+    },
+    select: {
+      id: true,
+      name: true,
       // Every match is against an archetype in its format, so this covers
       // all of the format's matches
       opponentArchetypes: {
-        select: { matches: { select: { wins: true, losses: true } } },
+        select: {
+          _count: {
+            select: { matches: { where: getVisibleMatchesWhere({ isOwner }) } },
+          },
+        },
       },
     },
   });
 
-  return { formats };
+  const formatsWithMatchCount = formats
+    .map(({ opponentArchetypes, ...format }) => ({
+      ...format,
+      matchCount: opponentArchetypes.reduce(
+        (sum, opponentArchetype) => sum + opponentArchetype._count.matches,
+        0,
+      ),
+    }))
+    // Alphabetical when tied
+    .sort((a, b) => {
+      if (b.matchCount !== a.matchCount) {
+        return b.matchCount - a.matchCount;
+      }
+
+      return a.name.localeCompare(b.name);
+    });
+
+  return { formats: formatsWithMatchCount, isOwner };
 };
 
 const getFormat = async ({

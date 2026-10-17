@@ -7,6 +7,7 @@ import DeckFilter from './DeckFilter';
 import DeckForm from './DeckForm';
 import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
+import FormatFilter from './FormatFilter';
 import FormatForm from './FormatForm';
 import FormatSelect from './FormatSelect';
 import Input from './Input';
@@ -34,6 +35,7 @@ export {
   Dialog,
   ErrorMessage,
   FlexRowBetween,
+  FormatFilter,
   FormatForm,
   FormatSelect,
   Input,
