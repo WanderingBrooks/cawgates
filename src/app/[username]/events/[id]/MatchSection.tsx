@@ -38,6 +38,7 @@ const MatchSection = ({
   username,
 }: MatchSectionProps) => {
   const t = useTranslations('event');
+  const tCommon = useTranslations('common');
   const tDelete = useTranslations('deleteMatchButton');
   const tCreateMatch = useTranslations('createMatch');
   const tEditMatch = useTranslations('editMatch');
@@ -111,7 +112,7 @@ const MatchSection = ({
                       }),
                     )}
                   >
-                    {t('gameRecord', {
+                    {tCommon('gameRecord', {
                       wins: match.wins,
                       losses: match.losses,
                     })}

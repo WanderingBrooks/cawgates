@@ -15,6 +15,7 @@ const EventPage = async ({
 }) => {
   const { username, id } = await params;
   const t = await getTranslations('event');
+  const tCommon = await getTranslations('common');
   const formatter = await getFormatter();
 
   const { event, isOwner } = await getEvent({
@@ -36,7 +37,7 @@ const EventPage = async ({
             <span>{formatDate({ formatter, date: new Date(event.date) })}</span>
             {event.matches.length > 0 && (
               <strong className="text-number">
-                {t('matchRecord', {
+                {tCommon('matchRecord', {
                   wins: matchWins,
                   losses: matchLosses,
                   ties: matchTies,

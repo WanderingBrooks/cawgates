@@ -14,6 +14,7 @@ const OpponentArchetypePage = async ({
 }) => {
   const { username, id } = await params;
   const t = await getTranslations('opponentArchetypePage');
+  const tCommon = await getTranslations('common');
   const formatter = await getFormatter();
 
   const { opponentArchetype, isOwner } = await getOpponentArchetype({
@@ -42,7 +43,7 @@ const OpponentArchetypePage = async ({
             <span>{opponentArchetype.format.name}</span>
             {opponentArchetype.matches.length > 0 && (
               <strong className="text-number">
-                {t('overallRecord', {
+                {tCommon('matchRecord', {
                   wins: matchWins,
                   losses: matchLosses,
                   ties: matchDraws,
@@ -99,7 +100,10 @@ const OpponentArchetypePage = async ({
                         }),
                       )}
                     >
-                      {t('record', { wins: match.wins, losses: match.losses })}
+                      {tCommon('gameRecord', {
+                        wins: match.wins,
+                        losses: match.losses,
+                      })}
                     </span>
                   </div>
                 </div>

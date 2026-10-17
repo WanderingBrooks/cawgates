@@ -33,6 +33,7 @@ const OpponentArchetypeRow = ({
   } = row;
 
   const t = useTranslations('formatOpponentArchetype');
+  const tCommon = useTranslations('common');
   const formatter = useFormatter();
   const router = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -73,8 +74,16 @@ const OpponentArchetypeRow = ({
         </>
       ) : (
         <>
-          <td className="text-number">{`${row.matchWins}-${row.matchLosses}-${row.matchDraws}`}</td>
-          <td className="text-number">{`${row.wins}-${row.losses}`}</td>
+          <td className="text-number">
+            {tCommon('matchRecord', {
+              wins: row.matchWins,
+              losses: row.matchLosses,
+              ties: row.matchDraws,
+            })}
+          </td>
+          <td className="text-number">
+            {tCommon('gameRecord', { wins: row.wins, losses: row.losses })}
+          </td>
           <td
             className={cn(
               'text-number',

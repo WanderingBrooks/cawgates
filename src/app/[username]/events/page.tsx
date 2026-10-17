@@ -11,6 +11,7 @@ const EventsPage = async ({
   params: Promise<{ username: string }>;
 }) => {
   const t = await getTranslations('events');
+  const tCommon = await getTranslations('common');
   const formatter = await getFormatter();
   const { username } = await params;
 
@@ -86,7 +87,9 @@ const EventsPage = async ({
                       </Link>
                     </td>
                     <td>{event.deck.name}</td>
-                    <td className="text-number">{t('record', record)}</td>
+                    <td className="text-number">
+                      {tCommon('matchRecord', record)}
+                    </td>
                   </tr>
                 );
               })}

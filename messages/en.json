@@ -1,4 +1,8 @@
 {
+  "common": {
+    "matchRecord": "{wins}-{losses}-{ties}",
+    "gameRecord": "{wins}-{losses}"
+  },
   "decks": {
     "title": "My decks",
     "guestTitle": "{username}''s decks",
@@ -54,7 +58,6 @@
     "event": "Event",
     "deck": "Deck",
     "recordHeader": "Record",
-    "record": "{wins}-{losses}-{ties}",
     "noEvents": "No events yet",
     "noDecksHint": "You need a deck before you can create an event.",
     "createDeck": "Create your first deck"
@@ -85,11 +88,9 @@
     "addMatch": "Add match",
     "editMatch": "Edit",
     "noMatches": "No matches yet — add one to get started",
-    "gameRecord": "{wins}-{losses}",
     "matchesSection": "Matches",
     "notesSection": "Notes",
-    "dangerZone": "Danger zone",
-    "matchRecord": "{wins}-{losses}-{ties}"
+    "dangerZone": "Danger zone"
   },
   "matchForm": {
     "opponentArchetype": "Opponent archetype *",
@@ -229,9 +230,7 @@
     "edit": "Edit",
     "editTitle": "Edit opponent archetype",
     "viewFormat": "View format",
-    "noMatches": "No matches yet",
-    "record": "{wins}-{losses}",
-    "overallRecord": "{wins}-{losses}-{ties}"
+    "noMatches": "No matches yet"
   },
   "discardConfirm": {
     "discardChanges": "Discard changes?",

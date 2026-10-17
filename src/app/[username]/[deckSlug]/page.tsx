@@ -12,6 +12,7 @@ const DeckPage = async ({
 }) => {
   const { username, deckSlug } = await params;
   const t = await getTranslations('deckPage');
+  const tCommon = await getTranslations('common');
   const formatter = await getFormatter();
 
   const { deck, isOwner } = await getDeck({
@@ -100,8 +101,19 @@ const DeckPage = async ({
                       {row.opponentArchetype}
                     </Link>
                   </td>
-                  <td className="text-number">{`${row.matchWins}-${row.matchLosses}-${row.matchDraws}`}</td>
-                  <td className="text-number">{`${row.wins}-${row.losses}`}</td>
+                  <td className="text-number">
+                    {tCommon('matchRecord', {
+                      wins: row.matchWins,
+                      losses: row.matchLosses,
+                      ties: row.matchDraws,
+                    })}
+                  </td>
+                  <td className="text-number">
+                    {tCommon('gameRecord', {
+                      wins: row.wins,
+                      losses: row.losses,
+                    })}
+                  </td>
                   <td
                     className={cn(
                       'text-number',
