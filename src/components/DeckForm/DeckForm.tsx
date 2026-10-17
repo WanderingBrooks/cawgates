@@ -57,7 +57,6 @@ type DeckFormProps =
       initialDeckData: {
         name: string;
         slug: string;
-        isPublic: boolean;
         formatId: string;
       };
       isFormatLocked: boolean;
@@ -78,10 +77,6 @@ const DeckForm = (props: DeckFormProps) => {
 
   const [slug, setSlug] = useState(
     props.mode === 'edit' ? props.initialDeckData.slug : '',
-  );
-
-  const [isPublic, setIsPublic] = useState(
-    props.mode === 'edit' ? props.initialDeckData.isPublic : false,
   );
 
   const [formatId, setFormatId] = useState(
@@ -143,15 +138,6 @@ const DeckForm = (props: DeckFormProps) => {
           onChange={setFormatId}
           isLocked={isFormatLocked}
           required
-        />
-        <Input
-          type="checkbox"
-          id="isPublic"
-          name="isPublic"
-          label={t('isPublic')}
-          hint={t('isPublicHint')}
-          checked={isPublic}
-          onChange={e => setIsPublic(e.target.checked)}
         />
         {state?.error && <ErrorMessage error={state.error} />}
         <FlexRowBetween className={classes.actionRow}>

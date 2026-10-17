@@ -6,8 +6,8 @@ import { getUser } from '@/lib/session';
  * page and unauthenticated users to the login page.
  *
  * This is NOT a global auth guard. Unauthenticated users can still access
- * `/[username]/...` routes directly; guest access to public profiles is
- * intentional and enforced per-page in the DAL via the `isPublic` flag.
+ * `/[username]/...` routes directly; guest access to profiles is
+ * intentional, and the DAL keeps notes private to their owner.
  */
 const RootPage = async () => {
   const user = await getUser();

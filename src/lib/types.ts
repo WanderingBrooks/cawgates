@@ -110,11 +110,6 @@ const slugSchema = z
 // Schema for creating a deck
 const createDeckSchema = z.object({
   name: requiredTrimmedString('Deck name is required'),
-  isPublic: z
-    .literal('on')
-    .optional()
-    .nullable()
-    .transform(value => value === 'on'),
   slug: slugSchema
     .min(1, 'Slug is required')
     .max(100, 'Slug must be 100 characters or less'),

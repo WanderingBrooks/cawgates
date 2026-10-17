@@ -4,13 +4,14 @@
  * Centralises data fetching and authorisation checks so they cannot be separated.
  * All functions accept `ownerUsername` (from the URL) rather than inferring the
  * owner from the current session. This allows both the owner and guests to use
- * the same read path — guests are gated by `isPublic` on the deck.
+ * the same read path.
  *
  * Every function returns `isOwner: boolean` so pages can conditionally render
  * edit controls without making a second auth call.
  *
- * Functions compose — e.g. `getEvent` calls `getDeck` — so the
- * `isPublic` check is enforced automatically at every level.
+ * Decks, events and matches are public. The only private data is notes, which
+ * these functions blank out for anyone but the owner, so they never reach a
+ * guest's browser (client components receive whole objects as props).
  *
  * Server actions do their own auth and should NOT use these functions.
  */
@@ -18,6 +19,15 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 import { getMatchRecord } from '@/lib/utils';
+
+// Notes are private to their author
+const hideNotes = <T extends { notes: string | null }>({
+  item,
+  isOwner,
+}: {
+  item: T;
+  isOwner: boolean;
+}): T => (isOwner ? item : { ...item, notes: null });
 
 /**
  * Match statistics per opponent archetype in a format. With a deckId only
@@ -144,10 +154,7 @@ const getDecksForOwner = async ({
   }
 
   const decks = await prisma.deck.findMany({
-    where: {
-      userId: owner.id,
-      ...(isOwner ? {} : { isPublic: true }),
-    },
+    where: { userId: owner.id },
     orderBy: { createdAt: 'asc' },
     include: { _count: { select: { events: true } }, format: true },
   });
@@ -183,10 +190,6 @@ const getDeck = async ({
     notFound();
   }
 
-  if (!isOwner && !deckWithCount.isPublic) {
-    notFound();
-  }
-
   const { _count, ...deck } = deckWithCount;
 
   return { deck, isOwner, hasMatches: _count.events > 0 };
@@ -201,7 +204,14 @@ const getEvents = async ({ ownerUsername }: { ownerUsername: string }) => {
     include: { matches: true, deck: true },
   });
 
-  return { isOwner, events, hasDecks: decks.length > 0 };
+  return {
+    isOwner,
+    events: events.map(event => ({
+      ...hideNotes({ item: event, isOwner }),
+      matches: event.matches.map(match => hideNotes({ item: match, isOwner })),
+    })),
+    hasDecks: decks.length > 0,
+  };
 };
 
 const getEvent = async ({
@@ -232,16 +242,18 @@ const getEvent = async ({
 
   // Verify the event belongs to the profile in the URL. Without this, a logged-in
   // user could read any event by visiting /{their-own-username}/events/{any-id},
-  // since isOwner would be true for their own username and bypass the public check below.
+  // since isOwner would be true for their own username and see its notes.
   if (event.deck.userId !== owner.id) {
     notFound();
   }
 
-  if (!isOwner && !event.deck.isPublic) {
-    notFound();
-  }
-
-  return { event, isOwner };
+  return {
+    event: {
+      ...hideNotes({ item: event, isOwner }),
+      matches: event.matches.map(match => hideNotes({ item: match, isOwner })),
+    },
+    isOwner,
+  };
 };
 
 const getOpponentArchetype = async ({
@@ -255,14 +267,12 @@ const getOpponentArchetype = async ({
     username: ownerUsername,
   });
 
-  // Shows matches from every deck in the format. Guests only see matches
-  // played with public decks.
+  // Shows matches from every deck in the format
   const opponentArchetype = await prisma.opponentArchetype.findUnique({
     where: { id: opponentArchetypeId, format: { userId: owner.id } },
     include: {
       format: true,
       matches: {
-        where: isOwner ? {} : { event: { deck: { isPublic: true } } },
         orderBy: { event: { date: 'desc' } },
         include: { event: { include: { deck: true } } },
       },
@@ -273,13 +283,21 @@ const getOpponentArchetype = async ({
     notFound();
   }
 
-  // Without a public match a guest has nothing to see, and the page would
-  // otherwise reveal the archetype's name
+  // Without a match a guest has nothing to see, and the page would otherwise
+  // reveal the name of an archetype that's only in the owner's format list
   if (!isOwner && opponentArchetype.matches.length === 0) {
     notFound();
   }
 
-  return { opponentArchetype, isOwner };
+  return {
+    opponentArchetype: {
+      ...opponentArchetype,
+      matches: opponentArchetype.matches.map(match =>
+        hideNotes({ item: match, isOwner }),
+      ),
+    },
+    isOwner,
+  };
 };
 
 // Formats have no public flag, so only the owner can see the formats pages
