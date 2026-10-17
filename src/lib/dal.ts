@@ -322,7 +322,10 @@ const getOpponentArchetype = async ({
   return {
     opponentArchetype: {
       ...opponentArchetype,
-      matches: matches.map(match => hideNotes({ item: match, isOwner })),
+      matches: matches.map(match => ({
+        ...hideNotes({ item: match, isOwner }),
+        event: hideNotes({ item: match.event, isOwner }),
+      })),
     },
     decks,
     selectedDeck,
