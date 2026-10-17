@@ -48,16 +48,6 @@
   text-align: right;
 }
 
-.rowActions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--spacing-sm);
-}
-
-.rowError {
-  margin: var(--spacing-xs) 0 0;
-}
-
 .desktopOnly {
   display: none;
 }

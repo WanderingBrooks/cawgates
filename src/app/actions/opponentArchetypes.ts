@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
 import { logEvent } from '@/lib/log';
@@ -206,9 +206,7 @@ const deleteOpponentArchetype = async ({
     opponentArchetypeId,
   });
 
-  revalidatePath(`/${user.username}/matchups/${opponentArchetype.formatId}`);
-
-  return { success: true };
+  redirect(`/${user.username}/matchups/${opponentArchetype.formatId}`);
 };
 
 export {

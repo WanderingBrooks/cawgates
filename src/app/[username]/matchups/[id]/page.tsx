@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { getFormatter, getTranslations } from 'next-intl/server';
 import { getFormatsForOwner, getFormatWithMatchStatistics } from '@/lib/dal';
-import { cn } from '@/lib/utils';
+import { cn, getWinRateTint } from '@/lib/utils';
 import {
   Button,
   DeckFilter,
@@ -13,7 +13,6 @@ import {
 } from '@/components';
 import DeleteFormatButton from './DeleteFormatButton';
 import EditFormatButton from './EditFormatButton';
-import OpponentArchetypeRow from './OpponentArchetypeRow';
 import classes from './formatPage.module.css';
 
 const renderNumber = (chunks: ReactNode) => (
@@ -34,7 +33,6 @@ const FormatPage = async ({
 
   const t = await getTranslations('formatPage');
   const tCommon = await getTranslations('common');
-  const tArchetype = await getTranslations('formatOpponentArchetype');
   const tDelete = await getTranslations('deleteFormatButton');
   const formatter = await getFormatter();
 
@@ -49,10 +47,6 @@ const FormatPage = async ({
     }),
     getFormatsForOwner({ ownerUsername: username }),
   ]);
-
-  const hasArchetypesWithMatches = format.opponentArchetypes.some(
-    opponentArchetype => opponentArchetype._count.matches > 0,
-  );
 
   const deleteFormatButton = (
     <DeleteFormatButton
@@ -153,41 +147,73 @@ const FormatPage = async ({
         {matchStatistics.length === 0 ? (
           <p>{selectedDeck ? t('noDeckMatches') : t('noOpponentArchetypes')}</p>
         ) : (
-          <>
-            {isOwner && hasArchetypesWithMatches && (
-              <p className="hint">{tArchetype('hasMatchesHint')}</p>
-            )}
-            <div className="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th>{t('archetype')}</th>
-                    <th className="text-number">
-                      {tCommon('matchRecordLabel')}
-                    </th>
-                    <th className="text-number">
-                      {tCommon('gameRecordLabel')}
-                    </th>
-                    <th className="text-number">
-                      {tCommon('gameWinPctLabel')}
-                    </th>
-                    {isOwner && <th />}
+          <div className="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>{t('archetype')}</th>
+                  <th className="text-number">{tCommon('matchRecordLabel')}</th>
+                  <th className="text-number">{tCommon('gameRecordLabel')}</th>
+                  <th className="text-number">{tCommon('gameWinPctLabel')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {matchStatistics.map(row => (
+                  <tr key={row.opponentArchetypeId}>
+                    <td>
+                      {/* Keeps the deck filter on the archetype page */}
+                      <Link
+                        href={`/${username}/opponents/${row.opponentArchetypeId}${
+                          selectedDeck
+                            ? `?deck=${encodeURIComponent(selectedDeck.slug)}`
+                            : ''
+                        }`}
+                      >
+                        {row.opponentArchetype}
+                      </Link>
+                    </td>
+                    {row.totalMatches === 0 ? (
+                      <>
+                        <td className="text-number">{tCommon('noValue')}</td>
+                        <td className="text-number">{tCommon('noValue')}</td>
+                        <td className="text-number">{tCommon('noValue')}</td>
+                      </>
+                    ) : (
+                      <>
+                        <td className="text-number">
+                          {tCommon('matchRecord', {
+                            wins: row.matchWins,
+                            losses: row.matchLosses,
+                            ties: row.matchDraws,
+                          })}
+                        </td>
+                        <td className="text-number">
+                          {tCommon('gameRecord', {
+                            wins: row.wins,
+                            losses: row.losses,
+                          })}
+                        </td>
+                        <td
+                          className={cn(
+                            'text-number',
+                            getWinRateTint({
+                              winRate: row.winRate,
+                              matchCount: row.totalMatches,
+                            }),
+                          )}
+                        >
+                          {formatter.number(row.winRate, {
+                            style: 'percent',
+                            maximumFractionDigits: 1,
+                          })}
+                        </td>
+                      </>
+                    )}
                   </tr>
-                </thead>
-                <tbody>
-                  {matchStatistics.map(row => (
-                    <OpponentArchetypeRow
-                      key={row.opponentArchetypeId}
-                      row={row}
-                      username={username}
-                      isOwner={isOwner}
-                      deckSlug={selectedDeck?.slug ?? null}
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </section>
 

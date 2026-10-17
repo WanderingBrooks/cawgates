@@ -320,6 +320,9 @@ const getOpponentArchetype = async ({
     notFound();
   }
 
+  // Before the deck filter, since any match blocks deleting the archetype
+  const hasMatches = opponentArchetype.matches.length > 0;
+
   // Same rules as the format page: only decks the viewer can see can be
   // selected, and an unknown slug falls back to all decks
   const { decks } = opponentArchetype.format;
@@ -338,6 +341,7 @@ const getOpponentArchetype = async ({
     },
     decks,
     selectedDeck,
+    hasMatches,
     isOwner,
   };
 };
@@ -420,9 +424,6 @@ const getFormat = async ({
         // Guests only see archetypes played with a public deck
         where: isOwner ? {} : { matches: { some: visibleMatches } },
         orderBy: { name: 'asc' },
-        include: {
-          _count: { select: { matches: { where: visibleMatches } } },
-        },
       },
     },
   });

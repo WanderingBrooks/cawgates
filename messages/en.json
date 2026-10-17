@@ -149,14 +149,6 @@
     "archetype": "Archetype",
     "dangerZone": "Danger zone"
   },
-  "formatOpponentArchetype": {
-    "edit": "Edit",
-    "editTitle": "Edit opponent archetype",
-    "delete": "Delete",
-    "deleting": "Deleting...",
-    "deleteConfirm": "Are you sure you want to delete {name}?",
-    "hasMatchesHint": "Opponent archetypes with matches can't be deleted"
-  },
   "deleteFormatButton": {
     "delete": "Delete format",
     "deleting": "Deleting...",
@@ -206,7 +198,12 @@
     "editTitle": "Edit opponent archetype",
     "viewFormat": "View format",
     "noMatches": "No matches yet",
-    "noDeckMatches": "No matches with this deck yet"
+    "noDeckMatches": "No matches with this deck yet",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "deleteConfirm": "Are you sure you want to delete {name}?",
+    "hasMatchesHint": "Opponent archetypes with matches can't be deleted",
+    "dangerZone": "Danger zone"
   },
   "discardConfirm": {
     "discardChanges": "Discard changes?",
