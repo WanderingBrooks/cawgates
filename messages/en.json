@@ -30,9 +30,11 @@
   "editDeck": {
     "title": "Edit deck"
   },
+  "deleteButton": {
+    "deleting": "Deleting..."
+  },
   "deleteDeckButton": {
     "delete": "Delete deck",
-    "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this deck? All events and matches will be lost."
   },
   "events": {
@@ -91,12 +93,10 @@
   },
   "deleteMatchButton": {
     "delete": "Delete match",
-    "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this match?"
   },
   "deleteEventButton": {
     "delete": "Delete event",
-    "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this event?"
   },
   "opponentArchetypeSelect": {
@@ -149,7 +149,6 @@
   },
   "deleteFormatButton": {
     "delete": "Delete format",
-    "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this format?",
     "deleteConfirmWithArchetypes": "{count, plural, one {Are you sure you want to delete this format? This also deletes # unused opponent archetype.} other {Are you sure you want to delete this format? This also deletes # unused opponent archetypes.}}",
     "hasDecksHint": "To delete this format, first delete its decks. Decks without matches can also be moved to another format."
@@ -197,7 +196,6 @@
     "viewMatchups": "View matchups",
     "noMatches": "No matches yet",
     "delete": "Delete archetype",
-    "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete {name}?",
     "hasMatchesHint": "Opponent archetypes with matches can't be deleted"
   },
