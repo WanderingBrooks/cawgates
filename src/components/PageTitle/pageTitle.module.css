@@ -1,7 +1,9 @@
+/* Top-aligned, so the title sits at the same height on every page even when
+   the actions beside it are taller, e.g. a button with a hint underneath */
 .pageTitle {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-sm);
