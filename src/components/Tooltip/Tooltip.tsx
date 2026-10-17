@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import classes from './tooltip.module.css';
 
@@ -51,7 +51,6 @@ const positionBubble = ({
 // scrolling containers such as a table wrapped in .table-scroll.
 const Tooltip = ({ content, children, className }: TooltipProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const tooltipId = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const bubbleRef = useRef<HTMLSpanElement>(null);
 
@@ -84,7 +83,6 @@ const Tooltip = ({ content, children, className }: TooltipProps) => {
         ref={triggerRef}
         type="button"
         className={classes.trigger}
-        aria-describedby={tooltipId}
         // Only ever opens: on touch screens a tap fires mouseenter and focus
         // (which open it) before click, so toggling here closed it straight
         // away. Tapping elsewhere or scrolling closes it.
@@ -100,8 +98,6 @@ const Tooltip = ({ content, children, className }: TooltipProps) => {
         <span
           ref={bubbleRef}
           popover="manual"
-          role="tooltip"
-          id={tooltipId}
           className={cn('text-tooltip', classes.bubble)}
         >
           {content}
