@@ -22,9 +22,11 @@ type MatchStatisticsRow = Awaited<
 const OpponentArchetypeRow = ({
   row,
   username,
+  isOwner,
 }: {
   row: MatchStatisticsRow;
   username: string;
+  isOwner: boolean;
 }) => {
   const {
     opponentArchetypeId,
@@ -97,39 +99,41 @@ const OpponentArchetypeRow = ({
           </td>
         </>
       )}
-      <td>
-        <div className={classes.rowActions}>
-          <Button
-            variant="secondary"
-            size="small"
-            onClick={() => setIsDialogOpen(true)}
-          >
-            {t('edit')}
-          </Button>
-          {/* Archetypes with matches can't be deleted; the format page
+      {isOwner && (
+        <td>
+          <div className={classes.rowActions}>
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => setIsDialogOpen(true)}
+            >
+              {t('edit')}
+            </Button>
+            {/* Archetypes with matches can't be deleted; the format page
               explains why in a hint above the table */}
-          <Button
-            variant="danger"
-            size="small"
-            onClick={handleDelete}
-            disabled={isDeleting || matchCount > 0}
-          >
-            {isDeleting ? t('deleting') : t('delete')}
-          </Button>
-        </div>
-        <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
-          <OpponentArchetypeForm
-            mode="edit"
-            opponentArchetypeId={opponentArchetypeId}
-            initialName={name}
-            onSuccess={() => {
-              setIsDialogOpen(false);
-              router.refresh();
-            }}
-            onCancel={() => setIsDialogOpen(false)}
-          />
-        </Dialog>
-      </td>
+            <Button
+              variant="danger"
+              size="small"
+              onClick={handleDelete}
+              disabled={isDeleting || matchCount > 0}
+            >
+              {isDeleting ? t('deleting') : t('delete')}
+            </Button>
+          </div>
+          <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
+            <OpponentArchetypeForm
+              mode="edit"
+              opponentArchetypeId={opponentArchetypeId}
+              initialName={name}
+              onSuccess={() => {
+                setIsDialogOpen(false);
+                router.refresh();
+              }}
+              onCancel={() => setIsDialogOpen(false)}
+            />
+          </Dialog>
+        </td>
+      )}
     </tr>
   );
 };

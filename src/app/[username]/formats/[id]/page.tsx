@@ -19,10 +19,11 @@ const FormatPage = async ({
   const tArchetype = await getTranslations('formatOpponentArchetype');
   const tDelete = await getTranslations('deleteFormatButton');
 
-  const { format, matchStatistics } = await getFormatWithMatchStatistics({
-    ownerUsername: username,
-    formatId: id,
-  });
+  const { format, isOwner, matchStatistics } =
+    await getFormatWithMatchStatistics({
+      ownerUsername: username,
+      formatId: id,
+    });
 
   const hasArchetypesWithMatches = format.opponentArchetypes.some(
     opponentArchetype => opponentArchetype._count.matches > 0,
@@ -43,21 +44,25 @@ const FormatPage = async ({
       <PageTitle
         title={format.name}
         actions={
-          <div className={classes.titleActions}>
-            <div className={classes.titleButtons}>
-              <EditFormatButton
-                formatId={format.id}
-                initialName={format.name}
-              />
-              <div className={classes.desktopOnly}>{deleteFormatButton}</div>
+          isOwner && (
+            <div className={classes.titleActions}>
+              <div className={classes.titleButtons}>
+                <EditFormatButton
+                  formatId={format.id}
+                  initialName={format.name}
+                />
+                <div className={classes.desktopOnly}>{deleteFormatButton}</div>
+              </div>
+              {/* Kept outside the button row so its width doesn't push the buttons apart */}
+              {hasDecks && (
+                <p
+                  className={cn('hint', classes.titleHint, classes.desktopOnly)}
+                >
+                  {tDelete('hasDecksHint')}
+                </p>
+              )}
             </div>
-            {/* Kept outside the button row so its width doesn't push the buttons apart */}
-            {hasDecks && (
-              <p className={cn('hint', classes.titleHint, classes.desktopOnly)}>
-                {tDelete('hasDecksHint')}
-              </p>
-            )}
-          </div>
+          )
         }
       />
 
@@ -94,7 +99,7 @@ const FormatPage = async ({
             <p>{t('noOpponentArchetypes')}</p>
           ) : (
             <>
-              {hasArchetypesWithMatches && (
+              {isOwner && hasArchetypesWithMatches && (
                 <p className="hint">{tArchetype('hasMatchesHint')}</p>
               )}
               <div className="table-scroll">
@@ -111,7 +116,7 @@ const FormatPage = async ({
                       <th className="text-number">
                         {tCommon('gameWinPctLabel')}
                       </th>
-                      <th />
+                      {isOwner && <th />}
                     </tr>
                   </thead>
                   <tbody>
@@ -120,6 +125,7 @@ const FormatPage = async ({
                         key={row.opponentArchetypeId}
                         row={row}
                         username={username}
+                        isOwner={isOwner}
                       />
                     ))}
                   </tbody>
@@ -131,11 +137,13 @@ const FormatPage = async ({
       </div>
 
       {/* On phones the delete button moves from the title down here */}
-      <section className={cn(classes.section, classes.mobileOnly)}>
-        <SectionHeader>{t('dangerZone')}</SectionHeader>
-        {deleteFormatButton}
-        {hasDecks && <p className="hint">{tDelete('hasDecksHint')}</p>}
-      </section>
+      {isOwner && (
+        <section className={cn(classes.section, classes.mobileOnly)}>
+          <SectionHeader>{t('dangerZone')}</SectionHeader>
+          {deleteFormatButton}
+          {hasDecks && <p className="hint">{tDelete('hasDecksHint')}</p>}
+        </section>
+      )}
     </>
   );
 };
