@@ -33,7 +33,7 @@
 
 @media (min-width: 768px) {
   .button {
-    min-height: var(--button-height);
+    min-height: var(--control-height);
   }
 
   .small {
@@ -62,5 +62,5 @@
 }
 
 .danger:hover:not(:disabled) {
-  background-color: var(--color-danger-bg-hover);
+  background-color: var(--color-danger-bg);
 }

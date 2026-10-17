@@ -4,10 +4,8 @@
   /* Colors */
   --color-background: #fefcf7;
   --color-header-bg: #fdfaf3;
-  --color-header-border: #e8e2d2;
   --color-surface: #ffffff;
   --color-surface-muted: #f8f5ec;
-  --color-input-bg: #ffffff;
   --color-primary: #1f4fa8;
   --color-primary-dark: #163a7d;
   --color-border: #e3dccb;
@@ -22,14 +20,10 @@
   --color-win-bg: #d7e3f8;
   --color-loss-bg: #f9dcc4;
 
-  /* Status Colors */
-  --color-error-bg: #fee2e2;
-  --color-error-text: #991b1b;
-
-  /* Danger */
+  /* Danger: delete buttons and error messages */
   --color-danger: #8f2f1f;
   --color-danger-border: #d8a89b;
-  --color-danger-bg-hover: #fbeee9;
+  --color-danger-bg: #fbeee9;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -63,7 +57,6 @@
   /* Controls */
   --control-height: 40px;
   --control-height-mobile: 44px;
-  --button-height: 36px;
   --button-height-small: 30px;
 
   /* Shadows */
@@ -75,7 +68,6 @@
   /* Z-Index */
   --z-index-banner: 2;
   --z-index-dialog: 3;
-  --z-index-menu: 4;
 }
 
 /* Always reserve room for the scrollbar so the centred column doesn't shift

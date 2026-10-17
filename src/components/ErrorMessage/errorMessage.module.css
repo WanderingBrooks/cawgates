@@ -1,6 +1,6 @@
 .error {
   padding: var(--spacing-md);
-  background-color: var(--color-error-bg);
-  color: var(--color-error-text);
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
   margin-bottom: var(--spacing-md);
 }

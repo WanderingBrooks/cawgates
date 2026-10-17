@@ -1,6 +1,6 @@
 .header {
   background-color: var(--color-header-bg);
-  border-bottom: 1px solid var(--color-header-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .bar {
@@ -72,7 +72,7 @@
 
 .strip {
   background-color: var(--color-surface-muted);
-  border-top: 1px solid var(--color-header-border);
+  border-top: 1px solid var(--color-border);
 }
 
 .stripText {
@@ -94,7 +94,7 @@
   display: flex;
   padding-bottom: env(safe-area-inset-bottom, 0px);
   background-color: var(--color-header-bg);
-  border-top: 1px solid var(--color-header-border);
+  border-top: 1px solid var(--color-border);
 }
 
 .tab,
