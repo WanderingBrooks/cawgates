@@ -128,7 +128,10 @@ const MatchForm = (props: MatchFormProps) => {
           name="opponentArchetypeId"
           label={t('opponentArchetype')}
           value={matchData.opponentArchetypeId}
-          onChange={handleChange}
+          onChange={opponentArchetypeId => {
+            setMatchData(prev => ({ ...prev, opponentArchetypeId }));
+            setHasFormDataChanged(true);
+          }}
           required
         />
         <div className={classes.recordRow}>

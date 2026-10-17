@@ -101,7 +101,7 @@
   "opponentArchetypeSelect": {
     "selectArchetype": "Select an archetype...",
     "loading": "Loading...",
-    "addNew": "+ Add new...",
+    "add": "+ Add",
     "edit": "Edit",
     "createTitle": "Create opponent archetype",
     "editTitle": "Edit opponent archetype"
@@ -109,7 +109,7 @@
   "formatSelect": {
     "selectFormat": "Select a format...",
     "loading": "Loading...",
-    "addNew": "+ Add new...",
+    "add": "+ Add",
     "edit": "Edit",
     "createTitle": "Create format",
     "editTitle": "Edit format"

@@ -1,22 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { getUserFormats } from '@/app/actions/formats';
-import Dialog from '../Dialog';
-import Button from '../Button';
 import FormatForm from '../FormatForm';
-import classes from './formatSelect.module.css';
-
-// TODO: FormatSelect and OpponentArchetypeSelect (and FormatForm /
-// OpponentArchetypeForm) are ~90% identical: same select + "Add new" + edit
-// dialog flow, identical CSS. They differ only in how options load, which
-// actions save, translation namespace and onChange shape. Worth merging into
-// one shared CreatableSelect + name form so fixes (like #62) land once.
-type FormatOption = {
-  id: string;
-  name: string;
-};
+import ItemPicker from '../ItemPicker';
 
 type FormatSelectProps = {
   label?: string;
@@ -29,128 +17,36 @@ type FormatSelectProps = {
   required?: boolean;
 };
 
-const ADD_NEW_VALUE = '__ADD_NEW__';
-
-const FormatSelect = ({
-  label,
-  hint,
-  id,
-  name,
-  value,
-  onChange,
-  isLocked = false,
-  required,
-}: FormatSelectProps) => {
+const FormatSelect = (props: FormatSelectProps) => {
   const t = useTranslations('formatSelect');
 
-  const [options, setOptions] = useState<FormatOption[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [isEditOpen, setIsEditOpen] = useState(false);
-
-  useEffect(() => {
-    const loadOptions = async () => {
-      const data = await getUserFormats();
-
-      setOptions(data.map(o => ({ id: o.id, name: o.name })));
-      setIsLoading(false);
-    };
-
-    loadOptions();
-  }, []);
-
-  const selectedOption = options.find(o => o.id === value) ?? null;
-
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === ADD_NEW_VALUE) {
-      setIsCreateOpen(true);
-      return;
-    }
-
-    onChange(e.target.value);
-  };
-
-  const handleCreateSuccess = (data: FormatOption) => {
-    setOptions(prev =>
-      [...prev, data].sort((a, b) => a.name.localeCompare(b.name)),
-    );
-
-    onChange(data.id);
-    setIsCreateOpen(false);
-  };
-
-  const handleEditSuccess = (data: FormatOption) => {
-    setOptions(prev =>
-      prev
-        .map(o => (o.id === data.id ? data : o))
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    );
-
-    setIsEditOpen(false);
-  };
+  const loadOptions = useCallback(() => getUserFormats(), []);
 
   return (
-    <div className={classes.container}>
-      {label && <label htmlFor={id}>{label}</label>}
-      {hint && <span className="hint">{hint}</span>}
-      {/* Hidden input carries the clean form value — the visible <select> may hold the
-          sentinel "__ADD_NEW__" value, and a disabled <select> is not submitted at all */}
-      <input
-        type="hidden"
-        id={id}
-        name={name}
-        value={value}
-        required={required}
-      />
-      <div className={classes.selectRow}>
-        <select
-          value={value}
-          onChange={handleSelectChange}
-          required={required}
-          disabled={isLoading || isLocked}
-          className={classes.select}
-        >
-          <option value="">
-            {isLoading ? t('loading') : t('selectFormat')}
-          </option>
-          {options.map(option => (
-            <option key={option.id} value={option.id}>
-              {option.name}
-            </option>
-          ))}
-          <option value={ADD_NEW_VALUE}>{t('addNew')}</option>
-        </select>
-        {selectedOption && (
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => setIsEditOpen(true)}
-          >
-            {t('edit')}
-          </Button>
-        )}
-      </div>
-
-      <Dialog isOpen={isCreateOpen} title={t('createTitle')} usePortal>
-        <FormatForm
-          mode="create"
-          onSuccess={handleCreateSuccess}
-          onCancel={() => setIsCreateOpen(false)}
-        />
-      </Dialog>
-
-      {selectedOption && (
-        <Dialog isOpen={isEditOpen} title={t('editTitle')} usePortal>
-          <FormatForm
-            mode="edit"
-            formatId={selectedOption.id}
-            initialName={selectedOption.name}
-            onSuccess={handleEditSuccess}
-            onCancel={() => setIsEditOpen(false)}
-          />
-        </Dialog>
+    <ItemPicker
+      {...props}
+      loadOptions={loadOptions}
+      text={{
+        placeholder: t('selectFormat'),
+        loading: t('loading'),
+        add: t('add'),
+        edit: t('edit'),
+        createTitle: t('createTitle'),
+        editTitle: t('editTitle'),
+      }}
+      renderCreateForm={({ onSuccess, onCancel }) => (
+        <FormatForm mode="create" onSuccess={onSuccess} onCancel={onCancel} />
       )}
-    </div>
+      renderEditForm={({ option, onSuccess, onCancel }) => (
+        <FormatForm
+          mode="edit"
+          formatId={option.id}
+          initialName={option.name}
+          onSuccess={onSuccess}
+          onCancel={onCancel}
+        />
+      )}
+    />
   );
 };
 
