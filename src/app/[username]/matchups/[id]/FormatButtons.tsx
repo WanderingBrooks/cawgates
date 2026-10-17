@@ -49,26 +49,24 @@ const FormatButtons = ({
       </Dialog>
 
       <Dialog isOpen={isEditOpen} title={t('editFormatTitle')} usePortal>
-        <div className={classes.dialogContent}>
-          <FormatForm
-            mode="edit"
-            formatId={formatId}
-            initialName={formatName}
-            onSuccess={() => {
-              setIsEditOpen(false);
-              router.refresh();
-            }}
-            onCancel={() => setIsEditOpen(false)}
-          />
-          <div className={classes.deleteSection}>
+        <FormatForm
+          mode="edit"
+          formatId={formatId}
+          initialName={formatName}
+          onSuccess={() => {
+            setIsEditOpen(false);
+            router.refresh();
+          }}
+          onCancel={() => setIsEditOpen(false)}
+          deleteButton={
             <DeleteFormatButton
               formatId={formatId}
               deckCount={deckCount}
               opponentArchetypeCount={opponentArchetypeCount}
             />
-            {deckCount > 0 && <p className="hint">{tDelete('hasDecksHint')}</p>}
-          </div>
-        </div>
+          }
+          deleteHint={deckCount > 0 ? tDelete('hasDecksHint') : undefined}
+        />
       </Dialog>
     </div>
   );
