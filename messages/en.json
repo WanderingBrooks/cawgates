@@ -116,8 +116,7 @@
   },
   "deckFilter": {
     "label": "Deck",
-    "allDecks": "All decks",
-    "privateDeck": "{name} (private)"
+    "allDecks": "All decks"
   },
   "formatFilter": {
     "label": "Format"
@@ -132,7 +131,7 @@
   "matchups": {
     "title": "Matchups",
     "noFormats": "No formats yet — create a deck to get started",
-    "noFormatsGuest": "No public matchups yet",
+    "noFormatsGuest": "No matchups yet",
     "createDeck": "Create deck"
   },
   "formatPage": {

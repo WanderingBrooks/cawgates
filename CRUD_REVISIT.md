@@ -4,36 +4,11 @@
 
 - PR #69 is a draft with the merge done. It still needs a click-through in
   the browser (see the PR's test plan) before it's marked ready.
-- Next decision: whether to remove public/private decks (below). Ask the
-  active user who keeps decks private before deciding.
-- After that: the navigation and stats consistency items, then where formats
-  and decks are created and edited.
-
-## Remove public/private decks
-
-Data check on 2026-10-17: 5 of 18 decks are private, across 3 users (none of
-them the owner's). Only one of those users is still active, and they've made
-every deck they created since May private, so removing the setting would
-expose decks they chose to hide. Ask them first.
-
-Public decks overcomplicate the app. Drop the concept: every deck is public,
-and the only private thing is notes (event and match notes), which only their
-author can see.
-
-What it would remove:
-
-- `Deck.isPublic` (needs a migration), and the "Make deck public" checkbox and
-  its translations in `DeckForm`
-- The guest-only logic in `src/lib/dal.ts`: `getVisibleDecksWhere`,
-  `getVisibleMatchesWhere`, `isPublicOnly` in `queryMatchStatistics`, the
-  guest 404s in `getDeck`, `getEvent`, `getFormat` and `getOpponentArchetype`,
-  and the guest filtering in `getFormatsForOwner`
-- The "(private)" deck label in `DeckFilter`, and the guest empty state on
-  `/matchups` (guests would see the same formats as the owner)
-
-What stays: `isOwner` for edit controls, and hiding notes from everyone but
-their author (already done on the event and archetype pages; check nothing
-else shows them).
+- Public/private decks are gone (PR #70, and this PR is rebased on it).
+  Every deck is public and only notes stay private. `Deck.isPublic` is
+  dropped in a follow-up migration (see `COLUMNS_TO_DROP.md`).
+- Next: the navigation and stats consistency items, then where formats and
+  decks are created and edited.
 
 ## Navigation buttons and stats consistency
 
@@ -83,7 +58,6 @@ Follows the pattern the deck form's format picker already uses (a select with
 Format [ Pauper        ▾ ]  [Edit format]     Deck [ Cawgates      ▾ ]  [Edit deck]
          Pauper                                       All decks
          + New format…                                Cawgates
-                                                      Jund Gardens (private)
                                                       + New deck…
 ```
 

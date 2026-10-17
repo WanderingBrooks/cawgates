@@ -29,19 +29,12 @@ const hideNotes = <T extends { notes: string | null }>({
   isOwner: boolean;
 }): T => (isOwner ? item : { ...item, notes: null });
 
-// Guests only see public decks, and the matches played with them
-const getVisibleDecksWhere = ({ isOwner }: { isOwner: boolean }) =>
-  isOwner ? {} : { isPublic: true };
-
-const getVisibleMatchesWhere = ({ isOwner }: { isOwner: boolean }) =>
-  isOwner ? {} : { event: { deck: { isPublic: true } } };
-
 /**
  * Match statistics per opponent archetype in a format. With a deckId only
- * that deck's matches count, and with isPublicOnly only matches played with
- * public decks. Either way only archetypes with counted matches are
- * returned. Without both, every deck's matches count and every archetype in
- * the format is returned, including ones with no matches yet.
+ * that deck's matches count. With a deckId or isPlayedOnly only archetypes
+ * with counted matches are returned. Without either, every deck's matches
+ * count and every archetype in the format is returned, including ones with
+ * no matches yet.
  *
  * This does no authorisation of its own, so it isn't exported: call it only
  * from the DAL functions below, after they have checked access to the deck
@@ -50,24 +43,17 @@ const getVisibleMatchesWhere = ({ isOwner }: { isOwner: boolean }) =>
 const queryMatchStatistics = async ({
   deckId,
   formatId,
-  isPublicOnly = false,
+  isPlayedOnly = false,
 }: {
   deckId?: string;
   formatId: string;
-  isPublicOnly?: boolean;
+  isPlayedOnly?: boolean;
 }) => {
   // Archetypes are shared by every deck in the format, so when only some
   // matches count, only return the archetypes those matches were against.
   // For guests this also keeps unplayed archetype names private.
   const countedMatches =
-    deckId || isPublicOnly
-      ? {
-          event: {
-            deckId,
-            deck: isPublicOnly ? { isPublic: true } : undefined,
-          },
-        }
-      : undefined;
+    deckId || isPlayedOnly ? { event: { deckId } } : undefined;
 
   const opponentArchetypes = await prisma.opponentArchetype.findMany({
     where: {
@@ -297,7 +283,6 @@ const getOpponentArchetype = async ({
           // Only decks that have played this archetype can be filtered by
           decks: {
             where: {
-              ...getVisibleDecksWhere({ isOwner }),
               events: {
                 some: { matches: { some: { opponentArchetypeId } } },
               },
@@ -307,7 +292,6 @@ const getOpponentArchetype = async ({
         },
       },
       matches: {
-        where: getVisibleMatchesWhere({ isOwner }),
         orderBy: { event: { date: 'desc' } },
         include: { event: { include: { deck: true } } },
       },
@@ -318,8 +302,8 @@ const getOpponentArchetype = async ({
     notFound();
   }
 
-  // Without a public match a guest has nothing to see, and the page would
-  // otherwise reveal the archetype's name
+  // Without a match a guest has nothing to see, and the page would otherwise
+  // reveal the name of an archetype that's only in the owner's format list
   if (!isOwner && opponentArchetype.matches.length === 0) {
     notFound();
   }
@@ -327,8 +311,8 @@ const getOpponentArchetype = async ({
   // Before the deck filter, since any match blocks deleting the archetype
   const hasMatches = opponentArchetype.matches.length > 0;
 
-  // Same rules as the format page: only decks the viewer can see can be
-  // selected, and any other slug falls back to all decks
+  // Only decks that played the archetype can be selected, and any other slug
+  // falls back to all decks
   const { decks } = opponentArchetype.format;
   const selectedDeck = decks.find(deck => deck.slug === deckSlug) ?? null;
 
@@ -350,11 +334,7 @@ const getOpponentArchetype = async ({
   };
 };
 
-/**
- * The formats the viewer can see, most played first. Guests only see
- * formats with a public deck, and only matches played with public decks
- * count towards the order.
- */
+// Every format, most played first
 const getFormatsForOwner = async ({
   ownerUsername,
 }: {
@@ -365,10 +345,7 @@ const getFormatsForOwner = async ({
   });
 
   const formats = await prisma.format.findMany({
-    where: {
-      userId: owner.id,
-      ...(!isOwner && { decks: { some: { isPublic: true } } }),
-    },
+    where: { userId: owner.id },
     select: {
       id: true,
       name: true,
@@ -376,9 +353,7 @@ const getFormatsForOwner = async ({
       // all of the format's matches
       opponentArchetypes: {
         select: {
-          _count: {
-            select: { matches: { where: getVisibleMatchesWhere({ isOwner }) } },
-          },
+          _count: { select: { matches: true } },
         },
       },
     },
@@ -415,29 +390,15 @@ const getFormat = async ({
     username: ownerUsername,
   });
 
-  const visibleMatches = getVisibleMatchesWhere({ isOwner });
-
   const format = await prisma.format.findUnique({
     where: { id: formatId, userId: owner.id },
     include: {
-      decks: {
-        where: getVisibleDecksWhere({ isOwner }),
-        orderBy: { createdAt: 'asc' },
-      },
-      opponentArchetypes: {
-        // Guests only see archetypes played with a public deck
-        where: isOwner ? {} : { matches: { some: visibleMatches } },
-        orderBy: { name: 'asc' },
-      },
+      decks: { orderBy: { createdAt: 'asc' } },
+      opponentArchetypes: { orderBy: { name: 'asc' } },
     },
   });
 
   if (!format) {
-    notFound();
-  }
-
-  // A format without public decks has nothing a guest may see
-  if (!isOwner && format.decks.length === 0) {
     notFound();
   }
 
@@ -455,17 +416,16 @@ const getFormatWithMatchStatistics = async ({
 }) => {
   const { format, isOwner } = await getFormat({ ownerUsername, formatId });
 
-  // Only decks the viewer can see can be selected, so a guest can't filter
-  // by a private deck's slug. An unknown slug falls back to all decks.
+  // An unknown slug falls back to all decks
   const selectedDeck =
     format.decks.find(deck => deck.slug === deckSlug) ?? null;
 
-  // The owner sees every archetype including unplayed ones, guests only
-  // the ones played with public decks
+  // The owner sees every archetype including unplayed ones, guests only the
+  // played ones, the same as the opponent archetype page
   const { rows: matchStatistics, totals } = await queryMatchStatistics({
     formatId: format.id,
     deckId: selectedDeck?.id,
-    isPublicOnly: !isOwner,
+    isPlayedOnly: !isOwner,
   });
 
   return { format, isOwner, selectedDeck, matchStatistics, totals };

@@ -6,7 +6,7 @@ import Select from '../Select';
 import classes from './deckFilter.module.css';
 
 type DeckFilterProps = {
-  decks: { slug: string; name: string; isPublic: boolean }[];
+  decks: { slug: string; name: string }[];
   selectedDeckSlug: string | null;
 };
 
@@ -23,11 +23,7 @@ const DeckFilter = ({ decks, selectedDeckSlug }: DeckFilterProps) => {
 
   const options = [
     { value: '', label: t('allDecks') },
-    ...decks.map(deck => ({
-      value: deck.slug,
-      // Only the owner is ever given private decks
-      label: deck.isPublic ? deck.name : t('privateDeck', { name: deck.name }),
-    })),
+    ...decks.map(deck => ({ value: deck.slug, label: deck.name })),
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
