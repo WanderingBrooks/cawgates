@@ -2,9 +2,8 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { PageTitle, Button, Tooltip } from '@/components';
-import { getDeck } from '@/lib/dal';
+import { getDeckWithMatchStatistics } from '@/lib/dal';
 import { cn, getWinRateTint } from '@/lib/utils';
-import getMatchStatistics from '@/lib/getMatchStatistics';
 
 const renderNumber = (chunks: ReactNode) => (
   <strong className="text-number">{chunks}</strong>
@@ -20,15 +19,11 @@ const DeckPage = async ({
   const tCommon = await getTranslations('common');
   const formatter = await getFormatter();
 
-  const { deck, isOwner } = await getDeck({
-    ownerUsername: username,
-    deckSlug,
-  });
-
-  const { rows: matchStatistics, totals } = await getMatchStatistics({
-    deckId: deck.id,
-    formatId: deck.formatId,
-  });
+  const { deck, isOwner, matchStatistics, totals } =
+    await getDeckWithMatchStatistics({
+      ownerUsername: username,
+      deckSlug,
+    });
 
   return (
     <>
