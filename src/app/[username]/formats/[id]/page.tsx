@@ -53,7 +53,14 @@ const FormatPage = async ({
             </div>
             {/* Kept outside the button row so its width doesn't push the buttons apart */}
             {hasDecks && (
-              <p className={cn('hint', classes.titleHint, classes.desktopOnly)}>
+              <p
+                className={cn(
+                  'hint',
+                  'text-right',
+                  classes.titleHint,
+                  classes.desktopOnly,
+                )}
+              >
                 {tDelete('hasDecksHint')}
               </p>
             )}

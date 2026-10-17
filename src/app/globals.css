@@ -224,6 +224,24 @@ tbody tr:last-child td {
   color: var(--color-text-secondary);
 }
 
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+/* A link that doesn't underline, even on hover, e.g. navigation */
+.link-plain,
+.link-plain:hover {
+  text-decoration: none;
+}
+
 /* Monospace digits that line up in columns, e.g. records and percentages */
 .text-number {
   font-family: var(--font-family-mono);

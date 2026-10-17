@@ -26,6 +26,7 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
       className={cn(
+        'text-nowrap',
         classes.button,
         variant && classes[variant],
         size === 'small' && cn(classes.small, 'text-small'),
