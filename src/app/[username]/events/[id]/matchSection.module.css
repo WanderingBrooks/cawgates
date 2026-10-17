@@ -12,10 +12,6 @@
   gap: var(--spacing-sm);
 }
 
-.sectionHeader > h2 {
-  margin-top: 0;
-}
-
 .sectionHeader > button {
   width: 100%;
 }
