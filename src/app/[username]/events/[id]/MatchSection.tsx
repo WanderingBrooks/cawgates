@@ -3,16 +3,15 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { deleteMatch } from '@/app/actions/matches';
 import {
   Button,
   Card,
   CardContent,
   CardTitle,
-  ErrorMessage,
   Dialog,
   SectionHeader,
 } from '@/components';
+import DeleteMatchButton from './DeleteMatchButton';
 import MatchForm from './MatchForm';
 import { MatchInputForm } from '@/lib/types';
 import { cn, getMatchResultTint } from '@/lib/utils';
@@ -47,30 +46,11 @@ const MatchSection = ({
 }: MatchSectionProps) => {
   const t = useTranslations('event');
   const tCommon = useTranslations('common');
-  const tDelete = useTranslations('deleteMatchButton');
   const tCreateMatch = useTranslations('createMatch');
   const tEditMatch = useTranslations('editMatch');
 
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingMatch, setEditingMatch] = useState<Match | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
-
-  const handleDelete = async ({ matchId }: { matchId: string }) => {
-    if (!confirm(tDelete('deleteConfirm'))) {
-      return;
-    }
-
-    setDeletingId(matchId);
-    setDeleteError(null);
-
-    const result = await deleteMatch(matchId);
-
-    if (result && result.error) {
-      setDeleteError(result.error);
-      setDeletingId(null);
-    }
-  };
 
   const editingMatchData: MatchInputForm | undefined = editingMatch
     ? {
@@ -92,8 +72,6 @@ const MatchSection = ({
           </Button>
         )}
       </div>
-
-      {deleteError && <ErrorMessage error={deleteError} />}
 
       {matches.length === 0 && <p>{t('noMatches')}</p>}
 
@@ -134,16 +112,6 @@ const MatchSection = ({
                       onClick={() => setEditingMatch(match)}
                     >
                       {t('editMatch')}
-                    </Button>
-                    <Button
-                      variant="danger"
-                      size="small"
-                      disabled={deletingId === match.id}
-                      onClick={() => handleDelete({ matchId: match.id })}
-                    >
-                      {deletingId === match.id
-                        ? tDelete('deleting')
-                        : tDelete('delete')}
                     </Button>
                   </div>
                 )}
@@ -187,6 +155,12 @@ const MatchSection = ({
                 initialMatchData={editingMatchData}
                 onSuccess={() => setEditingMatch(null)}
                 onCancel={() => setEditingMatch(null)}
+                deleteButton={
+                  <DeleteMatchButton
+                    matchId={editingMatch.id}
+                    onDeleted={() => setEditingMatch(null)}
+                  />
+                }
               />
             )}
           </Dialog>

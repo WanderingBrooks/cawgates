@@ -89,7 +89,7 @@
     "title": "Edit match"
   },
   "deleteMatchButton": {
-    "delete": "Delete",
+    "delete": "Delete match",
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this match?"
   },

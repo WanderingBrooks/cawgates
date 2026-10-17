@@ -9,8 +9,8 @@ import {
   Button,
   DiscardChangesConfirm,
   ErrorMessage,
-  FlexRowBetween,
   Form,
+  FormActions,
   Input,
   SpaceChildrenVertically,
   OpponentArchetypeSelect,
@@ -44,6 +44,7 @@ type MatchFormProps = {
   initialMatchData?: MatchInputForm;
   onSuccess: () => void;
   onCancel: () => void;
+  deleteButton?: React.ReactNode;
 };
 
 const MatchForm = ({
@@ -54,6 +55,7 @@ const MatchForm = ({
   initialMatchData,
   onSuccess,
   onCancel,
+  deleteButton,
 }: MatchFormProps) => {
   const t = useTranslations('matchForm');
 
@@ -167,12 +169,15 @@ const MatchForm = ({
             onDiscard={onCancel}
           />
         ) : (
-          <FlexRowBetween>
-            <Button variant="secondary" type="button" onClick={handleCancel}>
-              {t('cancel')}
-            </Button>
-            <SubmitButton isActionPending={isPending} />
-          </FlexRowBetween>
+          <FormActions
+            cancelButton={
+              <Button variant="secondary" type="button" onClick={handleCancel}>
+                {t('cancel')}
+              </Button>
+            }
+            submitButton={<SubmitButton isActionPending={isPending} />}
+            deleteButton={deleteButton}
+          />
         )}
       </SpaceChildrenVertically>
     </Form>
