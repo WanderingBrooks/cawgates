@@ -9,6 +9,7 @@
     "gameRecordLabel": "Game record",
     "gameWinPctLabel": "Game win %",
     "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
+    "matchWinPct": "<num>{rate}</num> <explainer>match win</explainer>",
     "noValue": "–"
   },
   "createDeck": {
@@ -139,9 +140,6 @@
     "editTitle": "Edit format",
     "editDeck": "Edit deck",
     "createDeck": "Create deck",
-    "totalMatchWins": "Match wins <num>{count}</num>",
-    "totalMatchLosses": "Match losses <num>{count}</num>",
-    "totalMatchWinPct": "<explainer>Match win %</explainer> <num>{rate}</num>",
     "opponentArchetypesSection": "Opponent archetypes",
     "noOpponentArchetypes": "No opponent archetypes yet",
     "noDeckMatches": "No matches with this deck yet",

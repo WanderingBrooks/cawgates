@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import {
@@ -14,11 +15,16 @@ import {
   DeckFilter,
   PageTitle,
   SectionHeader,
+  Tooltip,
 } from '@/components';
 import { getOpponentArchetype } from '@/lib/dal';
 import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
 import OpponentArchetypeActions from './OpponentArchetypeActions';
 import classes from './opponentArchetypePage.module.css';
+
+const renderNumber = (chunks: ReactNode) => (
+  <strong className="text-number">{chunks}</strong>
+);
 
 const OpponentArchetypePage = async ({
   params,
@@ -47,6 +53,8 @@ const OpponentArchetypePage = async ({
     matches: opponentArchetype.matches,
   });
 
+  const totalMatches = opponentArchetype.matches.length;
+
   const deleteButton = (
     <DeleteOpponentArchetypeButton
       opponentArchetypeId={opponentArchetype.id}
@@ -61,7 +69,7 @@ const OpponentArchetypePage = async ({
         title={opponentArchetype.name}
         subtitle={[
           <span key="format">{opponentArchetype.format.name}</span>,
-          opponentArchetype.matches.length > 0 && (
+          totalMatches > 0 && (
             <strong key="record" className="text-number">
               {tCommon('matchRecord', {
                 wins: matchWins,
@@ -69,6 +77,22 @@ const OpponentArchetypePage = async ({
                 ties: matchDraws,
               })}
             </strong>
+          ),
+          totalMatches > 0 && (
+            <span key="winRate">
+              {tCommon.rich('matchWinPct', {
+                rate: formatter.number(matchWins / totalMatches, {
+                  style: 'percent',
+                  maximumFractionDigits: 1,
+                }),
+                num: renderNumber,
+                explainer: chunks => (
+                  <Tooltip content={tCommon('matchWinPctExplainer')}>
+                    {chunks}
+                  </Tooltip>
+                ),
+              })}
+            </span>
           ),
         ]}
         actions={
@@ -104,7 +128,7 @@ const OpponentArchetypePage = async ({
       )}
       <section className={classes.section}>
         <SectionHeader>{t('matchesSection')}</SectionHeader>
-        {opponentArchetype.matches.length === 0 ? (
+        {totalMatches === 0 ? (
           <p>{t('noMatches')}</p>
         ) : (
           <div className={classes.matchList}>

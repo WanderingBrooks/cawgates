@@ -64,20 +64,15 @@ const FormatPage = async ({
         title={format.name}
         subtitle={
           totals.totalMatches > 0 && [
-            <span key="wins">
-              {t.rich('totalMatchWins', {
-                count: totals.matchWins,
-                num: renderNumber,
+            <strong key="record" className="text-number">
+              {tCommon('matchRecord', {
+                wins: totals.matchWins,
+                losses: totals.matchLosses,
+                ties: totals.matchDraws,
               })}
-            </span>,
-            <span key="losses">
-              {t.rich('totalMatchLosses', {
-                count: totals.matchLosses,
-                num: renderNumber,
-              })}
-            </span>,
+            </strong>,
             <span key="winRate">
-              {t.rich('totalMatchWinPct', {
+              {tCommon.rich('matchWinPct', {
                 rate: formatter.number(totals.matchWinRate, {
                   style: 'percent',
                   maximumFractionDigits: 1,
