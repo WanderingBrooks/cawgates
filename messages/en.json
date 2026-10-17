@@ -136,15 +136,16 @@
     "createDeck": "Create deck"
   },
   "formatPage": {
-    "edit": "Edit",
-    "editTitle": "Edit format",
+    "addFormat": "+ Add format",
+    "addFormatTitle": "Add format",
+    "editFormat": "Edit format",
+    "editFormatTitle": "Edit format",
     "editDeck": "Edit deck",
     "createDeck": "Create deck",
     "opponentArchetypesSection": "Opponent archetypes",
     "noOpponentArchetypes": "No opponent archetypes yet",
     "noDeckMatches": "No matches with this deck yet",
-    "archetype": "Archetype",
-    "dangerZone": "Danger zone"
+    "archetype": "Archetype"
   },
   "deleteFormatButton": {
     "delete": "Delete format",

@@ -11,8 +11,7 @@ import {
   SectionHeader,
   Tooltip,
 } from '@/components';
-import DeleteFormatButton from './DeleteFormatButton';
-import EditFormatButton from './EditFormatButton';
+import FormatButtons from './FormatButtons';
 import classes from './formatPage.module.css';
 
 const renderNumber = (chunks: ReactNode) => (
@@ -33,7 +32,7 @@ const FormatPage = async ({
 
   const t = await getTranslations('formatPage');
   const tCommon = await getTranslations('common');
-  const tDelete = await getTranslations('deleteFormatButton');
+  const tMatchups = await getTranslations('matchups');
   const formatter = await getFormatter();
 
   const [
@@ -48,20 +47,10 @@ const FormatPage = async ({
     getFormatsForOwner({ ownerUsername: username }),
   ]);
 
-  const deleteFormatButton = (
-    <DeleteFormatButton
-      formatId={format.id}
-      deckCount={format.decks.length}
-      opponentArchetypeCount={format.opponentArchetypes.length}
-    />
-  );
-
-  const hasDecks = format.decks.length > 0;
-
   return (
     <>
       <PageTitle
-        title={format.name}
+        title={tMatchups('title')}
         subtitle={
           totals.totalMatches > 0 && [
             <strong key="record" className="text-number">
@@ -87,38 +76,26 @@ const FormatPage = async ({
             </span>,
           ]
         }
-        actions={
-          isOwner && (
-            <div className={classes.titleActions}>
-              <div className={classes.titleButtons}>
-                <EditFormatButton
-                  formatId={format.id}
-                  initialName={format.name}
-                />
-                <div className={classes.desktopOnly}>{deleteFormatButton}</div>
-              </div>
-              {/* Kept outside the button row so its width doesn't push the buttons apart */}
-              {hasDecks && (
-                <p
-                  className={cn('hint', classes.titleHint, classes.desktopOnly)}
-                >
-                  {tDelete('hasDecksHint')}
-                </p>
-              )}
-            </div>
-          )
-        }
       />
 
       <div className={classes.filterRow}>
-        {/* With one format its name is already in the menu and the title */}
-        {formats.length > 1 && (
+        {/* Always shown, even with one format, since the title doesn't name it */}
+        <div className={classes.filterGroup}>
           <FormatFilter
             username={username}
             formats={formats}
             selectedFormatId={format.id}
           />
-        )}
+          {isOwner && (
+            <FormatButtons
+              username={username}
+              formatId={format.id}
+              formatName={format.name}
+              deckCount={format.decks.length}
+              opponentArchetypeCount={format.opponentArchetypes.length}
+            />
+          )}
+        </div>
         <DeckFilter
           decks={format.decks}
           selectedDeckSlug={selectedDeck?.slug ?? null}
@@ -205,15 +182,6 @@ const FormatPage = async ({
           </div>
         )}
       </section>
-
-      {/* On phones the delete button moves from the title down here */}
-      {isOwner && (
-        <section className={cn(classes.section, classes.mobileOnly)}>
-          <SectionHeader>{t('dangerZone')}</SectionHeader>
-          {deleteFormatButton}
-          {hasDecks && <p className="hint">{tDelete('hasDecksHint')}</p>}
-        </section>
-      )}
     </>
   );
 };
