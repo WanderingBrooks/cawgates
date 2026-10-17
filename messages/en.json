@@ -11,28 +11,9 @@
     "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
     "noValue": "–"
   },
-  "decks": {
-    "title": "My decks",
-    "guestTitle": "{username}''s decks",
-    "createDeck": "Create deck",
-    "noDecks": "No decks yet — create one to get started",
-    "deck": "Deck",
-    "format": "Format",
-    "events": "Events"
-  },
   "createDeck": {
     "title": "Create deck",
     "firstDeckSubtitle": "Create your first deck to start tracking events"
-  },
-  "deckPage": {
-    "editDeck": "Edit deck",
-    "totalMatchWins": "Match wins <num>{count}</num>",
-    "totalMatchLosses": "Match losses <num>{count}</num>",
-    "totalMatchWinPct": "<explainer>Match win %</explainer> <num>{rate}</num>",
-    "opponentArchetype": "Opponent archetype",
-    "noMatchesOwner": "No matches yet — create an event to start tracking",
-    "noMatchesViewer": "No matches found",
-    "createEvent": "Create event"
   },
   "deckForm": {
     "name": "Deck name *",

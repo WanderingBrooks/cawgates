@@ -466,23 +466,6 @@ const getFormatWithMatchStatistics = async ({
   return { format, isOwner, selectedDeck, matchStatistics, totals };
 };
 
-const getDeckWithMatchStatistics = async ({
-  ownerUsername,
-  deckSlug,
-}: {
-  ownerUsername: string;
-  deckSlug: string;
-}) => {
-  const { deck, isOwner } = await getDeck({ ownerUsername, deckSlug });
-
-  const { rows: matchStatistics, totals } = await queryMatchStatistics({
-    deckId: deck.id,
-    formatId: deck.formatId,
-  });
-
-  return { deck, isOwner, matchStatistics, totals };
-};
-
 export {
   getOwnerByUsername,
   getFormatsForOwner,
@@ -490,7 +473,6 @@ export {
   getFormatWithMatchStatistics,
   getDecksForOwner,
   getDeck,
-  getDeckWithMatchStatistics,
   getEvents,
   getEvent,
   getOpponentArchetype,
