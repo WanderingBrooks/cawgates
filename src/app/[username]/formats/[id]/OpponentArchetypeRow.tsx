@@ -23,10 +23,13 @@ const OpponentArchetypeRow = ({
   row,
   username,
   isOwner,
+  deckSlug,
 }: {
   row: MatchStatisticsRow;
   username: string;
   isOwner: boolean;
+  // Carried over to the archetype page so it opens with the same deck filter
+  deckSlug: string | null;
 }) => {
   const {
     opponentArchetypeId,
@@ -63,7 +66,11 @@ const OpponentArchetypeRow = ({
   return (
     <tr>
       <td>
-        <Link href={`/${username}/opponents/${opponentArchetypeId}`}>
+        <Link
+          href={`/${username}/opponents/${opponentArchetypeId}${
+            deckSlug ? `?deck=${encodeURIComponent(deckSlug)}` : ''
+          }`}
+        >
           {name}
         </Link>
         {error && <ErrorMessage error={error} className={classes.rowError} />}

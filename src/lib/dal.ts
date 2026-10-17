@@ -395,20 +395,28 @@ const getFormat = async ({
 const getFormatWithMatchStatistics = async ({
   ownerUsername,
   formatId,
+  deckSlug,
 }: {
   ownerUsername: string;
   formatId: string;
+  deckSlug?: string;
 }) => {
   const { format, isOwner } = await getFormat({ ownerUsername, formatId });
 
+  // Only decks the viewer can see can be selected, so a guest can't filter
+  // by a private deck's slug. An unknown slug falls back to all decks.
+  const selectedDeck =
+    format.decks.find(deck => deck.slug === deckSlug) ?? null;
+
   // The owner sees every archetype including unplayed ones, guests only
   // the ones played with public decks
-  const { rows: matchStatistics } = await queryMatchStatistics({
+  const { rows: matchStatistics, totals } = await queryMatchStatistics({
     formatId: format.id,
+    deckId: selectedDeck?.id,
     isPublicOnly: !isOwner,
   });
 
-  return { format, isOwner, matchStatistics };
+  return { format, isOwner, selectedDeck, matchStatistics, totals };
 };
 
 const getDeckWithMatchStatistics = async ({

@@ -1,28 +1,47 @@
+import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { getFormatter, getTranslations } from 'next-intl/server';
 import { getFormatWithMatchStatistics } from '@/lib/dal';
 import { cn } from '@/lib/utils';
-import { PageTitle, SectionHeader } from '@/components';
+import {
+  Button,
+  DeckFilter,
+  PageTitle,
+  SectionHeader,
+  Tooltip,
+} from '@/components';
 import DeleteFormatButton from './DeleteFormatButton';
 import EditFormatButton from './EditFormatButton';
 import OpponentArchetypeRow from './OpponentArchetypeRow';
 import classes from './formatPage.module.css';
 
+const renderNumber = (chunks: ReactNode) => (
+  <strong className="text-number">{chunks}</strong>
+);
+
 const FormatPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ username: string; id: string }>;
+  searchParams: Promise<{ deck?: string | string[] }>;
 }) => {
-  const { username, id } = await params;
+  const [{ username, id }, { deck }] = await Promise.all([
+    params,
+    searchParams,
+  ]);
+
   const t = await getTranslations('formatPage');
   const tCommon = await getTranslations('common');
   const tArchetype = await getTranslations('formatOpponentArchetype');
   const tDelete = await getTranslations('deleteFormatButton');
+  const formatter = await getFormatter();
 
-  const { format, isOwner, matchStatistics } =
+  const { format, isOwner, selectedDeck, matchStatistics, totals } =
     await getFormatWithMatchStatistics({
       ownerUsername: username,
       formatId: id,
+      deckSlug: typeof deck === 'string' ? deck : undefined,
     });
 
   const hasArchetypesWithMatches = format.opponentArchetypes.some(
@@ -43,6 +62,36 @@ const FormatPage = async ({
     <>
       <PageTitle
         title={format.name}
+        subtitle={
+          totals.totalMatches > 0 && [
+            <span key="wins">
+              {t.rich('totalMatchWins', {
+                count: totals.matchWins,
+                num: renderNumber,
+              })}
+            </span>,
+            <span key="losses">
+              {t.rich('totalMatchLosses', {
+                count: totals.matchLosses,
+                num: renderNumber,
+              })}
+            </span>,
+            <span key="winRate">
+              {t.rich('totalMatchWinPct', {
+                rate: formatter.number(totals.matchWinRate, {
+                  style: 'percent',
+                  maximumFractionDigits: 1,
+                }),
+                num: renderNumber,
+                explainer: chunks => (
+                  <Tooltip content={tCommon('matchWinPctExplainer')}>
+                    {chunks}
+                  </Tooltip>
+                ),
+              })}
+            </span>,
+          ]
+        }
         actions={
           isOwner && (
             <div className={classes.titleActions}>
@@ -66,75 +115,67 @@ const FormatPage = async ({
         }
       />
 
-      <div className={classes.columns}>
-        <section className={cn(classes.section, classes.decksColumn)}>
-          <SectionHeader>{t('decksSection')}</SectionHeader>
-          {format.decks.length === 0 ? (
-            <p>{t('noDecks')}</p>
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>{t('deck')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {format.decks.map(deck => (
-                  <tr key={deck.id}>
-                    <td>
-                      <Link href={`/${username}/${deck.slug}`}>
-                        {deck.name}
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </section>
-
-        <section className={cn(classes.section, classes.archetypesColumn)}>
-          <SectionHeader>{t('opponentArchetypesSection')}</SectionHeader>
-          {format.opponentArchetypes.length === 0 ? (
-            <p>{t('noOpponentArchetypes')}</p>
-          ) : (
-            <>
-              {isOwner && hasArchetypesWithMatches && (
-                <p className="hint">{tArchetype('hasMatchesHint')}</p>
-              )}
-              <div className="table-scroll">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>{t('archetype')}</th>
-                      <th className="text-number">
-                        {tCommon('matchRecordLabel')}
-                      </th>
-                      <th className="text-number">
-                        {tCommon('gameRecordLabel')}
-                      </th>
-                      <th className="text-number">
-                        {tCommon('gameWinPctLabel')}
-                      </th>
-                      {isOwner && <th />}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {matchStatistics.map(row => (
-                      <OpponentArchetypeRow
-                        key={row.opponentArchetypeId}
-                        row={row}
-                        username={username}
-                        isOwner={isOwner}
-                      />
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
-        </section>
+      <div className={classes.filterRow}>
+        <DeckFilter
+          decks={format.decks}
+          selectedDeckSlug={selectedDeck?.slug ?? null}
+        />
+        {isOwner && (
+          <div className={classes.filterButtons}>
+            {selectedDeck && (
+              <Link href={`/${username}/decks/${selectedDeck.slug}/edit`}>
+                <Button variant="secondary">{t('editDeck')}</Button>
+              </Link>
+            )}
+            <Link href={`/${username}/decks/create`}>
+              <Button variant="secondary">{t('createDeck')}</Button>
+            </Link>
+          </div>
+        )}
       </div>
+
+      <section className={classes.section}>
+        <SectionHeader>{t('opponentArchetypesSection')}</SectionHeader>
+        {matchStatistics.length === 0 ? (
+          <p>{selectedDeck ? t('noDeckMatches') : t('noOpponentArchetypes')}</p>
+        ) : (
+          <>
+            {isOwner && hasArchetypesWithMatches && (
+              <p className="hint">{tArchetype('hasMatchesHint')}</p>
+            )}
+            <div className="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>{t('archetype')}</th>
+                    <th className="text-number">
+                      {tCommon('matchRecordLabel')}
+                    </th>
+                    <th className="text-number">
+                      {tCommon('gameRecordLabel')}
+                    </th>
+                    <th className="text-number">
+                      {tCommon('gameWinPctLabel')}
+                    </th>
+                    {isOwner && <th />}
+                  </tr>
+                </thead>
+                <tbody>
+                  {matchStatistics.map(row => (
+                    <OpponentArchetypeRow
+                      key={row.opponentArchetypeId}
+                      row={row}
+                      username={username}
+                      isOwner={isOwner}
+                      deckSlug={selectedDeck?.slug ?? null}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+      </section>
 
       {/* On phones the delete button moves from the title down here */}
       {isOwner && (

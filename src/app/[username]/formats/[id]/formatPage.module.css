@@ -1,8 +1,22 @@
-.columns {
+/* The deck filter, with the owner's deck buttons beside it on wide screens */
+.filterRow {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: var(--spacing-xl);
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-sm);
+}
+
+.filterButtons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.filterButtons > * {
+  flex: 1;
+}
+
+.filterButtons > a > button {
+  width: 100%;
 }
 
 .section {
@@ -10,16 +24,6 @@
   flex-direction: column;
   align-items: stretch;
   gap: var(--spacing-sm);
-}
-
-.decksColumn {
-  flex: 1 1 260px;
-  min-width: 0;
-}
-
-.archetypesColumn {
-  flex: 1.8 1 100%;
-  min-width: 0;
 }
 
 /* Edit and Delete side by side, with the delete hint underneath */
@@ -72,8 +76,19 @@
     display: none;
   }
 
-  .archetypesColumn {
-    flex-basis: 440px;
+  .filterRow {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--spacing-md);
+  }
+
+  .filterButtons > * {
+    flex: initial;
+  }
+
+  .filterButtons > a > button {
+    width: auto;
   }
 
   .titleActions {

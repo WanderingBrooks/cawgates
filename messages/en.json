@@ -133,6 +133,11 @@
     "createTitle": "Create format",
     "editTitle": "Edit format"
   },
+  "deckFilter": {
+    "label": "Deck",
+    "allDecks": "All decks",
+    "privateDeck": "{name} (private)"
+  },
   "formatForm": {
     "name": "Name *",
     "create": "Create",
@@ -152,11 +157,14 @@
   "formatPage": {
     "edit": "Edit",
     "editTitle": "Edit format",
-    "decksSection": "Decks",
-    "noDecks": "No decks use this format",
-    "deck": "Deck",
+    "editDeck": "Edit deck",
+    "createDeck": "Create deck",
+    "totalMatchWins": "Match wins <num>{count}</num>",
+    "totalMatchLosses": "Match losses <num>{count}</num>",
+    "totalMatchWinPct": "<explainer>Match win %</explainer> <num>{rate}</num>",
     "opponentArchetypesSection": "Opponent archetypes",
     "noOpponentArchetypes": "No opponent archetypes yet",
+    "noDeckMatches": "No matches with this deck yet",
     "archetype": "Archetype",
     "dangerZone": "Danger zone"
   },
