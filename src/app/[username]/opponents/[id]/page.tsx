@@ -18,7 +18,6 @@ import {
   Tooltip,
 } from '@/components';
 import { getOpponentArchetype } from '@/lib/dal';
-import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
 import OpponentArchetypeActions from './OpponentArchetypeActions';
 import classes from './opponentArchetypePage.module.css';
 
@@ -55,14 +54,6 @@ const OpponentArchetypePage = async ({
 
   const totalMatches = opponentArchetype.matches.length;
 
-  const deleteButton = (
-    <DeleteOpponentArchetypeButton
-      opponentArchetypeId={opponentArchetype.id}
-      name={opponentArchetype.name}
-      hasMatches={hasMatches}
-    />
-  );
-
   return (
     <>
       <PageTitle
@@ -96,26 +87,16 @@ const OpponentArchetypePage = async ({
           ),
         ]}
         actions={
-          <div className={classes.titleActions}>
-            <div className={classes.titleButtons}>
-              <OpponentArchetypeActions
-                opponentArchetypeId={opponentArchetype.id}
-                formatId={opponentArchetype.formatId}
-                initialName={opponentArchetype.name}
-                username={username}
-                isOwner={isOwner}
-                deckSlug={selectedDeck?.slug ?? null}
-              />
-              {isOwner && (
-                <div className={classes.desktopOnly}>{deleteButton}</div>
-              )}
-            </div>
-            {/* Kept outside the button row so its width doesn't push the buttons apart */}
-            {isOwner && hasMatches && (
-              <p className={cn('hint', classes.titleHint, classes.desktopOnly)}>
-                {t('hasMatchesHint')}
-              </p>
-            )}
+          <div className={classes.titleButtons}>
+            <OpponentArchetypeActions
+              opponentArchetypeId={opponentArchetype.id}
+              formatId={opponentArchetype.formatId}
+              initialName={opponentArchetype.name}
+              username={username}
+              isOwner={isOwner}
+              deckSlug={selectedDeck?.slug ?? null}
+              hasMatches={hasMatches}
+            />
           </div>
         }
       />
@@ -183,15 +164,6 @@ const OpponentArchetypePage = async ({
           </div>
         )}
       </section>
-
-      {/* On phones the delete button moves from the title down here */}
-      {isOwner && (
-        <section className={cn(classes.section, classes.mobileOnly)}>
-          <SectionHeader>{t('dangerZone')}</SectionHeader>
-          {deleteButton}
-          {hasMatches && <p className="hint">{t('hasMatchesHint')}</p>}
-        </section>
-      )}
     </>
   );
 };

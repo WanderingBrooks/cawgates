@@ -11,8 +11,7 @@ import ErrorMessage from '../ErrorMessage';
 import Form from '../Form';
 import Input from '../Input';
 import SpaceChildrenVertically from '../SpaceChildrenVertically';
-import FlexRowBetween from '../FlexRowBetween';
-import classes from './formatForm.module.css';
+import FormActions from '../FormActions';
 
 const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();
@@ -86,31 +85,16 @@ const FormatForm = (props: FormatFormProps) => {
           required
         />
         {state?.error && <ErrorMessage error={state.error} />}
-        {props.mode === 'edit' && props.deleteButton ? (
-          <>
-            <FlexRowBetween>
-              {props.deleteButton}
-              <div className={classes.rightButtons}>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={props.onCancel}
-                >
-                  {t('cancel')}
-                </Button>
-                <SubmitButton mode={props.mode} />
-              </div>
-            </FlexRowBetween>
-            {props.deleteHint && <p className="hint">{props.deleteHint}</p>}
-          </>
-        ) : (
-          <FlexRowBetween>
+        <FormActions
+          cancelButton={
             <Button type="button" variant="secondary" onClick={props.onCancel}>
               {t('cancel')}
             </Button>
-            <SubmitButton mode={props.mode} />
-          </FlexRowBetween>
-        )}
+          }
+          submitButton={<SubmitButton mode={props.mode} />}
+          deleteButton={props.mode === 'edit' ? props.deleteButton : undefined}
+          deleteHint={props.mode === 'edit' ? props.deleteHint : undefined}
+        />
       </SpaceChildrenVertically>
     </Form>
   );

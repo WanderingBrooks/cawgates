@@ -14,7 +14,7 @@ import ErrorMessage from '../ErrorMessage';
 import Form from '../Form';
 import Input from '../Input';
 import SpaceChildrenVertically from '../SpaceChildrenVertically';
-import FlexRowBetween from '../FlexRowBetween';
+import FormActions from '../FormActions';
 
 const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();
@@ -46,6 +46,8 @@ type OpponentArchetypeFormProps =
       initialName: string;
       onSuccess: (data: { id: string; name: string }) => void;
       onCancel: () => void;
+      deleteButton?: React.ReactNode;
+      deleteHint?: string;
     };
 
 const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
@@ -93,12 +95,16 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
           required
         />
         {state?.error && <ErrorMessage error={state.error} />}
-        <FlexRowBetween>
-          <Button type="button" variant="secondary" onClick={props.onCancel}>
-            {t('cancel')}
-          </Button>
-          <SubmitButton mode={props.mode} />
-        </FlexRowBetween>
+        <FormActions
+          cancelButton={
+            <Button type="button" variant="secondary" onClick={props.onCancel}>
+              {t('cancel')}
+            </Button>
+          }
+          submitButton={<SubmitButton mode={props.mode} />}
+          deleteButton={props.mode === 'edit' ? props.deleteButton : undefined}
+          deleteHint={props.mode === 'edit' ? props.deleteHint : undefined}
+        />
       </SpaceChildrenVertically>
     </Form>
   );

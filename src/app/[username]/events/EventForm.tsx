@@ -13,12 +13,13 @@ import {
   Form,
   Input,
   SpaceChildrenVertically,
-  FlexRowBetween,
+  FormActions,
   TextArea,
   Select,
 } from '@/components';
 import { EventFormData } from '@/lib/types';
 import Link from 'next/link';
+import DeleteEventButton from './DeleteEventButton';
 
 /**
  * SubmitButton must be a separate component because useFormStatus() requires
@@ -169,12 +170,19 @@ const EventForm = (props: EventFormProps) => {
             onDiscard={() => router.push(cancelHref)}
           />
         ) : (
-          <FlexRowBetween>
-            <Button variant="secondary" type="button" onClick={handleCancel}>
-              {t('cancel')}
-            </Button>
-            <SubmitButton />
-          </FlexRowBetween>
+          <FormActions
+            cancelButton={
+              <Button variant="secondary" type="button" onClick={handleCancel}>
+                {t('cancel')}
+              </Button>
+            }
+            submitButton={<SubmitButton />}
+            deleteButton={
+              props.mode === 'edit' ? (
+                <DeleteEventButton eventId={props.eventId} />
+              ) : undefined
+            }
+          />
         )}
       </SpaceChildrenVertically>
     </Form>

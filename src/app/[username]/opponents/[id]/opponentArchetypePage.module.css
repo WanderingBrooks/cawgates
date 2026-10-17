@@ -28,14 +28,7 @@
   padding: 1px var(--spacing-sm);
 }
 
-/* Edit, View format and Delete side by side, with the delete hint underneath */
-.titleActions {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: var(--spacing-xs);
-}
-
+/* View matchups and Edit side by side */
 .titleButtons {
   display: flex;
   gap: var(--spacing-sm);
@@ -49,28 +42,10 @@
   width: 100%;
 }
 
-.titleHint {
-  max-width: 360px;
-  text-align: right;
-}
-
-.desktopOnly {
-  display: none;
-}
-
-.mobileOnly {
-  display: flex;
-  align-items: flex-start;
-}
-
 @media (min-width: 768px) {
   .matchResult {
     flex: initial;
     justify-content: normal;
-  }
-
-  .titleActions {
-    align-items: flex-end;
   }
 
   .titleButtons > * {
@@ -79,13 +54,5 @@
 
   .titleButtons > a > button {
     width: auto;
-  }
-
-  .desktopOnly {
-    display: block;
-  }
-
-  .mobileOnly {
-    display: none;
   }
 }

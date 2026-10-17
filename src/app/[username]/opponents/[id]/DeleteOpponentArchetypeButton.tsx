@@ -5,7 +5,8 @@ import { useTranslations } from 'next-intl';
 import { deleteOpponentArchetype } from '@/app/actions/opponentArchetypes';
 import { Button, ErrorMessage } from '@/components';
 
-// Archetypes with matches can't be deleted; the page explains why in a hint
+// Archetypes with matches can't be deleted; the Edit dialog explains why in a
+// hint under the button row
 const DeleteOpponentArchetypeButton = ({
   opponentArchetypeId,
   name,
@@ -37,7 +38,6 @@ const DeleteOpponentArchetypeButton = ({
 
   return (
     <>
-      {error && <ErrorMessage error={error} />}
       <Button
         onClick={handleDelete}
         disabled={isDeleting || hasMatches}
@@ -45,6 +45,7 @@ const DeleteOpponentArchetypeButton = ({
       >
         {isDeleting ? t('deleting') : t('delete')}
       </Button>
+      {error && <ErrorMessage error={error} />}
     </>
   );
 };

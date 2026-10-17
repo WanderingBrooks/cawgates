@@ -71,8 +71,7 @@
     "editMatch": "Edit",
     "noMatches": "No matches yet — add one to get started",
     "matchesSection": "Matches",
-    "notesSection": "Notes",
-    "dangerZone": "Danger zone"
+    "notesSection": "Notes"
   },
   "matchForm": {
     "opponentArchetype": "Opponent archetype *",
@@ -90,7 +89,7 @@
     "title": "Edit match"
   },
   "deleteMatchButton": {
-    "delete": "Delete",
+    "delete": "Delete match",
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this match?"
   },
@@ -196,11 +195,10 @@
     "editTitle": "Edit opponent archetype",
     "viewMatchups": "View matchups",
     "noMatches": "No matches yet",
-    "delete": "Delete",
+    "delete": "Delete archetype",
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete {name}?",
-    "hasMatchesHint": "Opponent archetypes with matches can't be deleted",
-    "dangerZone": "Danger zone"
+    "hasMatchesHint": "Opponent archetypes with matches can't be deleted"
   },
   "discardConfirm": {
     "discardChanges": "Discard changes?",
