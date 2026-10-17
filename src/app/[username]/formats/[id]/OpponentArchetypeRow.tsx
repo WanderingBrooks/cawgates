@@ -68,9 +68,9 @@ const OpponentArchetypeRow = ({
       </td>
       {matchCount === 0 ? (
         <>
-          <td className="text-number">{t('noMatches')}</td>
-          <td className="text-number">{t('noMatches')}</td>
-          <td className="text-number">{t('noMatches')}</td>
+          <td className="text-number">{tCommon('noValue')}</td>
+          <td className="text-number">{tCommon('noValue')}</td>
+          <td className="text-number">{tCommon('noValue')}</td>
         </>
       ) : (
         <>

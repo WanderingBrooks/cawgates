@@ -11,6 +11,7 @@ const FormatsPage = async ({
 }) => {
   const { username } = await params;
   const t = await getTranslations('formats');
+  const tCommon = await getTranslations('common');
   const formatter = await getFormatter();
 
   const { formats } = await getFormatsForOwner({ ownerUsername: username });
@@ -53,7 +54,7 @@ const FormatsPage = async ({
                 <th className="text-number">{t('opponentArchetypes')}</th>
                 <th className="text-number">{t('matches')}</th>
                 <th className="text-number">
-                  <Tooltip content={t('matchWinPctExplainer')}>
+                  <Tooltip content={tCommon('matchWinPctExplainer')}>
                     {t('matchWinPct')}
                   </Tooltip>
                 </th>
@@ -82,7 +83,7 @@ const FormatsPage = async ({
                     )}
                   >
                     {format.matchCount === 0
-                      ? t('noMatches')
+                      ? tCommon('noValue')
                       : formatter.number(format.matchWinRate, {
                           style: 'percent',
                           maximumFractionDigits: 1,

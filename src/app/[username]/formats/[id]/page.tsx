@@ -15,6 +15,7 @@ const FormatPage = async ({
 }) => {
   const { username, id } = await params;
   const t = await getTranslations('formatPage');
+  const tCommon = await getTranslations('common');
   const tArchetype = await getTranslations('formatOpponentArchetype');
   const tDelete = await getTranslations('deleteFormatButton');
 
@@ -101,9 +102,15 @@ const FormatPage = async ({
                   <thead>
                     <tr>
                       <th>{t('archetype')}</th>
-                      <th className="text-number">{t('matchRecord')}</th>
-                      <th className="text-number">{t('gameRecord')}</th>
-                      <th className="text-number">{t('gameWinPct')}</th>
+                      <th className="text-number">
+                        {tCommon('matchRecordLabel')}
+                      </th>
+                      <th className="text-number">
+                        {tCommon('gameRecordLabel')}
+                      </th>
+                      <th className="text-number">
+                        {tCommon('gameWinPctLabel')}
+                      </th>
                       <th />
                     </tr>
                   </thead>

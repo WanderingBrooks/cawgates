@@ -4,7 +4,12 @@
   },
   "common": {
     "matchRecord": "{wins}-{losses}-{ties}",
-    "gameRecord": "{wins}-{losses}"
+    "gameRecord": "{wins}-{losses}",
+    "matchRecordLabel": "Match record",
+    "gameRecordLabel": "Game record",
+    "gameWinPctLabel": "Game win %",
+    "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
+    "noValue": "–"
   },
   "decks": {
     "title": "My decks",
@@ -24,11 +29,7 @@
     "totalMatchWins": "Match wins <num>{count}</num>",
     "totalMatchLosses": "Match losses <num>{count}</num>",
     "totalMatchWinPct": "<explainer>Match win %</explainer> <num>{rate}</num>",
-    "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
     "opponentArchetype": "Opponent archetype",
-    "matchRecord": "Match record",
-    "gameRecord": "Game record",
-    "gameWinPct": "Game win %",
     "noMatchesOwner": "No matches yet — create an event to start tracking",
     "noMatchesViewer": "No matches found",
     "createEvent": "Create event"
@@ -152,9 +153,7 @@
     "decks": "Decks",
     "opponentArchetypes": "Opponent archetypes",
     "matches": "Matches",
-    "matchWinPct": "Match win %",
-    "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
-    "noMatches": "–"
+    "matchWinPct": "Match win %"
   },
   "formatPage": {
     "edit": "Edit",
@@ -165,9 +164,6 @@
     "opponentArchetypesSection": "Opponent archetypes",
     "noOpponentArchetypes": "No opponent archetypes yet",
     "archetype": "Archetype",
-    "matchRecord": "Match record",
-    "gameRecord": "Game record",
-    "gameWinPct": "Game win %",
     "dangerZone": "Danger zone"
   },
   "formatOpponentArchetype": {
@@ -176,8 +172,7 @@
     "delete": "Delete",
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete {name}?",
-    "hasMatchesHint": "Opponent archetypes with matches can't be deleted",
-    "noMatches": "–"
+    "hasMatchesHint": "Opponent archetypes with matches can't be deleted"
   },
   "deleteFormatButton": {
     "delete": "Delete format",

@@ -53,7 +53,7 @@ const DeckPage = async ({
                     }),
                     num: renderNumber,
                     explainer: chunks => (
-                      <Tooltip content={t('matchWinPctExplainer')}>
+                      <Tooltip content={tCommon('matchWinPctExplainer')}>
                         {chunks}
                       </Tooltip>
                     ),
@@ -91,9 +91,9 @@ const DeckPage = async ({
             <thead>
               <tr>
                 <th>{t('opponentArchetype')}</th>
-                <th className="text-number">{t('matchRecord')}</th>
-                <th className="text-number">{t('gameRecord')}</th>
-                <th className="text-number">{t('gameWinPct')}</th>
+                <th className="text-number">{tCommon('matchRecordLabel')}</th>
+                <th className="text-number">{tCommon('gameRecordLabel')}</th>
+                <th className="text-number">{tCommon('gameWinPctLabel')}</th>
               </tr>
             </thead>
             <tbody>
