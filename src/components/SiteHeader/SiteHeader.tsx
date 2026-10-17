@@ -68,7 +68,7 @@ const SiteHeader = async ({
               {t('appName')}
             </Link>
             {links.length > 0 && (
-              <nav aria-label={t('mainNavigation')} className={classes.nav}>
+              <nav className={classes.nav}>
                 <NavLinks
                   links={links}
                   linkClassName={classes.navLink}
@@ -116,7 +116,7 @@ const SiteHeader = async ({
         )}
       </header>
       {links.length > 0 && (
-        <nav aria-label={t('mainNavigation')} className={classes.tabBar}>
+        <nav className={classes.tabBar}>
           <NavLinks
             links={links}
             linkClassName={cn('text-small', classes.tab)}

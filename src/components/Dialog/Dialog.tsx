@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 import classes from './dialog.module.css';
@@ -32,18 +32,12 @@ const Dialog = ({
   usePortal = false,
 }: DialogProps) => {
   const isClient = useIsClient();
-  const titleId = useId();
 
   const content = (
     <div className={cn(classes.dialogContainer, isOpen && classes.open)}>
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-        className={cn(classes.dialog, className)}
-      >
+      <div className={cn(classes.dialog, className)}>
         <div className={classes.header}>
-          <h2 id={titleId}>{title}</h2>
+          <h2>{title}</h2>
         </div>
         {/* Children only mount while open, so forms inside start fresh each time
             instead of keeping state (e.g. a typed name) from the last open */}

@@ -50,7 +50,6 @@ const NavLinks = ({
           <Link
             key={link.href}
             href={link.href}
-            aria-current={isActive ? 'page' : undefined}
             className={cn(linkClassName, isActive && activeClassName)}
           >
             {link.label}
