@@ -41,6 +41,8 @@ model Deck {
   id        String   @id @default(uuid())
   name      String
   slug      String
+  // No longer used: every deck is public. Kept until the deploy that stops
+  // reading it is complete, then dropped (see COLUMNS_TO_DROP.md)
   isPublic  Boolean  @default(false)
   userId    String
   formatId  String
