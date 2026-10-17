@@ -1,3 +1,14 @@
+# Checks every PR into trunk before it can be merged. The "Protect trunk"
+# ruleset requires the "Checks" job below to pass, so renaming
+# the job means updating the ruleset too.
+#
+# A possible future check, if it's ever needed: a Prisma migration drift
+# check, which fails when prisma/schema.prisma changes without a matching
+# migration in prisma/migrations. It would need a throwaway Postgres
+# service in this job (prisma migrate diff replays the migrations into a
+# shadow database), then:
+#   pnpm exec prisma migrate diff --from-migrations prisma/migrations \
+#     --to-schema prisma/schema.prisma --exit-code
 name: Checks
 
 on:
@@ -12,12 +23,14 @@ concurrency:
 
 jobs:
   checks:
-    name: Lint and typecheck
-    # GitHub's runners, never the homelab one: PRs from forks run untrusted code
+    name: Checks
+    # GitHub's runners, never the homelab one: the repo is public, so a PR
+    # from a fork would run a stranger's code on the homelab
     runs-on: ubuntu-latest
 
-    # SKIP_ENV_VALIDATION=1 lets postinstall's `prisma generate` and
-    # `next typegen` load src/lib/env.ts without real secrets, as in the Dockerfile
+    # SKIP_ENV_VALIDATION=1 lets postinstall's `prisma generate`, `next typegen`
+    # and `next build` load src/lib/env.ts without real secrets, as in the
+    # Dockerfile. Nothing here connects to the database.
     env:
       SKIP_ENV_VALIDATION: 1
 
@@ -25,26 +38,40 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # package.json has no packageManager field, so the version is set here.
+      # It matches the Dockerfile's `corepack prepare pnpm@10`.
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
 
+      # Caches the pnpm store between runs, keyed on pnpm-lock.yaml
       - name: Install Node
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: pnpm
 
+      # --frozen-lockfile fails if package.json and pnpm-lock.yaml disagree.
+      # postinstall runs `prisma generate`, which also fails on an invalid schema.
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # ESLint also runs Prettier (eslint-plugin-prettier), so this checks
+      # formatting too
       - name: Lint
         run: pnpm lint
 
-      # tsc checks the route types in .next/types, which a fresh checkout doesn't have
+      # tsc checks the route types in .next/types, which a fresh checkout
+      # doesn't have
       - name: Generate route types
         run: pnpm exec next typegen
 
       - name: Typecheck
         run: pnpm typecheck
+
+      # Catches what lint and tsc miss, such as server-only code imported into
+      # a client component or a page that fails to render at build time.
+      # Without it these only show up when the homelab deploy fails after merge.
+      - name: Build
+        run: pnpm build
