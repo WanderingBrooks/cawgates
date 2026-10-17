@@ -12,13 +12,13 @@ import {
   Tooltip,
 } from '@/components';
 import FormatButtons from './FormatButtons';
-import classes from './formatPage.module.css';
+import classes from './matchupsPage.module.css';
 
 const renderNumber = (chunks: ReactNode) => (
   <strong className="text-number">{chunks}</strong>
 );
 
-const FormatPage = async ({
+const MatchupsPage = async ({
   params,
   searchParams,
 }: {
@@ -30,7 +30,7 @@ const FormatPage = async ({
     searchParams,
   ]);
 
-  const t = await getTranslations('formatPage');
+  const t = await getTranslations('matchupsPage');
   const tCommon = await getTranslations('common');
   const tMatchups = await getTranslations('matchups');
   const formatter = await getFormatter();
@@ -190,4 +190,4 @@ const FormatPage = async ({
   );
 };
 
-export default FormatPage;
+export default MatchupsPage;

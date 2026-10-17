@@ -135,7 +135,7 @@
     "noFormatsGuest": "No matchups yet",
     "createDeck": "Create deck"
   },
-  "formatPage": {
+  "matchupsPage": {
     "addFormat": "+ Add format",
     "addFormatTitle": "Add format",
     "editFormat": "Edit format",

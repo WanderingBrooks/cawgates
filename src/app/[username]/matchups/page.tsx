@@ -6,7 +6,7 @@ import { Button, PageTitle } from '@/components';
 
 // There is no list of formats: this opens the most played one, and the
 // format page has a dropdown to switch between them
-const MatchupsPage = async ({
+const MatchupsIndexPage = async ({
   params,
 }: {
   params: Promise<{ username: string }>;
@@ -39,4 +39,4 @@ const MatchupsPage = async ({
   );
 };
 
-export default MatchupsPage;
+export default MatchupsIndexPage;

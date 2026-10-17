@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Button, Dialog, FormatForm } from '@/components';
 import DeleteFormatButton from './DeleteFormatButton';
-import classes from './formatPage.module.css';
+import classes from './matchupsPage.module.css';
 
 // Add and edit buttons for the Format dropdown. Deleting lives inside the
 // edit dialog, the same way Delete deck lives in the deck form.
@@ -22,7 +22,7 @@ const FormatButtons = ({
   deckCount: number;
   opponentArchetypeCount: number;
 }) => {
-  const t = useTranslations('formatPage');
+  const t = useTranslations('matchupsPage');
   const tDelete = useTranslations('deleteFormatButton');
   const router = useRouter();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
