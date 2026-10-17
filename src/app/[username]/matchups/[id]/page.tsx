@@ -147,9 +147,9 @@ const FormatPage = async ({
               <thead>
                 <tr>
                   <th>{t('archetype')}</th>
-                  <th className="text-number">{tCommon('matchRecordLabel')}</th>
-                  <th className="text-number">{tCommon('gameRecordLabel')}</th>
-                  <th className="text-number">{tCommon('gameWinPctLabel')}</th>
+                  <th className="text-number">{tCommon('matchesLabel')}</th>
+                  <th className="text-number">{tCommon('recordLabel')}</th>
+                  <th className="text-number">{tCommon('winPctLabel')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -167,9 +167,9 @@ const FormatPage = async ({
                         {row.opponentArchetype}
                       </Link>
                     </td>
+                    <td className="text-number">{row.totalMatches}</td>
                     {row.totalMatches === 0 ? (
                       <>
-                        <td className="text-number">{tCommon('noValue')}</td>
                         <td className="text-number">{tCommon('noValue')}</td>
                         <td className="text-number">{tCommon('noValue')}</td>
                       </>
@@ -182,22 +182,16 @@ const FormatPage = async ({
                             ties: row.matchDraws,
                           })}
                         </td>
-                        <td className="text-number">
-                          {tCommon('gameRecord', {
-                            wins: row.wins,
-                            losses: row.losses,
-                          })}
-                        </td>
                         <td
                           className={cn(
                             'text-number',
                             getWinRateTint({
-                              winRate: row.winRate,
+                              winRate: row.matchWinRate,
                               matchCount: row.totalMatches,
                             }),
                           )}
                         >
-                          {formatter.number(row.winRate, {
+                          {formatter.number(row.matchWinRate, {
                             style: 'percent',
                             maximumFractionDigits: 1,
                           })}

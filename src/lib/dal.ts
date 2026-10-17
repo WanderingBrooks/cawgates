@@ -71,37 +71,34 @@ const queryMatchStatistics = async ({
   });
 
   const deckStats = opponentArchetypes.map(opponentArchetype => {
-    const { wins, losses, matchWins, matchLosses, matchDraws } = getMatchRecord(
-      { matches: opponentArchetype.matches },
-    );
+    const { matchWins, matchLosses, matchDraws } = getMatchRecord({
+      matches: opponentArchetype.matches,
+    });
 
-    const total = wins + losses;
+    const totalMatches = opponentArchetype.matches.length;
 
     return {
       opponentArchetype: opponentArchetype.name,
       opponentArchetypeId: opponentArchetype.id,
-      totalMatches: opponentArchetype.matches.length,
-      total,
-      wins,
-      losses,
-      winRate: total === 0 ? 0 : wins / total,
+      totalMatches,
       matchWins,
       matchLosses,
       matchDraws,
+      matchWinRate: totalMatches === 0 ? 0 : matchWins / totalMatches,
     };
   });
 
   // Sort order:
-  // 1) Total games played (wins + losses) descending — more data first.
-  // 2) Win rate descending for ties in total games (wins/total).
+  // 1) Matches played descending — more data first.
+  // 2) Match win rate descending for ties in matches played.
   // 3) Alphabetical ascending fallback for deterministic ordering.
   const rows = deckStats.sort((a, b) => {
-    if (b.total !== a.total) {
-      return b.total - a.total;
+    if (b.totalMatches !== a.totalMatches) {
+      return b.totalMatches - a.totalMatches;
     }
 
-    if (b.winRate !== a.winRate) {
-      return b.winRate - a.winRate;
+    if (b.matchWinRate !== a.matchWinRate) {
+      return b.matchWinRate - a.matchWinRate;
     }
 
     return a.opponentArchetype.localeCompare(b.opponentArchetype);

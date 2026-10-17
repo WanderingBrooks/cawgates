@@ -5,9 +5,9 @@
   "common": {
     "matchRecord": "{wins}-{losses}-{ties}",
     "gameRecord": "{wins}-{losses}",
-    "matchRecordLabel": "Match record",
-    "gameRecordLabel": "Game record",
-    "gameWinPctLabel": "Game win %",
+    "matchesLabel": "Matches",
+    "recordLabel": "Record",
+    "winPctLabel": "Win %",
     "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
     "matchWinPct": "<num>{rate}</num> <explainer>match win</explainer>",
     "noValue": "–"
