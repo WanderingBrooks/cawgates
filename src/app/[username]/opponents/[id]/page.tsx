@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import {
@@ -11,31 +12,56 @@ import {
   Card,
   CardContent,
   CardTitle,
+  DeckFilter,
   PageTitle,
   SectionHeader,
+  Tooltip,
 } from '@/components';
 import { getOpponentArchetype } from '@/lib/dal';
+import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
 import OpponentArchetypeActions from './OpponentArchetypeActions';
 import classes from './opponentArchetypePage.module.css';
 
+const renderNumber = (chunks: ReactNode) => (
+  <strong className="text-number">{chunks}</strong>
+);
+
 const OpponentArchetypePage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ username: string; id: string }>;
+  searchParams: Promise<{ deck?: string | string[] }>;
 }) => {
-  const { username, id } = await params;
+  const [{ username, id }, { deck }] = await Promise.all([
+    params,
+    searchParams,
+  ]);
+
   const t = await getTranslations('opponentArchetypePage');
   const tCommon = await getTranslations('common');
   const formatter = await getFormatter();
 
-  const { opponentArchetype, isOwner } = await getOpponentArchetype({
-    ownerUsername: username,
-    opponentArchetypeId: id,
-  });
+  const { opponentArchetype, decks, selectedDeck, hasMatches, isOwner } =
+    await getOpponentArchetype({
+      ownerUsername: username,
+      opponentArchetypeId: id,
+      deckSlug: typeof deck === 'string' ? deck : undefined,
+    });
 
   const { matchWins, matchLosses, matchDraws } = getMatchRecord({
     matches: opponentArchetype.matches,
   });
+
+  const totalMatches = opponentArchetype.matches.length;
+
+  const deleteButton = (
+    <DeleteOpponentArchetypeButton
+      opponentArchetypeId={opponentArchetype.id}
+      name={opponentArchetype.name}
+      hasMatches={hasMatches}
+    />
+  );
 
   return (
     <>
@@ -43,7 +69,7 @@ const OpponentArchetypePage = async ({
         title={opponentArchetype.name}
         subtitle={[
           <span key="format">{opponentArchetype.format.name}</span>,
-          opponentArchetype.matches.length > 0 && (
+          totalMatches > 0 && (
             <strong key="record" className="text-number">
               {tCommon('matchRecord', {
                 wins: matchWins,
@@ -52,22 +78,57 @@ const OpponentArchetypePage = async ({
               })}
             </strong>
           ),
+          totalMatches > 0 && (
+            <span key="winRate">
+              {tCommon.rich('matchWinPct', {
+                rate: formatter.number(matchWins / totalMatches, {
+                  style: 'percent',
+                  maximumFractionDigits: 1,
+                }),
+                num: renderNumber,
+                explainer: chunks => (
+                  <Tooltip content={tCommon('matchWinPctExplainer')}>
+                    {chunks}
+                  </Tooltip>
+                ),
+              })}
+            </span>
+          ),
         ]}
         actions={
-          // Edit and View format are owner-only, so guests get no actions row
-          isOwner && (
-            <OpponentArchetypeActions
-              opponentArchetypeId={opponentArchetype.id}
-              formatId={opponentArchetype.formatId}
-              initialName={opponentArchetype.name}
-              username={username}
-            />
-          )
+          <div className={classes.titleActions}>
+            <div className={classes.titleButtons}>
+              <OpponentArchetypeActions
+                opponentArchetypeId={opponentArchetype.id}
+                formatId={opponentArchetype.formatId}
+                initialName={opponentArchetype.name}
+                username={username}
+                isOwner={isOwner}
+                deckSlug={selectedDeck?.slug ?? null}
+              />
+              {isOwner && (
+                <div className={classes.desktopOnly}>{deleteButton}</div>
+              )}
+            </div>
+            {/* Kept outside the button row so its width doesn't push the buttons apart */}
+            {isOwner && hasMatches && (
+              <p className={cn('hint', classes.titleHint, classes.desktopOnly)}>
+                {t('hasMatchesHint')}
+              </p>
+            )}
+          </div>
         }
       />
+      {/* No deck has played an archetype without matches */}
+      {decks.length > 0 && (
+        <DeckFilter
+          decks={decks}
+          selectedDeckSlug={selectedDeck?.slug ?? null}
+        />
+      )}
       <section className={classes.section}>
         <SectionHeader>{t('matchesSection')}</SectionHeader>
-        {opponentArchetype.matches.length === 0 ? (
+        {totalMatches === 0 ? (
           <p>{t('noMatches')}</p>
         ) : (
           <div className={classes.matchList}>
@@ -122,6 +183,15 @@ const OpponentArchetypePage = async ({
           </div>
         )}
       </section>
+
+      {/* On phones the delete button moves from the title down here */}
+      {isOwner && (
+        <section className={cn(classes.section, classes.mobileOnly)}>
+          <SectionHeader>{t('dangerZone')}</SectionHeader>
+          {deleteButton}
+          {hasMatches && <p className="hint">{t('hasMatchesHint')}</p>}
+        </section>
+      )}
     </>
   );
 };

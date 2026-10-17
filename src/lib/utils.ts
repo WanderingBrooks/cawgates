@@ -23,7 +23,7 @@ const RESERVED_SLUGS = [
   'register',
   'events',
   'decks',
-  'formats',
+  'matchups',
   'opponents',
 ];
 

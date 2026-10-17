@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
@@ -180,7 +181,9 @@ const deleteFormat = async ({
     formatId,
   });
 
-  redirect(`/${user.username}/formats`);
+  // The menu's Matchups link may point at the deleted format
+  revalidatePath(`/${user.username}`, 'layout');
+  redirect(`/${user.username}/matchups`);
 };
 
 export { getUserFormats, createFormat, updateFormat, deleteFormat };

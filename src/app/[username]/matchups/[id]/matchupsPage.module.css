@@ -1,0 +1,56 @@
+/* Each dropdown with the owner's add and edit buttons beside it */
+.filterRow {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-md);
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-sm);
+}
+
+.filterButtons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.filterButtons > * {
+  flex: 1;
+}
+
+.filterButtons > a > button {
+  width: 100%;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-sm);
+}
+
+@media (min-width: 768px) {
+  .filterRow {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--spacing-lg);
+  }
+
+  .filterGroup {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .filterButtons > * {
+    flex: initial;
+  }
+
+  .filterButtons > a > button {
+    width: auto;
+  }
+}

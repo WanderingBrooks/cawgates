@@ -5,34 +5,16 @@
   "common": {
     "matchRecord": "{wins}-{losses}-{ties}",
     "gameRecord": "{wins}-{losses}",
-    "matchRecordLabel": "Match record",
-    "gameRecordLabel": "Game record",
-    "gameWinPctLabel": "Game win %",
+    "matchesLabel": "Matches",
+    "recordLabel": "Record",
+    "winPctLabel": "Win %",
     "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
+    "matchWinPct": "<num>{rate}</num> <explainer>match win</explainer>",
     "noValue": "–"
-  },
-  "decks": {
-    "title": "My decks",
-    "guestTitle": "{username}''s decks",
-    "createDeck": "Create deck",
-    "noDecks": "No decks yet — create one to get started",
-    "deck": "Deck",
-    "format": "Format",
-    "events": "Events"
   },
   "createDeck": {
     "title": "Create deck",
     "firstDeckSubtitle": "Create your first deck to start tracking events"
-  },
-  "deckPage": {
-    "editDeck": "Edit deck",
-    "totalMatchWins": "Match wins <num>{count}</num>",
-    "totalMatchLosses": "Match losses <num>{count}</num>",
-    "totalMatchWinPct": "<explainer>Match win %</explainer> <num>{rate}</num>",
-    "opponentArchetype": "Opponent archetype",
-    "noMatchesOwner": "No matches yet — create an event to start tracking",
-    "noMatchesViewer": "No matches found",
-    "createEvent": "Create event"
   },
   "deckForm": {
     "name": "Deck name *",
@@ -84,7 +66,7 @@
   },
   "event": {
     "editEvent": "Edit event",
-    "viewDeck": "View deck",
+    "viewMatchups": "View matchups",
     "addMatch": "Add match",
     "editMatch": "Edit",
     "noMatches": "No matches yet — add one to get started",
@@ -133,6 +115,13 @@
     "createTitle": "Create format",
     "editTitle": "Edit format"
   },
+  "deckFilter": {
+    "label": "Deck",
+    "allDecks": "All decks"
+  },
+  "formatFilter": {
+    "label": "Format"
+  },
   "formatForm": {
     "name": "Name *",
     "create": "Create",
@@ -140,33 +129,23 @@
     "saving": "Saving...",
     "cancel": "Cancel"
   },
-  "formats": {
-    "title": "My formats",
-    "noFormats": "No formats yet — create one when you create a deck",
-    "format": "Format",
-    "decks": "Decks",
-    "opponentArchetypes": "Opponent archetypes",
-    "matches": "Matches",
-    "matchWinPct": "Match win %"
+  "matchups": {
+    "title": "Matchups",
+    "noFormats": "No formats yet — create a deck to get started",
+    "noFormatsGuest": "No matchups yet",
+    "createDeck": "Create deck"
   },
-  "formatPage": {
-    "edit": "Edit",
-    "editTitle": "Edit format",
-    "decksSection": "Decks",
-    "noDecks": "No decks use this format",
-    "deck": "Deck",
+  "matchupsPage": {
+    "addFormat": "+ Add format",
+    "addFormatTitle": "Add format",
+    "editFormat": "Edit format",
+    "editFormatTitle": "Edit format",
+    "editDeck": "Edit deck",
+    "addDeck": "+ Add deck",
     "opponentArchetypesSection": "Opponent archetypes",
     "noOpponentArchetypes": "No opponent archetypes yet",
-    "archetype": "Archetype",
-    "dangerZone": "Danger zone"
-  },
-  "formatOpponentArchetype": {
-    "edit": "Edit",
-    "editTitle": "Edit opponent archetype",
-    "delete": "Delete",
-    "deleting": "Deleting...",
-    "deleteConfirm": "Are you sure you want to delete {name}?",
-    "hasMatchesHint": "Opponent archetypes with matches can't be deleted"
+    "noDeckMatches": "No matches with this deck yet",
+    "archetype": "Archetype"
   },
   "deleteFormatButton": {
     "delete": "Delete format",
@@ -199,8 +178,7 @@
   "siteHeader": {
     "appName": "Cawgates",
     "events": "Events",
-    "decks": "Decks",
-    "formats": "Formats",
+    "matchups": "Matchups",
     "login": "Login",
     "register": "Register",
     "logout": "Logout"
@@ -216,8 +194,13 @@
     "matchesSection": "Matches",
     "edit": "Edit",
     "editTitle": "Edit opponent archetype",
-    "viewFormat": "View format",
-    "noMatches": "No matches yet"
+    "viewMatchups": "View matchups",
+    "noMatches": "No matches yet",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "deleteConfirm": "Are you sure you want to delete {name}?",
+    "hasMatchesHint": "Opponent archetypes with matches can't be deleted",
+    "dangerZone": "Danger zone"
   },
   "discardConfirm": {
     "discardChanges": "Discard changes?",

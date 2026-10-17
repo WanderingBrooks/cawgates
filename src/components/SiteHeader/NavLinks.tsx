@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
-type NavSection = 'events' | 'decks' | 'formats';
+type NavSection = 'events' | 'matchups';
 
 type NavLink = {
   href: string;
@@ -12,21 +12,21 @@ type NavLink = {
   section: NavSection;
 };
 
-// Opponent archetypes belong to a format, so their pages sit under Formats.
-// Deck pages live directly under the username (/[username]/[deckSlug]), so
-// anything else belongs to the Decks section.
-const getActiveSection = (pathname: string): NavSection => {
+// Opponent archetypes belong to a format, so their pages sit under
+// Matchups. Deck create and edit pages have no tab of their own, so none
+// is highlighted there.
+const getActiveSection = (pathname: string): NavSection | null => {
   const section = pathname.split('/').filter(Boolean)[1];
 
-  if (section === 'events' || section === 'formats') {
-    return section;
+  if (section === 'events') {
+    return 'events';
   }
 
-  if (section === 'opponents') {
-    return 'formats';
+  if (section === 'matchups' || section === 'opponents') {
+    return 'matchups';
   }
 
-  return 'decks';
+  return null;
 };
 
 const NavLinks = ({

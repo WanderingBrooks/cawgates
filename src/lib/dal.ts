@@ -31,9 +31,10 @@ const hideNotes = <T extends { notes: string | null }>({
 
 /**
  * Match statistics per opponent archetype in a format. With a deckId only
- * that deck's matches count, and only archetypes it has played are
- * returned. Without one, every deck's matches count and every archetype
- * in the format is returned, including ones with no matches yet.
+ * that deck's matches count. With a deckId or isPlayedOnly only archetypes
+ * with counted matches are returned. Without either, every deck's matches
+ * count and every archetype in the format is returned, including ones with
+ * no matches yet.
  *
  * This does no authorisation of its own, so it isn't exported: call it only
  * from the DAL functions below, after they have checked access to the deck
@@ -42,61 +43,62 @@ const hideNotes = <T extends { notes: string | null }>({
 const queryMatchStatistics = async ({
   deckId,
   formatId,
+  isPlayedOnly = false,
 }: {
   deckId?: string;
   formatId: string;
+  isPlayedOnly?: boolean;
 }) => {
-  // Archetypes are shared by every deck in the format, so for a deck only
-  // count the archetypes and matches it has actually played
-  const deckMatches = deckId ? { event: { deckId } } : undefined;
+  // Archetypes are shared by every deck in the format, so when only some
+  // matches count, only return the archetypes those matches were against.
+  // For guests this also keeps unplayed archetype names private.
+  const countedMatches =
+    deckId || isPlayedOnly ? { event: { deckId } } : undefined;
 
   const opponentArchetypes = await prisma.opponentArchetype.findMany({
     where: {
       formatId,
-      ...(deckMatches && { matches: { some: deckMatches } }),
+      ...(countedMatches && { matches: { some: countedMatches } }),
     },
     select: {
       id: true,
       name: true,
       matches: {
-        where: deckMatches,
+        where: countedMatches,
         select: { wins: true, losses: true },
       },
     },
   });
 
   const deckStats = opponentArchetypes.map(opponentArchetype => {
-    const { wins, losses, matchWins, matchLosses, matchDraws } = getMatchRecord(
-      { matches: opponentArchetype.matches },
-    );
+    const { matchWins, matchLosses, matchDraws } = getMatchRecord({
+      matches: opponentArchetype.matches,
+    });
 
-    const total = wins + losses;
+    const totalMatches = opponentArchetype.matches.length;
 
     return {
       opponentArchetype: opponentArchetype.name,
       opponentArchetypeId: opponentArchetype.id,
-      totalMatches: opponentArchetype.matches.length,
-      total,
-      wins,
-      losses,
-      winRate: total === 0 ? 0 : wins / total,
+      totalMatches,
       matchWins,
       matchLosses,
       matchDraws,
+      matchWinRate: totalMatches === 0 ? 0 : matchWins / totalMatches,
     };
   });
 
   // Sort order:
-  // 1) Total games played (wins + losses) descending — more data first.
-  // 2) Win rate descending for ties in total games (wins/total).
+  // 1) Matches played descending — more data first.
+  // 2) Match win rate descending for ties in matches played.
   // 3) Alphabetical ascending fallback for deterministic ordering.
   const rows = deckStats.sort((a, b) => {
-    if (b.total !== a.total) {
-      return b.total - a.total;
+    if (b.totalMatches !== a.totalMatches) {
+      return b.totalMatches - a.totalMatches;
     }
 
-    if (b.winRate !== a.winRate) {
-      return b.winRate - a.winRate;
+    if (b.matchWinRate !== a.matchWinRate) {
+      return b.matchWinRate - a.matchWinRate;
     }
 
     return a.opponentArchetype.localeCompare(b.opponentArchetype);
@@ -259,9 +261,11 @@ const getEvent = async ({
 const getOpponentArchetype = async ({
   ownerUsername,
   opponentArchetypeId,
+  deckSlug,
 }: {
   ownerUsername: string;
   opponentArchetypeId: string;
+  deckSlug?: string;
 }) => {
   const { owner, isOwner } = await getOwnerByUsername({
     username: ownerUsername,
@@ -271,7 +275,19 @@ const getOpponentArchetype = async ({
   const opponentArchetype = await prisma.opponentArchetype.findUnique({
     where: { id: opponentArchetypeId, format: { userId: owner.id } },
     include: {
-      format: true,
+      format: {
+        include: {
+          // Only decks that have played this archetype can be filtered by
+          decks: {
+            where: {
+              events: {
+                some: { matches: { some: { opponentArchetypeId } } },
+              },
+            },
+            orderBy: { createdAt: 'asc' },
+          },
+        },
+      },
       matches: {
         orderBy: { event: { date: 'desc' } },
         include: { event: { include: { deck: true } } },
@@ -289,18 +305,36 @@ const getOpponentArchetype = async ({
     notFound();
   }
 
+  // Before the deck filter, since any match blocks deleting the archetype
+  const hasMatches = opponentArchetype.matches.length > 0;
+
+  // Only decks that played the archetype can be selected, and any other slug
+  // falls back to all decks
+  const { decks } = opponentArchetype.format;
+  const selectedDeck = decks.find(deck => deck.slug === deckSlug) ?? null;
+
+  const matches = selectedDeck
+    ? opponentArchetype.matches.filter(
+        match => match.event.deckId === selectedDeck.id,
+      )
+    : opponentArchetype.matches;
+
   return {
     opponentArchetype: {
       ...opponentArchetype,
-      matches: opponentArchetype.matches.map(match =>
-        hideNotes({ item: match, isOwner }),
-      ),
+      matches: matches.map(match => ({
+        ...hideNotes({ item: match, isOwner }),
+        event: hideNotes({ item: match.event, isOwner }),
+      })),
     },
+    decks,
+    selectedDeck,
+    hasMatches,
     isOwner,
   };
 };
 
-// Formats have no public flag, so only the owner can see the formats pages
+// Every format, most played first
 const getFormatsForOwner = async ({
   ownerUsername,
 }: {
@@ -310,24 +344,39 @@ const getFormatsForOwner = async ({
     username: ownerUsername,
   });
 
-  if (!isOwner) {
-    notFound();
-  }
-
   const formats = await prisma.format.findMany({
     where: { userId: owner.id },
-    orderBy: { name: 'asc' },
-    include: {
-      _count: { select: { decks: true, opponentArchetypes: true } },
+    select: {
+      id: true,
+      name: true,
       // Every match is against an archetype in its format, so this covers
       // all of the format's matches
       opponentArchetypes: {
-        select: { matches: { select: { wins: true, losses: true } } },
+        select: {
+          _count: { select: { matches: true } },
+        },
       },
     },
   });
 
-  return { formats };
+  const formatsWithMatchCount = formats
+    .map(({ opponentArchetypes, ...format }) => ({
+      ...format,
+      matchCount: opponentArchetypes.reduce(
+        (sum, opponentArchetype) => sum + opponentArchetype._count.matches,
+        0,
+      ),
+    }))
+    // Alphabetical when tied
+    .sort((a, b) => {
+      if (b.matchCount !== a.matchCount) {
+        return b.matchCount - a.matchCount;
+      }
+
+      return a.name.localeCompare(b.name);
+    });
+
+  return { formats: formatsWithMatchCount, isOwner };
 };
 
 const getFormat = async ({
@@ -341,18 +390,11 @@ const getFormat = async ({
     username: ownerUsername,
   });
 
-  if (!isOwner) {
-    notFound();
-  }
-
   const format = await prisma.format.findUnique({
     where: { id: formatId, userId: owner.id },
     include: {
       decks: { orderBy: { createdAt: 'asc' } },
-      opponentArchetypes: {
-        orderBy: { name: 'asc' },
-        include: { _count: { select: { matches: true } } },
-      },
+      opponentArchetypes: { orderBy: { name: 'asc' } },
     },
   });
 
@@ -360,41 +402,33 @@ const getFormat = async ({
     notFound();
   }
 
-  return { format };
+  return { format, isOwner };
 };
 
 const getFormatWithMatchStatistics = async ({
   ownerUsername,
   formatId,
-}: {
-  ownerUsername: string;
-  formatId: string;
-}) => {
-  const { format } = await getFormat({ ownerUsername, formatId });
-
-  // Every deck's matches, and every archetype including unplayed ones
-  const { rows: matchStatistics } = await queryMatchStatistics({
-    formatId: format.id,
-  });
-
-  return { format, matchStatistics };
-};
-
-const getDeckWithMatchStatistics = async ({
-  ownerUsername,
   deckSlug,
 }: {
   ownerUsername: string;
-  deckSlug: string;
+  formatId: string;
+  deckSlug?: string;
 }) => {
-  const { deck, isOwner } = await getDeck({ ownerUsername, deckSlug });
+  const { format, isOwner } = await getFormat({ ownerUsername, formatId });
 
+  // An unknown slug falls back to all decks
+  const selectedDeck =
+    format.decks.find(deck => deck.slug === deckSlug) ?? null;
+
+  // The owner sees every archetype including unplayed ones, guests only the
+  // played ones, the same as the opponent archetype page
   const { rows: matchStatistics, totals } = await queryMatchStatistics({
-    deckId: deck.id,
-    formatId: deck.formatId,
+    formatId: format.id,
+    deckId: selectedDeck?.id,
+    isPlayedOnly: !isOwner,
   });
 
-  return { deck, isOwner, matchStatistics, totals };
+  return { format, isOwner, selectedDeck, matchStatistics, totals };
 };
 
 export {
@@ -404,7 +438,6 @@ export {
   getFormatWithMatchStatistics,
   getDecksForOwner,
   getDeck,
-  getDeckWithMatchStatistics,
   getEvents,
   getEvent,
   getOpponentArchetype,

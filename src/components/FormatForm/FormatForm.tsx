@@ -12,6 +12,7 @@ import Form from '../Form';
 import Input from '../Input';
 import SpaceChildrenVertically from '../SpaceChildrenVertically';
 import FlexRowBetween from '../FlexRowBetween';
+import classes from './formatForm.module.css';
 
 const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();
@@ -42,6 +43,10 @@ type FormatFormProps =
       initialName: string;
       onSuccess: (data: { id: string; name: string }) => void;
       onCancel: () => void;
+      // Shown on the left of the button row, the same as Delete deck in the
+      // deck form, with an optional hint under the row
+      deleteButton?: React.ReactNode;
+      deleteHint?: string;
     };
 
 const FormatForm = (props: FormatFormProps) => {
@@ -81,12 +86,31 @@ const FormatForm = (props: FormatFormProps) => {
           required
         />
         {state?.error && <ErrorMessage error={state.error} />}
-        <FlexRowBetween>
-          <Button type="button" variant="secondary" onClick={props.onCancel}>
-            {t('cancel')}
-          </Button>
-          <SubmitButton mode={props.mode} />
-        </FlexRowBetween>
+        {props.mode === 'edit' && props.deleteButton ? (
+          <>
+            <FlexRowBetween>
+              {props.deleteButton}
+              <div className={classes.rightButtons}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={props.onCancel}
+                >
+                  {t('cancel')}
+                </Button>
+                <SubmitButton mode={props.mode} />
+              </div>
+            </FlexRowBetween>
+            {props.deleteHint && <p className="hint">{props.deleteHint}</p>}
+          </>
+        ) : (
+          <FlexRowBetween>
+            <Button type="button" variant="secondary" onClick={props.onCancel}>
+              {t('cancel')}
+            </Button>
+            <SubmitButton mode={props.mode} />
+          </FlexRowBetween>
+        )}
       </SpaceChildrenVertically>
     </Form>
   );

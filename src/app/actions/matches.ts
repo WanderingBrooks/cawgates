@@ -75,9 +75,7 @@ const createMatch = async (
       },
     });
 
-    revalidatePath(
-      `/${user.username}/${event.deck.slug}/events/${validated.eventId}`,
-    );
+    revalidatePath(`/${user.username}/events/${validated.eventId}`);
 
     logEvent('match.created', {
       userId: user.userId,
@@ -166,9 +164,7 @@ const updateMatch = async (
       },
     });
 
-    revalidatePath(
-      `/${user.username}/${match.event.deck.slug}/events/${match.eventId}`,
-    );
+    revalidatePath(`/${user.username}/events/${match.eventId}`);
 
     logEvent('match.updated', {
       userId: user.userId,
@@ -213,9 +209,7 @@ const deleteMatch = async (matchId: string): Promise<ActionResult> => {
 
     await prisma.match.delete({ where: { id: matchId } });
 
-    revalidatePath(
-      `/${user.username}/${match.event.deck.slug}/events/${match.eventId}`,
-    );
+    revalidatePath(`/${user.username}/events/${match.eventId}`);
 
     logEvent('match.deleted', {
       userId: user.userId,

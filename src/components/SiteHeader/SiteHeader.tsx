@@ -11,6 +11,9 @@ type SiteHeaderProps = {
   // belong to anyone (login, register), which then show only the app name.
   ownerUsername?: string;
   isOwner?: boolean;
+  // The Matchups link goes straight to this format so it can be prefetched,
+  // instead of to /matchups, which only redirects to it
+  mostPlayedFormatId?: string;
   viewerUsername: string | null;
 };
 
@@ -20,13 +23,14 @@ type SiteHeaderProps = {
  * tab bar fixed to the bottom of the screen.
  *
  * When someone views another user's profile the links point at that
- * user's events and decks (formats are owner-only). The strip under the
- * header says whose profile it is, with a way back to the viewer's own
- * events or a prompt to sign up.
+ * user's events and matchups. The strip under the header says whose
+ * profile it is, with a way back to the viewer's own events or a prompt to
+ * sign up.
  */
 const SiteHeader = async ({
   ownerUsername,
   isOwner = false,
+  mostPlayedFormatId,
   viewerUsername,
 }: SiteHeaderProps) => {
   const t = await getTranslations('siteHeader');
@@ -40,19 +44,12 @@ const SiteHeader = async ({
           section: 'events',
         },
         {
-          href: `/${ownerUsername}/decks`,
-          label: t('decks'),
-          section: 'decks',
+          href: mostPlayedFormatId
+            ? `/${ownerUsername}/matchups/${mostPlayedFormatId}`
+            : `/${ownerUsername}/matchups`,
+          label: t('matchups'),
+          section: 'matchups',
         },
-        ...(isOwner
-          ? [
-              {
-                href: `/${ownerUsername}/formats`,
-                label: t('formats'),
-                section: 'formats' as const,
-              },
-            ]
-          : []),
       ]
     : [];
 

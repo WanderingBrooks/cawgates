@@ -54,14 +54,16 @@ const EventPage = async ({
         ]}
         actions={
           <>
+            <Link
+              href={`/${username}/matchups/${event.deck.formatId}?deck=${encodeURIComponent(event.deck.slug)}`}
+            >
+              <Button variant="secondary">{t('viewMatchups')}</Button>
+            </Link>
             {isOwner && (
               <Link href={`/${username}/events/${id}/edit`}>
                 <Button variant="secondary">{t('editEvent')}</Button>
               </Link>
             )}
-            <Link href={`/${username}/${event.deck.slug}`}>
-              <Button variant="secondary">{t('viewDeck')}</Button>
-            </Link>
             {isOwner && (
               <div className={classes.desktopOnly}>
                 <DeleteEventButton eventId={id} />
