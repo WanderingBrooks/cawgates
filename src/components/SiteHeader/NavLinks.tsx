@@ -12,14 +12,21 @@ type NavLink = {
   section: NavSection;
 };
 
-// Opponent archetypes and decks belong to a format, so their pages sit
-// under Matchups. Anything else belongs to Events.
-const MATCHUP_SECTIONS = ['matchups', 'opponents', 'decks'];
-
-const getActiveSection = (pathname: string): NavSection => {
+// Opponent archetypes belong to a format, so their pages sit under
+// Matchups. Deck create and edit pages have no tab of their own, so none
+// is highlighted there.
+const getActiveSection = (pathname: string): NavSection | null => {
   const section = pathname.split('/').filter(Boolean)[1];
 
-  return MATCHUP_SECTIONS.includes(section) ? 'matchups' : 'events';
+  if (section === 'events') {
+    return 'events';
+  }
+
+  if (section === 'matchups' || section === 'opponents') {
+    return 'matchups';
+  }
+
+  return null;
 };
 
 const NavLinks = ({
