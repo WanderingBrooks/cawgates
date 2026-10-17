@@ -5,7 +5,9 @@ import { getFormatsForOwner } from '@/lib/dal';
 import { Button, PageTitle } from '@/components';
 
 // There is no list of formats: this opens the most played one, and the
-// format page has a dropdown to switch between them
+// format page has a dropdown to switch between them. The menu links
+// straight to that format, so this is only reached by typing the URL or
+// when the owner has no formats yet.
 const MatchupsIndexPage = async ({
   params,
 }: {

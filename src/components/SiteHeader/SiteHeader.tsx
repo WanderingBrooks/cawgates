@@ -11,6 +11,9 @@ type SiteHeaderProps = {
   // belong to anyone (login, register), which then show only the app name.
   ownerUsername?: string;
   isOwner?: boolean;
+  // The Matchups link goes straight to this format so it can be prefetched,
+  // instead of to /matchups, which only redirects to it
+  mostPlayedFormatId?: string;
   viewerUsername: string | null;
 };
 
@@ -27,6 +30,7 @@ type SiteHeaderProps = {
 const SiteHeader = async ({
   ownerUsername,
   isOwner = false,
+  mostPlayedFormatId,
   viewerUsername,
 }: SiteHeaderProps) => {
   const t = await getTranslations('siteHeader');
@@ -40,7 +44,9 @@ const SiteHeader = async ({
           section: 'events',
         },
         {
-          href: `/${ownerUsername}/matchups`,
+          href: mostPlayedFormatId
+            ? `/${ownerUsername}/matchups/${mostPlayedFormatId}`
+            : `/${ownerUsername}/matchups`,
           label: t('matchups'),
           section: 'matchups',
         },
