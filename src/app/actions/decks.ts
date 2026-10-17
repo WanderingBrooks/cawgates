@@ -71,7 +71,9 @@ const createDeck = async (
       formatId: deck.formatId,
     });
 
-    redirect(`/${user.username}/${deck.slug}`);
+    redirect(
+      `/${user.username}/formats/${deck.formatId}?deck=${encodeURIComponent(deck.slug)}`,
+    );
   } catch (error: unknown) {
     if (
       typeof error === 'object' &&
@@ -158,7 +160,9 @@ const updateDeck = async (
       formatId: updated.formatId,
     });
 
-    redirect(`/${user.username}/${updated.slug}`);
+    redirect(
+      `/${user.username}/formats/${updated.formatId}?deck=${encodeURIComponent(updated.slug)}`,
+    );
   } catch (error: unknown) {
     if (
       typeof error === 'object' &&
@@ -205,7 +209,7 @@ const deleteDeck = async (deckId: string): Promise<ActionResult> => {
     deckId,
   });
 
-  redirect(`/${user.username}/decks`);
+  redirect(`/${user.username}/formats/${deck.formatId}`);
 };
 
 export { getUserDecks, createDeck, updateDeck, deleteDeck };

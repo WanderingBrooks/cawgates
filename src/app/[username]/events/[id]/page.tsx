@@ -59,7 +59,9 @@ const EventPage = async ({
                 <Button variant="secondary">{t('editEvent')}</Button>
               </Link>
             )}
-            <Link href={`/${username}/${event.deck.slug}`}>
+            <Link
+              href={`/${username}/formats/${event.deck.formatId}?deck=${encodeURIComponent(event.deck.slug)}`}
+            >
               <Button variant="secondary">{t('viewDeck')}</Button>
             </Link>
             {isOwner && (
