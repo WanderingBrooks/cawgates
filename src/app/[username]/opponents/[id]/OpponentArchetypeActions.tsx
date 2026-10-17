@@ -28,11 +28,6 @@ const OpponentArchetypeActions = ({
 
   return (
     <>
-      {isOwner && (
-        <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
-          {t('edit')}
-        </Button>
-      )}
       <Link
         href={`/${username}/matchups/${formatId}${
           deckSlug ? `?deck=${encodeURIComponent(deckSlug)}` : ''
@@ -40,6 +35,11 @@ const OpponentArchetypeActions = ({
       >
         <Button variant="secondary">{t('viewFormat')}</Button>
       </Link>
+      {isOwner && (
+        <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
+          {t('edit')}
+        </Button>
+      )}
       {isOwner && (
         <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
           <OpponentArchetypeForm
