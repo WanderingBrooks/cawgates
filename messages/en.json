@@ -65,7 +65,7 @@
   },
   "event": {
     "editEvent": "Edit event",
-    "viewDeck": "View deck",
+    "viewMatchups": "View matchups",
     "addMatch": "Add match",
     "editMatch": "Edit",
     "noMatches": "No matches yet — add one to get started",
