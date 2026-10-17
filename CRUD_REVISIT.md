@@ -11,57 +11,103 @@
   archetype subtitles both read "record · match win %", and every stat is
   match-based (game scores only on individual matches), like Decks and the
   City.
-- Next: where formats and decks are created and edited (below).
+- Next: apply the create/edit/delete rules below, working through the
+  checklist.
 
-## Where formats and decks are created and edited
+## Create, edit and delete rules
 
-Merging the deck pages into Matchups (PR #69) made viewing simpler but scattered
-the create/edit/delete actions. This needs more thought before changing.
+Decided 2026-10-17. Everything that can be managed (formats, decks, opponent
+archetypes, events, matches) follows these rules.
 
-### Where things are now
+1. **Titles name the page, not what's selected.** Matchups is titled
+   "Matchups". The format and deck it shows are picked in dropdowns, and the
+   subtitle is "context · record".
+2. **Add and edit sit next to the dropdown that picks the thing.** Wherever a
+   format, deck or archetype is chosen from a dropdown, in a filter row or a
+   form, it looks like this:
 
-| Action        | Where                                                         | Problem                                                     |
-| ------------- | ------------------------------------------------------------- | ----------------------------------------------------------- |
-| Create deck   | Button next to the Deck dropdown on Matchups                  | Reads as part of the filter                                 |
-| Edit deck     | Button next to the Deck dropdown, only once a deck is picked  | Hidden until you happen to filter                           |
-| Create format | Only inside the deck form ("+ Add new…" in its format picker) | Practically undiscoverable                                  |
-| Edit format   | "Edit" button by the Matchups page title                      | On a page called Matchups, "Edit" doesn't say what it edits |
-| Delete format | Next to Edit, plus a mobile danger zone                       | Clutters the title area                                     |
+   ```
+   Format [ Pauper ▾ ]  [+ Add format]  [Edit format]
+   ```
 
-### Option A: manage each thing next to the dropdown that selects it
+   - "+ Add …" is a button, never an option inside the dropdown.
+   - "Edit …" only shows once something is selected.
+   - Both are owner-only. Guests just see the dropdown.
+   - Exceptions: the event form's deck picker only gets "+ Add deck" (no
+     Edit), and the archetype page's deck filter stays view-only.
 
-Follows the pattern the deck form's format picker already uses (a select with
-"+ Add new…" plus an Edit button).
+3. **A filter dropdown always shows**, even with one option, so the page
+   always says what it's showing.
+4. **Delete lives inside the edit form or dialog** for everything, matches
+   included, at the bottom, with its
+   "can't delete because…" hint next to it, the way Delete deck already
+   works. There are no delete buttons on pages or cards, and no mobile
+   "danger zone" sections.
+5. **Page buttons go View, then Edit.** For example "View matchups · Edit
+   event". Delete is no longer a page button (rule 4).
 
-```
-Format [ Pauper        ▾ ]  [Edit format]     Deck [ Cawgates      ▾ ]  [Edit deck]
-         Pauper                                       All decks
-         + New format…                                Cawgates
-                                                      + New deck…
-```
+## Checklist
 
-- The owner always sees the Format dropdown, since it holds "+ New format…".
-  Guests see it only with 2+ formats.
-- "+ New format…" opens the existing `FormatForm` dialog, then goes to the new
-  format.
-- Edit format sits next to the Format dropdown.
-- Delete format moves inside the Edit format dialog, the same way Delete deck
-  lives in the deck form. That removes the title buttons, the hint and the
-  mobile danger zone.
-- "+ New deck…" goes to `/decks/create?format=<id>` with the format already
-  chosen. The Create deck button goes away.
-- The page title becomes just the format name and totals.
+### Matchups page (`src/app/[username]/matchups/[id]/page.tsx`)
 
-### Option B: a separate Manage page
+Done in PR #69. Everything after this section is a follow-up PR.
 
-One page that lists formats, decks and archetypes with all the editing on it,
-so Matchups is only for viewing. Cleaner separation, but it brings back a list
-page right after we removed them.
+- [ ] Title is "Matchups"; the subtitle stays "record · match win %"
+- [ ] Format dropdown always shows (drop the "2+ formats" check)
+- [ ] "+ Add format" and "Edit format" buttons next to the Format dropdown
+      (reuse the `FormatForm` dialog; after adding, go to the new format)
+- [ ] Delete format moves into the Edit format dialog; remove the title
+      buttons, the title hint and the mobile danger zone
+- [ ] "+ Add deck" and "Edit deck" next to the Deck dropdown (replacing the
+      Create deck and Edit deck buttons). "+ Add deck" opens the deck create
+      page with this format already chosen
 
-### Open questions
+### Opponent archetype page (`src/app/[username]/opponents/[id]/page.tsx`)
 
-- Is the filter row the right home for editing, or does it make the filter
-  harder to read?
-- Should creating a format be possible without creating a deck at the same
-  time?
-- Mock it up before building.
+- [ ] Delete moves into the Edit dialog, with the "has matches" hint; remove
+      the title Delete button, its hint and the mobile danger zone
+- [ ] Buttons are "View matchups · Edit"
+
+### Event page (`src/app/[username]/events/[id]/page.tsx`)
+
+- [ ] Delete event moves into the event edit page (`EventForm` in edit
+      mode); remove the title Delete button and the mobile danger zone
+- [ ] Buttons are "View matchups · Edit event"
+
+### Matches (`MatchSection.tsx`, `MatchForm.tsx`)
+
+- [ ] Each match card only has "Edit"; Delete moves into the Edit match
+      dialog
+- [ ] Opponent archetype picker: "+ Add archetype" button next to it instead
+      of the "+ Add new..." option; the Edit button stays
+
+### Deck form (`src/components/DeckForm`)
+
+- [ ] Format picker: "+ Add format" button next to it instead of the
+      "+ Add new..." option; the Edit button stays
+- [ ] Delete deck is already inside the form; check it matches rule 4
+
+### Event form (`src/app/[username]/events/EventForm.tsx`)
+
+- [ ] Deck picker (create mode): "+ Add deck" next to it (no Edit deck),
+      replacing the "create a deck" link in the hint. How it works is still
+      open (below)
+
+### Shared components
+
+- [ ] `FormatSelect` and `OpponentArchetypeSelect` are ~90% the same (see the
+      TODO in both). Merging them into one picker with the add and edit
+      buttons is the natural way to apply rule 2 to both, and the event
+      form's deck picker could use it too.
+
+## Open questions
+
+- **How "+ Add deck" works in the event form.** The deck form is a full
+  page, not a dialog, so the button either leaves the event form or the deck
+  form has to open in a dialog. Undecided, since a dialog is a big change.
+
+## Decided
+
+- The event form's deck picker gets no "Edit deck".
+- The archetype page's deck filter stays view-only.
+- Deleting a match moves into its Edit dialog, the same as everything else.
