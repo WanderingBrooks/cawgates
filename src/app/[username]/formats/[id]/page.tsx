@@ -109,9 +109,7 @@ const FormatPage = async ({
                       <th className="text-number">{t('matchRecord')}</th>
                       <th className="text-number">{t('gameRecord')}</th>
                       <th className="text-number">{t('gameWinPct')}</th>
-                      <th>
-                        <span className="visually-hidden">{t('actions')}</span>
-                      </th>
+                      <th />
                     </tr>
                   </thead>
                   <tbody>

@@ -297,16 +297,6 @@ td.text-number {
   background-color: var(--color-loss-bg);
 }
 
-/* Hidden on screen but read by screen readers, e.g. an actions column header */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 /* Wraps a table so it scrolls sideways instead of widening the page */
 .table-scroll {
   overflow-x: auto;
