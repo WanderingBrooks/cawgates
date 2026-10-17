@@ -294,8 +294,14 @@ const getOpponentArchetype = async ({
     include: {
       format: {
         include: {
+          // Only decks that have played this archetype can be filtered by
           decks: {
-            where: getVisibleDecksWhere({ isOwner }),
+            where: {
+              ...getVisibleDecksWhere({ isOwner }),
+              events: {
+                some: { matches: { some: { opponentArchetypeId } } },
+              },
+            },
             orderBy: { createdAt: 'asc' },
           },
         },
@@ -313,9 +319,7 @@ const getOpponentArchetype = async ({
   }
 
   // Without a public match a guest has nothing to see, and the page would
-  // otherwise reveal the archetype's name. Checked before the deck filter,
-  // so picking a deck that hasn't played the archetype shows no matches
-  // instead of a 404.
+  // otherwise reveal the archetype's name
   if (!isOwner && opponentArchetype.matches.length === 0) {
     notFound();
   }
@@ -324,7 +328,7 @@ const getOpponentArchetype = async ({
   const hasMatches = opponentArchetype.matches.length > 0;
 
   // Same rules as the format page: only decks the viewer can see can be
-  // selected, and an unknown slug falls back to all decks
+  // selected, and any other slug falls back to all decks
   const { decks } = opponentArchetype.format;
   const selectedDeck = decks.find(deck => deck.slug === deckSlug) ?? null;
 

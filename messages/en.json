@@ -198,7 +198,6 @@
     "editTitle": "Edit opponent archetype",
     "viewFormat": "View format",
     "noMatches": "No matches yet",
-    "noDeckMatches": "No matches with this deck yet",
     "delete": "Delete",
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete {name}?",

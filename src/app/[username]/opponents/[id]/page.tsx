@@ -95,11 +95,17 @@ const OpponentArchetypePage = async ({
           </div>
         }
       />
-      <DeckFilter decks={decks} selectedDeckSlug={selectedDeck?.slug ?? null} />
+      {/* No deck has played an archetype without matches */}
+      {decks.length > 0 && (
+        <DeckFilter
+          decks={decks}
+          selectedDeckSlug={selectedDeck?.slug ?? null}
+        />
+      )}
       <section className={classes.section}>
         <SectionHeader>{t('matchesSection')}</SectionHeader>
         {opponentArchetype.matches.length === 0 ? (
-          <p>{selectedDeck ? t('noDeckMatches') : t('noMatches')}</p>
+          <p>{t('noMatches')}</p>
         ) : (
           <div className={classes.matchList}>
             {opponentArchetype.matches.map(match => (
