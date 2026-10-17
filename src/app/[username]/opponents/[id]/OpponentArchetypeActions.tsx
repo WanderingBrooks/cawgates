@@ -33,7 +33,7 @@ const OpponentArchetypeActions = ({
           deckSlug ? `?deck=${encodeURIComponent(deckSlug)}` : ''
         }`}
       >
-        <Button variant="secondary">{t('viewFormat')}</Button>
+        <Button variant="secondary">{t('viewMatchups')}</Button>
       </Link>
       {isOwner && (
         <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
