@@ -4,13 +4,6 @@
   gap: var(--spacing-sm);
 }
 
-.notes {
-  box-sizing: border-box;
-  padding: var(--spacing-md) var(--spacing-lg);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-}
-
 .desktopOnly {
   display: none;
 }

@@ -2,7 +2,13 @@ import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { cn, formatDate, getMatchResultTint } from '@/lib/utils';
 import Markdown from 'react-markdown';
-import { PageTitle, SectionHeader } from '@/components';
+import {
+  Card,
+  CardContent,
+  CardTitle,
+  PageTitle,
+  SectionHeader,
+} from '@/components';
 import { getOpponentArchetype } from '@/lib/dal';
 import OpponentArchetypeActions from './OpponentArchetypeActions';
 import classes from './opponentArchetypePage.module.css';
@@ -67,8 +73,8 @@ const OpponentArchetypePage = async ({
         ) : (
           <div className={classes.matchList}>
             {opponentArchetype.matches.map(match => (
-              <article key={match.id} className={classes.matchCard}>
-                <div className={classes.matchHeader}>
+              <Card key={match.id}>
+                <CardTitle>
                   <div className={classes.matchEvent}>
                     <Link
                       href={`/${username}/events/${match.event.id}`}
@@ -104,15 +110,15 @@ const OpponentArchetypePage = async ({
                       })}
                     </span>
                   </div>
-                </div>
+                </CardTitle>
                 {isOwner && match.notes && (
-                  <div className={classes.matchNotes}>
+                  <CardContent>
                     <div className="prose">
                       <Markdown>{match.notes}</Markdown>
                     </div>
-                  </div>
+                  </CardContent>
                 )}
-              </article>
+              </Card>
             ))}
           </div>
         )}

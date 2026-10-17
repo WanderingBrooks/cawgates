@@ -1,4 +1,5 @@
 import Button from './Button';
+import { Card, CardContent, CardTitle } from './Card';
 import DiscardChangesConfirm from './DiscardChangesConfirm';
 import Form from './Form';
 import Dialog from './Dialog';
@@ -22,6 +23,9 @@ import { Tooltip } from './Tooltip';
 
 export {
   Button,
+  Card,
+  CardContent,
+  CardTitle,
   DiscardChangesConfirm,
   Form,
   DeckForm,

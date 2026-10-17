@@ -4,7 +4,15 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { deleteMatch } from '@/app/actions/matches';
-import { Button, ErrorMessage, Dialog, SectionHeader } from '@/components';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardTitle,
+  ErrorMessage,
+  Dialog,
+  SectionHeader,
+} from '@/components';
 import MatchForm from './MatchForm';
 import { MatchInputForm } from '@/lib/types';
 import { cn, getMatchResultTint } from '@/lib/utils';
@@ -92,8 +100,8 @@ const MatchSection = ({
       {matches.length > 0 && (
         <div className={classes.matchList}>
           {matches.map(match => (
-            <article key={match.id} className={classes.matchCard}>
-              <div className={classes.matchHeader}>
+            <Card key={match.id}>
+              <CardTitle>
                 <div className={classes.matchSummary}>
                   <Link
                     href={`/${username}/opponents/${match.opponentArchetypeId}`}
@@ -139,15 +147,15 @@ const MatchSection = ({
                     </Button>
                   </div>
                 )}
-              </div>
+              </CardTitle>
               {isOwner && match.notes && (
-                <div className={classes.matchNotes}>
+                <CardContent>
                   <div className="prose">
                     <Markdown>{match.notes}</Markdown>
                   </div>
-                </div>
+                </CardContent>
               )}
-            </article>
+            </Card>
           ))}
         </div>
       )}

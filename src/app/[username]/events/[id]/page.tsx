@@ -1,7 +1,13 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { cn, formatDate } from '@/lib/utils';
-import { Button, PageTitle, SectionHeader } from '@/components';
+import {
+  Button,
+  Card,
+  CardContent,
+  PageTitle,
+  SectionHeader,
+} from '@/components';
 import { getEvent } from '@/lib/dal';
 import DeleteEventButton from './DeleteEventButton';
 import MatchSection from './MatchSection';
@@ -67,11 +73,13 @@ const EventPage = async ({
       {isOwner && event.notes && (
         <section className={classes.section}>
           <SectionHeader>{t('notesSection')}</SectionHeader>
-          <div className={classes.notes}>
-            <div className="prose">
-              <Markdown>{event.notes}</Markdown>
-            </div>
-          </div>
+          <Card>
+            <CardContent>
+              <div className="prose">
+                <Markdown>{event.notes}</Markdown>
+              </div>
+            </CardContent>
+          </Card>
         </section>
       )}
       <MatchSection
