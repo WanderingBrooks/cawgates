@@ -11,11 +11,16 @@ const OpponentArchetypeActions = ({
   formatId,
   initialName,
   username,
+  isOwner,
+  deckSlug,
 }: {
   opponentArchetypeId: string;
   formatId: string;
   initialName: string;
   username: string;
+  isOwner: boolean;
+  // Carried back to the format page so it keeps the same deck filter
+  deckSlug: string | null;
 }) => {
   const t = useTranslations('opponentArchetypePage');
   const router = useRouter();
@@ -23,24 +28,32 @@ const OpponentArchetypeActions = ({
 
   return (
     <>
-      <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
-        {t('edit')}
-      </Button>
-      <Link href={`/${username}/formats/${formatId}`}>
+      {isOwner && (
+        <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
+          {t('edit')}
+        </Button>
+      )}
+      <Link
+        href={`/${username}/formats/${formatId}${
+          deckSlug ? `?deck=${encodeURIComponent(deckSlug)}` : ''
+        }`}
+      >
         <Button variant="secondary">{t('viewFormat')}</Button>
       </Link>
-      <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
-        <OpponentArchetypeForm
-          mode="edit"
-          opponentArchetypeId={opponentArchetypeId}
-          initialName={initialName}
-          onSuccess={() => {
-            setIsDialogOpen(false);
-            router.refresh();
-          }}
-          onCancel={() => setIsDialogOpen(false)}
-        />
-      </Dialog>
+      {isOwner && (
+        <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
+          <OpponentArchetypeForm
+            mode="edit"
+            opponentArchetypeId={opponentArchetypeId}
+            initialName={initialName}
+            onSuccess={() => {
+              setIsDialogOpen(false);
+              router.refresh();
+            }}
+            onCancel={() => setIsDialogOpen(false)}
+          />
+        </Dialog>
+      )}
     </>
   );
 };

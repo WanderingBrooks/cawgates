@@ -225,7 +225,8 @@
     "edit": "Edit",
     "editTitle": "Edit opponent archetype",
     "viewFormat": "View format",
-    "noMatches": "No matches yet"
+    "noMatches": "No matches yet",
+    "noDeckMatches": "No matches with this deck yet"
   },
   "discardConfirm": {
     "discardChanges": "Discard changes?",

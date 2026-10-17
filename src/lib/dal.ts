@@ -278,9 +278,11 @@ const getEvent = async ({
 const getOpponentArchetype = async ({
   ownerUsername,
   opponentArchetypeId,
+  deckSlug,
 }: {
   ownerUsername: string;
   opponentArchetypeId: string;
+  deckSlug?: string;
 }) => {
   const { owner, isOwner } = await getOwnerByUsername({
     username: ownerUsername,
@@ -290,8 +292,16 @@ const getOpponentArchetype = async ({
   const opponentArchetype = await prisma.opponentArchetype.findUnique({
     where: { id: opponentArchetypeId, format: { userId: owner.id } },
     include: {
-      format: true,
+      format: {
+        include: {
+          decks: {
+            where: getVisibleDecksWhere({ isOwner }),
+            orderBy: { createdAt: 'asc' },
+          },
+        },
+      },
       matches: {
+        where: getVisibleMatchesWhere({ isOwner }),
         orderBy: { event: { date: 'desc' } },
         include: { event: { include: { deck: true } } },
       },
@@ -302,19 +312,32 @@ const getOpponentArchetype = async ({
     notFound();
   }
 
-  // Without a match a guest has nothing to see, and the page would otherwise
-  // reveal the name of an archetype that's only in the owner's format list
+  // Without a public match a guest has nothing to see, and the page would
+  // otherwise reveal the archetype's name. Checked before the deck filter,
+  // so picking a deck that hasn't played the archetype shows no matches
+  // instead of a 404.
   if (!isOwner && opponentArchetype.matches.length === 0) {
     notFound();
   }
 
+  // Same rules as the format page: only decks the viewer can see can be
+  // selected, and an unknown slug falls back to all decks
+  const { decks } = opponentArchetype.format;
+  const selectedDeck = decks.find(deck => deck.slug === deckSlug) ?? null;
+
+  const matches = selectedDeck
+    ? opponentArchetype.matches.filter(
+        match => match.event.deckId === selectedDeck.id,
+      )
+    : opponentArchetype.matches;
+
   return {
     opponentArchetype: {
       ...opponentArchetype,
-      matches: opponentArchetype.matches.map(match =>
-        hideNotes({ item: match, isOwner }),
-      ),
+      matches: matches.map(match => hideNotes({ item: match, isOwner })),
     },
+    decks,
+    selectedDeck,
     isOwner,
   };
 };

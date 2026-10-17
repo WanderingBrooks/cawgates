@@ -11,6 +11,7 @@ import {
   Card,
   CardContent,
   CardTitle,
+  DeckFilter,
   PageTitle,
   SectionHeader,
 } from '@/components';
@@ -20,18 +21,26 @@ import classes from './opponentArchetypePage.module.css';
 
 const OpponentArchetypePage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ username: string; id: string }>;
+  searchParams: Promise<{ deck?: string | string[] }>;
 }) => {
-  const { username, id } = await params;
+  const [{ username, id }, { deck }] = await Promise.all([
+    params,
+    searchParams,
+  ]);
+
   const t = await getTranslations('opponentArchetypePage');
   const tCommon = await getTranslations('common');
   const formatter = await getFormatter();
 
-  const { opponentArchetype, isOwner } = await getOpponentArchetype({
-    ownerUsername: username,
-    opponentArchetypeId: id,
-  });
+  const { opponentArchetype, decks, selectedDeck, isOwner } =
+    await getOpponentArchetype({
+      ownerUsername: username,
+      opponentArchetypeId: id,
+      deckSlug: typeof deck === 'string' ? deck : undefined,
+    });
 
   const { matchWins, matchLosses, matchDraws } = getMatchRecord({
     matches: opponentArchetype.matches,
@@ -54,21 +63,21 @@ const OpponentArchetypePage = async ({
           ),
         ]}
         actions={
-          // Edit and View format are owner-only, so guests get no actions row
-          isOwner && (
-            <OpponentArchetypeActions
-              opponentArchetypeId={opponentArchetype.id}
-              formatId={opponentArchetype.formatId}
-              initialName={opponentArchetype.name}
-              username={username}
-            />
-          )
+          <OpponentArchetypeActions
+            opponentArchetypeId={opponentArchetype.id}
+            formatId={opponentArchetype.formatId}
+            initialName={opponentArchetype.name}
+            username={username}
+            isOwner={isOwner}
+            deckSlug={selectedDeck?.slug ?? null}
+          />
         }
       />
+      <DeckFilter decks={decks} selectedDeckSlug={selectedDeck?.slug ?? null} />
       <section className={classes.section}>
         <SectionHeader>{t('matchesSection')}</SectionHeader>
         {opponentArchetype.matches.length === 0 ? (
-          <p>{t('noMatches')}</p>
+          <p>{selectedDeck ? t('noDeckMatches') : t('noMatches')}</p>
         ) : (
           <div className={classes.matchList}>
             {opponentArchetype.matches.map(match => (
