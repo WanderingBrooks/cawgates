@@ -27,7 +27,7 @@ const DeleteMatchButton = ({
 
     const result = await deleteMatch(matchId);
 
-    if (result && result.error) {
+    if (result && !result.success) {
       setError(result.error);
       setIsDeleting(false);
       return;
@@ -38,10 +38,10 @@ const DeleteMatchButton = ({
 
   return (
     <>
-      {error && <ErrorMessage error={error} />}
       <Button onClick={handleDelete} disabled={isDeleting} variant="danger">
         {isDeleting ? t('deleting') : t('delete')}
       </Button>
+      {error && <ErrorMessage error={error} />}
     </>
   );
 };

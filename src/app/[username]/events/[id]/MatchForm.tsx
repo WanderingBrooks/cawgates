@@ -44,6 +44,7 @@ type MatchFormProps = {
   initialMatchData?: MatchInputForm;
   onSuccess: () => void;
   onCancel: () => void;
+  // Only shown when editing
   deleteButton?: React.ReactNode;
 };
 
@@ -176,7 +177,7 @@ const MatchForm = ({
               </Button>
             }
             submitButton={<SubmitButton isActionPending={isPending} />}
-            deleteButton={deleteButton}
+            deleteButton={mode === 'edit' ? deleteButton : undefined}
           />
         )}
       </SpaceChildrenVertically>

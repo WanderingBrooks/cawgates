@@ -43,7 +43,6 @@ const DeleteFormatButton = ({
 
   return (
     <>
-      {error && <ErrorMessage error={error} />}
       <Button
         onClick={handleDelete}
         disabled={isDeleting || hasDecks}
@@ -51,6 +50,7 @@ const DeleteFormatButton = ({
       >
         {isDeleting ? t('deleting') : t('delete')}
       </Button>
+      {error && <ErrorMessage error={error} />}
     </>
   );
 };

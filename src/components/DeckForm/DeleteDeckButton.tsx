@@ -29,10 +29,10 @@ const DeleteDeckButton = ({ deckId }: { deckId: string }) => {
 
   return (
     <>
-      {error && <ErrorMessage error={error} />}
       <Button onClick={handleDelete} disabled={isDeleting} variant="danger">
         {isDeleting ? t('deleting') : t('delete')}
       </Button>
+      {error && <ErrorMessage error={error} />}
     </>
   );
 };

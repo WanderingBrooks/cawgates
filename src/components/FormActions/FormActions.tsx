@@ -34,8 +34,10 @@ const FormActions = ({
 
   return (
     <div className={cn(classes.formActions, className)}>
-      <FlexRowBetween>
-        {deleteButton}
+      <FlexRowBetween className={classes.row}>
+        {/* Its own column, so a delete error shows under the button instead
+            of squeezing between the buttons */}
+        <div className={classes.deleteSlot}>{deleteButton}</div>
         <div className={classes.rightButtons}>
           {cancelButton}
           {submitButton}
