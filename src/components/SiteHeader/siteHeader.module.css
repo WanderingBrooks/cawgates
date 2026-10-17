@@ -27,6 +27,7 @@
 .appName,
 .appName:hover {
   color: var(--color-text);
+  text-decoration: none;
 }
 
 .nav {
@@ -37,6 +38,7 @@
 .navLink,
 .navLink:hover {
   color: var(--color-text-secondary);
+  text-decoration: none;
 }
 
 .navLink {
@@ -98,6 +100,7 @@
 .tab,
 .tab:hover {
   color: var(--color-text-secondary);
+  text-decoration: none;
 }
 
 .tab {
@@ -107,6 +110,7 @@
   justify-content: center;
   min-height: var(--tab-bar-height);
   padding: 0 var(--spacing-xs);
+  text-align: center;
 }
 
 .tabActive,

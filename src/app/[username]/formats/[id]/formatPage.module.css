@@ -41,6 +41,7 @@
 
 .titleHint {
   max-width: 360px;
+  text-align: right;
 }
 
 .rowActions {

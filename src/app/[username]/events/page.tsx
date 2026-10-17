@@ -3,6 +3,7 @@ import { getTranslations, getFormatter } from 'next-intl/server';
 import { formatDate, getMatchRecord } from '@/lib/utils';
 import { Button, PageTitle } from '@/components';
 import { getEvents } from '@/lib/dal';
+import classes from './event.module.css';
 
 const EventsPage = async ({
   params,
@@ -64,7 +65,7 @@ const EventsPage = async ({
 
                 return (
                   <tr key={event.id}>
-                    <td className="text-nowrap">
+                    <td className={classes.date}>
                       {formatDate({ formatter, date: new Date(event.date) })}
                     </td>
                     <td>

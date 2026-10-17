@@ -64,17 +64,14 @@ const SiteHeader = async ({
       <header className={classes.header}>
         <div className={classes.bar}>
           <div className={classes.left}>
-            <Link
-              href={homeHref}
-              className={cn('text-bold', 'link-plain', classes.appName)}
-            >
+            <Link href={homeHref} className={cn('text-bold', classes.appName)}>
               {t('appName')}
             </Link>
             {links.length > 0 && (
               <nav className={classes.nav}>
                 <NavLinks
                   links={links}
-                  linkClassName={cn('link-plain', classes.navLink)}
+                  linkClassName={classes.navLink}
                   activeClassName={cn('text-strong', classes.navLinkActive)}
                 />
               </nav>
@@ -122,12 +119,7 @@ const SiteHeader = async ({
         <nav className={classes.tabBar}>
           <NavLinks
             links={links}
-            linkClassName={cn(
-              'text-small',
-              'text-center',
-              'link-plain',
-              classes.tab,
-            )}
+            linkClassName={cn('text-small', classes.tab)}
             activeClassName={cn('text-strong', classes.tabActive)}
           />
         </nav>
