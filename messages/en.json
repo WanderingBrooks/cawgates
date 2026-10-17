@@ -1,4 +1,7 @@
 {
+  "pageTitle": {
+    "separator": "·"
+  },
   "common": {
     "matchRecord": "{wins}-{losses}-{ties}",
     "gameRecord": "{wins}-{losses}"

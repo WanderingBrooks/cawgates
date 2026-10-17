@@ -38,20 +38,18 @@ const OpponentArchetypePage = async ({
     <>
       <PageTitle
         title={opponentArchetype.name}
-        subtitle={
-          <>
-            <span>{opponentArchetype.format.name}</span>
-            {opponentArchetype.matches.length > 0 && (
-              <strong className="text-number">
-                {tCommon('matchRecord', {
-                  wins: matchWins,
-                  losses: matchLosses,
-                  ties: matchDraws,
-                })}
-              </strong>
-            )}
-          </>
-        }
+        subtitle={[
+          <span key="format">{opponentArchetype.format.name}</span>,
+          opponentArchetype.matches.length > 0 && (
+            <strong key="record" className="text-number">
+              {tCommon('matchRecord', {
+                wins: matchWins,
+                losses: matchLosses,
+                ties: matchDraws,
+              })}
+            </strong>
+          ),
+        ]}
         actions={
           <OpponentArchetypeActions
             opponentArchetypeId={opponentArchetype.id}

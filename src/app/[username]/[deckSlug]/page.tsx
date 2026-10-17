@@ -34,24 +34,23 @@ const DeckPage = async ({
     <>
       <PageTitle
         title={deck.name}
-        subtitle={
-          <>
-            <span>{deck.format.name}</span>
-            {totals.totalMatches > 0 && (
-              <>
-                <span>
+        subtitle={[
+          <span key="format">{deck.format.name}</span>,
+          ...(totals.totalMatches > 0
+            ? [
+                <span key="wins">
                   {t.rich('totalMatchWins', {
                     count: totals.matchWins,
                     num: renderNumber,
                   })}
-                </span>
-                <span>
+                </span>,
+                <span key="losses">
                   {t.rich('totalMatchLosses', {
                     count: totals.matchLosses,
                     num: renderNumber,
                   })}
-                </span>
-                <span>
+                </span>,
+                <span key="winRate">
                   {t.rich('totalMatchWinPct', {
                     rate: formatter.number(totals.matchWinRate, {
                       style: 'percent',
@@ -64,11 +63,10 @@ const DeckPage = async ({
                       </Tooltip>
                     ),
                   })}
-                </span>
-              </>
-            )}
-          </>
-        }
+                </span>,
+              ]
+            : []),
+        ]}
         actions={
           isOwner && (
             <Link href={`/${username}/${deck.slug}/edit`}>

@@ -31,21 +31,21 @@ const EventPage = async ({
     <>
       <PageTitle
         title={event.name}
-        subtitle={
-          <>
-            <span>{event.deck.name}</span>
-            <span>{formatDate({ formatter, date: new Date(event.date) })}</span>
-            {event.matches.length > 0 && (
-              <strong className="text-number">
-                {tCommon('matchRecord', {
-                  wins: matchWins,
-                  losses: matchLosses,
-                  ties: matchTies,
-                })}
-              </strong>
-            )}
-          </>
-        }
+        subtitle={[
+          <span key="deck">{event.deck.name}</span>,
+          <span key="date">
+            {formatDate({ formatter, date: new Date(event.date) })}
+          </span>,
+          event.matches.length > 0 && (
+            <strong key="record" className="text-number">
+              {tCommon('matchRecord', {
+                wins: matchWins,
+                losses: matchLosses,
+                ties: matchTies,
+              })}
+            </strong>
+          ),
+        ]}
         actions={
           <>
             {isOwner && (

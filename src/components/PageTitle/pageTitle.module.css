@@ -21,10 +21,7 @@
   gap: 0 var(--spacing-sm);
 }
 
-/* Subtitle items render as "Pauper · Match wins 24 · ..." */
-.subtitle > * + *::before {
-  content: '·';
-  margin-right: var(--spacing-sm);
+.separator {
   color: var(--color-text-muted);
 }
 
