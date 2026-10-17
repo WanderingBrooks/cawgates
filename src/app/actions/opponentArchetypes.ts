@@ -206,7 +206,7 @@ const deleteOpponentArchetype = async ({
     opponentArchetypeId,
   });
 
-  revalidatePath(`/${user.username}/formats/${opponentArchetype.formatId}`);
+  revalidatePath(`/${user.username}/matchups/${opponentArchetype.formatId}`);
 
   return { success: true };
 };

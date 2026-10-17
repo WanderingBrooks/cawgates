@@ -27,7 +27,7 @@ const FormatFilter = ({
   }));
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    router.push(`/${username}/formats/${e.target.value}`);
+    router.push(`/${username}/matchups/${e.target.value}`);
   };
 
   return (

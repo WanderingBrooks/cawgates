@@ -129,8 +129,8 @@
     "saving": "Saving...",
     "cancel": "Cancel"
   },
-  "formats": {
-    "title": "My formats",
+  "matchups": {
+    "title": "Matchups",
     "noFormats": "No formats yet — create a deck to get started",
     "createDeck": "Create deck"
   },
@@ -187,7 +187,7 @@
   "siteHeader": {
     "appName": "Cawgates",
     "events": "Events",
-    "formats": "Formats",
+    "matchups": "Matchups",
     "login": "Login",
     "register": "Register",
     "logout": "Logout"

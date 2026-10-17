@@ -60,7 +60,7 @@ const EventPage = async ({
               </Link>
             )}
             <Link
-              href={`/${username}/formats/${event.deck.formatId}?deck=${encodeURIComponent(event.deck.slug)}`}
+              href={`/${username}/matchups/${event.deck.formatId}?deck=${encodeURIComponent(event.deck.slug)}`}
             >
               <Button variant="secondary">{t('viewDeck')}</Button>
             </Link>

@@ -6,7 +6,7 @@ import { Button, PageTitle } from '@/components';
 
 // There is no list of formats: this opens the most played one, and the
 // format page has a dropdown to switch between them
-const FormatsPage = async ({
+const MatchupsPage = async ({
   params,
 }: {
   params: Promise<{ username: string }>;
@@ -18,14 +18,14 @@ const FormatsPage = async ({
   });
 
   if (formats.length > 0) {
-    redirect(`/${username}/formats/${formats[0].id}`);
+    redirect(`/${username}/matchups/${formats[0].id}`);
   }
 
   if (!isOwner) {
     notFound();
   }
 
-  const t = await getTranslations('formats');
+  const t = await getTranslations('matchups');
 
   return (
     <>
@@ -40,4 +40,4 @@ const FormatsPage = async ({
   );
 };
 
-export default FormatsPage;
+export default MatchupsPage;

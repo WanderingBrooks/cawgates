@@ -89,8 +89,8 @@ const DeckForm = (props: DeckFormProps) => {
 
   const cancelHref =
     props.mode === 'create'
-      ? `/${props.username}/formats`
-      : `/${props.username}/formats/${props.initialDeckData.formatId}?deck=${encodeURIComponent(props.deckSlug)}`;
+      ? `/${props.username}/matchups`
+      : `/${props.username}/matchups/${props.initialDeckData.formatId}?deck=${encodeURIComponent(props.deckSlug)}`;
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);

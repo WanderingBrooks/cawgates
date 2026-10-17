@@ -72,7 +72,7 @@ const createDeck = async (
     });
 
     redirect(
-      `/${user.username}/formats/${deck.formatId}?deck=${encodeURIComponent(deck.slug)}`,
+      `/${user.username}/matchups/${deck.formatId}?deck=${encodeURIComponent(deck.slug)}`,
     );
   } catch (error: unknown) {
     if (
@@ -161,7 +161,7 @@ const updateDeck = async (
     });
 
     redirect(
-      `/${user.username}/formats/${updated.formatId}?deck=${encodeURIComponent(updated.slug)}`,
+      `/${user.username}/matchups/${updated.formatId}?deck=${encodeURIComponent(updated.slug)}`,
     );
   } catch (error: unknown) {
     if (
@@ -209,7 +209,7 @@ const deleteDeck = async (deckId: string): Promise<ActionResult> => {
     deckId,
   });
 
-  redirect(`/${user.username}/formats/${deck.formatId}`);
+  redirect(`/${user.username}/matchups/${deck.formatId}`);
 };
 
 export { getUserDecks, createDeck, updateDeck, deleteDeck };

@@ -49,14 +49,14 @@ const SiteHeader = async ({
           ? [
               formats.length === 1
                 ? {
-                    href: `/${ownerUsername}/formats/${formats[0].id}`,
+                    href: `/${ownerUsername}/matchups/${formats[0].id}`,
                     label: formats[0].name,
-                    section: 'formats' as const,
+                    section: 'matchups' as const,
                   }
                 : {
-                    href: `/${ownerUsername}/formats`,
-                    label: t('formats'),
-                    section: 'formats' as const,
+                    href: `/${ownerUsername}/matchups`,
+                    label: t('matchups'),
+                    section: 'matchups' as const,
                   },
             ]
           : []),

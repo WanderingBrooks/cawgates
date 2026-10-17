@@ -34,7 +34,7 @@ const OpponentArchetypeActions = ({
         </Button>
       )}
       <Link
-        href={`/${username}/formats/${formatId}${
+        href={`/${username}/matchups/${formatId}${
           deckSlug ? `?deck=${encodeURIComponent(deckSlug)}` : ''
         }`}
       >

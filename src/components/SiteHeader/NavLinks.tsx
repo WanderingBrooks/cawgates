@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
-type NavSection = 'events' | 'formats';
+type NavSection = 'events' | 'matchups';
 
 type NavLink = {
   href: string;
@@ -13,13 +13,13 @@ type NavLink = {
 };
 
 // Opponent archetypes and decks belong to a format, so their pages sit
-// under Formats. Anything else belongs to Events.
-const FORMAT_SECTIONS = ['formats', 'opponents', 'decks'];
+// under Matchups. Anything else belongs to Events.
+const MATCHUP_SECTIONS = ['matchups', 'opponents', 'decks'];
 
 const getActiveSection = (pathname: string): NavSection => {
   const section = pathname.split('/').filter(Boolean)[1];
 
-  return FORMAT_SECTIONS.includes(section) ? 'formats' : 'events';
+  return MATCHUP_SECTIONS.includes(section) ? 'matchups' : 'events';
 };
 
 const NavLinks = ({

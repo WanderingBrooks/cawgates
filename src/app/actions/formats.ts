@@ -180,7 +180,7 @@ const deleteFormat = async ({
     formatId,
   });
 
-  redirect(`/${user.username}/formats`);
+  redirect(`/${user.username}/matchups`);
 };
 
 export { getUserFormats, createFormat, updateFormat, deleteFormat };
