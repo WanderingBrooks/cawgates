@@ -2,6 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import {
   createMatchSchema,
   updateMatchSchema,
@@ -14,6 +15,9 @@ const createMatch = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
+  // Each match action ends back on its event page
+  let eventHref: string;
+
   try {
     const user = await getUser();
 
@@ -75,15 +79,14 @@ const createMatch = async (
       },
     });
 
-    revalidatePath(`/${user.username}/events/${validated.eventId}`);
+    eventHref = `/${user.username}/events/${validated.eventId}`;
+    revalidatePath(eventHref);
 
     logEvent('match.created', {
       userId: user.userId,
       eventId: validated.eventId,
       matchId: match.id,
     });
-
-    return { success: true };
   } catch (error) {
     console.error('Failed to create match:', error);
 
@@ -92,12 +95,17 @@ const createMatch = async (
       error: 'Failed to create match. Please try again.',
     };
   }
+
+  redirect(eventHref);
 };
 
 const updateMatch = async (
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> => {
+  // Each match action ends back on its event page
+  let eventHref: string;
+
   try {
     const user = await getUser();
 
@@ -164,15 +172,14 @@ const updateMatch = async (
       },
     });
 
-    revalidatePath(`/${user.username}/events/${match.eventId}`);
+    eventHref = `/${user.username}/events/${match.eventId}`;
+    revalidatePath(eventHref);
 
     logEvent('match.updated', {
       userId: user.userId,
       eventId: match.eventId,
       matchId: match.id,
     });
-
-    return { success: true };
   } catch (error) {
     console.error('Failed to update match:', error);
 
@@ -181,9 +188,14 @@ const updateMatch = async (
       error: 'Failed to update match. Please try again.',
     };
   }
+
+  redirect(eventHref);
 };
 
 const deleteMatch = async (matchId: string): Promise<ActionResult> => {
+  // Each match action ends back on its event page
+  let eventHref: string;
+
   try {
     const user = await getUser();
 
@@ -209,15 +221,14 @@ const deleteMatch = async (matchId: string): Promise<ActionResult> => {
 
     await prisma.match.delete({ where: { id: matchId } });
 
-    revalidatePath(`/${user.username}/events/${match.eventId}`);
+    eventHref = `/${user.username}/events/${match.eventId}`;
+    revalidatePath(eventHref);
 
     logEvent('match.deleted', {
       userId: user.userId,
       eventId: match.eventId,
       matchId: match.id,
     });
-
-    return { success: true };
   } catch (error) {
     console.error('Failed to delete match:', error);
 
@@ -226,6 +237,8 @@ const deleteMatch = async (matchId: string): Promise<ActionResult> => {
       error: 'Failed to delete match. Please try again.',
     };
   }
+
+  redirect(eventHref);
 };
 
 export { createMatch, updateMatch, deleteMatch };
