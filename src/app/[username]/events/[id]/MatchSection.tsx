@@ -3,15 +3,16 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { deleteMatch } from '@/app/actions/matches';
 import {
   Button,
   Card,
   CardContent,
   CardTitle,
+  DeleteButton,
   Dialog,
   SectionHeader,
 } from '@/components';
-import DeleteMatchButton from './DeleteMatchButton';
 import MatchForm from './MatchForm';
 import { MatchInputForm } from '@/lib/types';
 import { cn, getMatchResultTint } from '@/lib/utils';
@@ -48,6 +49,7 @@ const MatchSection = ({
   const tCommon = useTranslations('common');
   const tCreateMatch = useTranslations('createMatch');
   const tEditMatch = useTranslations('editMatch');
+  const tDelete = useTranslations('deleteMatchButton');
 
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingMatch, setEditingMatch] = useState<Match | null>(null);
@@ -156,8 +158,10 @@ const MatchSection = ({
                 onSuccess={() => setEditingMatch(null)}
                 onCancel={() => setEditingMatch(null)}
                 deleteButton={
-                  <DeleteMatchButton
-                    matchId={editingMatch.id}
+                  <DeleteButton
+                    label={tDelete('delete')}
+                    confirmMessage={tDelete('deleteConfirm')}
+                    onDelete={() => deleteMatch(editingMatch.id)}
                     onDeleted={() => setEditingMatch(null)}
                   />
                 }

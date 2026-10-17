@@ -5,6 +5,7 @@ import Form from './Form';
 import Dialog from './Dialog';
 import DeckFilter from './DeckFilter';
 import DeckForm from './DeckForm';
+import DeleteButton from './DeleteButton';
 import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
 import FormActions from './FormActions';
@@ -33,6 +34,7 @@ export {
   Form,
   DeckFilter,
   DeckForm,
+  DeleteButton,
   Dialog,
   ErrorMessage,
   FlexRowBetween,

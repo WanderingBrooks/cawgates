@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Button, Dialog, FormatForm } from '@/components';
-import DeleteFormatButton from './DeleteFormatButton';
+import { deleteFormat } from '@/app/actions/formats';
+import { Button, DeleteButton, Dialog, FormatForm } from '@/components';
 import classes from './matchupsPage.module.css';
 
 // Add and edit buttons for the Format dropdown. Deleting lives inside the
@@ -59,10 +59,17 @@ const FormatButtons = ({
           }}
           onCancel={() => setIsEditOpen(false)}
           deleteButton={
-            <DeleteFormatButton
-              formatId={formatId}
-              deckCount={deckCount}
-              opponentArchetypeCount={opponentArchetypeCount}
+            <DeleteButton
+              label={tDelete('delete')}
+              confirmMessage={
+                opponentArchetypeCount > 0
+                  ? tDelete('deleteConfirmWithArchetypes', {
+                      count: opponentArchetypeCount,
+                    })
+                  : tDelete('deleteConfirm')
+              }
+              onDelete={() => deleteFormat({ formatId })}
+              disabled={deckCount > 0}
             />
           }
           deleteHint={deckCount > 0 ? tDelete('hasDecksHint') : undefined}
