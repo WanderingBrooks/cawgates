@@ -11,12 +11,12 @@ import {
   ErrorMessage,
   OpponentArchetypeForm,
 } from '@/components';
-import type { getFormat } from '@/lib/dal';
+import type { getFormatWithMatchStatistics } from '@/lib/dal';
 import { cn, getWinRateTint } from '@/lib/utils';
 import classes from './formatPage.module.css';
 
 type MatchStatisticsRow = Awaited<
-  ReturnType<typeof getFormat>
+  ReturnType<typeof getFormatWithMatchStatistics>
 >['matchStatistics'][number];
 
 const OpponentArchetypeRow = ({

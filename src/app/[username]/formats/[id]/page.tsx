@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { getFormat } from '@/lib/dal';
+import { getFormatWithMatchStatistics } from '@/lib/dal';
 import { cn } from '@/lib/utils';
 import { PageTitle, SectionHeader } from '@/components';
 import DeleteFormatButton from './DeleteFormatButton';
@@ -18,7 +18,7 @@ const FormatPage = async ({
   const tArchetype = await getTranslations('formatOpponentArchetype');
   const tDelete = await getTranslations('deleteFormatButton');
 
-  const { format, matchStatistics } = await getFormat({
+  const { format, matchStatistics } = await getFormatWithMatchStatistics({
     ownerUsername: username,
     formatId: id,
   });

@@ -342,6 +342,18 @@ const getFormat = async ({
     notFound();
   }
 
+  return { format };
+};
+
+const getFormatWithMatchStatistics = async ({
+  ownerUsername,
+  formatId,
+}: {
+  ownerUsername: string;
+  formatId: string;
+}) => {
+  const { format } = await getFormat({ ownerUsername, formatId });
+
   // Every deck's matches, and every archetype including unplayed ones
   const { rows: matchStatistics } = await queryMatchStatistics({
     formatId: format.id,
@@ -371,6 +383,7 @@ export {
   getOwnerByUsername,
   getFormatsForOwner,
   getFormat,
+  getFormatWithMatchStatistics,
   getDecksForOwner,
   getDeck,
   getDeckWithMatchStatistics,
