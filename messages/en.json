@@ -13,8 +13,7 @@
     "noValue": "–"
   },
   "createDeck": {
-    "title": "Create deck",
-    "firstDeckSubtitle": "Create your first deck to start tracking events"
+    "title": "Create deck"
   },
   "deckForm": {
     "name": "Deck name *",
@@ -58,7 +57,7 @@
   },
   "eventForm": {
     "deckId": "Deck *",
-    "deckIdHint": "Need a new deck? <link>Create one here</link>",
+    "addDeck": "+ Add deck",
     "eventName": "Event name *",
     "eventDate": "Event date *",
     "notes": "Notes",

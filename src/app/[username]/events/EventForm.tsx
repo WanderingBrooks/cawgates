@@ -5,10 +5,12 @@ import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { createEvent, deleteEvent, updateEvent } from '@/app/actions/events';
-import { type ActionResult } from '@/lib/types';
+import { type ActionResult, type SavedDeck } from '@/lib/types';
 import {
   Button,
+  DeckForm,
   DeleteButton,
+  Dialog,
   DiscardChangesConfirm,
   ErrorMessage,
   Form,
@@ -19,7 +21,7 @@ import {
   Select,
 } from '@/components';
 import { EventFormData } from '@/lib/types';
-import Link from 'next/link';
+import classes from './eventForm.module.css';
 
 /**
  * SubmitButton must be a separate component because useFormStatus() requires
@@ -55,6 +57,7 @@ type EventFormProps = CreateEventProps | EditEventProps;
 const EventForm = (props: EventFormProps) => {
   const t = useTranslations('eventForm');
   const tDelete = useTranslations('deleteEventButton');
+  const tCreateDeck = useTranslations('createDeck');
   const router = useRouter();
 
   const { mode, username } = props;
@@ -105,6 +108,20 @@ const EventForm = (props: EventFormProps) => {
     setHasFormDataChanged(true);
   };
 
+  // Grows when a deck is added from here, so it can be selected straight away
+  const [decks, setDecks] = useState(
+    props.mode === 'create' ? props.decks : [],
+  );
+
+  const [isAddDeckOpen, setIsAddDeckOpen] = useState(false);
+
+  const handleDeckCreated = (deck: SavedDeck) => {
+    setDecks(prev => [...prev, { id: deck.id, name: deck.name }]);
+    setEventData(prev => ({ ...prev, deckId: deck.id }));
+    setHasFormDataChanged(true);
+    setIsAddDeckOpen(false);
+  };
+
   return (
     <Form action={formAction}>
       <SpaceChildrenVertically>
@@ -115,27 +132,31 @@ const EventForm = (props: EventFormProps) => {
           </>
         )}
         {props.mode === 'create' && (
-          <Select
-            required
-            id="deckId"
-            name="deckId"
-            label={t('deckId')}
-            hint={t.rich('deckIdHint', {
-              link: chunks => (
-                <Link href={`/${username}/decks/create`}>{chunks}</Link>
-              ),
-            })}
-            value={eventData.deckId}
-            onChange={handleEventChange}
-            options={[
-              // Placeholder empty value
-              { value: '', label: '' },
-              ...props.decks.map(deck => ({
-                value: deck.id,
-                label: deck.name,
-              })),
-            ]}
-          />
+          <div className={classes.deckRow}>
+            <Select
+              required
+              id="deckId"
+              name="deckId"
+              label={t('deckId')}
+              value={eventData.deckId}
+              onChange={handleEventChange}
+              options={[
+                // Placeholder empty value
+                { value: '', label: '' },
+                ...decks.map(deck => ({
+                  value: deck.id,
+                  label: deck.name,
+                })),
+              ]}
+            />
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setIsAddDeckOpen(true)}
+            >
+              {t('addDeck')}
+            </Button>
+          </div>
         )}
         <Input
           type="text"
@@ -190,6 +211,18 @@ const EventForm = (props: EventFormProps) => {
           />
         )}
       </SpaceChildrenVertically>
+
+      {/* The deck form's format picker can open a format dialog on top of
+          this one, the one place dialogs stack */}
+      <Dialog isOpen={isAddDeckOpen} title={tCreateDeck('title')} usePortal>
+        {isAddDeckOpen && (
+          <DeckForm
+            mode="create"
+            onSuccess={handleDeckCreated}
+            onCancel={() => setIsAddDeckOpen(false)}
+          />
+        )}
+      </Dialog>
     </Form>
   );
 };
