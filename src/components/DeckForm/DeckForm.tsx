@@ -48,7 +48,12 @@ const SubmitButton = ({
 };
 
 type DeckFormProps =
-  | { mode: 'create'; username: string }
+  | {
+      mode: 'create';
+      username: string;
+      // Preselected when adding a deck from a format's Matchups page
+      initialFormatId?: string;
+    }
   | {
       mode: 'edit';
       username: string;
@@ -80,7 +85,9 @@ const DeckForm = (props: DeckFormProps) => {
   );
 
   const [formatId, setFormatId] = useState(
-    props.mode === 'edit' ? props.initialDeckData.formatId : '',
+    props.mode === 'edit'
+      ? props.initialDeckData.formatId
+      : (props.initialFormatId ?? ''),
   );
 
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);

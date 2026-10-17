@@ -96,22 +96,26 @@ const FormatPage = async ({
             />
           )}
         </div>
-        <DeckFilter
-          decks={format.decks}
-          selectedDeckSlug={selectedDeck?.slug ?? null}
-        />
-        {isOwner && (
-          <div className={classes.filterButtons}>
-            {selectedDeck && (
-              <Link href={`/${username}/decks/${selectedDeck.slug}/edit`}>
-                <Button variant="secondary">{t('editDeck')}</Button>
+        <div className={classes.filterGroup}>
+          <DeckFilter
+            decks={format.decks}
+            selectedDeckSlug={selectedDeck?.slug ?? null}
+          />
+          {isOwner && (
+            <div className={classes.filterButtons}>
+              <Link
+                href={`/${username}/decks/create?format=${encodeURIComponent(format.id)}`}
+              >
+                <Button variant="secondary">{t('addDeck')}</Button>
               </Link>
-            )}
-            <Link href={`/${username}/decks/create`}>
-              <Button variant="secondary">{t('createDeck')}</Button>
-            </Link>
-          </div>
-        )}
+              {selectedDeck && (
+                <Link href={`/${username}/decks/${selectedDeck.slug}/edit`}>
+                  <Button variant="secondary">{t('editDeck')}</Button>
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       <section className={classes.section}>
