@@ -47,7 +47,7 @@
 .rowActions {
   display: flex;
   justify-content: flex-end;
-  gap: 6px;
+  gap: var(--spacing-sm);
 }
 
 .rowError {
