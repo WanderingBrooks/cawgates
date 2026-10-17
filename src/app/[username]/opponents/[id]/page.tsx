@@ -54,13 +54,15 @@ const OpponentArchetypePage = async ({
           ),
         ]}
         actions={
-          <OpponentArchetypeActions
-            opponentArchetypeId={opponentArchetype.id}
-            formatId={opponentArchetype.formatId}
-            initialName={opponentArchetype.name}
-            isOwner={isOwner}
-            username={username}
-          />
+          // Edit and View format are owner-only, so guests get no actions row
+          isOwner && (
+            <OpponentArchetypeActions
+              opponentArchetypeId={opponentArchetype.id}
+              formatId={opponentArchetype.formatId}
+              initialName={opponentArchetype.name}
+              username={username}
+            />
+          )
         }
       />
       <section className={classes.section}>

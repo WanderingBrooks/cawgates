@@ -10,13 +10,11 @@ const OpponentArchetypeActions = ({
   opponentArchetypeId,
   formatId,
   initialName,
-  isOwner,
   username,
 }: {
   opponentArchetypeId: string;
   formatId: string;
   initialName: string;
-  isOwner: boolean;
   username: string;
 }) => {
   const t = useTranslations('opponentArchetypePage');
@@ -25,30 +23,24 @@ const OpponentArchetypeActions = ({
 
   return (
     <>
-      {isOwner && (
-        <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
-          {t('edit')}
-        </Button>
-      )}
-      {isOwner && (
-        <Link href={`/${username}/formats/${formatId}`}>
-          <Button variant="secondary">{t('viewFormat')}</Button>
-        </Link>
-      )}
-      {isOwner && (
-        <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
-          <OpponentArchetypeForm
-            mode="edit"
-            opponentArchetypeId={opponentArchetypeId}
-            initialName={initialName}
-            onSuccess={() => {
-              setIsDialogOpen(false);
-              router.refresh();
-            }}
-            onCancel={() => setIsDialogOpen(false)}
-          />
-        </Dialog>
-      )}
+      <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
+        {t('edit')}
+      </Button>
+      <Link href={`/${username}/formats/${formatId}`}>
+        <Button variant="secondary">{t('viewFormat')}</Button>
+      </Link>
+      <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
+        <OpponentArchetypeForm
+          mode="edit"
+          opponentArchetypeId={opponentArchetypeId}
+          initialName={initialName}
+          onSuccess={() => {
+            setIsDialogOpen(false);
+            router.refresh();
+          }}
+          onCancel={() => setIsDialogOpen(false)}
+        />
+      </Dialog>
     </>
   );
 };
