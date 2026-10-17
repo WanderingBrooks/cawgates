@@ -1,6 +1,20 @@
 # Things to revisit
 
+## Where we left off (2026-10-17)
+
+- PR #69 is a draft with the merge done. It still needs a click-through in
+  the browser (see the PR's test plan) before it's marked ready.
+- Next decision: whether to remove public/private decks (below). Ask the
+  active user who keeps decks private before deciding.
+- After that: the navigation and stats consistency items, then where formats
+  and decks are created and edited.
+
 ## Remove public/private decks
+
+Data check on 2026-10-17: 5 of 18 decks are private, across 3 users (none of
+them the owner's). Only one of those users is still active, and they've made
+every deck they created since May private, so removing the setting would
+expose decks they chose to hide. Ask them first.
 
 Public decks overcomplicate the app. Drop the concept: every deck is public,
 and the only private thing is notes (event and match notes), which only their
