@@ -214,8 +214,6 @@
     "events": "Events",
     "decks": "Decks",
     "formats": "Formats",
-    "ownerEvents": "{username}''s events",
-    "ownerDecks": "{username}''s decks",
     "login": "Login",
     "register": "Register",
     "logout": "Logout"

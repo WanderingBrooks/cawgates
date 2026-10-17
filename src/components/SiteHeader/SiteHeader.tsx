@@ -20,7 +20,7 @@ type SiteHeaderProps = {
  * tab bar fixed to the bottom of the screen.
  *
  * When someone views another user's profile the links point at that
- * user's events and decks (formats are owner-only), and a strip under the
+ * user's events and decks (formats are owner-only). The strip under the
  * header says whose profile it is, with a way back to the viewer's own
  * events or a prompt to sign up.
  */
@@ -32,36 +32,29 @@ const SiteHeader = async ({
   const t = await getTranslations('siteHeader');
   const tGuest = await getTranslations('guestBanner');
 
-  let links: NavLink[] = [];
-
-  if (ownerUsername && isOwner) {
-    links = [
-      {
-        href: `/${ownerUsername}/events`,
-        label: t('events'),
-        section: 'events',
-      },
-      { href: `/${ownerUsername}/decks`, label: t('decks'), section: 'decks' },
-      {
-        href: `/${ownerUsername}/formats`,
-        label: t('formats'),
-        section: 'formats',
-      },
-    ];
-  } else if (ownerUsername) {
-    links = [
-      {
-        href: `/${ownerUsername}/events`,
-        label: t('ownerEvents', { username: ownerUsername }),
-        section: 'events',
-      },
-      {
-        href: `/${ownerUsername}/decks`,
-        label: t('ownerDecks', { username: ownerUsername }),
-        section: 'decks',
-      },
-    ];
-  }
+  const links: NavLink[] = ownerUsername
+    ? [
+        {
+          href: `/${ownerUsername}/events`,
+          label: t('events'),
+          section: 'events',
+        },
+        {
+          href: `/${ownerUsername}/decks`,
+          label: t('decks'),
+          section: 'decks',
+        },
+        ...(isOwner
+          ? [
+              {
+                href: `/${ownerUsername}/formats`,
+                label: t('formats'),
+                section: 'formats' as const,
+              },
+            ]
+          : []),
+      ]
+    : [];
 
   const homeHref = viewerUsername ? `/${viewerUsername}/events` : '/';
   const isViewingOtherProfile = !!ownerUsername && !isOwner;
