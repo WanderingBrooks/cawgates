@@ -198,6 +198,15 @@ tbody tr:last-child td {
 
 /* Text Utilities */
 
+/* TODO: Reuse shared styles through CSS modules instead of global classes
+   in JSX. These named styles (and .hint, .prose, .tint-*, .table-scroll
+   below) should move to shared module files, e.g. src/styles/text.module.css,
+   and be pulled into each component's module with `composes`, so JSX only
+   uses `classes.x`. One-off properties such as text-align stay in the
+   component's module, and there are no single-property utility classes.
+   Decide first whether to add SCSS (@extend, mixins for the 768px
+   breakpoint), then migrate every usage and update AGENTS.md. */
+
 .text-label {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
