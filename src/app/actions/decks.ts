@@ -2,12 +2,24 @@
 
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
-import { createDeckSchema, type ActionResult } from '@/lib/types';
+import {
+  createDeckSchema,
+  type ActionResult,
+  type ActionResultWithData,
+  type SavedDeck,
+} from '@/lib/types';
 import { slugify } from '@/lib/utils';
 import { logEvent } from '@/lib/log';
-import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 // --- User's own decks ---
+
+const toSavedDeck = ({ deck }: { deck: SavedDeck }): SavedDeck => ({
+  id: deck.id,
+  name: deck.name,
+  slug: deck.slug,
+  formatId: deck.formatId,
+});
 
 const getUserDecks = async () => {
   const user = await getUser();
@@ -26,9 +38,9 @@ const getUserDecks = async () => {
 };
 
 const createDeck = async (
-  _prevState: ActionResult | null,
+  _prevState: ActionResultWithData<SavedDeck> | null,
   formData: FormData,
-): Promise<ActionResult> => {
+): Promise<ActionResultWithData<SavedDeck>> => {
   const user = await getUser();
 
   if (!user) {
@@ -71,9 +83,11 @@ const createDeck = async (
       formatId: deck.formatId,
     });
 
-    redirect(
-      `/${user.username}/matchups/${deck.formatId}?deck=${encodeURIComponent(deck.slug)}`,
-    );
+    // The deck form is a dialog, so the caller closes it and navigates.
+    // Revalidating the layout also refreshes the menu's Matchups link.
+    revalidatePath(`/${user.username}`, 'layout');
+
+    return { success: true, data: toSavedDeck({ deck }) };
   } catch (error: unknown) {
     if (
       typeof error === 'object' &&
@@ -92,9 +106,9 @@ const createDeck = async (
 };
 
 const updateDeck = async (
-  _prevState: ActionResult | null,
+  _prevState: ActionResultWithData<SavedDeck> | null,
   formData: FormData,
-): Promise<ActionResult> => {
+): Promise<ActionResultWithData<SavedDeck>> => {
   const user = await getUser();
 
   if (!user) {
@@ -160,9 +174,9 @@ const updateDeck = async (
       formatId: updated.formatId,
     });
 
-    redirect(
-      `/${user.username}/matchups/${updated.formatId}?deck=${encodeURIComponent(updated.slug)}`,
-    );
+    revalidatePath(`/${user.username}`, 'layout');
+
+    return { success: true, data: toSavedDeck({ deck: updated }) };
   } catch (error: unknown) {
     if (
       typeof error === 'object' &&
@@ -209,7 +223,9 @@ const deleteDeck = async (deckId: string): Promise<ActionResult> => {
     deckId,
   });
 
-  redirect(`/${user.username}/matchups/${deck.formatId}`);
+  revalidatePath(`/${user.username}`, 'layout');
+
+  return { success: true };
 };
 
 export { getUserDecks, createDeck, updateDeck, deleteDeck };

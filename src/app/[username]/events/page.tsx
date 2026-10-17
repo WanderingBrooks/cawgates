@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { formatDate, getMatchRecord } from '@/lib/utils';
-import { Button, PageTitle } from '@/components';
+import { Button, CreateDeckButton, PageTitle } from '@/components';
 import { getEvents } from '@/lib/dal';
 import classes from './event.module.css';
 
@@ -37,9 +37,12 @@ const EventsPage = async ({
         <>
           <p>{t('noDecksHint')}</p>
           <div>
-            <Link href={`/${username}/decks/create`}>
-              <Button variant="primary">{t('createDeck')}</Button>
-            </Link>
+            {/* Stays here, where Create event shows up once there's a deck */}
+            <CreateDeckButton
+              username={username}
+              label={t('createDeck')}
+              stayOnPage
+            />
           </div>
         </>
       )}

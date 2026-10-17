@@ -5,6 +5,8 @@ import Form from './Form';
 import Dialog from './Dialog';
 import DeckFilter from './DeckFilter';
 import DeckForm from './DeckForm';
+import CreateDeckButton from './DeckForm/CreateDeckButton';
+import EditDeckButton from './DeckForm/EditDeckButton';
 import DeleteButton from './DeleteButton';
 import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
@@ -33,9 +35,11 @@ export {
   DiscardChangesConfirm,
   Form,
   DeckFilter,
+  CreateDeckButton,
   DeckForm,
   DeleteButton,
   Dialog,
+  EditDeckButton,
   ErrorMessage,
   FlexRowBetween,
   FormActions,

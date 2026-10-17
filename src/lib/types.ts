@@ -89,6 +89,15 @@ export type ActionResultWithData<T> =
   | { success: true; data: T; error?: never }
   | { success: false; error: string };
 
+// What the deck actions return, so the deck dialog's caller can navigate to
+// or select the deck
+export type SavedDeck = {
+  id: string;
+  name: string;
+  slug: string;
+  formatId: string;
+};
+
 // Helper type for event form data (event fields only, no matches)
 export type EventFormData = Pick<
   CreateEventInput,
