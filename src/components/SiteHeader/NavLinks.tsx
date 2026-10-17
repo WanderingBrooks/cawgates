@@ -12,13 +12,18 @@ type NavLink = {
   section: NavSection;
 };
 
+// Opponent archetypes belong to a format, so their pages sit under Formats.
 // Deck pages live directly under the username (/[username]/[deckSlug]), so
-// anything that isn't an events or formats page belongs to the Decks section
+// anything else belongs to the Decks section.
 const getActiveSection = (pathname: string): NavSection => {
   const section = pathname.split('/').filter(Boolean)[1];
 
   if (section === 'events' || section === 'formats') {
     return section;
+  }
+
+  if (section === 'opponents') {
+    return 'formats';
   }
 
   return 'decks';
