@@ -10,7 +10,7 @@ import ErrorMessage from '../ErrorMessage';
 import Form from '../Form';
 import Input from '../Input';
 import SpaceChildrenVertically from '../SpaceChildrenVertically';
-import FlexRowBetween from '../FlexRowBetween';
+import FormActions from '../FormActions';
 import FormatSelect from '../FormatSelect';
 import Link from 'next/link';
 import DeleteDeckButton from './DeleteDeckButton';
@@ -148,26 +148,22 @@ const DeckForm = (props: DeckFormProps) => {
           required
         />
         {state?.error && <ErrorMessage error={state.error} />}
-        <FlexRowBetween className={classes.actionRow}>
-          {props.mode === 'edit' ? (
-            <>
+        <FormActions
+          className={classes.actionRow}
+          cancelButton={
+            <Link href={cancelHref}>
+              <Button variant="secondary">{t('cancel')}</Button>
+            </Link>
+          }
+          submitButton={
+            <SubmitButton mode={props.mode} isActionPending={isPending} />
+          }
+          deleteButton={
+            props.mode === 'edit' ? (
               <DeleteDeckButton deckId={props.deckId} />
-              <div className={classes.rightButtons}>
-                <Link href={cancelHref}>
-                  <Button variant="secondary">{t('cancel')}</Button>
-                </Link>
-                <SubmitButton mode={props.mode} isActionPending={isPending} />
-              </div>
-            </>
-          ) : (
-            <>
-              <Link href={cancelHref}>
-                <Button variant="secondary">{t('cancel')}</Button>
-              </Link>
-              <SubmitButton mode={props.mode} isActionPending={isPending} />
-            </>
-          )}
-        </FlexRowBetween>
+            ) : undefined
+          }
+        />
       </SpaceChildrenVertically>
     </Form>
   );
