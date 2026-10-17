@@ -50,6 +50,31 @@ const calculate = ({
 - If a component doesn't have a CSS module file, create one
 - Use the `cn` util function when combining multiple classes
 - Always use CSS variables from `@/app/globals.css` for colors and spacing
+- **Style mobile first**: the base styles are for phones, and desktop changes go in `@media (min-width: 768px)`. Never use `max-width` media queries. The breakpoint is always `768px`; it can't be a CSS variable because `var()` doesn't work inside `@media`
+
+```css
+/* ❌ Bad - desktop first */
+.actions {
+  justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+  .actions {
+    justify-content: stretch;
+  }
+}
+
+/* ✅ Good - mobile first */
+.actions {
+  justify-content: stretch;
+}
+
+@media (min-width: 768px) {
+  .actions {
+    justify-content: flex-end;
+  }
+}
+```
 
 ```tsx
 // ❌ Bad - inline styles
