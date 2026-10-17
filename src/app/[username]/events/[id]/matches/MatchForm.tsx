@@ -1,12 +1,14 @@
 'use client';
 
-import { useActionState, useEffect, useState } from 'react';
+import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
-import { createMatch, updateMatch } from '@/app/actions/matches';
+import { useRouter } from 'next/navigation';
+import { createMatch, deleteMatch, updateMatch } from '@/app/actions/matches';
 import { type ActionResult, MatchInputForm } from '@/lib/types';
 import {
   Button,
+  DeleteButton,
   DiscardChangesConfirm,
   ErrorMessage,
   Form,
@@ -36,29 +38,31 @@ const SubmitButton = ({ isActionPending }: { isActionPending: boolean }) => {
   );
 };
 
-type MatchFormProps = {
-  mode: 'create' | 'edit';
-  deckId: string;
-  eventId: string;
-  matchId?: string;
-  initialMatchData?: MatchInputForm;
-  onSuccess: () => void;
-  onCancel: () => void;
-  // Only shown when editing
-  deleteButton?: React.ReactNode;
+type CreateMatchProps = {
+  mode: 'create';
 };
 
-const MatchForm = ({
-  mode,
-  deckId,
-  eventId,
-  matchId,
-  initialMatchData,
-  onSuccess,
-  onCancel,
-  deleteButton,
-}: MatchFormProps) => {
+type EditMatchProps = {
+  mode: 'edit';
+  matchId: string;
+  initialMatchData: MatchInputForm;
+};
+
+type MatchFormProps = {
+  username: string;
+  deckId: string;
+  eventId: string;
+} & (CreateMatchProps | EditMatchProps);
+
+// Saving, cancelling and deleting all go back to the event page
+const MatchForm = (props: MatchFormProps) => {
   const t = useTranslations('matchForm');
+  const tDelete = useTranslations('deleteMatchButton');
+  const router = useRouter();
+
+  const { mode, username, deckId, eventId } = props;
+
+  const eventHref = `/${username}/events/${eventId}`;
 
   const action = mode === 'create' ? createMatch : updateMatch;
 
@@ -68,12 +72,14 @@ const MatchForm = ({
   >(action, null);
 
   const [matchData, setMatchData] = useState<MatchInputForm>(
-    initialMatchData || {
-      opponentArchetypeId: '',
-      wins: '',
-      losses: '',
-      notes: '',
-    },
+    props.mode === 'edit'
+      ? props.initialMatchData
+      : {
+          opponentArchetypeId: '',
+          wins: '',
+          losses: '',
+          notes: '',
+        },
   );
 
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -83,15 +89,9 @@ const MatchForm = ({
     if (hasFormDataChanged) {
       setShowCancelConfirm(true);
     } else {
-      onCancel();
+      router.push(eventHref);
     }
   };
-
-  useEffect(() => {
-    if (state?.success) {
-      onSuccess();
-    }
-  }, [state, onSuccess]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -118,7 +118,9 @@ const MatchForm = ({
     <Form action={formAction}>
       <SpaceChildrenVertically>
         <input type="hidden" name="eventId" value={eventId} />
-        {matchId && <input type="hidden" name="matchId" value={matchId} />}
+        {props.mode === 'edit' && (
+          <input type="hidden" name="matchId" value={props.matchId} />
+        )}
 
         <OpponentArchetypeSelect
           deckId={deckId}
@@ -160,14 +162,14 @@ const MatchForm = ({
           label={t('notes')}
           value={matchData.notes ?? ''}
           onChange={handleChange}
-          rows={15}
+          rows={25}
         />
 
         {state?.error && <ErrorMessage error={state.error} />}
         {showCancelConfirm ? (
           <DiscardChangesConfirm
             onKeepEditing={() => setShowCancelConfirm(false)}
-            onDiscard={onCancel}
+            onDiscard={() => router.push(eventHref)}
           />
         ) : (
           <FormActions
@@ -177,7 +179,15 @@ const MatchForm = ({
               </Button>
             }
             submitButton={<SubmitButton isActionPending={isPending} />}
-            deleteButton={mode === 'edit' ? deleteButton : undefined}
+            deleteButton={
+              props.mode === 'edit' ? (
+                <DeleteButton
+                  label={tDelete('delete')}
+                  confirmMessage={tDelete('deleteConfirm')}
+                  onDelete={() => deleteMatch(props.matchId)}
+                />
+              ) : undefined
+            }
           />
         )}
       </SpaceChildrenVertically>

@@ -258,6 +258,27 @@ const getEvent = async ({
   };
 };
 
+// Composed on getEvent, so the match's event must belong to the profile
+const getMatch = async ({
+  ownerUsername,
+  eventId,
+  matchId,
+}: {
+  ownerUsername: string;
+  eventId: string;
+  matchId: string;
+}) => {
+  const { event, isOwner } = await getEvent({ ownerUsername, eventId });
+
+  const match = event.matches.find(match => match.id === matchId);
+
+  if (!match) {
+    notFound();
+  }
+
+  return { event, match, isOwner };
+};
+
 const getOpponentArchetype = async ({
   ownerUsername,
   opponentArchetypeId,
@@ -440,5 +461,6 @@ export {
   getDeck,
   getEvents,
   getEvent,
+  getMatch,
   getOpponentArchetype,
 };

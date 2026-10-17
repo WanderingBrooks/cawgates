@@ -81,7 +81,6 @@ const EventPage = async ({
       <MatchSection
         matches={event.matches}
         eventId={id}
-        deckId={event.deckId}
         isOwner={isOwner}
         username={username}
       />
