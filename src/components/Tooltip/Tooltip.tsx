@@ -85,7 +85,10 @@ const Tooltip = ({ content, children, className }: TooltipProps) => {
         type="button"
         className={classes.trigger}
         aria-describedby={tooltipId}
-        onClick={() => setIsOpen(open => !open)}
+        // Only ever opens: on touch screens a tap fires mouseenter and focus
+        // (which open it) before click, so toggling here closed it straight
+        // away. Tapping elsewhere or scrolling closes it.
+        onClick={() => setIsOpen(true)}
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
         onFocus={() => setIsOpen(true)}
