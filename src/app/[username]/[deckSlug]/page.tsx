@@ -64,7 +64,7 @@ const DeckPage = async ({
         ]}
         actions={
           isOwner && (
-            <Link href={`/${username}/${deck.slug}/edit`}>
+            <Link href={`/${username}/decks/${deck.slug}/edit`}>
               <Button variant="secondary">{t('editDeck')}</Button>
             </Link>
           )
