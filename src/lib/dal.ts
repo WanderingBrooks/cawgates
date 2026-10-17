@@ -17,6 +17,100 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
+import { getMatchRecord } from '@/lib/utils';
+
+/**
+ * Match statistics per opponent archetype in a format. With a deckId only
+ * that deck's matches count, and only archetypes it has played are
+ * returned. Without one, every deck's matches count and every archetype
+ * in the format is returned, including ones with no matches yet.
+ *
+ * This does no authorisation of its own, so it isn't exported: call it only
+ * from the DAL functions below, after they have checked access to the deck
+ * or format.
+ */
+const queryMatchStatistics = async ({
+  deckId,
+  formatId,
+}: {
+  deckId?: string;
+  formatId: string;
+}) => {
+  // Archetypes are shared by every deck in the format, so for a deck only
+  // count the archetypes and matches it has actually played
+  const deckMatches = deckId ? { event: { deckId } } : undefined;
+
+  const opponentArchetypes = await prisma.opponentArchetype.findMany({
+    where: {
+      formatId,
+      ...(deckMatches && { matches: { some: deckMatches } }),
+    },
+    select: {
+      id: true,
+      name: true,
+      matches: {
+        where: deckMatches,
+        select: { wins: true, losses: true },
+      },
+    },
+  });
+
+  const deckStats = opponentArchetypes.map(opponentArchetype => {
+    const { wins, losses, matchWins, matchLosses, matchDraws } = getMatchRecord(
+      { matches: opponentArchetype.matches },
+    );
+
+    const total = wins + losses;
+
+    return {
+      opponentArchetype: opponentArchetype.name,
+      opponentArchetypeId: opponentArchetype.id,
+      totalMatches: opponentArchetype.matches.length,
+      total,
+      wins,
+      losses,
+      winRate: total === 0 ? 0 : wins / total,
+      matchWins,
+      matchLosses,
+      matchDraws,
+    };
+  });
+
+  // Sort order:
+  // 1) Total games played (wins + losses) descending — more data first.
+  // 2) Win rate descending for ties in total games (wins/total).
+  // 3) Alphabetical ascending fallback for deterministic ordering.
+  const rows = deckStats.sort((a, b) => {
+    if (b.total !== a.total) {
+      return b.total - a.total;
+    }
+
+    if (b.winRate !== a.winRate) {
+      return b.winRate - a.winRate;
+    }
+
+    return a.opponentArchetype.localeCompare(b.opponentArchetype);
+  });
+
+  const { matchWins, matchLosses, matchDraws } = getMatchRecord({
+    matches: opponentArchetypes.flatMap(
+      opponentArchetype => opponentArchetype.matches,
+    ),
+  });
+
+  const totalMatches = matchWins + matchLosses + matchDraws;
+
+  return {
+    rows,
+    totals: {
+      matchWins,
+      matchLosses,
+      matchDraws,
+      totalMatches,
+      matchWinRate: totalMatches === 0 ? 0 : matchWins / totalMatches,
+    },
+  };
+};
 
 const getOwnerByUsername = async ({ username }: { username: string }) => {
   const [viewer, owner] = await Promise.all([
@@ -205,7 +299,14 @@ const getFormatsForOwner = async ({
   const formats = await prisma.format.findMany({
     where: { userId: owner.id },
     orderBy: { name: 'asc' },
-    include: { _count: { select: { decks: true, opponentArchetypes: true } } },
+    include: {
+      _count: { select: { decks: true, opponentArchetypes: true } },
+      // Every match is against an archetype in its format, so this covers
+      // all of the format's matches
+      opponentArchetypes: {
+        select: { matches: { select: { wins: true, losses: true } } },
+      },
+    },
   });
 
   return { formats };
@@ -244,12 +345,48 @@ const getFormat = async ({
   return { format };
 };
 
+const getFormatWithMatchStatistics = async ({
+  ownerUsername,
+  formatId,
+}: {
+  ownerUsername: string;
+  formatId: string;
+}) => {
+  const { format } = await getFormat({ ownerUsername, formatId });
+
+  // Every deck's matches, and every archetype including unplayed ones
+  const { rows: matchStatistics } = await queryMatchStatistics({
+    formatId: format.id,
+  });
+
+  return { format, matchStatistics };
+};
+
+const getDeckWithMatchStatistics = async ({
+  ownerUsername,
+  deckSlug,
+}: {
+  ownerUsername: string;
+  deckSlug: string;
+}) => {
+  const { deck, isOwner } = await getDeck({ ownerUsername, deckSlug });
+
+  const { rows: matchStatistics, totals } = await queryMatchStatistics({
+    deckId: deck.id,
+    formatId: deck.formatId,
+  });
+
+  return { deck, isOwner, matchStatistics, totals };
+};
+
 export {
   getOwnerByUsername,
   getFormatsForOwner,
   getFormat,
+  getFormatWithMatchStatistics,
   getDecksForOwner,
   getDeck,
+  getDeckWithMatchStatistics,
   getEvents,
   getEvent,
   getOpponentArchetype,

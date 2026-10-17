@@ -1,0 +1,9 @@
+/* Wins and losses are short numbers, so they share a row */
+.recordRow {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.recordRow > * {
+  flex: 1;
+}

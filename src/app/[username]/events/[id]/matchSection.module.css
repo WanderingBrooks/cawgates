@@ -1,13 +1,19 @@
-.matchLinkAndArchetype {
+.section {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  gap: var(--spacing-md);
 }
 
-.matchRecord {
+.sectionHeader {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.sectionHeader > button {
+  width: 100%;
 }
 
 .matchList {
@@ -16,9 +22,41 @@
   gap: var(--spacing-md);
 }
 
-.matchActions {
-  margin-top: var(--spacing-md);
+.matchSummary {
+  flex: 1 1 100%;
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xs) var(--spacing-md);
+}
+
+.record {
+  padding: 1px var(--spacing-sm);
+}
+
+.matchActions {
+  flex: 1 1 100%;
+  display: flex;
   gap: var(--spacing-sm);
+}
+
+.matchActions > button {
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .sectionHeader > button {
+    width: auto;
+  }
+
+  .matchSummary {
+    flex: initial;
+    justify-content: normal;
+  }
+
+  .matchActions,
+  .matchActions > button {
+    flex: initial;
+  }
 }

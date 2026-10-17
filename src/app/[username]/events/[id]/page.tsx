@@ -1,7 +1,13 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { formatDate } from '@/lib/utils';
-import { Button, PageTitle, SectionHeader } from '@/components';
+import { cn, formatDate, getMatchRecord } from '@/lib/utils';
+import {
+  Button,
+  Card,
+  CardContent,
+  PageTitle,
+  SectionHeader,
+} from '@/components';
 import { getEvent } from '@/lib/dal';
 import DeleteEventButton from './DeleteEventButton';
 import MatchSection from './MatchSection';
@@ -15,6 +21,7 @@ const EventPage = async ({
 }) => {
   const { username, id } = await params;
   const t = await getTranslations('event');
+  const tCommon = await getTranslations('common');
   const formatter = await getFormatter();
 
   const { event, isOwner } = await getEvent({
@@ -22,44 +29,59 @@ const EventPage = async ({
     ownerUsername: username,
   });
 
-  const matchWins = event.matches.filter(m => m.wins > m.losses).length;
-  const matchLosses = event.matches.filter(m => m.losses > m.wins).length;
-  const matchTies = event.matches.filter(m => m.wins === m.losses).length;
+  const { matchWins, matchLosses, matchDraws } = getMatchRecord({
+    matches: event.matches,
+  });
 
   return (
     <>
-      <PageTitle title={event.name} subtitle={event.deck.name} />
-      <div className={classes.headerRow}>
-        <div>
-          <p>{formatDate({ formatter, date: new Date(event.date) })}</p>
-          {event.matches.length > 0 && (
-            <p className="text-emphasis">
-              {t('matchRecord', {
+      <PageTitle
+        title={event.name}
+        subtitle={[
+          <span key="deck">{event.deck.name}</span>,
+          <span key="date">
+            {formatDate({ formatter, date: new Date(event.date) })}
+          </span>,
+          event.matches.length > 0 && (
+            <strong key="record" className="text-number">
+              {tCommon('matchRecord', {
                 wins: matchWins,
                 losses: matchLosses,
-                ties: matchTies,
+                ties: matchDraws,
               })}
-            </p>
-          )}
-        </div>
-        <div className={classes.rightButtons}>
-          {isOwner && (
-            <Link href={`/${username}/events/${id}/edit`}>
-              <Button variant="primary">{t('editEvent')}</Button>
+            </strong>
+          ),
+        ]}
+        actions={
+          <>
+            {isOwner && (
+              <Link href={`/${username}/events/${id}/edit`}>
+                <Button variant="secondary">{t('editEvent')}</Button>
+              </Link>
+            )}
+            <Link href={`/${username}/${event.deck.slug}`}>
+              <Button variant="secondary">{t('viewDeck')}</Button>
             </Link>
-          )}
-          <Link href={`/${username}/${event.deck.slug}`}>
-            <Button variant="secondary">{t('viewDeck')}</Button>
-          </Link>
-        </div>
-      </div>
+            {isOwner && (
+              <div className={classes.desktopOnly}>
+                <DeleteEventButton eventId={id} />
+              </div>
+            )}
+          </>
+        }
+      />
       {isOwner && event.notes && (
-        <>
+        <section className={classes.section}>
           <SectionHeader>{t('notesSection')}</SectionHeader>
-          <Markdown>{event.notes}</Markdown>
-        </>
+          <Card>
+            <CardContent>
+              <div className="prose">
+                <Markdown>{event.notes}</Markdown>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
       )}
-      <SectionHeader>{t('matchesSection')}</SectionHeader>
       <MatchSection
         matches={event.matches}
         eventId={id}
@@ -67,11 +89,12 @@ const EventPage = async ({
         isOwner={isOwner}
         username={username}
       />
+      {/* On phones the delete button moves from the title down here */}
       {isOwner && (
-        <>
+        <section className={cn(classes.section, classes.mobileOnly)}>
           <SectionHeader>{t('dangerZone')}</SectionHeader>
           <DeleteEventButton eventId={id} />
-        </>
+        </section>
       )}
     </>
   );

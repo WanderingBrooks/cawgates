@@ -3,31 +3,36 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Button, Dialog, FormatForm } from '@/components';
-import classes from './formatPage.module.css';
+import Link from 'next/link';
+import { Button, Dialog, OpponentArchetypeForm } from '@/components';
 
-const FormatSubHeader = ({
+const OpponentArchetypeActions = ({
+  opponentArchetypeId,
   formatId,
   initialName,
+  username,
 }: {
+  opponentArchetypeId: string;
   formatId: string;
   initialName: string;
+  username: string;
 }) => {
-  const t = useTranslations('formatPage');
+  const t = useTranslations('opponentArchetypePage');
   const router = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
     <>
-      <div className={classes.rightAlignedButton}>
-        <Button variant="primary" onClick={() => setIsDialogOpen(true)}>
-          {t('edit')}
-        </Button>
-      </div>
+      <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
+        {t('edit')}
+      </Button>
+      <Link href={`/${username}/formats/${formatId}`}>
+        <Button variant="secondary">{t('viewFormat')}</Button>
+      </Link>
       <Dialog isOpen={isDialogOpen} title={t('editTitle')} usePortal>
-        <FormatForm
+        <OpponentArchetypeForm
           mode="edit"
-          formatId={formatId}
+          opponentArchetypeId={opponentArchetypeId}
           initialName={initialName}
           onSuccess={() => {
             setIsDialogOpen(false);
@@ -40,4 +45,4 @@ const FormatSubHeader = ({
   );
 };
 
-export default FormatSubHeader;
+export default OpponentArchetypeActions;

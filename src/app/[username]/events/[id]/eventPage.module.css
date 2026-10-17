@@ -1,13 +1,23 @@
-.headerRow {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--spacing-md);
-}
-
-.rightButtons {
+.section {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   gap: var(--spacing-sm);
+}
+
+.desktopOnly {
+  display: none;
+}
+
+.mobileOnly {
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .desktopOnly {
+    display: block;
+  }
+
+  .mobileOnly {
+    display: none;
+  }
 }

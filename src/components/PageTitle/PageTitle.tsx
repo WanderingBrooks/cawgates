@@ -1,32 +1,44 @@
+import { Fragment } from 'react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import classes from './pageTitle.module.css';
-import NavMenu from '../NavMenu/NavMenu';
 
 type PageTitleProps = {
   title: string;
-  subtitle?: string;
+  // One item, or a list shown as "Pauper · Match wins 24 · ...". Falsy items
+  // are skipped, so callers can include items conditionally.
+  subtitle?: React.ReactNode | React.ReactNode[];
+  // Buttons for the page, shown beside the title on wide screens and
+  // below it on phones
+  actions?: React.ReactNode;
   className?: string;
-  disableMenu?: boolean;
 };
 
-const PageTitle = ({
-  title,
-  subtitle,
-  className,
-  disableMenu = false,
-}: PageTitleProps) => {
+const PageTitle = ({ title, subtitle, actions, className }: PageTitleProps) => {
+  const t = useTranslations('pageTitle');
+
+  const subtitleItems = (
+    Array.isArray(subtitle) ? subtitle : [subtitle]
+  ).filter(item => item !== undefined && item !== null && item !== false);
+
   return (
     <div className={cn(classes.pageTitle, className)}>
-      <div>
+      <div className={classes.text}>
         <h1>{title}</h1>
-        {/*
-         * Render h2 even when subtitle is not passed in
-         * to maintain consistent spacing between title
-         * and page content.
-         */}
-        <h2 className={classes.subtitle}>{subtitle}</h2>
+        {subtitleItems.length > 0 && (
+          <div className={cn('text-secondary', classes.subtitle)}>
+            {subtitleItems.map((item, index) => (
+              <Fragment key={index}>
+                {index > 0 && (
+                  <span className={classes.separator}>{t('separator')}</span>
+                )}
+                {item}
+              </Fragment>
+            ))}
+          </div>
+        )}
       </div>
-      <NavMenu disabled={disableMenu} />
+      {actions && <div className={classes.actions}>{actions}</div>}
     </div>
   );
 };

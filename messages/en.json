@@ -1,30 +1,38 @@
 {
+  "pageTitle": {
+    "separator": "·"
+  },
+  "common": {
+    "matchRecord": "{wins}-{losses}-{ties}",
+    "gameRecord": "{wins}-{losses}",
+    "matchRecordLabel": "Match record",
+    "gameRecordLabel": "Game record",
+    "gameWinPctLabel": "Game win %",
+    "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
+    "noValue": "–"
+  },
   "decks": {
     "title": "My decks",
     "guestTitle": "{username}''s decks",
     "createDeck": "Create deck",
     "noDecks": "No decks yet — create one to get started",
-    "eventCount": "{count, plural, one {# event} other {# events}}"
+    "deck": "Deck",
+    "format": "Format",
+    "events": "Events"
   },
   "createDeck": {
     "title": "Create deck",
     "firstDeckSubtitle": "Create your first deck to start tracking events"
   },
   "deckPage": {
-    "title": "Record",
     "editDeck": "Edit deck",
-    "totalMatchWins": "Match wins",
-    "totalMatchLosses": "Match losses",
-    "matchWinPct": "Match win %",
-    "matchWinPctExplainer": "Wins ÷ (wins + losses + draws)",
+    "totalMatchWins": "Match wins <num>{count}</num>",
+    "totalMatchLosses": "Match losses <num>{count}</num>",
+    "totalMatchWinPct": "<explainer>Match win %</explainer> <num>{rate}</num>",
     "opponentArchetype": "Opponent archetype",
-    "matchRecord": "Match record",
-    "gameRecord": "Game record",
-    "gameWinPct": "Game win %",
     "noMatchesOwner": "No matches yet — create an event to start tracking",
     "noMatchesViewer": "No matches found",
-    "createEvent": "Create event",
-    "deckAndFormat": "{deck} - {format}"
+    "createEvent": "Create event"
   },
   "deckForm": {
     "name": "Deck name *",
@@ -50,20 +58,21 @@
   "events": {
     "title": "Events",
     "createEvent": "Create event",
-    "record": "{wins}W–{losses}L–{ties}T",
+    "date": "Date",
+    "event": "Event",
+    "deck": "Deck",
+    "recordHeader": "Record",
     "noEvents": "No events yet",
     "noDecksHint": "You need a deck before you can create an event.",
     "createDeck": "Create your first deck"
   },
   "createEvent": {
     "title": "Create new event",
-    "viewEvents": "View events",
     "noDecksHint": "You need a deck before you can create an event.",
     "createEvent": "Create event"
   },
   "editEvent": {
-    "title": "Edit event",
-    "backToEvent": "Back to event"
+    "title": "Edit event"
   },
   "eventForm": {
     "deckId": "Deck *",
@@ -81,19 +90,15 @@
     "addMatch": "Add match",
     "editMatch": "Edit",
     "noMatches": "No matches yet — add one to get started",
-    "gameRecord": "{wins}W–{losses}L",
     "matchesSection": "Matches",
     "notesSection": "Notes",
-    "dangerZone": "Danger zone",
-    "matchRecord": "{wins}W–{losses}L–{ties}T"
+    "dangerZone": "Danger zone"
   },
   "matchForm": {
     "opponentArchetype": "Opponent archetype *",
     "wins": "Wins *",
     "losses": "Losses *",
     "notes": "Notes",
-    "openNotes": "Open notes",
-    "closeNotes": "Close notes",
     "saveMatch": "Save Match",
     "saving": "Saving...",
     "cancel": "Cancel"
@@ -140,22 +145,26 @@
   "formats": {
     "title": "My formats",
     "noFormats": "No formats yet — create one when you create a deck",
-    "deckCount": "{count, plural, one {# deck} other {# decks}}",
-    "opponentArchetypeCount": "{count, plural, one {# opponent archetype} other {# opponent archetypes}}"
+    "format": "Format",
+    "decks": "Decks",
+    "opponentArchetypes": "Opponent archetypes",
+    "matches": "Matches",
+    "matchWinPct": "Match win %"
   },
   "formatPage": {
     "edit": "Edit",
     "editTitle": "Edit format",
     "decksSection": "Decks",
     "noDecks": "No decks use this format",
+    "deck": "Deck",
     "opponentArchetypesSection": "Opponent archetypes",
     "noOpponentArchetypes": "No opponent archetypes yet",
+    "archetype": "Archetype",
     "dangerZone": "Danger zone"
   },
   "formatOpponentArchetype": {
-    "matchCount": "{count, plural, one {# match} other {# matches}}",
-    "rename": "Rename",
-    "renameTitle": "Rename opponent archetype",
+    "edit": "Edit",
+    "editTitle": "Edit opponent archetype",
     "delete": "Delete",
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete {name}?",
@@ -166,7 +175,7 @@
     "deleting": "Deleting...",
     "deleteConfirm": "Are you sure you want to delete this format?",
     "deleteConfirmWithArchetypes": "{count, plural, one {Are you sure you want to delete this format? This also deletes # unused opponent archetype.} other {Are you sure you want to delete this format? This also deletes # unused opponent archetypes.}}",
-    "hasDecksHint": "To delete this format, all of its decks must first be moved to another format or deleted."
+    "hasDecksHint": "To delete this format, first delete its decks. Decks without matches can also be moved to another format."
   },
   "errorMessage": {
     "message": "<strong>Error:</strong> {error}"
@@ -189,18 +198,13 @@
     "submitting": "Logging in...",
     "clickHereToRegister": "Don't have an account? Click here to register."
   },
-  "pageTitle": {
-    "logout": "Logout"
-  },
-  "navMenu": {
-    "menu": "Menu",
-    "myDecks": "My decks",
-    "myFormats": "My formats",
-    "myEvents": "My events",
-    "decks": "{username}''s decks",
-    "events": "{username}''s events",
-    "record": "Record",
-    "edit": "Edit",
+  "siteHeader": {
+    "appName": "Cawgates",
+    "events": "Events",
+    "decks": "Decks",
+    "formats": "Formats",
+    "login": "Login",
+    "register": "Register",
     "logout": "Logout"
   },
   "opponentArchetypeForm": {
@@ -211,14 +215,11 @@
     "cancel": "Cancel"
   },
   "opponentArchetypePage": {
-    "editSection": "Edit archetype",
     "matchesSection": "Matches",
     "edit": "Edit",
     "editTitle": "Edit opponent archetype",
     "viewFormat": "View format",
-    "noMatches": "No matches yet",
-    "record": "{wins}W–{losses}L",
-    "overallRecord": "{wins}W–{losses}L–{ties}T"
+    "noMatches": "No matches yet"
   },
   "discardConfirm": {
     "discardChanges": "Discard changes?",
@@ -229,9 +230,8 @@
     "title": "Loading..."
   },
   "guestBanner": {
-    "viewing": "{username}'s profile.",
-    "backToMyEvents": "Back to my events.",
-    "signUpPrompt": "<login>Login</login> or <register>Register</register> to track your decks."
+    "viewingSignedIn": "{username}'s profile. <back>Back to my events.</back>",
+    "viewingSignedOut": "{username}'s profile. <login>Login</login> or <register>Register</register> to track your decks."
   },
   "notFound": {
     "message": "This page could not be found.",

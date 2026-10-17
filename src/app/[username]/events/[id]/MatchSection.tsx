@@ -6,14 +6,16 @@ import { useTranslations } from 'next-intl';
 import { deleteMatch } from '@/app/actions/matches';
 import {
   Button,
-  ErrorMessage,
-  Dialog,
   Card,
   CardContent,
   CardTitle,
+  ErrorMessage,
+  Dialog,
+  SectionHeader,
 } from '@/components';
 import MatchForm from './MatchForm';
 import { MatchInputForm } from '@/lib/types';
+import { cn, getMatchResultTint } from '@/lib/utils';
 import classes from './matchSection.module.css';
 import Markdown from 'react-markdown';
 
@@ -44,6 +46,7 @@ const MatchSection = ({
   username,
 }: MatchSectionProps) => {
   const t = useTranslations('event');
+  const tCommon = useTranslations('common');
   const tDelete = useTranslations('deleteMatchButton');
   const tCreateMatch = useTranslations('createMatch');
   const tEditMatch = useTranslations('editMatch');
@@ -80,12 +83,15 @@ const MatchSection = ({
     : undefined;
 
   return (
-    <>
-      {isOwner && (
-        <Button variant="primary" onClick={() => setIsAddOpen(true)}>
-          {t('addMatch')}
-        </Button>
-      )}
+    <section className={classes.section}>
+      <div className={classes.sectionHeader}>
+        <SectionHeader>{t('matchesSection')}</SectionHeader>
+        {isOwner && (
+          <Button variant="primary" onClick={() => setIsAddOpen(true)}>
+            {t('addMatch')}
+          </Button>
+        )}
+      </div>
 
       {deleteError && <ErrorMessage error={deleteError} />}
 
@@ -95,46 +101,59 @@ const MatchSection = ({
         <div className={classes.matchList}>
           {matches.map(match => (
             <Card key={match.id}>
-              <CardTitle align="start">
-                <div className={classes.matchLinkAndArchetype}>
+              <CardTitle>
+                <div className={classes.matchSummary}>
                   <Link
                     href={`/${username}/opponents/${match.opponentArchetypeId}`}
+                    className="text-strong"
                   >
                     {match.opponentArchetype.name}
                   </Link>
-                </div>
-                <div className={classes.matchRecord}>
-                  <p>
-                    {t('gameRecord', {
+                  <span
+                    className={cn(
+                      'text-number',
+                      'text-strong',
+                      classes.record,
+                      getMatchResultTint({
+                        wins: match.wins,
+                        losses: match.losses,
+                      }),
+                    )}
+                  >
+                    {tCommon('gameRecord', {
                       wins: match.wins,
                       losses: match.losses,
                     })}
-                  </p>
+                  </span>
                 </div>
+                {isOwner && (
+                  <div className={classes.matchActions}>
+                    <Button
+                      variant="secondary"
+                      size="small"
+                      onClick={() => setEditingMatch(match)}
+                    >
+                      {t('editMatch')}
+                    </Button>
+                    <Button
+                      variant="danger"
+                      size="small"
+                      disabled={deletingId === match.id}
+                      onClick={() => handleDelete({ matchId: match.id })}
+                    >
+                      {deletingId === match.id
+                        ? tDelete('deleting')
+                        : tDelete('delete')}
+                    </Button>
+                  </div>
+                )}
               </CardTitle>
               {isOwner && match.notes && (
                 <CardContent>
-                  <Markdown>{match.notes}</Markdown>
+                  <div className="prose">
+                    <Markdown>{match.notes}</Markdown>
+                  </div>
                 </CardContent>
-              )}
-              {isOwner && (
-                <div className={classes.matchActions}>
-                  <Button
-                    variant="secondary"
-                    onClick={() => setEditingMatch(match)}
-                  >
-                    {t('editMatch')}
-                  </Button>
-                  <Button
-                    variant="danger"
-                    disabled={deletingId === match.id}
-                    onClick={() => handleDelete({ matchId: match.id })}
-                  >
-                    {deletingId === match.id
-                      ? tDelete('deleting')
-                      : tDelete('delete')}
-                  </Button>
-                </div>
               )}
             </Card>
           ))}
@@ -173,7 +192,7 @@ const MatchSection = ({
           </Dialog>
         </>
       )}
-    </>
+    </section>
   );
 };
 

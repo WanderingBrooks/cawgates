@@ -50,6 +50,31 @@ const calculate = ({
 - If a component doesn't have a CSS module file, create one
 - Use the `cn` util function when combining multiple classes
 - Always use CSS variables from `@/app/globals.css` for colors and spacing
+- **Style mobile first**: the base styles are for phones, and desktop changes go in `@media (min-width: 768px)`. Never use `max-width` media queries. The breakpoint is always `768px`; it can't be a CSS variable because `var()` doesn't work inside `@media`
+
+```css
+/* ❌ Bad - desktop first */
+.actions {
+  justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+  .actions {
+    justify-content: stretch;
+  }
+}
+
+/* ✅ Good - mobile first */
+.actions {
+  justify-content: stretch;
+}
+
+@media (min-width: 768px) {
+  .actions {
+    justify-content: flex-end;
+  }
+}
+```
 
 ```tsx
 // ❌ Bad - inline styles
@@ -79,6 +104,8 @@ const calculate = ({
 // ✅ Good - global text utility composed with module class
 <p className={cn('text-label', classes.sectionHeader)} />
 ```
+
+- **No screen reader support**: the app doesn't support screen readers, so don't add markup that only they use: `aria-*` attributes, `role`, or visually hidden text
 
 ## Internationalization
 
@@ -141,9 +168,9 @@ const myActionWithData = async (): Promise<ActionResultWithData<{ id: string }>>
 
 ## Code Quality
 
-- After generating or modifying code, always run both `npm run lint` and `npm run typecheck` to catch errors
-- `npm run lint` catches style and ESLint rule violations
-- `npm run typecheck` runs `tsc --noEmit` to catch cross-file type errors that ESLint misses
+- After generating or modifying code, always run both `pnpm lint` and `pnpm typecheck` to catch errors
+- `pnpm lint` catches style and ESLint rule violations
+- `pnpm typecheck` runs `tsc --noEmit` to catch cross-file type errors that ESLint misses
 
 ## Data Access
 

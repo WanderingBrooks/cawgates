@@ -1,6 +1,11 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { formatDate } from '@/lib/utils';
+import {
+  cn,
+  formatDate,
+  getMatchRecord,
+  getMatchResultTint,
+} from '@/lib/utils';
 import Markdown from 'react-markdown';
 import {
   Card,
@@ -10,7 +15,7 @@ import {
   SectionHeader,
 } from '@/components';
 import { getOpponentArchetype } from '@/lib/dal';
-import OpponentArchetypeSubHeader from './OpponentArchetypeSubHeader';
+import OpponentArchetypeActions from './OpponentArchetypeActions';
 import classes from './opponentArchetypePage.module.css';
 
 const OpponentArchetypePage = async ({
@@ -20,6 +25,7 @@ const OpponentArchetypePage = async ({
 }) => {
   const { username, id } = await params;
   const t = await getTranslations('opponentArchetypePage');
+  const tCommon = await getTranslations('common');
   const formatter = await getFormatter();
 
   const { opponentArchetype, isOwner } = await getOpponentArchetype({
@@ -27,70 +33,95 @@ const OpponentArchetypePage = async ({
     opponentArchetypeId: id,
   });
 
-  const matchWins = opponentArchetype.matches.filter(
-    m => m.wins > m.losses,
-  ).length;
-
-  const matchLosses = opponentArchetype.matches.filter(
-    m => m.losses > m.wins,
-  ).length;
-
-  const matchDraws = opponentArchetype.matches.filter(
-    m => m.wins === m.losses,
-  ).length;
+  const { matchWins, matchLosses, matchDraws } = getMatchRecord({
+    matches: opponentArchetype.matches,
+  });
 
   return (
     <>
       <PageTitle
         title={opponentArchetype.name}
-        subtitle={opponentArchetype.format.name}
+        subtitle={[
+          <span key="format">{opponentArchetype.format.name}</span>,
+          opponentArchetype.matches.length > 0 && (
+            <strong key="record" className="text-number">
+              {tCommon('matchRecord', {
+                wins: matchWins,
+                losses: matchLosses,
+                ties: matchDraws,
+              })}
+            </strong>
+          ),
+        ]}
+        actions={
+          // Edit and View format are owner-only, so guests get no actions row
+          isOwner && (
+            <OpponentArchetypeActions
+              opponentArchetypeId={opponentArchetype.id}
+              formatId={opponentArchetype.formatId}
+              initialName={opponentArchetype.name}
+              username={username}
+            />
+          )
+        }
       />
-      <OpponentArchetypeSubHeader
-        opponentArchetypeId={opponentArchetype.id}
-        formatId={opponentArchetype.formatId}
-        initialName={opponentArchetype.name}
-        totalMatches={opponentArchetype.matches.length}
-        matchWins={matchWins}
-        matchLosses={matchLosses}
-        matchDraws={matchDraws}
-        isOwner={isOwner}
-        username={username}
-      />
-      <SectionHeader>{t('matchesSection')}</SectionHeader>
-      {opponentArchetype.matches.length === 0 ? (
-        <p>{t('noMatches')}</p>
-      ) : (
-        <div className={classes.matchList}>
-          {opponentArchetype.matches.map(match => (
-            <Card key={match.id}>
-              <CardTitle align="start">
-                <div className={classes.matchLink}>
-                  <Link href={`/${username}/events/${match.event.id}`}>
-                    {match.event.name}
-                  </Link>
-                  <span>{match.event.deck.name}</span>
-                </div>
-                <div className={classes.matchRecordAndDate}>
-                  <p>
-                    {formatDate({
-                      formatter,
-                      date: new Date(match.event.date),
-                    })}
-                  </p>
-                  <p>
-                    {t('record', { wins: match.wins, losses: match.losses })}
-                  </p>
-                </div>
-              </CardTitle>
-              {isOwner && match.notes && (
-                <CardContent>
-                  <Markdown>{match.notes}</Markdown>
-                </CardContent>
-              )}
-            </Card>
-          ))}
-        </div>
-      )}
+      <section className={classes.section}>
+        <SectionHeader>{t('matchesSection')}</SectionHeader>
+        {opponentArchetype.matches.length === 0 ? (
+          <p>{t('noMatches')}</p>
+        ) : (
+          <div className={classes.matchList}>
+            {opponentArchetype.matches.map(match => (
+              <Card key={match.id}>
+                <CardTitle>
+                  <div className={classes.matchEvent}>
+                    <Link
+                      href={`/${username}/events/${match.event.id}`}
+                      className="text-strong"
+                    >
+                      {match.event.name}
+                    </Link>
+                    <span className="text-secondary">
+                      {match.event.deck.name}
+                    </span>
+                  </div>
+                  <div className={classes.matchResult}>
+                    <span className="text-secondary">
+                      {formatDate({
+                        formatter,
+                        date: new Date(match.event.date),
+                      })}
+                    </span>
+                    <span
+                      className={cn(
+                        'text-number',
+                        'text-strong',
+                        classes.record,
+                        getMatchResultTint({
+                          wins: match.wins,
+                          losses: match.losses,
+                        }),
+                      )}
+                    >
+                      {tCommon('gameRecord', {
+                        wins: match.wins,
+                        losses: match.losses,
+                      })}
+                    </span>
+                  </div>
+                </CardTitle>
+                {isOwner && match.notes && (
+                  <CardContent>
+                    <div className="prose">
+                      <Markdown>{match.notes}</Markdown>
+                    </div>
+                  </CardContent>
+                )}
+              </Card>
+            ))}
+          </div>
+        )}
+      </section>
     </>
   );
 };

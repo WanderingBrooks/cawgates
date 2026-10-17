@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import classes from './form.module.css';
 
 type FormProps = {
   action: (formData: FormData) => void;
@@ -38,7 +39,11 @@ const Form = ({ action, children, warnIfUnsaved = true }: FormProps) => {
 
   return (
     // eslint-disable-next-line no-restricted-syntax
-    <form action={action} onChange={() => setHasFormDataChanged(true)}>
+    <form
+      action={action}
+      onChange={() => setHasFormDataChanged(true)}
+      className={classes.form}
+    >
       {children}
     </form>
   );

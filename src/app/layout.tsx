@@ -1,9 +1,11 @@
 import './globals.css';
 
 import type { Metadata } from 'next';
+import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google';
 import { getLocale } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { cn } from '@/lib/utils';
 
 // This RootLayout component is the only place
 // the Page component should be imported and used.
@@ -14,6 +16,20 @@ import Page from '@/components/Page';
 
 const metadata: Metadata = { title: 'Cawgates' };
 
+// Self-hosted by next/font at build time, exposed as CSS variables that
+// --font-family and --font-family-mono in globals.css pick up
+const plexSans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-plex-sans',
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '600'],
+  variable: '--font-plex-mono',
+});
+
 const RootLayout = async ({
   children,
 }: Readonly<{
@@ -23,7 +39,7 @@ const RootLayout = async ({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={cn(plexSans.variable, plexMono.variable)}>
       <body>
         <NextIntlClientProvider messages={messages}>
           <Page>{children}</Page>

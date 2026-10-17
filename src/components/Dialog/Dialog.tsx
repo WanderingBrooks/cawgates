@@ -3,7 +3,6 @@
 import { useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
-import { Card, CardTitle } from '../Card';
 import classes from './dialog.module.css';
 
 type DialogProps = {
@@ -36,12 +35,14 @@ const Dialog = ({
 
   const content = (
     <div className={cn(classes.dialogContainer, isOpen && classes.open)}>
-      <Card className={cn(classes.dialog, className)}>
-        <CardTitle>{title}</CardTitle>
+      <div className={cn(classes.dialog, className)}>
+        <div className={classes.header}>
+          <h2>{title}</h2>
+        </div>
         {/* Children only mount while open, so forms inside start fresh each time
             instead of keeping state (e.g. a typed name) from the last open */}
-        {isOpen && children}
-      </Card>
+        <div className={classes.body}>{isOpen && children}</div>
+      </div>
     </div>
   );
 

@@ -1,9 +1,13 @@
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
-import { PageTitle, Button, Card, Tooltip } from '@/components';
-import { getDeck } from '@/lib/dal';
-import getMatchStatistics from './getMatchStatistics';
-import classes from './deck.module.css';
+import { PageTitle, Button, Tooltip } from '@/components';
+import { getDeckWithMatchStatistics } from '@/lib/dal';
+import { cn, getWinRateTint } from '@/lib/utils';
+
+const renderNumber = (chunks: ReactNode) => (
+  <strong className="text-number">{chunks}</strong>
+);
 
 const DeckPage = async ({
   params,
@@ -12,106 +16,128 @@ const DeckPage = async ({
 }) => {
   const { username, deckSlug } = await params;
   const t = await getTranslations('deckPage');
+  const tCommon = await getTranslations('common');
   const formatter = await getFormatter();
 
-  const { deck, isOwner } = await getDeck({
-    ownerUsername: username,
-    deckSlug,
-  });
-
-  const { rows: matchStatistics, totals } = await getMatchStatistics({
-    deckId: deck.id,
-    formatId: deck.formatId,
-  });
+  const { deck, isOwner, matchStatistics, totals } =
+    await getDeckWithMatchStatistics({
+      ownerUsername: username,
+      deckSlug,
+    });
 
   return (
     <>
       <PageTitle
-        title={t('title')}
-        subtitle={t('deckAndFormat', {
-          deck: deck.name,
-          format: deck.format.name,
-        })}
+        title={deck.name}
+        subtitle={[
+          <span key="format">{deck.format.name}</span>,
+          ...(totals.totalMatches > 0
+            ? [
+                <span key="wins">
+                  {t.rich('totalMatchWins', {
+                    count: totals.matchWins,
+                    num: renderNumber,
+                  })}
+                </span>,
+                <span key="losses">
+                  {t.rich('totalMatchLosses', {
+                    count: totals.matchLosses,
+                    num: renderNumber,
+                  })}
+                </span>,
+                <span key="winRate">
+                  {t.rich('totalMatchWinPct', {
+                    rate: formatter.number(totals.matchWinRate, {
+                      style: 'percent',
+                      maximumFractionDigits: 1,
+                    }),
+                    num: renderNumber,
+                    explainer: chunks => (
+                      <Tooltip content={tCommon('matchWinPctExplainer')}>
+                        {chunks}
+                      </Tooltip>
+                    ),
+                  })}
+                </span>,
+              ]
+            : []),
+        ]}
+        actions={
+          isOwner && (
+            <Link href={`/${username}/${deck.slug}/edit`}>
+              <Button variant="secondary">{t('editDeck')}</Button>
+            </Link>
+          )
+        }
       />
-      {isOwner && (
-        <div className={classes.rightAlignedButton}>
-          <Link href={`/${username}/${deck.slug}/edit`}>
-            <Button variant="primary">{t('editDeck')}</Button>
-          </Link>
-        </div>
-      )}
-      {totals.totalMatches > 0 && (
-        <Card className={classes.summaryCard}>
-          <div className={classes.summaryRow}>
-            <div className={classes.summaryStat}>
-              <p className="text-label">{t('totalMatchWins')}</p>
-              <p className="text-emphasis">{totals.matchWins}</p>
-            </div>
-            <div className={classes.summaryStat}>
-              <p className="text-label">{t('totalMatchLosses')}</p>
-              <p className="text-emphasis">{totals.matchLosses}</p>
-            </div>
-            <div className={classes.summaryStat}>
-              <p className="text-label">
-                <Tooltip content={t('matchWinPctExplainer')}>
-                  {t('matchWinPct')}
-                </Tooltip>
-              </p>
-              <p className="text-emphasis">
-                {formatter.number(totals.matchWinRate, {
-                  style: 'percent',
-                  maximumFractionDigits: 1,
-                })}
-              </p>
-            </div>
-          </div>
-        </Card>
-      )}
       {matchStatistics.length === 0 ? (
         <>
           {isOwner ? (
             <>
               <p>{t('noMatchesOwner')}</p>
-              <Link href={`/${username}/events/create`}>
-                <Button variant="primary">{t('createEvent')}</Button>
-              </Link>
+              <div>
+                <Link href={`/${username}/events/create`}>
+                  <Button variant="primary">{t('createEvent')}</Button>
+                </Link>
+              </div>
             </>
           ) : (
             <p>{t('noMatchesViewer')}</p>
           )}
         </>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>{t('opponentArchetype')}</th>
-              <th>{t('matchRecord')}</th>
-              <th>{t('gameRecord')}</th>
-              <th>{t('gameWinPct')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {matchStatistics.map(row => (
-              <tr key={row.opponentArchetypeId}>
-                <td>
-                  <Link
-                    href={`/${username}/opponents/${row.opponentArchetypeId}`}
-                  >
-                    {row.opponentArchetype}
-                  </Link>
-                </td>
-                <td>{`${row.matchWins}-${row.matchLosses}-${row.matchDraws}`}</td>
-                <td>{`${row.wins}-${row.losses}`}</td>
-                <td>
-                  {formatter.number(row.winRate, {
-                    style: 'percent',
-                    maximumFractionDigits: 1,
-                  })}
-                </td>
+        <div className="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>{t('opponentArchetype')}</th>
+                <th className="text-number">{tCommon('matchRecordLabel')}</th>
+                <th className="text-number">{tCommon('gameRecordLabel')}</th>
+                <th className="text-number">{tCommon('gameWinPctLabel')}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {matchStatistics.map(row => (
+                <tr key={row.opponentArchetypeId}>
+                  <td>
+                    <Link
+                      href={`/${username}/opponents/${row.opponentArchetypeId}`}
+                    >
+                      {row.opponentArchetype}
+                    </Link>
+                  </td>
+                  <td className="text-number">
+                    {tCommon('matchRecord', {
+                      wins: row.matchWins,
+                      losses: row.matchLosses,
+                      ties: row.matchDraws,
+                    })}
+                  </td>
+                  <td className="text-number">
+                    {tCommon('gameRecord', {
+                      wins: row.wins,
+                      losses: row.losses,
+                    })}
+                  </td>
+                  <td
+                    className={cn(
+                      'text-number',
+                      getWinRateTint({
+                        winRate: row.winRate,
+                        matchCount: row.totalMatches,
+                      }),
+                    )}
+                  >
+                    {formatter.number(row.winRate, {
+                      style: 'percent',
+                      maximumFractionDigits: 1,
+                    })}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </>
   );

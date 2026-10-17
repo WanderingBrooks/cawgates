@@ -1,0 +1,22 @@
+.pageContent {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  /* Leave room for the fixed tab bar at the bottom of the screen */
+  padding: var(--spacing-lg) var(--spacing-lg)
+    calc(
+      var(--tab-bar-height) + var(--spacing-xxl) +
+        env(safe-area-inset-bottom, 0px)
+    );
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+@media (min-width: 768px) {
+  .pageContent {
+    padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-xxl);
+  }
+}
