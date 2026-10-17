@@ -1,0 +1,50 @@
+name: Checks
+
+on:
+  pull_request:
+    branches:
+      - trunk
+
+# A new push to the same PR cancels the run that's still going
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Lint and typecheck
+    # GitHub's runners, never the homelab one: PRs from forks run untrusted code
+    runs-on: ubuntu-latest
+
+    # SKIP_ENV_VALIDATION=1 lets postinstall's `prisma generate` and
+    # `next typegen` load src/lib/env.ts without real secrets, as in the Dockerfile
+    env:
+      SKIP_ENV_VALIDATION: 1
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      # tsc checks the route types in .next/types, which a fresh checkout doesn't have
+      - name: Generate route types
+        run: pnpm exec next typegen
+
+      - name: Typecheck
+        run: pnpm typecheck
