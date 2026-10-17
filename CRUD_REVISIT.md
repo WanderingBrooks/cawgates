@@ -7,32 +7,11 @@
 - Public/private decks are gone (PR #70, and this PR is rebased on it).
   Every deck is public and only notes stay private. `Deck.isPublic` is
   dropped in a follow-up migration (see `COLUMNS_TO_DROP.md`).
-- Next: the navigation and stats consistency items, then where formats and
-  decks are created and edited.
-
-## Navigation buttons and stats consistency
-
-1. **Event page "View deck" button.** It now opens the Matchups page filtered
-   to the event's deck (`/matchups/<formatId>?deck=<slug>`), so the label no
-   longer matches where it goes.
-2. **Archetype page "View format" button.** It goes back to the Matchups page
-   (keeping the deck filter), but there is no "format" page any more. Maybe a
-   "Back to matchups" link or a breadcrumb instead of a button.
-3. **Subheaders differ between Matchups and the archetype page.**
-   - Matchups: the title is the format name, and the subtitle is
-     "Match wins 20 · Match losses 14 · Match win % 58.8%".
-   - Archetype: the title is the archetype, and the subtitle is
-     "Pauper · 1-1-0" (format name and match record).
-   They should probably follow the same pattern.
-4. **Match vs game stats are shown inconsistently.**
-   - Matchups header: match wins, match losses, match win %.
-   - Matchups table: match record, game record, game win %, with the win/loss
-     tint based on game win %.
-   - Archetype page: match record in the subtitle, and a game record per
-     match.
-   - Event page and events list: match record.
-   Decide which stats to show where (match vs game, record vs percentage)
-   and use them consistently.
+- Done: the navigation buttons say "View matchups", the Matchups and
+  archetype subtitles both read "record · match win %", and every stat is
+  match-based (game scores only on individual matches), like Decks and the
+  City.
+- Next: where formats and decks are created and edited (below).
 
 ## Where formats and decks are created and edited
 
@@ -41,13 +20,13 @@ the create/edit/delete actions. This needs more thought before changing.
 
 ### Where things are now
 
-| Action        | Where                                                        | Problem                                                   |
-| ------------- | ------------------------------------------------------------ | --------------------------------------------------------- |
-| Create deck   | Button next to the Deck dropdown on Matchups                 | Reads as part of the filter                               |
-| Edit deck     | Button next to the Deck dropdown, only once a deck is picked | Hidden until you happen to filter                         |
-| Create format | Only inside the deck form ("+ Add new…" in its format picker) | Practically undiscoverable                                |
-| Edit format   | "Edit" button by the Matchups page title                     | On a page called Matchups, "Edit" doesn't say what it edits |
-| Delete format | Next to Edit, plus a mobile danger zone                      | Clutters the title area                                   |
+| Action        | Where                                                         | Problem                                                     |
+| ------------- | ------------------------------------------------------------- | ----------------------------------------------------------- |
+| Create deck   | Button next to the Deck dropdown on Matchups                  | Reads as part of the filter                                 |
+| Edit deck     | Button next to the Deck dropdown, only once a deck is picked  | Hidden until you happen to filter                           |
+| Create format | Only inside the deck form ("+ Add new…" in its format picker) | Practically undiscoverable                                  |
+| Edit format   | "Edit" button by the Matchups page title                      | On a page called Matchups, "Edit" doesn't say what it edits |
+| Delete format | Next to Edit, plus a mobile danger zone                       | Clutters the title area                                     |
 
 ### Option A: manage each thing next to the dropdown that selects it
 
