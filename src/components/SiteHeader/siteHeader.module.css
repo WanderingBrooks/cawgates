@@ -6,7 +6,7 @@
 .bar {
   box-sizing: border-box;
   max-width: var(--page-max-width);
-  min-height: 48px;
+  min-height: var(--header-height-mobile);
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
 
@@ -42,7 +42,7 @@
 .navLink {
   display: flex;
   align-items: center;
-  min-height: 44px;
+  min-height: var(--control-height-mobile);
   padding: 0 var(--spacing-md);
 }
 
