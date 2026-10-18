@@ -1,19 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { useUnsavedChangesGuard } from '../UnsavedChangesGuard';
 import classes from './form.module.css';
 
 type FormProps = {
   action: (formData: FormData) => void;
   children: React.ReactNode;
   /**
-   * When true, warns the user if they attempt to leave the page with unsaved
-   * changes. Defaults to true.
-   *
-   * Uses the browser's `beforeunload` event, which only fires for full-page
-   * navigations: reload, closing the tab, or typing a new URL. It does NOT
-   * fire for in-app navigation (back button, <Link> clicks) because Next.js
-   * handles those in JavaScript without unloading the document.
+   * When true, asks before the user leaves the page with unsaved changes:
+   * reload, closing the tab, a link or Back. Defaults to true.
    *
    * Set to false for forms where losing input is not a concern (e.g. login).
    */
@@ -21,21 +18,13 @@ type FormProps = {
 };
 
 const Form = ({ action, children, warnIfUnsaved = true }: FormProps) => {
+  const t = useTranslations('discardConfirm');
   const [hasFormDataChanged, setHasFormDataChanged] = useState(false);
 
-  useEffect(() => {
-    if (!hasFormDataChanged || !warnIfUnsaved) {
-      return;
-    }
-
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [hasFormDataChanged, warnIfUnsaved]);
+  useUnsavedChangesGuard({
+    isDirty: hasFormDataChanged && warnIfUnsaved,
+    message: t('message'),
+  });
 
   return (
     // eslint-disable-next-line no-restricted-syntax

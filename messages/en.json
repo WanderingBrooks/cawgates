@@ -208,7 +208,8 @@
   "discardConfirm": {
     "discardChanges": "Discard changes?",
     "keepEditing": "Keep editing",
-    "discard": "Discard"
+    "discard": "Discard",
+    "message": "You have unsaved changes. Leave and lose them?"
   },
   "loading": {
     "title": "Loading..."
