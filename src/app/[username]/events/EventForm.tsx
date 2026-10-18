@@ -4,10 +4,11 @@ import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { createEvent, updateEvent } from '@/app/actions/events';
+import { createEvent, deleteEvent, updateEvent } from '@/app/actions/events';
 import { type ActionResult } from '@/lib/types';
 import {
   Button,
+  DeleteButton,
   DiscardChangesConfirm,
   ErrorMessage,
   Form,
@@ -19,7 +20,6 @@ import {
 } from '@/components';
 import { EventFormData } from '@/lib/types';
 import Link from 'next/link';
-import DeleteEventButton from './DeleteEventButton';
 
 /**
  * SubmitButton must be a separate component because useFormStatus() requires
@@ -54,6 +54,7 @@ type EventFormProps = CreateEventProps | EditEventProps;
 
 const EventForm = (props: EventFormProps) => {
   const t = useTranslations('eventForm');
+  const tDelete = useTranslations('deleteEventButton');
   const router = useRouter();
 
   const { mode, username } = props;
@@ -179,7 +180,11 @@ const EventForm = (props: EventFormProps) => {
             submitButton={<SubmitButton />}
             deleteButton={
               props.mode === 'edit' ? (
-                <DeleteEventButton eventId={props.eventId} />
+                <DeleteButton
+                  label={tDelete('delete')}
+                  confirmMessage={tDelete('deleteConfirm')}
+                  onDelete={() => deleteEvent(props.eventId)}
+                />
               ) : undefined
             }
           />
