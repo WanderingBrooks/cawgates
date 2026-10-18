@@ -18,6 +18,7 @@ import {
   OpponentArchetypeSelect,
   TextArea,
 } from '@/components';
+import { NOTES_ROWS } from '@/lib/utils';
 import classes from './matchForm.module.css';
 
 const SubmitButton = ({ isActionPending }: { isActionPending: boolean }) => {
@@ -165,7 +166,7 @@ const MatchForm = (props: MatchFormProps) => {
           label={t('notes')}
           value={matchData.notes ?? ''}
           onChange={handleChange}
-          rows={25}
+          rows={NOTES_ROWS}
         />
 
         {state?.error && <ErrorMessage error={state.error} />}
