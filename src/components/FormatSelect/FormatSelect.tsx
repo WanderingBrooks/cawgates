@@ -28,6 +28,7 @@ const FormatSelect = (props: FormatSelectProps) => {
       loadOptions={loadOptions}
       text={{
         placeholder: t('selectFormat'),
+        empty: t('empty'),
         loading: t('loading'),
         add: t('add'),
         edit: t('edit'),

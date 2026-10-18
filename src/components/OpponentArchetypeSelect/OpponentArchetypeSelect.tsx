@@ -33,6 +33,7 @@ const OpponentArchetypeSelect = ({
       loadOptions={loadOptions}
       text={{
         placeholder: t('selectArchetype'),
+        empty: t('empty'),
         loading: t('loading'),
         add: t('add'),
         edit: t('edit'),

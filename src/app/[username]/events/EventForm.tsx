@@ -142,9 +142,11 @@ const EventForm = (props: EventFormProps) => {
                 label={t('deckId')}
                 value={eventData.deckId}
                 onChange={handleEventChange}
+                // Until the first deck is added, + Add deck is the only step
+                disabled={decks.length === 0}
                 options={[
                   // Placeholder empty value
-                  { value: '', label: '' },
+                  { value: '', label: decks.length === 0 ? t('noDecks') : '' },
                   ...decks.map(deck => ({
                     value: deck.id,
                     label: deck.name,
@@ -153,7 +155,7 @@ const EventForm = (props: EventFormProps) => {
               />
               <Button
                 type="button"
-                variant="secondary"
+                variant={decks.length === 0 ? 'primary' : 'secondary'}
                 onClick={() => setIsAddDeckOpen(true)}
               >
                 {t('addDeck')}

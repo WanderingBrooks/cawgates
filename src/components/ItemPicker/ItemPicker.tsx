@@ -30,6 +30,8 @@ type ItemPickerProps = {
   loadOptions: () => Promise<ItemOption[]>;
   text: {
     placeholder: string;
+    // Shown in the disabled dropdown until the first item is added
+    empty: string;
     loading: string;
     add: string;
     edit: string;
@@ -82,6 +84,17 @@ const ItemPicker = ({
 
   const selectedOption = options.find(o => o.id === value) ?? null;
 
+  // Nothing to pick yet, so + Add is the only next step
+  const isEmpty = !isLoading && options.length === 0;
+
+  let placeholder = text.placeholder;
+
+  if (isLoading) {
+    placeholder = text.loading;
+  } else if (isEmpty) {
+    placeholder = text.empty;
+  }
+
   const handleCreateSuccess = (data: ItemOption) => {
     setOptions(prev => sortByName({ options: [...prev, data] }));
     onChange(data.id);
@@ -114,12 +127,10 @@ const ItemPicker = ({
           value={value}
           onChange={e => onChange(e.target.value)}
           required={required}
-          disabled={isLoading || isLocked}
+          disabled={isLoading || isLocked || isEmpty}
           className={classes.select}
         >
-          <option value="">
-            {isLoading ? text.loading : text.placeholder}
-          </option>
+          <option value="">{placeholder}</option>
           {options.map(option => (
             <option key={option.id} value={option.id}>
               {option.name}
@@ -129,7 +140,7 @@ const ItemPicker = ({
         {!isLocked && (
           <Button
             type="button"
-            variant="secondary"
+            variant={isEmpty ? 'primary' : 'secondary'}
             onClick={() => setIsCreateOpen(true)}
             disabled={isLoading}
           >
