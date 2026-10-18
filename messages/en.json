@@ -51,7 +51,8 @@
   "createEvent": {
     "title": "Create new event",
     "noDecksHint": "You need a deck before you can create an event.",
-    "createEvent": "Create event"
+    "createEvent": "Create event",
+    "createDeck": "Create your first deck"
   },
   "editEvent": {
     "title": "Edit event"
