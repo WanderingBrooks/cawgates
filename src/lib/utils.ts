@@ -33,6 +33,9 @@ const formatDate = ({
   // eslint-disable-next-line no-restricted-syntax
   formatter.dateTime(date, { dateStyle: 'medium' });
 
+// Event and match notes get a tall box, since they can run long
+const NOTES_ROWS = 25;
+
 // Below this many matches a win rate says more about luck than the
 // matchup, so it isn't tinted
 const MIN_MATCHES_FOR_TINT = 3;
@@ -104,6 +107,7 @@ export {
   cn,
   slugify,
   RESERVED_USERNAMES,
+  NOTES_ROWS,
   formatDate,
   getWinRateTint,
   getMatchResultTint,

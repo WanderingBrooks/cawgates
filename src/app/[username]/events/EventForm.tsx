@@ -17,6 +17,7 @@ import {
   FormActions,
   TextArea,
 } from '@/components';
+import { NOTES_ROWS } from '@/lib/utils';
 import { EventFormData } from '@/lib/types';
 
 /**
@@ -148,7 +149,7 @@ const EventForm = (props: EventFormProps) => {
           label={t('notes')}
           value={eventData.notes}
           onChange={handleEventChange}
-          rows={25}
+          rows={NOTES_ROWS}
         />
 
         {state?.error && <ErrorMessage error={state.error} />}
