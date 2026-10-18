@@ -51,7 +51,9 @@ const MatchSection = ({
         )}
       </div>
 
-      {matches.length === 0 && <p>{t('noMatches')}</p>}
+      {matches.length === 0 && (
+        <p>{isOwner ? t('noMatches') : t('noMatchesGuest')}</p>
+      )}
 
       {matches.length > 0 && (
         <div className={classes.matchList}>

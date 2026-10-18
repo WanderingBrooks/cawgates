@@ -33,7 +33,9 @@ const EventsPage = async ({
         }
       />
 
-      {events.length === 0 && <p>{t('noEvents')}</p>}
+      {events.length === 0 && (
+        <p>{isOwner ? t('noEvents') : t('noEventsGuest')}</p>
+      )}
 
       {events.length > 0 && (
         <div className="table-scroll">
