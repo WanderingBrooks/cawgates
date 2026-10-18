@@ -31,22 +31,24 @@ const FormatSelect = (props: FormatSelectProps) => {
         empty: t('empty'),
         loading: t('loading'),
         add: t('add'),
-        edit: t('edit'),
         createTitle: t('createTitle'),
-        editTitle: t('editTitle'),
       }}
       renderCreateForm={({ onSuccess, onCancel }) => (
         <FormatForm mode="create" onSuccess={onSuccess} onCancel={onCancel} />
       )}
-      renderEditForm={({ option, onSuccess, onCancel }) => (
-        <FormatForm
-          mode="edit"
-          formatId={option.id}
-          initialName={option.name}
-          onSuccess={onSuccess}
-          onCancel={onCancel}
-        />
-      )}
+      edit={{
+        label: t('edit'),
+        title: t('editTitle'),
+        renderForm: ({ option, onSuccess, onCancel }) => (
+          <FormatForm
+            mode="edit"
+            formatId={option.id}
+            initialName={option.name}
+            onSuccess={onSuccess}
+            onCancel={onCancel}
+          />
+        ),
+      }}
     />
   );
 };

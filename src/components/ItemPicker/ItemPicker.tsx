@@ -34,22 +34,26 @@ type ItemPickerProps = {
     empty: string;
     loading: string;
     add: string;
-    edit: string;
     createTitle: string;
-    editTitle: string;
   };
   renderCreateForm: (props: FormRenderProps) => React.ReactNode;
-  renderEditForm: (
-    props: FormRenderProps & { option: ItemOption },
-  ) => React.ReactNode;
+  // Leave out to hide the Edit button
+  edit?: {
+    label: string;
+    title: string;
+    renderForm: (
+      props: FormRenderProps & { option: ItemOption },
+    ) => React.ReactNode;
+  };
 };
 
 const sortByName = ({ options }: { options: ItemOption[] }) =>
   [...options].sort((a, b) => a.name.localeCompare(b.name));
 
 /**
- * A dropdown of named items (formats, opponent archetypes) with "+ Add" and
- * Edit buttons next to it, each opening a dialog with the item's name form.
+ * A dropdown of named items (decks, formats, opponent archetypes) with
+ * "+ Add" and Edit buttons next to it, each opening a dialog with the item's
+ * form.
  * A new item is selected as soon as it's created.
  */
 const ItemPicker = ({
@@ -64,7 +68,7 @@ const ItemPicker = ({
   loadOptions,
   text,
   renderCreateForm,
-  renderEditForm,
+  edit,
 }: ItemPickerProps) => {
   const [options, setOptions] = useState<ItemOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -147,13 +151,13 @@ const ItemPicker = ({
             {text.add}
           </Button>
         )}
-        {selectedOption && (
+        {edit && selectedOption && (
           <Button
             type="button"
             variant="secondary"
             onClick={() => setIsEditOpen(true)}
           >
-            {text.edit}
+            {edit.label}
           </Button>
         )}
       </div>
@@ -165,9 +169,9 @@ const ItemPicker = ({
         })}
       </Dialog>
 
-      {selectedOption && (
-        <Dialog isOpen={isEditOpen} title={text.editTitle} usePortal>
-          {renderEditForm({
+      {edit && selectedOption && (
+        <Dialog isOpen={isEditOpen} title={edit.title} usePortal>
+          {edit.renderForm({
             option: selectedOption,
             onSuccess: handleEditSuccess,
             onCancel: () => setIsEditOpen(false),
