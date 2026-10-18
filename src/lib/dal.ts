@@ -89,7 +89,7 @@ const queryMatchStatistics = async ({
   });
 
   // Sort order:
-  // 1) Matches played descending — more data first.
+  // 1) Matches played descending, so more data comes first.
   // 2) Match win rate descending for ties in matches played.
   // 3) Alphabetical ascending fallback for deterministic ordering.
   const rows = deckStats.sort((a, b) => {

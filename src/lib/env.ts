@@ -15,7 +15,7 @@ const envSchema = z.object({
 // configuration.
 //
 // SKIP_ENV_VALIDATION bypasses this for contexts that load app code without
-// real secrets available — Docker image builds and `prisma generate` (which
+// real secrets available: Docker image builds and `prisma generate` (which
 // builds the client from the schema and never connects to a database). Real
 // deployments never set this, so the fail-fast check still applies wherever
 // it actually matters.
