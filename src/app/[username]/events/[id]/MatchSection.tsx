@@ -87,9 +87,7 @@ const MatchSection = ({
                 {isOwner && (
                   <div className={classes.matchActions}>
                     <Link href={`${matchesHref}/${match.id}/edit`}>
-                      <Button variant="secondary" size="small">
-                        {t('editMatch')}
-                      </Button>
+                      <Button variant="secondary">{t('editMatch')}</Button>
                     </Link>
                   </div>
                 )}
