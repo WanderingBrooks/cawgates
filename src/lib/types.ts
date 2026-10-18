@@ -19,7 +19,7 @@ const matchSchema = z.object({
 
 // Schema for creating an event
 const createEventSchema = z.object({
-  deckId: z.string().min(1, 'Deck ID is required'),
+  deckId: z.string().min(1, 'Deck is required'),
   eventName: requiredTrimmedString('Event name is required'),
   eventDate: z.string().min(1, 'Event date is required'),
   notes: z.string().optional().default(''),
