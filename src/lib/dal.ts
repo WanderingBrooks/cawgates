@@ -164,39 +164,6 @@ const getDecksForOwner = async ({
   return { decks, isOwner };
 };
 
-const getDeck = async ({
-  ownerUsername,
-  deckSlug,
-}: {
-  ownerUsername: string;
-  deckSlug: string;
-}) => {
-  const { owner, isOwner } = await getOwnerByUsername({
-    username: ownerUsername,
-  });
-
-  if (!owner) {
-    notFound();
-  }
-
-  const deckWithCount = await prisma.deck.findUnique({
-    where: { userId_slug: { userId: owner.id, slug: deckSlug } },
-    include: {
-      format: true,
-      // Events that have at least one match, so hasMatches needs no extra query
-      _count: { select: { events: { where: { matches: { some: {} } } } } },
-    },
-  });
-
-  if (!deckWithCount) {
-    notFound();
-  }
-
-  const { _count, ...deck } = deckWithCount;
-
-  return { deck, isOwner, hasMatches: _count.events > 0 };
-};
-
 const getEvents = async ({ ownerUsername }: { ownerUsername: string }) => {
   const { isOwner, decks } = await getDecksForOwner({ ownerUsername });
 
@@ -457,7 +424,6 @@ export {
   getFormat,
   getFormatWithMatchStatistics,
   getDecksForOwner,
-  getDeck,
   getEvents,
   getEvent,
   getMatch,

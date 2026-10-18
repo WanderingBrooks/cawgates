@@ -123,99 +123,107 @@ const EventForm = (props: EventFormProps) => {
   };
 
   return (
-    <Form action={formAction}>
-      <SpaceChildrenVertically>
-        {props.mode === 'edit' && (
-          <>
-            <input type="hidden" name="eventId" value={props.eventId} />
-            <input type="hidden" name="deckId" value={eventData.deckId} />
-          </>
-        )}
-        {props.mode === 'create' && (
-          <div className={classes.deckRow}>
-            <Select
-              required
-              id="deckId"
-              name="deckId"
-              label={t('deckId')}
-              value={eventData.deckId}
-              onChange={handleEventChange}
-              // Until the first deck is added, + Add deck is the only step
-              disabled={decks.length === 0}
-              options={[
-                // Placeholder empty value
-                { value: '', label: decks.length === 0 ? t('noDecks') : '' },
-                ...decks.map(deck => ({
-                  value: deck.id,
-                  label: deck.name,
-                })),
-              ]}
-            />
-            <Button
-              type="button"
-              variant={decks.length === 0 ? 'primary' : 'secondary'}
-              onClick={() => setIsAddDeckOpen(true)}
-            >
-              {t('addDeck')}
-            </Button>
-          </div>
-        )}
-        <Input
-          type="text"
-          id="eventName"
-          name="eventName"
-          label={t('eventName')}
-          value={eventData.eventName}
-          onChange={handleEventChange}
-          required
-        />
-        <Input
-          type="date"
-          id="eventDate"
-          name="eventDate"
-          label={t('eventDate')}
-          value={eventData.eventDate}
-          onChange={handleEventChange}
-          required
-        />
-        <TextArea
-          id="notes"
-          name="notes"
-          label={t('notes')}
-          value={eventData.notes}
-          onChange={handleEventChange}
-          rows={25}
-        />
-
-        {state?.error && <ErrorMessage error={state.error} />}
-        {showCancelConfirm ? (
-          <DiscardChangesConfirm
-            onKeepEditing={() => setShowCancelConfirm(false)}
-            onDiscard={() => router.push(cancelHref)}
-          />
-        ) : (
-          <FormActions
-            cancelButton={
-              <Button variant="secondary" type="button" onClick={handleCancel}>
-                {t('cancel')}
+    <>
+      <Form action={formAction}>
+        <SpaceChildrenVertically>
+          {props.mode === 'edit' && (
+            <>
+              <input type="hidden" name="eventId" value={props.eventId} />
+              <input type="hidden" name="deckId" value={eventData.deckId} />
+            </>
+          )}
+          {props.mode === 'create' && (
+            <div className={classes.deckRow}>
+              <Select
+                required
+                id="deckId"
+                name="deckId"
+                label={t('deckId')}
+                value={eventData.deckId}
+                onChange={handleEventChange}
+                // Until the first deck is added, + Add deck is the only step
+                disabled={decks.length === 0}
+                options={[
+                  // Placeholder empty value
+                  { value: '', label: decks.length === 0 ? t('noDecks') : '' },
+                  ...decks.map(deck => ({
+                    value: deck.id,
+                    label: deck.name,
+                  })),
+                ]}
+              />
+              <Button
+                type="button"
+                variant={decks.length === 0 ? 'primary' : 'secondary'}
+                onClick={() => setIsAddDeckOpen(true)}
+              >
+                {t('addDeck')}
               </Button>
-            }
-            submitButton={<SubmitButton />}
-            deleteButton={
-              props.mode === 'edit' ? (
-                <DeleteButton
-                  label={tDelete('delete')}
-                  confirmMessage={tDelete('deleteConfirm')}
-                  onDelete={() => deleteEvent(props.eventId)}
-                />
-              ) : undefined
-            }
+            </div>
+          )}
+          <Input
+            type="text"
+            id="eventName"
+            name="eventName"
+            label={t('eventName')}
+            value={eventData.eventName}
+            onChange={handleEventChange}
+            required
           />
-        )}
-      </SpaceChildrenVertically>
+          <Input
+            type="date"
+            id="eventDate"
+            name="eventDate"
+            label={t('eventDate')}
+            value={eventData.eventDate}
+            onChange={handleEventChange}
+            required
+          />
+          <TextArea
+            id="notes"
+            name="notes"
+            label={t('notes')}
+            value={eventData.notes}
+            onChange={handleEventChange}
+            rows={25}
+          />
 
-      {/* The deck form's format picker can open a format dialog on top of
-          this one, the one place dialogs stack */}
+          {state?.error && <ErrorMessage error={state.error} />}
+          {showCancelConfirm ? (
+            <DiscardChangesConfirm
+              onKeepEditing={() => setShowCancelConfirm(false)}
+              onDiscard={() => router.push(cancelHref)}
+            />
+          ) : (
+            <FormActions
+              cancelButton={
+                <Button
+                  variant="secondary"
+                  type="button"
+                  onClick={handleCancel}
+                >
+                  {t('cancel')}
+                </Button>
+              }
+              submitButton={<SubmitButton />}
+              deleteButton={
+                props.mode === 'edit' ? (
+                  <DeleteButton
+                    label={tDelete('delete')}
+                    confirmMessage={tDelete('deleteConfirm')}
+                    onDelete={() => deleteEvent(props.eventId)}
+                  />
+                ) : undefined
+              }
+            />
+          )}
+        </SpaceChildrenVertically>
+      </Form>
+
+      {/* Outside the <form>, since React events bubble out of portals and
+          typing in the deck form would mark this form as changed. Its
+          format picker can open a format dialog on top, the one place
+          dialogs stack. */}
       <Dialog isOpen={isAddDeckOpen} title={tCreateDeck('title')} usePortal>
         {isAddDeckOpen && (
           <DeckForm
@@ -225,7 +233,7 @@ const EventForm = (props: EventFormProps) => {
           />
         )}
       </Dialog>
-    </Form>
+    </>
   );
 };
 

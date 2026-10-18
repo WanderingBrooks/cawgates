@@ -44,7 +44,7 @@ type ItemPickerProps = {
   ) => React.ReactNode;
 };
 
-const sortByName = (options: ItemOption[]) =>
+const sortByName = ({ options }: { options: ItemOption[] }) =>
   [...options].sort((a, b) => a.name.localeCompare(b.name));
 
 /**
@@ -96,14 +96,14 @@ const ItemPicker = ({
   }
 
   const handleCreateSuccess = (data: ItemOption) => {
-    setOptions(prev => sortByName([...prev, data]));
+    setOptions(prev => sortByName({ options: [...prev, data] }));
     onChange(data.id);
     setIsCreateOpen(false);
   };
 
   const handleEditSuccess = (data: ItemOption) => {
     setOptions(prev =>
-      sortByName(prev.map(o => (o.id === data.id ? data : o))),
+      sortByName({ options: prev.map(o => (o.id === data.id ? data : o)) }),
     );
 
     setIsEditOpen(false);
