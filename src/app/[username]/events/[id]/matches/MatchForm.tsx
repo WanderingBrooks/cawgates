@@ -9,7 +9,6 @@ import { type ActionResult, MatchInputForm } from '@/lib/types';
 import {
   Button,
   DeleteButton,
-  DiscardChangesConfirm,
   ErrorMessage,
   Form,
   FormActions,
@@ -57,6 +56,7 @@ type MatchFormProps = {
 // Saving, cancelling and deleting all go back to the event page
 const MatchForm = (props: MatchFormProps) => {
   const t = useTranslations('matchForm');
+  const tDiscard = useTranslations('discardConfirm');
   const tDelete = useTranslations('deleteMatchButton');
   const router = useRouter();
 
@@ -82,13 +82,10 @@ const MatchForm = (props: MatchFormProps) => {
         },
   );
 
-  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [hasFormDataChanged, setHasFormDataChanged] = useState(false);
 
   const handleCancel = () => {
-    if (hasFormDataChanged) {
-      setShowCancelConfirm(true);
-    } else {
+    if (!hasFormDataChanged || window.confirm(tDiscard('message'))) {
       router.push(eventHref);
     }
   };
@@ -169,30 +166,23 @@ const MatchForm = (props: MatchFormProps) => {
         />
 
         {state?.error && <ErrorMessage error={state.error} />}
-        {showCancelConfirm ? (
-          <DiscardChangesConfirm
-            onKeepEditing={() => setShowCancelConfirm(false)}
-            onDiscard={() => router.push(eventHref)}
-          />
-        ) : (
-          <FormActions
-            cancelButton={
-              <Button variant="secondary" type="button" onClick={handleCancel}>
-                {t('cancel')}
-              </Button>
-            }
-            submitButton={<SubmitButton isActionPending={isPending} />}
-            deleteButton={
-              props.mode === 'edit' ? (
-                <DeleteButton
-                  label={tDelete('delete')}
-                  confirmMessage={tDelete('deleteConfirm')}
-                  onDelete={() => deleteMatch(props.matchId)}
-                />
-              ) : undefined
-            }
-          />
-        )}
+        <FormActions
+          cancelButton={
+            <Button variant="secondary" type="button" onClick={handleCancel}>
+              {t('cancel')}
+            </Button>
+          }
+          submitButton={<SubmitButton isActionPending={isPending} />}
+          deleteButton={
+            props.mode === 'edit' ? (
+              <DeleteButton
+                label={tDelete('delete')}
+                confirmMessage={tDelete('deleteConfirm')}
+                onDelete={() => deleteMatch(props.matchId)}
+              />
+            ) : undefined
+          }
+        />
       </SpaceChildrenVertically>
     </Form>
   );
