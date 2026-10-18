@@ -26,18 +26,9 @@
   cursor: not-allowed !important;
 }
 
-.small {
-  min-height: var(--control-height);
-  padding: 0 var(--spacing-sm);
-}
-
 @media (min-width: 768px) {
   .button {
     min-height: var(--control-height);
-  }
-
-  .small {
-    min-height: var(--button-height-small);
   }
 }
 
