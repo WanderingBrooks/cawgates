@@ -55,6 +55,7 @@
   },
   "eventForm": {
     "deckId": "Deck *",
+    "noDecks": "No decks yet",
     "addDeck": "+ Add deck",
     "eventName": "Event name *",
     "eventDate": "Event date *",
@@ -98,6 +99,7 @@
   },
   "opponentArchetypeSelect": {
     "selectArchetype": "Select an archetype...",
+    "empty": "No archetypes yet",
     "loading": "Loading...",
     "add": "+ Add",
     "edit": "Edit",
@@ -106,6 +108,7 @@
   },
   "formatSelect": {
     "selectFormat": "Select a format...",
+    "empty": "No formats yet",
     "loading": "Loading...",
     "add": "+ Add",
     "edit": "Edit",
