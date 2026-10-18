@@ -8,8 +8,9 @@ import ErrorMessage from '../ErrorMessage';
 
 /**
  * The Delete button in an edit form's button row. It confirms, runs the
- * delete action, and shows the action's error under the button. Every delete
- * action redirects on success, so only a failure ever comes back.
+ * delete action, and shows the action's error under the button. On success
+ * the action redirects, or the caller's onDelete navigates away, so the
+ * button never needs to reset.
  */
 const DeleteButton = ({
   label,
