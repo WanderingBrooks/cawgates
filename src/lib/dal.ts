@@ -212,7 +212,6 @@ const getEvents = async ({ ownerUsername }: { ownerUsername: string }) => {
       ...hideNotes({ item: event, isOwner }),
       matches: event.matches.map(match => hideNotes({ item: match, isOwner })),
     })),
-    hasDecks: decks.length > 0,
   };
 };
 

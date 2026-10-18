@@ -8,23 +8,15 @@ import Button from '../Button';
 import Dialog from '../Dialog';
 import DeckForm from './DeckForm';
 
-/**
- * Opens the deck form in a dialog. Once the deck is created it opens the
- * deck's matchups, or with stayOnPage reloads the current page, like the
- * event pages that need a deck before they can show anything.
- */
+// Opens the deck form in a dialog, then the new deck's matchups
 const CreateDeckButton = ({
   username,
   label,
-  variant = 'primary',
   initialFormatId,
-  stayOnPage = false,
 }: {
   username: string;
   label: string;
-  variant?: 'primary' | 'secondary';
   initialFormatId?: string;
-  stayOnPage?: boolean;
 }) => {
   const t = useTranslations('createDeck');
   const router = useRouter();
@@ -33,11 +25,6 @@ const CreateDeckButton = ({
   const handleSuccess = (deck: SavedDeck) => {
     setIsOpen(false);
 
-    if (stayOnPage) {
-      router.refresh();
-      return;
-    }
-
     router.push(
       `/${username}/matchups/${deck.formatId}?deck=${encodeURIComponent(deck.slug)}`,
     );
@@ -45,7 +32,7 @@ const CreateDeckButton = ({
 
   return (
     <>
-      <Button variant={variant} onClick={() => setIsOpen(true)}>
+      <Button variant="secondary" onClick={() => setIsOpen(true)}>
         {label}
       </Button>
       <Dialog isOpen={isOpen} title={t('title')} usePortal>

@@ -107,7 +107,6 @@ const MatchupsPage = async ({
               <CreateDeckButton
                 username={username}
                 label={t('addDeck')}
-                variant="secondary"
                 initialFormatId={format.id}
               />
               {selectedDeck && (

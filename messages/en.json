@@ -43,13 +43,10 @@
     "event": "Event",
     "deck": "Deck",
     "recordHeader": "Record",
-    "noEvents": "No events yet",
-    "noDecksHint": "You need a deck before you can create an event.",
-    "createDeck": "Create your first deck"
+    "noEvents": "No events yet"
   },
   "createEvent": {
     "title": "Create new event",
-    "noDecksHint": "You need a deck before you can create an event.",
     "createEvent": "Create event"
   },
   "editEvent": {
@@ -70,7 +67,7 @@
     "viewMatchups": "View matchups",
     "addMatch": "Add match",
     "editMatch": "Edit",
-    "noMatches": "No matches yet — add one to get started",
+    "noMatches": "No matches yet. Add one to get started.",
     "matchesSection": "Matches",
     "notesSection": "Notes"
   },
@@ -129,9 +126,9 @@
   },
   "matchups": {
     "title": "Matchups",
-    "noFormats": "No formats yet — create a deck to get started",
+    "noFormats": "No matchups yet. Create an event to get started.",
     "noFormatsGuest": "No matchups yet",
-    "createDeck": "Create deck"
+    "createEvent": "Create event"
   },
   "matchupsPage": {
     "addFormat": "+ Add format",

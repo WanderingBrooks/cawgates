@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { formatDate, getMatchRecord } from '@/lib/utils';
-import { Button, CreateDeckButton, PageTitle } from '@/components';
+import { Button, PageTitle } from '@/components';
 import { getEvents } from '@/lib/dal';
 import classes from './event.module.css';
 
@@ -15,7 +15,7 @@ const EventsPage = async ({
   const formatter = await getFormatter();
   const { username } = await params;
 
-  const { events, isOwner, hasDecks } = await getEvents({
+  const { events, isOwner } = await getEvents({
     ownerUsername: username,
   });
 
@@ -24,8 +24,8 @@ const EventsPage = async ({
       <PageTitle
         title={t('title')}
         actions={
-          isOwner &&
-          hasDecks && (
+          // A new user starts here: the event form adds their first deck
+          isOwner && (
             <Link href={`/${username}/events/create`}>
               <Button variant="primary">{t('createEvent')}</Button>
             </Link>
@@ -33,21 +33,7 @@ const EventsPage = async ({
         }
       />
 
-      {isOwner && !hasDecks && (
-        <>
-          <p>{t('noDecksHint')}</p>
-          <div>
-            {/* Stays here, where Create event shows up once there's a deck */}
-            <CreateDeckButton
-              username={username}
-              label={t('createDeck')}
-              stayOnPage
-            />
-          </div>
-        </>
-      )}
-
-      {events.length === 0 && hasDecks && <p>{t('noEvents')}</p>}
+      {events.length === 0 && <p>{t('noEvents')}</p>}
 
       {events.length > 0 && (
         <div className="table-scroll">

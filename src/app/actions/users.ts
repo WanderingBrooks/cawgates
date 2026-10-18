@@ -96,7 +96,7 @@ const registerUser = async (
     };
   }
 
-  // The Events page starts a new user off with "Create your first deck"
+  // Events has Create event, whose form adds the first deck
   redirect(`/${username}/events`);
 };
 

@@ -1,7 +1,8 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { getFormatsForOwner } from '@/lib/dal';
-import { CreateDeckButton, PageTitle } from '@/components';
+import { Button, PageTitle } from '@/components';
 
 // There is no list of formats: this opens the most played one, and the
 // format page has a dropdown to switch between them. The menu links
@@ -31,7 +32,9 @@ const MatchupsIndexPage = async ({
       <p>{isOwner ? t('noFormats') : t('noFormatsGuest')}</p>
       {isOwner && (
         <div>
-          <CreateDeckButton username={username} label={t('createDeck')} />
+          <Link href={`/${username}/events/create`}>
+            <Button variant="primary">{t('createEvent')}</Button>
+          </Link>
         </div>
       )}
     </>
