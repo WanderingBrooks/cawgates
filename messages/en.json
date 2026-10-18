@@ -55,8 +55,6 @@
   },
   "eventForm": {
     "deckId": "Deck *",
-    "noDecks": "No decks yet",
-    "addDeck": "+ Add deck",
     "eventName": "Event name *",
     "eventDate": "Event date *",
     "notes": "Notes",
@@ -96,6 +94,13 @@
   "deleteEventButton": {
     "delete": "Delete event",
     "deleteConfirm": "Are you sure you want to delete this event?"
+  },
+  "deckSelect": {
+    "selectDeck": "Select a deck...",
+    "empty": "No decks yet",
+    "loading": "Loading...",
+    "add": "+ Add",
+    "createTitle": "Create deck"
   },
   "opponentArchetypeSelect": {
     "selectArchetype": "Select an archetype...",

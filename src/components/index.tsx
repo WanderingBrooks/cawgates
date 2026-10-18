@@ -5,6 +5,7 @@ import Form from './Form';
 import Dialog from './Dialog';
 import DeckFilter from './DeckFilter';
 import DeckForm from './DeckForm';
+import DeckSelect from './DeckSelect';
 import CreateDeckButton from './DeckForm/CreateDeckButton';
 import EditDeckButton from './DeckForm/EditDeckButton';
 import DeleteButton from './DeleteButton';
@@ -37,6 +38,7 @@ export {
   DeckFilter,
   CreateDeckButton,
   DeckForm,
+  DeckSelect,
   DeleteButton,
   Dialog,
   EditDeckButton,
