@@ -110,6 +110,8 @@ const OpponentArchetypePage = async ({
       <section className={classes.section}>
         <SectionHeader>{t('matchesSection')}</SectionHeader>
         {totalMatches === 0 ? (
+          // Only the owner gets here: guests can't open an archetype
+          // without matches
           <p>{t('noMatches')}</p>
         ) : (
           <div className={classes.matchList}>

@@ -43,7 +43,8 @@
     "event": "Event",
     "deck": "Deck",
     "recordHeader": "Record",
-    "noEvents": "No events yet"
+    "noEvents": "No events yet. Create one to get started.",
+    "noEventsGuest": "No events yet"
   },
   "createEvent": {
     "title": "Create new event",
@@ -68,6 +69,7 @@
     "addMatch": "Add match",
     "editMatch": "Edit",
     "noMatches": "No matches yet. Add one to get started.",
+    "noMatchesGuest": "No matches yet",
     "matchesSection": "Matches",
     "notesSection": "Notes"
   },
@@ -127,8 +129,7 @@
   "matchups": {
     "title": "Matchups",
     "noFormats": "No matchups yet. Create an event to get started.",
-    "noFormatsGuest": "No matchups yet",
-    "createEvent": "Create event"
+    "noFormatsGuest": "No matchups yet"
   },
   "matchupsPage": {
     "addFormat": "+ Add format",
@@ -138,8 +139,10 @@
     "editDeck": "Edit deck",
     "addDeck": "+ Add deck",
     "opponentArchetypesSection": "Opponent archetypes",
-    "noOpponentArchetypes": "No opponent archetypes yet",
-    "noDeckMatches": "No matches with this deck yet",
+    "noOpponentArchetypes": "No opponent archetypes yet. Create an event and add a match to get started.",
+    "noOpponentArchetypesGuest": "No matchups yet",
+    "noDeckMatches": "No matches with this deck yet. Create an event to add some.",
+    "noDeckMatchesGuest": "No matches with this deck yet",
     "archetype": "Archetype"
   },
   "deleteFormatButton": {
@@ -189,7 +192,7 @@
     "edit": "Edit",
     "editTitle": "Edit opponent archetype",
     "viewMatchups": "View matchups",
-    "noMatches": "No matches yet",
+    "noMatches": "No matches against this archetype yet. Create an event to add some.",
     "delete": "Delete archetype",
     "deleteConfirm": "Are you sure you want to delete {name}?",
     "hasMatchesHint": "Opponent archetypes with matches can't be deleted"

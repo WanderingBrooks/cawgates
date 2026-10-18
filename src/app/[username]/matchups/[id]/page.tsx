@@ -131,7 +131,15 @@ const MatchupsPage = async ({
       <section className={classes.section}>
         <SectionHeader>{t('opponentArchetypesSection')}</SectionHeader>
         {matchStatistics.length === 0 ? (
-          <p>{selectedDeck ? t('noDeckMatches') : t('noOpponentArchetypes')}</p>
+          <p>
+            {isOwner
+              ? t(selectedDeck ? 'noDeckMatches' : 'noOpponentArchetypes')
+              : t(
+                  selectedDeck
+                    ? 'noDeckMatchesGuest'
+                    : 'noOpponentArchetypesGuest',
+                )}
+          </p>
         ) : (
           <div className="table-scroll">
             <table>
