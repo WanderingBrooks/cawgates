@@ -30,10 +30,8 @@ const getUserDecks = async () => {
 
   return prisma.deck.findMany({
     where: { userId: user.userId },
-    orderBy: { createdAt: 'asc' },
-    include: {
-      _count: { select: { events: true } },
-    },
+    orderBy: { name: 'asc' },
+    select: { id: true, name: true },
   });
 };
 
