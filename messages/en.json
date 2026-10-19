@@ -206,7 +206,9 @@
     "hasMatchesHint": "Opponent archetypes with matches can't be deleted"
   },
   "discardConfirm": {
-    "message": "You have unsaved changes. Leave and lose them?"
+    "discardChanges": "Discard changes?",
+    "keepEditing": "Keep editing",
+    "discard": "Discard"
   },
   "loading": {
     "title": "Loading..."

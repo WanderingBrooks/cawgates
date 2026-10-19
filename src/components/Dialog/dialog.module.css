@@ -47,7 +47,8 @@
   padding: var(--spacing-lg) var(--spacing-lg) 0;
 }
 
-/* Forms in dialogs end with their Cancel / Save row. On phones, pin it to the bottom so it stays reachable while
+/* Forms in dialogs end with their Cancel / Save row (or the discard
+   confirmation). On phones, pin it to the bottom so it stays reachable while
    the fields above scroll, e.g. when writing long match notes. */
 .body form > div > :last-child {
   position: sticky;

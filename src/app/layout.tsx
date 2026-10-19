@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils';
 // styles and header for the entire app.
 // eslint-disable-next-line no-restricted-imports
 import Page from '@/components/Page';
-import UnsavedChangesGuard from '@/components/UnsavedChangesGuard';
 
 const metadata: Metadata = { title: 'Cawgates' };
 
@@ -43,7 +42,6 @@ const RootLayout = async ({
     <html lang={locale} className={cn(plexSans.variable, plexMono.variable)}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <UnsavedChangesGuard />
           <Page>{children}</Page>
         </NextIntlClientProvider>
       </body>

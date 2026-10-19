@@ -10,6 +10,7 @@ import {
   Button,
   DeckSelect,
   DeleteButton,
+  DiscardChangesConfirm,
   ErrorMessage,
   Form,
   Input,
@@ -52,7 +53,6 @@ type EventFormProps = CreateEventProps | EditEventProps;
 
 const EventForm = (props: EventFormProps) => {
   const t = useTranslations('eventForm');
-  const tDiscard = useTranslations('discardConfirm');
   const tDelete = useTranslations('deleteEventButton');
   const router = useRouter();
 
@@ -70,10 +70,13 @@ const EventForm = (props: EventFormProps) => {
     null,
   );
 
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [hasFormDataChanged, setHasFormDataChanged] = useState(false);
 
   const handleCancel = () => {
-    if (!hasFormDataChanged || window.confirm(tDiscard('message'))) {
+    if (hasFormDataChanged) {
+      setShowCancelConfirm(true);
+    } else {
       router.push(cancelHref);
     }
   };
@@ -153,23 +156,34 @@ const EventForm = (props: EventFormProps) => {
         />
 
         {state?.error && <ErrorMessage error={state.error} />}
-        <FormActions
-          cancelButton={
-            <Button variant="secondary" type="button" onClick={handleCancel}>
-              {t('cancel')}
-            </Button>
-          }
-          submitButton={<SubmitButton />}
-          deleteButton={
-            props.mode === 'edit' ? (
-              <DeleteButton
-                label={tDelete('delete')}
-                confirmMessage={tDelete('deleteConfirm')}
-                onDelete={() => deleteEvent(props.eventId)}
-              />
-            ) : undefined
-          }
-        />
+        {showCancelConfirm ? (
+          <DiscardChangesConfirm
+            onKeepEditing={() => setShowCancelConfirm(false)}
+            onDiscard={() => router.push(cancelHref)}
+          />
+        ) : (
+          <FormActions
+            cancelButton={
+              <Button
+                variant="secondary"
+                type="button"
+                onClick={handleCancel}
+              >
+                {t('cancel')}
+              </Button>
+            }
+            submitButton={<SubmitButton />}
+            deleteButton={
+              props.mode === 'edit' ? (
+                <DeleteButton
+                  label={tDelete('delete')}
+                  confirmMessage={tDelete('deleteConfirm')}
+                  onDelete={() => deleteEvent(props.eventId)}
+                />
+              ) : undefined
+            }
+          />
+        )}
       </SpaceChildrenVertically>
     </Form>
   );

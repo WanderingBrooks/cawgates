@@ -1,5 +1,6 @@
 import Button from './Button';
 import { Card, CardContent, CardTitle } from './Card';
+import DiscardChangesConfirm from './DiscardChangesConfirm';
 import Form from './Form';
 import Dialog from './Dialog';
 import DeckFilter from './DeckFilter';
@@ -32,6 +33,7 @@ export {
   Card,
   CardContent,
   CardTitle,
+  DiscardChangesConfirm,
   Form,
   DeckFilter,
   CreateDeckButton,
