@@ -2,8 +2,8 @@
 
 /**
  * Inline confirmation UI shown when a user attempts to cancel a form with
- * unsaved changes. Replaces the cancel/save button row in place — no dialog
- * overlay required. Renders a "Discard changes?" label above two side-by-side
+ * unsaved changes. Replaces the cancel/save button row in place, so no dialog
+ * overlay is needed. Renders a "Discard changes?" label above two side-by-side
  * buttons: "Keep editing" to dismiss and "Discard" to confirm abandoning edits.
  */
 
