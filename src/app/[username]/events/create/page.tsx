@@ -20,7 +20,6 @@ const CreateEventPage = async ({
     notFound();
   }
 
-  // With no decks yet, the form's + Add deck creates the first one
   return (
     <>
       <PageTitle title={t('title')} />
