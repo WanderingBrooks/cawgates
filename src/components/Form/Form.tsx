@@ -3,6 +3,13 @@
 import { useEffect, useState } from 'react';
 import classes from './form.module.css';
 
+// TODO: Revisit how forms protect against lost work. The beforeunload
+// warning below misses links and Back, and iPhone Safari never shows it, so
+// an accidental reload there (pull to refresh) loses the form, notes and
+// all. The plan is drafts: save each form to localStorage as the user types,
+// restore it when the form opens again, and clear it on save. Confirming on
+// links and Back was tried in PR #84 and taken out as too fragile.
+
 type FormProps = {
   action: (formData: FormData) => void;
   children: React.ReactNode;

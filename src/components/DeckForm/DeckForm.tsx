@@ -1,10 +1,10 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { createDeck, deleteDeck, updateDeck } from '@/app/actions/decks';
-import { type ActionResult } from '@/lib/types';
+import { type ActionResultWithData, type SavedDeck } from '@/lib/types';
 import Button from '../Button';
 import DeleteButton from '../DeleteButton';
 import ErrorMessage from '../ErrorMessage';
@@ -13,8 +13,6 @@ import Input from '../Input';
 import SpaceChildrenVertically from '../SpaceChildrenVertically';
 import FormActions from '../FormActions';
 import FormatSelect from '../FormatSelect';
-import Link from 'next/link';
-import classes from './deckForm.module.css';
 import { slugify } from '@/lib/utils';
 
 const SubmitButton = ({
@@ -47,25 +45,31 @@ const SubmitButton = ({
   );
 };
 
-type DeckFormProps =
-  | {
-      mode: 'create';
-      username: string;
-      // Preselected when adding a deck from a format's Matchups page
-      initialFormatId?: string;
-    }
-  | {
-      mode: 'edit';
-      username: string;
-      deckId: string;
-      deckSlug: string;
-      initialDeckData: {
-        name: string;
-        slug: string;
-        formatId: string;
-      };
-      isFormatLocked: boolean;
-    };
+// Shown in a dialog, so whoever opens it closes it and navigates
+type DeckFormCallbacks = {
+  onSuccess: (deck: SavedDeck) => void;
+  onCancel: () => void;
+};
+
+type DeckFormProps = DeckFormCallbacks &
+  (
+    | {
+        mode: 'create';
+        // Preselected when adding a deck from a format's Matchups page
+        initialFormatId?: string;
+      }
+    | {
+        mode: 'edit';
+        deckId: string;
+        initialDeckData: {
+          name: string;
+          slug: string;
+          formatId: string;
+        };
+        isFormatLocked: boolean;
+        onDeleted: () => void;
+      }
+  );
 
 const DeckForm = (props: DeckFormProps) => {
   const t = useTranslations('deckForm');
@@ -73,9 +77,16 @@ const DeckForm = (props: DeckFormProps) => {
   const action = props.mode === 'create' ? createDeck : updateDeck;
 
   const [state, formAction, isPending] = useActionState<
-    ActionResult | null,
+    ActionResultWithData<SavedDeck> | null,
     FormData
   >(action, null);
+
+  useEffect(() => {
+    if (state?.success) {
+      props.onSuccess(state.data);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   const [name, setName] = useState(
     props.mode === 'edit' ? props.initialDeckData.name : '',
@@ -94,12 +105,6 @@ const DeckForm = (props: DeckFormProps) => {
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
 
   const isFormatLocked = props.mode === 'edit' && props.isFormatLocked;
-
-  const cancelHref =
-    props.mode === 'create'
-      ? // Back to the format the deck was being added to, if any
-        `/${props.username}/matchups${props.initialFormatId ? `/${props.initialFormatId}` : ''}`
-      : `/${props.username}/matchups/${props.initialDeckData.formatId}?deck=${encodeURIComponent(props.deckSlug)}`;
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -150,11 +155,10 @@ const DeckForm = (props: DeckFormProps) => {
         />
         {state?.error && <ErrorMessage error={state.error} />}
         <FormActions
-          className={classes.actionRow}
           cancelButton={
-            <Link href={cancelHref}>
-              <Button variant="secondary">{t('cancel')}</Button>
-            </Link>
+            <Button type="button" variant="secondary" onClick={props.onCancel}>
+              {t('cancel')}
+            </Button>
           }
           submitButton={
             <SubmitButton mode={props.mode} isActionPending={isPending} />
@@ -164,7 +168,15 @@ const DeckForm = (props: DeckFormProps) => {
               <DeleteButton
                 label={tDelete('delete')}
                 confirmMessage={tDelete('deleteConfirm')}
-                onDelete={() => deleteDeck(props.deckId)}
+                onDelete={async () => {
+                  const result = await deleteDeck(props.deckId);
+
+                  if (result.success) {
+                    props.onDeleted();
+                  }
+
+                  return result;
+                }}
               />
             ) : undefined
           }

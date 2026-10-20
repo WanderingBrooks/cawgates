@@ -6,7 +6,7 @@
 /* appearance: none removes the browser's own arrow, which looks different
    in every browser, and the background image draws our chevron instead.
    The extra right padding keeps the text from running under it.
-   FormatSelect and OpponentArchetypeSelect compose this class. */
+   ItemPicker composes this class. */
 .select {
   composes: input from '../Input/input.module.css';
   padding-right: var(--spacing-xxl);
@@ -14,4 +14,9 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%236a5b3c' stroke-width='1.5'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right var(--spacing-md) center;
+}
+
+.select:disabled {
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-muted);
 }

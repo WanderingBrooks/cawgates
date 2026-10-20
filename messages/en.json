@@ -13,8 +13,7 @@
     "noValue": "–"
   },
   "createDeck": {
-    "title": "Create deck",
-    "firstDeckSubtitle": "Create your first deck to start tracking events"
+    "title": "Create deck"
   },
   "deckForm": {
     "name": "Deck name *",
@@ -44,22 +43,18 @@
     "event": "Event",
     "deck": "Deck",
     "recordHeader": "Record",
-    "noEvents": "No events yet",
-    "noDecksHint": "You need a deck before you can create an event.",
-    "createDeck": "Create your first deck"
+    "noEvents": "No events yet. Create one to get started.",
+    "noEventsGuest": "No events yet"
   },
   "createEvent": {
     "title": "Create new event",
-    "noDecksHint": "You need a deck before you can create an event.",
-    "createEvent": "Create event",
-    "createDeck": "Create your first deck"
+    "createEvent": "Create event"
   },
   "editEvent": {
     "title": "Edit event"
   },
   "eventForm": {
     "deckId": "Deck *",
-    "deckIdHint": "Need a new deck? <link>Create one here</link>",
     "eventName": "Event name *",
     "eventDate": "Event date *",
     "notes": "Notes",
@@ -72,7 +67,8 @@
     "viewMatchups": "View matchups",
     "addMatch": "Add match",
     "editMatch": "Edit",
-    "noMatches": "No matches yet — add one to get started",
+    "noMatches": "No matches yet. Add one to get started.",
+    "noMatchesGuest": "No matches yet",
     "matchesSection": "Matches",
     "notesSection": "Notes"
   },
@@ -99,18 +95,27 @@
     "delete": "Delete event",
     "deleteConfirm": "Are you sure you want to delete this event?"
   },
+  "deckSelect": {
+    "selectDeck": "Select a deck...",
+    "empty": "No decks yet",
+    "loading": "Loading...",
+    "add": "+ Add",
+    "createTitle": "Create deck"
+  },
   "opponentArchetypeSelect": {
     "selectArchetype": "Select an archetype...",
+    "empty": "No archetypes yet",
     "loading": "Loading...",
-    "addNew": "+ Add new...",
+    "add": "+ Add",
     "edit": "Edit",
     "createTitle": "Create opponent archetype",
     "editTitle": "Edit opponent archetype"
   },
   "formatSelect": {
     "selectFormat": "Select a format...",
+    "empty": "No formats yet",
     "loading": "Loading...",
-    "addNew": "+ Add new...",
+    "add": "+ Add",
     "edit": "Edit",
     "createTitle": "Create format",
     "editTitle": "Edit format"
@@ -131,9 +136,8 @@
   },
   "matchups": {
     "title": "Matchups",
-    "noFormats": "No formats yet — create a deck to get started",
-    "noFormatsGuest": "No matchups yet",
-    "createDeck": "Create deck"
+    "noFormats": "No matchups yet. Create an event to get started.",
+    "noFormatsGuest": "No matchups yet"
   },
   "matchupsPage": {
     "addFormat": "+ Add format",
@@ -143,8 +147,10 @@
     "editDeck": "Edit deck",
     "addDeck": "+ Add deck",
     "opponentArchetypesSection": "Opponent archetypes",
-    "noOpponentArchetypes": "No opponent archetypes yet",
-    "noDeckMatches": "No matches with this deck yet",
+    "noOpponentArchetypes": "No opponent archetypes yet. Create an event and add a match to get started.",
+    "noOpponentArchetypesGuest": "No matchups yet",
+    "noDeckMatches": "No matches with this deck yet. Create an event to add some.",
+    "noDeckMatchesGuest": "No matches with this deck yet",
     "archetype": "Archetype"
   },
   "deleteFormatButton": {
@@ -194,7 +200,7 @@
     "edit": "Edit",
     "editTitle": "Edit opponent archetype",
     "viewMatchups": "View matchups",
-    "noMatches": "No matches yet",
+    "noMatches": "No matches against this archetype yet. Create an event to add some.",
     "delete": "Delete archetype",
     "deleteConfirm": "Are you sure you want to delete {name}?",
     "hasMatchesHint": "Opponent archetypes with matches can't be deleted"

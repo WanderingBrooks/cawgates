@@ -8,20 +8,19 @@ import ErrorMessage from '../ErrorMessage';
 
 /**
  * The Delete button in an edit form's button row. It confirms, runs the
- * delete action, and shows the action's error under the button. Actions that
- * redirect on success never return, so onDeleted is only for ones that don't.
+ * delete action, and shows the action's error under the button. On success
+ * the action redirects, or the caller's onDelete navigates away, so the
+ * button never needs to reset.
  */
 const DeleteButton = ({
   label,
   confirmMessage,
   onDelete,
-  onDeleted,
   disabled = false,
 }: {
   label: string;
   confirmMessage: string;
   onDelete: () => Promise<ActionResult>;
-  onDeleted?: () => void;
   // Like when matches block deleting; the form's hint explains why
   disabled?: boolean;
 }) => {
@@ -42,10 +41,7 @@ const DeleteButton = ({
     if (result && !result.success) {
       setError(result.error);
       setIsDeleting(false);
-      return;
     }
-
-    onDeleted?.();
   };
 
   return (

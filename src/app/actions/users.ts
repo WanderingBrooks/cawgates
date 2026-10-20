@@ -96,9 +96,8 @@ const registerUser = async (
     };
   }
 
-  // Redirect to deck creation after registration.
-  // Get the user setup with what they need.
-  redirect(`/${username}/decks/create`);
+  // Events has Create event, whose form adds the first deck
+  redirect(`/${username}/events`);
 };
 
 export { registerUser };

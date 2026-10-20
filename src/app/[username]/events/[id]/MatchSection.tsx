@@ -1,20 +1,12 @@
-'use client';
-
 import Link from 'next/link';
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { deleteMatch } from '@/app/actions/matches';
 import {
   Button,
   Card,
   CardContent,
   CardTitle,
-  DeleteButton,
-  Dialog,
   SectionHeader,
 } from '@/components';
-import MatchForm from './MatchForm';
-import { MatchInputForm } from '@/lib/types';
 import { cn, getMatchResultTint } from '@/lib/utils';
 import classes from './matchSection.module.css';
 import Markdown from 'react-markdown';
@@ -33,7 +25,6 @@ type Match = {
 type MatchSectionProps = {
   matches: Match[];
   eventId: string;
-  deckId: string;
   isOwner: boolean;
   username: string;
 };
@@ -41,41 +32,28 @@ type MatchSectionProps = {
 const MatchSection = ({
   matches,
   eventId,
-  deckId,
   isOwner,
   username,
 }: MatchSectionProps) => {
   const t = useTranslations('event');
   const tCommon = useTranslations('common');
-  const tCreateMatch = useTranslations('createMatch');
-  const tEditMatch = useTranslations('editMatch');
-  const tDelete = useTranslations('deleteMatchButton');
 
-  const [isAddOpen, setIsAddOpen] = useState(false);
-  const [editingMatch, setEditingMatch] = useState<Match | null>(null);
-
-  const editingMatchData: MatchInputForm | undefined = editingMatch
-    ? {
-        id: editingMatch.id,
-        opponentArchetypeId: editingMatch.opponentArchetypeId,
-        wins: editingMatch.wins,
-        losses: editingMatch.losses,
-        notes: editingMatch.notes ?? '',
-      }
-    : undefined;
+  const matchesHref = `/${username}/events/${eventId}/matches`;
 
   return (
     <section className={classes.section}>
       <div className={classes.sectionHeader}>
         <SectionHeader>{t('matchesSection')}</SectionHeader>
         {isOwner && (
-          <Button variant="primary" onClick={() => setIsAddOpen(true)}>
-            {t('addMatch')}
-          </Button>
+          <Link href={`${matchesHref}/create`}>
+            <Button variant="primary">{t('addMatch')}</Button>
+          </Link>
         )}
       </div>
 
-      {matches.length === 0 && <p>{t('noMatches')}</p>}
+      {matches.length === 0 && (
+        <p>{isOwner ? t('noMatches') : t('noMatchesGuest')}</p>
+      )}
 
       {matches.length > 0 && (
         <div className={classes.matchList}>
@@ -108,13 +86,9 @@ const MatchSection = ({
                 </div>
                 {isOwner && (
                   <div className={classes.matchActions}>
-                    <Button
-                      variant="secondary"
-                      size="small"
-                      onClick={() => setEditingMatch(match)}
-                    >
-                      {t('editMatch')}
-                    </Button>
+                    <Link href={`${matchesHref}/${match.id}/edit`}>
+                      <Button variant="secondary">{t('editMatch')}</Button>
+                    </Link>
                   </div>
                 )}
               </CardTitle>
@@ -128,47 +102,6 @@ const MatchSection = ({
             </Card>
           ))}
         </div>
-      )}
-
-      {isOwner && (
-        <>
-          <Dialog isOpen={isAddOpen} title={tCreateMatch('title')} usePortal>
-            <MatchForm
-              mode="create"
-              deckId={deckId}
-              eventId={eventId}
-              onSuccess={() => setIsAddOpen(false)}
-              onCancel={() => setIsAddOpen(false)}
-            />
-          </Dialog>
-
-          <Dialog
-            isOpen={editingMatch !== null}
-            title={tEditMatch('title')}
-            usePortal
-          >
-            {editingMatch !== null && (
-              <MatchForm
-                key={editingMatch.id}
-                mode="edit"
-                deckId={deckId}
-                eventId={eventId}
-                matchId={editingMatch.id}
-                initialMatchData={editingMatchData}
-                onSuccess={() => setEditingMatch(null)}
-                onCancel={() => setEditingMatch(null)}
-                deleteButton={
-                  <DeleteButton
-                    label={tDelete('delete')}
-                    confirmMessage={tDelete('deleteConfirm')}
-                    onDelete={() => deleteMatch(editingMatch.id)}
-                    onDeleted={() => setEditingMatch(null)}
-                  />
-                }
-              />
-            )}
-          </Dialog>
-        </>
       )}
     </section>
   );

@@ -16,16 +16,8 @@ const slugify = ({ name }: { name: string }) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-// Slugs that conflict with static routes
-const RESERVED_SLUGS = [
-  'create',
-  'login',
-  'register',
-  'events',
-  'decks',
-  'matchups',
-  'opponents',
-];
+// Profiles live at /[username], so a username can't be a top-level route
+const RESERVED_USERNAMES = ['login', 'register'];
 
 /**
  * Formats a date consistently across the app.
@@ -40,6 +32,9 @@ const formatDate = ({
 }) =>
   // eslint-disable-next-line no-restricted-syntax
   formatter.dateTime(date, { dateStyle: 'medium' });
+
+// Event and match notes get a tall box, since they can run long
+const NOTES_ROWS = 25;
 
 // Below this many matches a win rate says more about luck than the
 // matchup, so it isn't tinted
@@ -111,7 +106,8 @@ const getMatchRecord = ({
 export {
   cn,
   slugify,
-  RESERVED_SLUGS,
+  RESERVED_USERNAMES,
+  NOTES_ROWS,
   formatDate,
   getWinRateTint,
   getMatchResultTint,

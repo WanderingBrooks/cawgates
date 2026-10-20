@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { RESERVED_SLUGS } from './utils';
+import { RESERVED_USERNAMES } from './utils';
 
 // trim() must come before min(1): checks run in order, so min-then-trim lets
 // a value of only spaces pass and be saved as an empty string
@@ -19,7 +19,7 @@ const matchSchema = z.object({
 
 // Schema for creating an event
 const createEventSchema = z.object({
-  deckId: z.string().min(1, 'Deck ID is required'),
+  deckId: z.string().min(1, 'Deck is required'),
   eventName: requiredTrimmedString('Event name is required'),
   eventDate: z.string().min(1, 'Event date is required'),
   notes: z.string().optional().default(''),
@@ -89,6 +89,15 @@ export type ActionResultWithData<T> =
   | { success: true; data: T; error?: never }
   | { success: false; error: string };
 
+// What the deck actions return, so the deck dialog's caller can navigate to
+// or select the deck
+export type SavedDeck = {
+  id: string;
+  name: string;
+  slug: string;
+  formatId: string;
+};
+
 // Helper type for event form data (event fields only, no matches)
 export type EventFormData = Pick<
   CreateEventInput,
@@ -101,11 +110,7 @@ const slugSchema = z
     /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
     'May only contain lowercase letters, numbers, and hyphens',
   )
-  .trim()
-  .refine(
-    slug => !RESERVED_SLUGS.includes(slug),
-    'This value is reserved and cannot be used',
-  );
+  .trim();
 
 // Schema for creating a deck
 const createDeckSchema = z.object({
@@ -123,7 +128,12 @@ export type CreateDeckInput = z.infer<typeof createDeckSchema>;
 const registerUserSchema = z
   .object({
     email: z.email('Invalid email address').trim().toLowerCase(),
-    username: slugSchema.min(3, 'Username must be at least 3 characters'),
+    username: slugSchema
+      .min(3, 'Username must be at least 3 characters')
+      .refine(
+        username => !RESERVED_USERNAMES.includes(username),
+        'This value is reserved and cannot be used',
+      ),
     password: z.string().min(8, 'Password must be at least 8 characters'),
     confirmPassword: z.string(),
   })

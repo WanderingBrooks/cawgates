@@ -1,22 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { getOpponentArchetypesForArchetype } from '@/app/actions/opponentArchetypes';
-import Dialog from '../Dialog';
-import Button from '../Button';
+import ItemPicker from '../ItemPicker';
 import OpponentArchetypeForm from '../OpponentArchetypeForm';
-import classes from './opponentArchetypeSelect.module.css';
-
-// TODO: FormatSelect and OpponentArchetypeSelect (and FormatForm /
-// OpponentArchetypeForm) are ~90% identical: same select + "Add new" + edit
-// dialog flow, identical CSS. They differ only in how options load, which
-// actions save, translation namespace and onChange shape. Worth merging into
-// one shared CreatableSelect + name form so fixes (like #62) land once.
-type OpponentArchetypeOption = {
-  id: string;
-  name: string;
-};
 
 type OpponentArchetypeSelectProps = {
   deckId: string;
@@ -24,140 +12,54 @@ type OpponentArchetypeSelectProps = {
   id?: string;
   name: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (opponentArchetypeId: string) => void;
   required?: boolean;
 };
 
-const ADD_NEW_VALUE = '__ADD_NEW__';
-
 const OpponentArchetypeSelect = ({
   deckId,
-  label,
-  id,
-  name,
-  value,
-  onChange,
-  required,
+  ...props
 }: OpponentArchetypeSelectProps) => {
   const t = useTranslations('opponentArchetypeSelect');
 
-  const [options, setOptions] = useState<OpponentArchetypeOption[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [isEditOpen, setIsEditOpen] = useState(false);
-
-  useEffect(() => {
-    const loadOptions = async () => {
-      const data = await getOpponentArchetypesForArchetype({ deckId });
-
-      setOptions(data.map(o => ({ id: o.id, name: o.name })));
-      setIsLoading(false);
-    };
-
-    loadOptions();
-  }, [deckId]);
-
-  const selectedOption = options.find(o => o.id === value) ?? null;
-
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === ADD_NEW_VALUE) {
-      setIsCreateOpen(true);
-      return;
-    }
-
-    const syntheticEvent = {
-      target: { name: name, value: e.target.value },
-    } as React.ChangeEvent<HTMLInputElement>;
-
-    onChange(syntheticEvent);
-  };
-
-  const handleCreateSuccess = (data: { id: string; name: string }) => {
-    setOptions(prev =>
-      [...prev, data].sort((a, b) => a.name.localeCompare(b.name)),
-    );
-
-    const syntheticEvent = {
-      target: { name: name, value: data.id },
-    } as React.ChangeEvent<HTMLInputElement>;
-
-    onChange(syntheticEvent);
-    setIsCreateOpen(false);
-  };
-
-  const handleEditSuccess = (data: { id: string; name: string }) => {
-    setOptions(prev =>
-      prev
-        .map(o => (o.id === data.id ? data : o))
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    );
-
-    setIsEditOpen(false);
-  };
+  const loadOptions = useCallback(
+    () => getOpponentArchetypesForArchetype({ deckId }),
+    [deckId],
+  );
 
   return (
-    <div className={classes.container}>
-      {label && <label htmlFor={id}>{label}</label>}
-      {/* Hidden input for the label association (via id) and to carry the clean form value —
-          the visible <select> may hold the sentinel "__ADD_NEW__" value, so form submission
-          reads from here instead, which always contains a real opponentArchetypeId or empty string */}
-      <input
-        type="hidden"
-        id={id}
-        name={name}
-        value={value}
-        required={required}
-      />
-      <div className={classes.selectRow}>
-        <select
-          value={value}
-          onChange={handleSelectChange}
-          required={required}
-          disabled={isLoading}
-          className={classes.select}
-        >
-          <option value="">
-            {isLoading ? t('loading') : t('selectArchetype')}
-          </option>
-          <option value={ADD_NEW_VALUE}>{t('addNew')}</option>
-          {options.map(option => (
-            <option key={option.id} value={option.id}>
-              {option.name}
-            </option>
-          ))}
-        </select>
-        {selectedOption && (
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => setIsEditOpen(true)}
-          >
-            {t('edit')}
-          </Button>
-        )}
-      </div>
-
-      <Dialog isOpen={isCreateOpen} title={t('createTitle')} usePortal>
+    <ItemPicker
+      {...props}
+      loadOptions={loadOptions}
+      text={{
+        placeholder: t('selectArchetype'),
+        empty: t('empty'),
+        loading: t('loading'),
+        add: t('add'),
+        createTitle: t('createTitle'),
+      }}
+      renderCreateForm={({ onSuccess, onCancel }) => (
         <OpponentArchetypeForm
           mode="create"
           deckId={deckId}
-          onSuccess={handleCreateSuccess}
-          onCancel={() => setIsCreateOpen(false)}
+          onSuccess={onSuccess}
+          onCancel={onCancel}
         />
-      </Dialog>
-
-      {selectedOption && (
-        <Dialog isOpen={isEditOpen} title={t('editTitle')} usePortal>
+      )}
+      edit={{
+        label: t('edit'),
+        title: t('editTitle'),
+        renderForm: ({ option, onSuccess, onCancel }) => (
           <OpponentArchetypeForm
             mode="edit"
-            opponentArchetypeId={selectedOption.id}
-            initialName={selectedOption.name}
-            onSuccess={handleEditSuccess}
-            onCancel={() => setIsEditOpen(false)}
+            opponentArchetypeId={option.id}
+            initialName={option.name}
+            onSuccess={onSuccess}
+            onCancel={onCancel}
           />
-        </Dialog>
-      )}
-    </div>
+        ),
+      }}
+    />
   );
 };
 

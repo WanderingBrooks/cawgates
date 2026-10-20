@@ -8,6 +8,7 @@ import { createEvent, deleteEvent, updateEvent } from '@/app/actions/events';
 import { type ActionResult } from '@/lib/types';
 import {
   Button,
+  DeckSelect,
   DeleteButton,
   DiscardChangesConfirm,
   ErrorMessage,
@@ -16,10 +17,9 @@ import {
   SpaceChildrenVertically,
   FormActions,
   TextArea,
-  Select,
 } from '@/components';
+import { NOTES_ROWS } from '@/lib/utils';
 import { EventFormData } from '@/lib/types';
-import Link from 'next/link';
 
 /**
  * SubmitButton must be a separate component because useFormStatus() requires
@@ -40,7 +40,6 @@ const SubmitButton = () => {
 type CreateEventProps = {
   mode: 'create';
   username: string;
-  decks: { id: string; name: string }[];
 };
 
 type EditEventProps = {
@@ -105,6 +104,11 @@ const EventForm = (props: EventFormProps) => {
     setHasFormDataChanged(true);
   };
 
+  const handleDeckChange = (deckId: string) => {
+    setEventData(prev => ({ ...prev, deckId }));
+    setHasFormDataChanged(true);
+  };
+
   return (
     <Form action={formAction}>
       <SpaceChildrenVertically>
@@ -115,26 +119,13 @@ const EventForm = (props: EventFormProps) => {
           </>
         )}
         {props.mode === 'create' && (
-          <Select
+          <DeckSelect
             required
             id="deckId"
             name="deckId"
             label={t('deckId')}
-            hint={t.rich('deckIdHint', {
-              link: chunks => (
-                <Link href={`/${username}/decks/create`}>{chunks}</Link>
-              ),
-            })}
             value={eventData.deckId}
-            onChange={handleEventChange}
-            options={[
-              // Placeholder empty value
-              { value: '', label: '' },
-              ...props.decks.map(deck => ({
-                value: deck.id,
-                label: deck.name,
-              })),
-            ]}
+            onChange={handleDeckChange}
           />
         )}
         <Input
@@ -161,7 +152,7 @@ const EventForm = (props: EventFormProps) => {
           label={t('notes')}
           value={eventData.notes}
           onChange={handleEventChange}
-          rows={25}
+          rows={NOTES_ROWS}
         />
 
         {state?.error && <ErrorMessage error={state.error} />}
@@ -173,7 +164,11 @@ const EventForm = (props: EventFormProps) => {
         ) : (
           <FormActions
             cancelButton={
-              <Button variant="secondary" type="button" onClick={handleCancel}>
+              <Button
+                variant="secondary"
+                type="button"
+                onClick={handleCancel}
+              >
                 {t('cancel')}
               </Button>
             }

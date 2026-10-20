@@ -4,8 +4,9 @@ import { getFormatter, getTranslations } from 'next-intl/server';
 import { getFormatsForOwner, getFormatWithMatchStatistics } from '@/lib/dal';
 import { cn, getWinRateTint } from '@/lib/utils';
 import {
-  Button,
+  CreateDeckButton,
   DeckFilter,
+  EditDeckButton,
   FormatFilter,
   PageTitle,
   SectionHeader,
@@ -103,15 +104,24 @@ const MatchupsPage = async ({
           />
           {isOwner && (
             <div className={classes.filterButtons}>
-              <Link
-                href={`/${username}/decks/create?format=${encodeURIComponent(format.id)}`}
-              >
-                <Button variant="secondary">{t('addDeck')}</Button>
-              </Link>
+              <CreateDeckButton
+                username={username}
+                label={t('addDeck')}
+                initialFormatId={format.id}
+              />
               {selectedDeck && (
-                <Link href={`/${username}/decks/${selectedDeck.slug}/edit`}>
-                  <Button variant="secondary">{t('editDeck')}</Button>
-                </Link>
+                <EditDeckButton
+                  username={username}
+                  label={t('editDeck')}
+                  deck={{
+                    id: selectedDeck.id,
+                    name: selectedDeck.name,
+                    slug: selectedDeck.slug,
+                    formatId: selectedDeck.formatId,
+                  }}
+                  // The totals only count this deck's matches here
+                  isFormatLocked={totals.totalMatches > 0}
+                />
               )}
             </div>
           )}
@@ -121,7 +131,15 @@ const MatchupsPage = async ({
       <section className={classes.section}>
         <SectionHeader>{t('opponentArchetypesSection')}</SectionHeader>
         {matchStatistics.length === 0 ? (
-          <p>{selectedDeck ? t('noDeckMatches') : t('noOpponentArchetypes')}</p>
+          <p>
+            {isOwner
+              ? t(selectedDeck ? 'noDeckMatches' : 'noOpponentArchetypes')
+              : t(
+                  selectedDeck
+                    ? 'noDeckMatchesGuest'
+                    : 'noOpponentArchetypesGuest',
+                )}
+          </p>
         ) : (
           <div className="table-scroll">
             <table>
