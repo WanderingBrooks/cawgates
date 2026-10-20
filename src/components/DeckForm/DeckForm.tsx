@@ -3,9 +3,10 @@
 import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useTranslations } from 'next-intl';
-import { createDeck, updateDeck } from '@/app/actions/decks';
+import { createDeck, deleteDeck, updateDeck } from '@/app/actions/decks';
 import { type ActionResult } from '@/lib/types';
 import Button from '../Button';
+import DeleteButton from '../DeleteButton';
 import ErrorMessage from '../ErrorMessage';
 import Form from '../Form';
 import Input from '../Input';
@@ -13,7 +14,6 @@ import SpaceChildrenVertically from '../SpaceChildrenVertically';
 import FormActions from '../FormActions';
 import FormatSelect from '../FormatSelect';
 import Link from 'next/link';
-import DeleteDeckButton from './DeleteDeckButton';
 import classes from './deckForm.module.css';
 import { slugify } from '@/lib/utils';
 
@@ -69,6 +69,7 @@ type DeckFormProps =
 
 const DeckForm = (props: DeckFormProps) => {
   const t = useTranslations('deckForm');
+  const tDelete = useTranslations('deleteDeckButton');
   const action = props.mode === 'create' ? createDeck : updateDeck;
 
   const [state, formAction, isPending] = useActionState<
@@ -160,7 +161,11 @@ const DeckForm = (props: DeckFormProps) => {
           }
           deleteButton={
             props.mode === 'edit' ? (
-              <DeleteDeckButton deckId={props.deckId} />
+              <DeleteButton
+                label={tDelete('delete')}
+                confirmMessage={tDelete('deleteConfirm')}
+                onDelete={() => deleteDeck(props.deckId)}
+              />
             ) : undefined
           }
         />

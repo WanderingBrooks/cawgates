@@ -4,8 +4,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { Button, Dialog, OpponentArchetypeForm } from '@/components';
-import DeleteOpponentArchetypeButton from './DeleteOpponentArchetypeButton';
+import { deleteOpponentArchetype } from '@/app/actions/opponentArchetypes';
+import {
+  Button,
+  DeleteButton,
+  Dialog,
+  OpponentArchetypeForm,
+} from '@/components';
 
 const OpponentArchetypeActions = ({
   opponentArchetypeId,
@@ -56,10 +61,13 @@ const OpponentArchetypeActions = ({
             }}
             onCancel={() => setIsDialogOpen(false)}
             deleteButton={
-              <DeleteOpponentArchetypeButton
-                opponentArchetypeId={opponentArchetypeId}
-                name={initialName}
-                hasMatches={hasMatches}
+              <DeleteButton
+                label={t('delete')}
+                confirmMessage={t('deleteConfirm', { name: initialName })}
+                onDelete={() =>
+                  deleteOpponentArchetype({ opponentArchetypeId })
+                }
+                disabled={hasMatches}
               />
             }
             deleteHint={hasMatches ? t('hasMatchesHint') : undefined}
