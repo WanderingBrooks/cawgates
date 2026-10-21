@@ -47,6 +47,7 @@ type OpponentArchetypeFormProps =
       mode: 'edit';
       opponentArchetypeId: string;
       initialName: string;
+      initialIsRogue: boolean;
       onSuccess: (data: OpponentArchetypeOption) => void;
       onCancel: () => void;
       deleteButton?: React.ReactNode;
@@ -75,6 +76,10 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
     props.mode === 'edit' ? props.initialName : '',
   );
 
+  const [isRogue, setIsRogue] = useState(
+    props.mode === 'edit' ? props.initialIsRogue : false,
+  );
+
   return (
     <Form action={formAction}>
       <SpaceChildrenVertically>
@@ -96,6 +101,15 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
           value={name}
           onChange={e => setName(e.target.value)}
           required
+        />
+        <Input
+          type="checkbox"
+          id="isRogue"
+          name="isRogue"
+          label={t('rogue')}
+          hint={t('rogueHint')}
+          checked={isRogue}
+          onChange={e => setIsRogue(e.target.checked)}
         />
         {state?.error && <ErrorMessage error={state.error} />}
         <FormActions

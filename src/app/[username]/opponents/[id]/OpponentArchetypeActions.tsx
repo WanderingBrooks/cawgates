@@ -16,6 +16,7 @@ const OpponentArchetypeActions = ({
   opponentArchetypeId,
   formatId,
   initialName,
+  initialIsRogue,
   username,
   isOwner,
   deckSlug,
@@ -24,6 +25,7 @@ const OpponentArchetypeActions = ({
   opponentArchetypeId: string;
   formatId: string;
   initialName: string;
+  initialIsRogue: boolean;
   username: string;
   isOwner: boolean;
   // Carried back to the format page so it keeps the same deck filter
@@ -55,6 +57,7 @@ const OpponentArchetypeActions = ({
             mode="edit"
             opponentArchetypeId={opponentArchetypeId}
             initialName={initialName}
+            initialIsRogue={initialIsRogue}
             onSuccess={() => {
               setIsDialogOpen(false);
               router.refresh();

@@ -109,7 +109,8 @@
     "add": "+ Add",
     "edit": "Edit",
     "createTitle": "Create opponent archetype",
-    "editTitle": "Edit opponent archetype"
+    "editTitle": "Edit opponent archetype",
+    "rogueGroup": "Rogue"
   },
   "formatSelect": {
     "selectFormat": "Select a format...",
@@ -190,6 +191,8 @@
   },
   "opponentArchetypeForm": {
     "name": "Name *",
+    "rogue": "Rogue",
+    "rogueHint": "A one-off brew. Rogue decks are grouped at the bottom of lists.",
     "create": "Create",
     "save": "Save",
     "saving": "Saving...",

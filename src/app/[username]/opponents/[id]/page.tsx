@@ -92,6 +92,7 @@ const OpponentArchetypePage = async ({
               opponentArchetypeId={opponentArchetype.id}
               formatId={opponentArchetype.formatId}
               initialName={opponentArchetype.name}
+              initialIsRogue={opponentArchetype.isRogue}
               username={username}
               isOwner={isOwner}
               deckSlug={selectedDeck?.slug ?? null}
