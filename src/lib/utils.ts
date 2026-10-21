@@ -33,7 +33,9 @@ const formatDate = ({
   // eslint-disable-next-line no-restricted-syntax
   formatter.dateTime(date, { dateStyle: 'medium' });
 
-// Event and match notes get a tall box, since they can run long
+// Event and match notes get a tall box, since they can run long. Browsers
+// that support field-sizing grow it further as you type (see
+// textArea.module.css).
 const NOTES_ROWS = 25;
 
 // Below this many matches a win rate says more about luck than the

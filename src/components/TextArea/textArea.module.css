@@ -6,4 +6,9 @@
 .textArea {
   composes: input from '../Input/input.module.css';
   resize: vertical;
+  /* Grow with the text instead of scrolling inside a fixed box. This
+     ignores rows, so min-height keeps the starting size (25 lines plus
+     padding, to match NOTES_ROWS). */
+  field-sizing: content;
+  min-height: calc(25lh + 2 * var(--spacing-sm));
 }
