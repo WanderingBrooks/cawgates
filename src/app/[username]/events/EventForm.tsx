@@ -16,6 +16,7 @@ import {
   Input,
   SpaceChildrenVertically,
   FormActions,
+  FormFooter,
   TextArea,
 } from '@/components';
 import { NOTES_ROWS } from '@/lib/utils';
@@ -156,34 +157,36 @@ const EventForm = (props: EventFormProps) => {
         />
 
         {state?.error && <ErrorMessage error={state.error} />}
-        {showCancelConfirm ? (
-          <DiscardChangesConfirm
-            onKeepEditing={() => setShowCancelConfirm(false)}
-            onDiscard={() => router.push(cancelHref)}
-          />
-        ) : (
-          <FormActions
-            cancelButton={
-              <Button
-                variant="secondary"
-                type="button"
-                onClick={handleCancel}
-              >
-                {t('cancel')}
-              </Button>
-            }
-            submitButton={<SubmitButton />}
-            deleteButton={
-              props.mode === 'edit' ? (
-                <DeleteButton
-                  label={tDelete('delete')}
-                  confirmMessage={tDelete('deleteConfirm')}
-                  onDelete={() => deleteEvent(props.eventId)}
-                />
-              ) : undefined
-            }
-          />
-        )}
+        <FormFooter>
+          {showCancelConfirm ? (
+            <DiscardChangesConfirm
+              onKeepEditing={() => setShowCancelConfirm(false)}
+              onDiscard={() => router.push(cancelHref)}
+            />
+          ) : (
+            <FormActions
+              cancelButton={
+                <Button
+                  variant="secondary"
+                  type="button"
+                  onClick={handleCancel}
+                >
+                  {t('cancel')}
+                </Button>
+              }
+              submitButton={<SubmitButton />}
+              deleteButton={
+                props.mode === 'edit' ? (
+                  <DeleteButton
+                    label={tDelete('delete')}
+                    confirmMessage={tDelete('deleteConfirm')}
+                    onDelete={() => deleteEvent(props.eventId)}
+                  />
+                ) : undefined
+              }
+            />
+          )}
+        </FormFooter>
       </SpaceChildrenVertically>
     </Form>
   );
