@@ -33,6 +33,11 @@
   gap: var(--spacing-sm);
 }
 
+/* Indented under the Rogue summary row */
+.rogueRow td:first-child {
+  padding-left: var(--spacing-xl);
+}
+
 @media (min-width: 768px) {
   .filterRow {
     flex-direction: row;

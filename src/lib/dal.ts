@@ -29,8 +29,28 @@ const hideNotes = <T extends { notes: string | null }>({
   isOwner: boolean;
 }): T => (isOwner ? item : { ...item, notes: null });
 
+// Win/loss/draw counts and win rate for a set of matches
+const summariseMatches = ({
+  matches,
+}: {
+  matches: { wins: number; losses: number }[];
+}) => {
+  const { matchWins, matchLosses, matchDraws } = getMatchRecord({ matches });
+
+  const totalMatches = matches.length;
+
+  return {
+    totalMatches,
+    matchWins,
+    matchLosses,
+    matchDraws,
+    matchWinRate: totalMatches === 0 ? 0 : matchWins / totalMatches,
+  };
+};
+
 /**
- * Match statistics per opponent archetype in a format. With a deckId only
+ * Match statistics per opponent archetype in a format, with rogue
+ * archetypes split out into their own rows and totals. With a deckId only
  * that deck's matches count. With a deckId or isPlayedOnly only archetypes
  * with counted matches are returned. Without either, every deck's matches
  * count and every archetype in the format is returned, including ones with
@@ -63,6 +83,7 @@ const queryMatchStatistics = async ({
     select: {
       id: true,
       name: true,
+      isRogue: true,
       matches: {
         where: countedMatches,
         select: { wins: true, losses: true },
@@ -70,23 +91,12 @@ const queryMatchStatistics = async ({
     },
   });
 
-  const deckStats = opponentArchetypes.map(opponentArchetype => {
-    const { matchWins, matchLosses, matchDraws } = getMatchRecord({
-      matches: opponentArchetype.matches,
-    });
-
-    const totalMatches = opponentArchetype.matches.length;
-
-    return {
-      opponentArchetype: opponentArchetype.name,
-      opponentArchetypeId: opponentArchetype.id,
-      totalMatches,
-      matchWins,
-      matchLosses,
-      matchDraws,
-      matchWinRate: totalMatches === 0 ? 0 : matchWins / totalMatches,
-    };
-  });
+  const deckStats = opponentArchetypes.map(opponentArchetype => ({
+    opponentArchetype: opponentArchetype.name,
+    opponentArchetypeId: opponentArchetype.id,
+    isRogue: opponentArchetype.isRogue,
+    ...summariseMatches({ matches: opponentArchetype.matches }),
+  }));
 
   // Sort order:
   // 1) Matches played descending, so more data comes first.
@@ -104,23 +114,26 @@ const queryMatchStatistics = async ({
     return a.opponentArchetype.localeCompare(b.opponentArchetype);
   });
 
-  const { matchWins, matchLosses, matchDraws } = getMatchRecord({
-    matches: opponentArchetypes.flatMap(
-      opponentArchetype => opponentArchetype.matches,
-    ),
-  });
-
-  const totalMatches = matchWins + matchLosses + matchDraws;
+  const rogueArchetypes = opponentArchetypes.filter(
+    opponentArchetype => opponentArchetype.isRogue,
+  );
 
   return {
-    rows,
-    totals: {
-      matchWins,
-      matchLosses,
-      matchDraws,
-      totalMatches,
-      matchWinRate: totalMatches === 0 ? 0 : matchWins / totalMatches,
+    rows: rows.filter(row => !row.isRogue),
+    rogue: {
+      rows: rows.filter(row => row.isRogue),
+      totals: summariseMatches({
+        matches: rogueArchetypes.flatMap(
+          opponentArchetype => opponentArchetype.matches,
+        ),
+      }),
     },
+    // Rogue matches still count towards the format's record
+    totals: summariseMatches({
+      matches: opponentArchetypes.flatMap(
+        opponentArchetype => opponentArchetype.matches,
+      ),
+    }),
   };
 };
 
@@ -409,13 +422,17 @@ const getFormatWithMatchStatistics = async ({
 
   // The owner sees every archetype including unplayed ones, guests only the
   // played ones, the same as the opponent archetype page
-  const { rows: matchStatistics, totals } = await queryMatchStatistics({
+  const {
+    rows: matchStatistics,
+    rogue,
+    totals,
+  } = await queryMatchStatistics({
     formatId: format.id,
     deckId: selectedDeck?.id,
     isPlayedOnly: !isOwner,
   });
 
-  return { format, isOwner, selectedDeck, matchStatistics, totals };
+  return { format, isOwner, selectedDeck, matchStatistics, rogue, totals };
 };
 
 export {

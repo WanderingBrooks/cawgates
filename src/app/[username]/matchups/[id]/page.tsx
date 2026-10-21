@@ -13,6 +13,7 @@ import {
   Tooltip,
 } from '@/components';
 import FormatButtons from './FormatButtons';
+import RogueRows from './RogueRows';
 import classes from './matchupsPage.module.css';
 
 const renderNumber = (chunks: ReactNode) => (
@@ -37,7 +38,7 @@ const MatchupsPage = async ({
   const formatter = await getFormatter();
 
   const [
-    { format, isOwner, selectedDeck, matchStatistics, totals },
+    { format, isOwner, selectedDeck, matchStatistics, rogue, totals },
     { formats },
   ] = await Promise.all([
     getFormatWithMatchStatistics({
@@ -47,6 +48,61 @@ const MatchupsPage = async ({
     }),
     getFormatsForOwner({ ownerUsername: username }),
   ]);
+
+  const renderStatCells = ({ stats }: { stats: (typeof rogue)['totals'] }) => (
+    <>
+      <td className="text-number">{stats.totalMatches}</td>
+      {stats.totalMatches === 0 ? (
+        <>
+          <td className="text-number">{tCommon('noValue')}</td>
+          <td className="text-number">{tCommon('noValue')}</td>
+        </>
+      ) : (
+        <>
+          <td className="text-number">
+            {tCommon('matchRecord', {
+              wins: stats.matchWins,
+              losses: stats.matchLosses,
+              ties: stats.matchDraws,
+            })}
+          </td>
+          <td
+            className={cn(
+              'text-number',
+              getWinRateTint({
+                winRate: stats.matchWinRate,
+                matchCount: stats.totalMatches,
+              }),
+            )}
+          >
+            {formatter.number(stats.matchWinRate, {
+              style: 'percent',
+              maximumFractionDigits: 1,
+            })}
+          </td>
+        </>
+      )}
+    </>
+  );
+
+  const renderRow = ({ row }: { row: (typeof matchStatistics)[number] }) => (
+    <tr
+      key={row.opponentArchetypeId}
+      className={cn(row.isRogue && classes.rogueRow)}
+    >
+      <td>
+        {/* Keeps the deck filter on the archetype page */}
+        <Link
+          href={`/${username}/opponents/${row.opponentArchetypeId}${
+            selectedDeck ? `?deck=${encodeURIComponent(selectedDeck.slug)}` : ''
+          }`}
+        >
+          {row.opponentArchetype}
+        </Link>
+      </td>
+      {renderStatCells({ stats: row })}
+    </tr>
+  );
 
   return (
     <>
@@ -130,7 +186,7 @@ const MatchupsPage = async ({
 
       <section className={classes.section}>
         <SectionHeader>{t('opponentArchetypesSection')}</SectionHeader>
-        {matchStatistics.length === 0 ? (
+        {matchStatistics.length === 0 && rogue.rows.length === 0 ? (
           <p>
             {isOwner
               ? t(selectedDeck ? 'noDeckMatches' : 'noOpponentArchetypes')
@@ -151,55 +207,15 @@ const MatchupsPage = async ({
                   <th className="text-number">{tCommon('winPctLabel')}</th>
                 </tr>
               </thead>
-              <tbody>
-                {matchStatistics.map(row => (
-                  <tr key={row.opponentArchetypeId}>
-                    <td>
-                      {/* Keeps the deck filter on the archetype page */}
-                      <Link
-                        href={`/${username}/opponents/${row.opponentArchetypeId}${
-                          selectedDeck
-                            ? `?deck=${encodeURIComponent(selectedDeck.slug)}`
-                            : ''
-                        }`}
-                      >
-                        {row.opponentArchetype}
-                      </Link>
-                    </td>
-                    <td className="text-number">{row.totalMatches}</td>
-                    {row.totalMatches === 0 ? (
-                      <>
-                        <td className="text-number">{tCommon('noValue')}</td>
-                        <td className="text-number">{tCommon('noValue')}</td>
-                      </>
-                    ) : (
-                      <>
-                        <td className="text-number">
-                          {tCommon('matchRecord', {
-                            wins: row.matchWins,
-                            losses: row.matchLosses,
-                            ties: row.matchDraws,
-                          })}
-                        </td>
-                        <td
-                          className={cn(
-                            'text-number',
-                            getWinRateTint({
-                              winRate: row.matchWinRate,
-                              matchCount: row.totalMatches,
-                            }),
-                          )}
-                        >
-                          {formatter.number(row.matchWinRate, {
-                            style: 'percent',
-                            maximumFractionDigits: 1,
-                          })}
-                        </td>
-                      </>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
+              <tbody>{matchStatistics.map(row => renderRow({ row }))}</tbody>
+              {rogue.rows.length > 0 && (
+                <RogueRows
+                  count={rogue.rows.length}
+                  statCells={renderStatCells({ stats: rogue.totals })}
+                >
+                  {rogue.rows.map(row => renderRow({ row }))}
+                </RogueRows>
+              )}
             </table>
           </div>
         )}

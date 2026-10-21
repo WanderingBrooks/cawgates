@@ -1,0 +1,13 @@
+/* The global tbody rule drops the last row's border in the table body
+   above, so this puts it back between the two */
+.body {
+  border-top: 1px solid var(--color-row-border);
+}
+
+.toggle {
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+}

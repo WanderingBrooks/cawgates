@@ -152,7 +152,9 @@
     "noOpponentArchetypesGuest": "No matchups yet",
     "noDeckMatches": "No matches with this deck yet. Create an event to add some.",
     "noDeckMatchesGuest": "No matches with this deck yet",
-    "archetype": "Archetype"
+    "archetype": "Archetype",
+    "rogueClosed": "▸ Rogue ({count})",
+    "rogueOpen": "▾ Rogue ({count})"
   },
   "deleteFormatButton": {
     "delete": "Delete format",
