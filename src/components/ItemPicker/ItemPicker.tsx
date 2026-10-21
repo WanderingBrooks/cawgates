@@ -8,6 +8,8 @@ import classes from './itemPicker.module.css';
 type ItemOption = {
   id: string;
   name: string;
+  // Listed after the others, under text.secondaryGroup
+  isSecondary?: boolean;
 };
 
 type FormRenderProps = {
@@ -35,6 +37,8 @@ type ItemPickerProps = {
     loading: string;
     add: string;
     createTitle: string;
+    // Heading for the options marked isSecondary
+    secondaryGroup?: string;
   };
   renderCreateForm: (props: FormRenderProps) => React.ReactNode;
   // Leave out to hide the Edit button
@@ -47,8 +51,23 @@ type ItemPickerProps = {
   };
 };
 
-const sortByName = ({ options }: { options: ItemOption[] }) =>
-  [...options].sort((a, b) => a.name.localeCompare(b.name));
+// Matches the order loadOptions returns, so new and renamed items land
+// where a reload would put them
+const sortOptions = ({ options }: { options: ItemOption[] }) =>
+  [...options].sort((a, b) => {
+    if (Boolean(a.isSecondary) !== Boolean(b.isSecondary)) {
+      return a.isSecondary ? 1 : -1;
+    }
+
+    return a.name.localeCompare(b.name);
+  });
+
+const renderOptions = ({ options }: { options: ItemOption[] }) =>
+  options.map(option => (
+    <option key={option.id} value={option.id}>
+      {option.name}
+    </option>
+  ));
 
 /**
  * A dropdown of named items (decks, formats, opponent archetypes) with
@@ -79,7 +98,10 @@ const ItemPicker = ({
     const load = async () => {
       const data = await loadOptions();
 
-      setOptions(data.map(o => ({ id: o.id, name: o.name })));
+      setOptions(
+        data.map(o => ({ id: o.id, name: o.name, isSecondary: o.isSecondary })),
+      );
+
       setIsLoading(false);
     };
 
@@ -87,6 +109,9 @@ const ItemPicker = ({
   }, [loadOptions]);
 
   const selectedOption = options.find(o => o.id === value) ?? null;
+
+  const primaryOptions = options.filter(o => !o.isSecondary);
+  const secondaryOptions = options.filter(o => o.isSecondary);
 
   // Nothing to pick yet, so + Add is the only next step
   const isEmpty = !isLoading && options.length === 0;
@@ -100,14 +125,14 @@ const ItemPicker = ({
   }
 
   const handleCreateSuccess = (data: ItemOption) => {
-    setOptions(prev => sortByName({ options: [...prev, data] }));
+    setOptions(prev => sortOptions({ options: [...prev, data] }));
     onChange(data.id);
     setIsCreateOpen(false);
   };
 
   const handleEditSuccess = (data: ItemOption) => {
     setOptions(prev =>
-      sortByName({ options: prev.map(o => (o.id === data.id ? data : o)) }),
+      sortOptions({ options: prev.map(o => (o.id === data.id ? data : o)) }),
     );
 
     setIsEditOpen(false);
@@ -135,11 +160,12 @@ const ItemPicker = ({
           className={classes.select}
         >
           <option value="">{placeholder}</option>
-          {options.map(option => (
-            <option key={option.id} value={option.id}>
-              {option.name}
-            </option>
-          ))}
+          {renderOptions({ options: primaryOptions })}
+          {secondaryOptions.length > 0 && (
+            <optgroup label={text.secondaryGroup}>
+              {renderOptions({ options: secondaryOptions })}
+            </optgroup>
+          )}
         </select>
         {!isLocked && (
           <Button
