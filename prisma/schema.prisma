@@ -57,6 +57,8 @@ model OpponentArchetype {
   id        String   @id @default(uuid())
   name      String   @db.Citext
   formatId  String
+  // One-off brews, grouped at the bottom of the picker and matchups table
+  isRogue   Boolean  @default(false)
   createdAt DateTime @default(now())
 
   format  Format  @relation(fields: [formatId], references: [id], onDelete: Cascade)

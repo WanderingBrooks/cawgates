@@ -64,11 +64,19 @@ export type MatchInputForm = Omit<MatchInput, 'wins' | 'losses'> & {
 // Schema for creating/updating an opponent archetype
 const createOpponentArchetypeSchema = z.object({
   name: requiredTrimmedString('Name is required'),
+  isRogue: z.boolean(),
 });
 
 export type CreateOpponentArchetypeInput = z.infer<
   typeof createOpponentArchetypeSchema
 >;
+
+// What the archetype actions return, and what the picker lists
+export type OpponentArchetypeOption = {
+  id: string;
+  name: string;
+  isRogue: boolean;
+};
 
 // Schema for creating/updating a format
 const createFormatSchema = z.object({

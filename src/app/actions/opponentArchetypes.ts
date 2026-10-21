@@ -8,6 +8,7 @@ import {
   createOpponentArchetypeSchema,
   type ActionResult,
   type ActionResultWithData,
+  type OpponentArchetypeOption,
 } from '@/lib/types';
 
 const getOpponentArchetypesForArchetype = async ({
@@ -31,14 +32,15 @@ const getOpponentArchetypesForArchetype = async ({
 
   return prisma.opponentArchetype.findMany({
     where: { formatId: deck.formatId },
-    orderBy: { name: 'asc' },
+    // Rogue decks go at the bottom of the picker
+    orderBy: [{ isRogue: 'asc' }, { name: 'asc' }],
   });
 };
 
 const createOpponentArchetype = async (
-  _prevState: ActionResultWithData<{ id: string; name: string }> | null,
+  _prevState: ActionResultWithData<OpponentArchetypeOption> | null,
   formData: FormData,
-): Promise<ActionResultWithData<{ id: string; name: string }>> => {
+): Promise<ActionResultWithData<OpponentArchetypeOption>> => {
   const user = await getUser();
 
   if (!user) {
@@ -47,8 +49,10 @@ const createOpponentArchetype = async (
 
   const deckId = formData.get('deckId') as string;
   const name = formData.get('name') as string;
+  // An unticked checkbox isn't submitted at all
+  const isRogue = formData.get('isRogue') === 'on';
 
-  const result = createOpponentArchetypeSchema.safeParse({ name });
+  const result = createOpponentArchetypeSchema.safeParse({ name, isRogue });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
@@ -66,6 +70,7 @@ const createOpponentArchetype = async (
     const created = await prisma.opponentArchetype.create({
       data: {
         name: result.data.name,
+        isRogue: result.data.isRogue,
         formatId: deck.formatId,
       },
     });
@@ -79,7 +84,7 @@ const createOpponentArchetype = async (
 
     return {
       success: true,
-      data: { id: created.id, name: created.name },
+      data: { id: created.id, name: created.name, isRogue: created.isRogue },
     };
   } catch (error: unknown) {
     if (
@@ -99,9 +104,9 @@ const createOpponentArchetype = async (
 };
 
 const updateOpponentArchetype = async (
-  _prevState: ActionResultWithData<{ id: string; name: string }> | null,
+  _prevState: ActionResultWithData<OpponentArchetypeOption> | null,
   formData: FormData,
-): Promise<ActionResultWithData<{ id: string; name: string }>> => {
+): Promise<ActionResultWithData<OpponentArchetypeOption>> => {
   const user = await getUser();
 
   if (!user) {
@@ -110,8 +115,10 @@ const updateOpponentArchetype = async (
 
   const opponentArchetypeId = formData.get('opponentArchetypeId') as string;
   const name = formData.get('name') as string;
+  // An unticked checkbox isn't submitted at all
+  const isRogue = formData.get('isRogue') === 'on';
 
-  const result = createOpponentArchetypeSchema.safeParse({ name });
+  const result = createOpponentArchetypeSchema.safeParse({ name, isRogue });
 
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
@@ -129,7 +136,7 @@ const updateOpponentArchetype = async (
   try {
     const updated = await prisma.opponentArchetype.update({
       where: { id: opponentArchetypeId },
-      data: { name: result.data.name },
+      data: { name: result.data.name, isRogue: result.data.isRogue },
     });
 
     logEvent('opponentArchetype.updated', {
@@ -140,7 +147,7 @@ const updateOpponentArchetype = async (
 
     return {
       success: true,
-      data: { id: updated.id, name: updated.name },
+      data: { id: updated.id, name: updated.name, isRogue: updated.isRogue },
     };
   } catch (error: unknown) {
     if (

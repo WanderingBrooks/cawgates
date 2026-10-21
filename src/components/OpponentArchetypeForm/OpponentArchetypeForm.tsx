@@ -8,7 +8,10 @@ import {
   createOpponentArchetype,
   updateOpponentArchetype,
 } from '@/app/actions/opponentArchetypes';
-import { type ActionResultWithData } from '@/lib/types';
+import {
+  type ActionResultWithData,
+  type OpponentArchetypeOption,
+} from '@/lib/types';
 import Button from '../Button';
 import ErrorMessage from '../ErrorMessage';
 import Form from '../Form';
@@ -37,14 +40,14 @@ type OpponentArchetypeFormProps =
   | {
       mode: 'create';
       deckId: string;
-      onSuccess: (data: { id: string; name: string }) => void;
+      onSuccess: (data: OpponentArchetypeOption) => void;
       onCancel: () => void;
     }
   | {
       mode: 'edit';
       opponentArchetypeId: string;
       initialName: string;
-      onSuccess: (data: { id: string; name: string }) => void;
+      onSuccess: (data: OpponentArchetypeOption) => void;
       onCancel: () => void;
       deleteButton?: React.ReactNode;
       deleteHint?: string;
@@ -57,7 +60,7 @@ const OpponentArchetypeForm = (props: OpponentArchetypeFormProps) => {
     props.mode === 'create' ? createOpponentArchetype : updateOpponentArchetype;
 
   const [state, formAction] = useActionState<
-    ActionResultWithData<{ id: string; name: string }> | null,
+    ActionResultWithData<OpponentArchetypeOption> | null,
     FormData
   >(action, null);
 
