@@ -12,6 +12,7 @@ import DeleteButton from './DeleteButton';
 import ErrorMessage from './ErrorMessage';
 import FlexRowBetween from './FlexRowBetween';
 import FormActions from './FormActions';
+import FormFooter from './FormFooter';
 import FormatFilter from './FormatFilter';
 import FormatForm from './FormatForm';
 import FormatSelect from './FormatSelect';
@@ -45,6 +46,7 @@ export {
   ErrorMessage,
   FlexRowBetween,
   FormActions,
+  FormFooter,
   FormatFilter,
   FormatForm,
   FormatSelect,

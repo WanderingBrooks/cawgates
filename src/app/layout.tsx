@@ -1,6 +1,6 @@
 import './globals.css';
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google';
 import { getLocale } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
@@ -15,6 +15,11 @@ import { cn } from '@/lib/utils';
 import Page from '@/components/Page';
 
 const metadata: Metadata = { title: 'Cawgates' };
+
+// Shrink the page when the on-screen keyboard opens, so bottom-pinned bars
+// like the form footer sit above the keyboard instead of behind it. Android
+// browsers honour this. iOS Safari ignores it.
+const viewport: Viewport = { interactiveWidget: 'resizes-content' };
 
 // Self-hosted by next/font at build time, exposed as CSS variables that
 // --font-family and --font-family-mono in globals.css pick up
@@ -49,5 +54,5 @@ const RootLayout = async ({
   );
 };
 
-export { metadata };
+export { metadata, viewport };
 export default RootLayout;
