@@ -271,7 +271,7 @@ const getOpponentArchetype = async ({
                 some: { matches: { some: { opponentArchetypeId } } },
               },
             },
-            orderBy: { createdAt: 'asc' },
+            orderBy: { name: 'asc' },
           },
         },
       },
@@ -380,7 +380,7 @@ const getFormat = async ({
   const format = await prisma.format.findUnique({
     where: { id: formatId, userId: owner.id },
     include: {
-      decks: { orderBy: { createdAt: 'asc' } },
+      decks: { orderBy: { name: 'asc' } },
       opponentArchetypes: { orderBy: { name: 'asc' } },
     },
   });
