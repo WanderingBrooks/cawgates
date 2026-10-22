@@ -103,6 +103,40 @@ const getMatchRecord = ({
     { wins: 0, losses: 0, matchWins: 0, matchLosses: 0, matchDraws: 0 },
   );
 
+// Most played first, alphabetical when tied
+const sortByMatchCount = <T extends { name: string; matchCount: number }>({
+  items,
+}: {
+  items: T[];
+}) =>
+  [...items].sort((a, b) => {
+    if (b.matchCount !== a.matchCount) {
+      return b.matchCount - a.matchCount;
+    }
+
+    return a.name.localeCompare(b.name);
+  });
+
+// Selects each event's match count, which sortDecksByMatchCount sums. Prisma
+// can't order by a count two relations deep, so decks are sorted in code.
+const DECK_MATCH_COUNT_SELECT = {
+  select: { _count: { select: { matches: true } } },
+};
+
+const sortDecksByMatchCount = <
+  T extends { name: string; events: { _count: { matches: number } }[] },
+>({
+  decks,
+}: {
+  decks: T[];
+}) =>
+  sortByMatchCount({
+    items: decks.map(({ events, ...deck }) => ({
+      ...deck,
+      matchCount: events.reduce((sum, event) => sum + event._count.matches, 0),
+    })),
+  });
+
 export {
   cn,
   slugify,
@@ -112,4 +146,7 @@ export {
   getWinRateTint,
   getMatchResultTint,
   getMatchRecord,
+  sortByMatchCount,
+  DECK_MATCH_COUNT_SELECT,
+  sortDecksByMatchCount,
 };

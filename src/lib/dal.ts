@@ -18,7 +18,12 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getUser } from '@/lib/session';
-import { getMatchRecord } from '@/lib/utils';
+import {
+  DECK_MATCH_COUNT_SELECT,
+  getMatchRecord,
+  sortByMatchCount,
+  sortDecksByMatchCount,
+} from '@/lib/utils';
 
 // Notes are private to their author
 const hideNotes = <T extends { notes: string | null }>({
@@ -271,7 +276,7 @@ const getOpponentArchetype = async ({
                 some: { matches: { some: { opponentArchetypeId } } },
               },
             },
-            orderBy: { createdAt: 'asc' },
+            include: { events: DECK_MATCH_COUNT_SELECT },
           },
         },
       },
@@ -297,7 +302,10 @@ const getOpponentArchetype = async ({
 
   // Only decks that played the archetype can be selected, and any other slug
   // falls back to all decks
-  const { decks } = opponentArchetype.format;
+  const decks = sortDecksByMatchCount({
+    decks: opponentArchetype.format.decks,
+  });
+
   const selectedDeck = decks.find(deck => deck.slug === deckSlug) ?? null;
 
   const matches = selectedDeck
@@ -346,24 +354,20 @@ const getFormatsForOwner = async ({
     },
   });
 
-  const formatsWithMatchCount = formats
-    .map(({ opponentArchetypes, ...format }) => ({
+  const formatsWithMatchCount = formats.map(
+    ({ opponentArchetypes, ...format }) => ({
       ...format,
       matchCount: opponentArchetypes.reduce(
         (sum, opponentArchetype) => sum + opponentArchetype._count.matches,
         0,
       ),
-    }))
-    // Alphabetical when tied
-    .sort((a, b) => {
-      if (b.matchCount !== a.matchCount) {
-        return b.matchCount - a.matchCount;
-      }
+    }),
+  );
 
-      return a.name.localeCompare(b.name);
-    });
-
-  return { formats: formatsWithMatchCount, isOwner };
+  return {
+    formats: sortByMatchCount({ items: formatsWithMatchCount }),
+    isOwner,
+  };
 };
 
 const getFormat = async ({
@@ -380,7 +384,7 @@ const getFormat = async ({
   const format = await prisma.format.findUnique({
     where: { id: formatId, userId: owner.id },
     include: {
-      decks: { orderBy: { createdAt: 'asc' } },
+      decks: { include: { events: DECK_MATCH_COUNT_SELECT } },
       opponentArchetypes: { orderBy: { name: 'asc' } },
     },
   });
@@ -389,7 +393,13 @@ const getFormat = async ({
     notFound();
   }
 
-  return { format, isOwner };
+  return {
+    format: {
+      ...format,
+      decks: sortDecksByMatchCount({ decks: format.decks }),
+    },
+    isOwner,
+  };
 };
 
 const getFormatWithMatchStatistics = async ({

@@ -8,7 +8,11 @@ import {
   type ActionResultWithData,
   type SavedDeck,
 } from '@/lib/types';
-import { slugify } from '@/lib/utils';
+import {
+  DECK_MATCH_COUNT_SELECT,
+  slugify,
+  sortDecksByMatchCount,
+} from '@/lib/utils';
 import { logEvent } from '@/lib/log';
 import { revalidatePath } from 'next/cache';
 
@@ -28,11 +32,12 @@ const getUserDecks = async () => {
     return [];
   }
 
-  return prisma.deck.findMany({
+  const decks = await prisma.deck.findMany({
     where: { userId: user.userId },
-    orderBy: { name: 'asc' },
-    select: { id: true, name: true },
+    select: { id: true, name: true, events: DECK_MATCH_COUNT_SELECT },
   });
+
+  return sortDecksByMatchCount({ decks });
 };
 
 const createDeck = async (
