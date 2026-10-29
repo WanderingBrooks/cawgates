@@ -1,0 +1,23 @@
+/* Fixed to the bottom of the screen like the tab bar it replaces on form
+   pages. PageContent already leaves room for the tab bar below the content,
+   so the footer doesn't cover the end of the form. */
+.formFooter {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-index-banner);
+  padding: var(--spacing-sm) var(--spacing-lg)
+    calc(var(--spacing-sm) + env(safe-area-inset-bottom, 0px));
+  background-color: var(--color-header-bg);
+  border-top: 1px solid var(--color-border);
+}
+
+@media (min-width: 768px) {
+  .formFooter {
+    position: static;
+    padding: 0;
+    background-color: transparent;
+    border-top: none;
+  }
+}

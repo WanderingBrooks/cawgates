@@ -13,6 +13,7 @@ import {
   ErrorMessage,
   Form,
   FormActions,
+  FormFooter,
   Input,
   SpaceChildrenVertically,
   OpponentArchetypeSelect,
@@ -170,30 +171,36 @@ const MatchForm = (props: MatchFormProps) => {
         />
 
         {state?.error && <ErrorMessage error={state.error} />}
-        {showCancelConfirm ? (
-          <DiscardChangesConfirm
-            onKeepEditing={() => setShowCancelConfirm(false)}
-            onDiscard={() => router.push(eventHref)}
-          />
-        ) : (
-          <FormActions
-            cancelButton={
-              <Button variant="secondary" type="button" onClick={handleCancel}>
-                {t('cancel')}
-              </Button>
-            }
-            submitButton={<SubmitButton isActionPending={isPending} />}
-            deleteButton={
-              props.mode === 'edit' ? (
-                <DeleteButton
-                  label={tDelete('delete')}
-                  confirmMessage={tDelete('deleteConfirm')}
-                  onDelete={() => deleteMatch(props.matchId)}
-                />
-              ) : undefined
-            }
-          />
-        )}
+        <FormFooter>
+          {showCancelConfirm ? (
+            <DiscardChangesConfirm
+              onKeepEditing={() => setShowCancelConfirm(false)}
+              onDiscard={() => router.push(eventHref)}
+            />
+          ) : (
+            <FormActions
+              cancelButton={
+                <Button
+                  variant="secondary"
+                  type="button"
+                  onClick={handleCancel}
+                >
+                  {t('cancel')}
+                </Button>
+              }
+              submitButton={<SubmitButton isActionPending={isPending} />}
+              deleteButton={
+                props.mode === 'edit' ? (
+                  <DeleteButton
+                    label={tDelete('delete')}
+                    confirmMessage={tDelete('deleteConfirm')}
+                    onDelete={() => deleteMatch(props.matchId)}
+                  />
+                ) : undefined
+              }
+            />
+          )}
+        </FormFooter>
       </SpaceChildrenVertically>
     </Form>
   );

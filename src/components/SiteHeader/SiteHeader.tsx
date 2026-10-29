@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import Button from '../Button';
 import LogoutButton from './LogoutButton';
 import NavLinks, { type NavLink } from './NavLinks';
+import TabBar from './TabBar';
 import classes from './siteHeader.module.css';
 
 type SiteHeaderProps = {
@@ -20,7 +21,7 @@ type SiteHeaderProps = {
 /**
  * App-wide header: the app name, navigation for the profile being viewed,
  * and the viewer's account actions. On phones the navigation moves to a
- * tab bar fixed to the bottom of the screen.
+ * tab bar fixed to the bottom of the screen, except on create and edit pages.
  *
  * When someone views another user's profile the links point at that
  * user's events and matchups. The strip under the header says whose
@@ -113,13 +114,12 @@ const SiteHeader = async ({
         )}
       </header>
       {links.length > 0 && (
-        <nav className={classes.tabBar}>
-          <NavLinks
-            links={links}
-            linkClassName={cn('text-small', classes.tab)}
-            activeClassName={cn('text-strong', classes.tabActive)}
-          />
-        </nav>
+        <TabBar
+          links={links}
+          className={classes.tabBar}
+          tabClassName={cn('text-small', classes.tab)}
+          activeTabClassName={cn('text-strong', classes.tabActive)}
+        />
       )}
     </>
   );
