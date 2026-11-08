@@ -25,4 +25,4 @@ jobs:
         run: docker build --target=builder -t cawgates:migrate .
 
       - name: Migrate and deploy
-        run: /home/jason/homelab-docker-compose/deploy-cawgates.sh
+        run: /home/jason/homelab-docker-compose/stacks/cawgates/deploy.sh
