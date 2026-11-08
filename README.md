@@ -47,5 +47,3 @@ A Magic: The Gathering match tracker. Track your tournament events, record match
 ## Production
 
 The app is self-hosted, deployed at **[cawgates.ajasonb.xyz](https://cawgates.ajasonb.xyz)**.
-
-Deployment and database migrations are automated via GitHub Actions on every push to `trunk`. Migrations are written to be backwards compatible with the currently-running deployment, since the previous version keeps serving requests until the new one is up.
