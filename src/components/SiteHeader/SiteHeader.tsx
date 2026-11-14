@@ -79,7 +79,7 @@ const SiteHeader = async ({
             {viewerUsername && (
               <>
                 <span className={classes.username}>{viewerUsername}</span>
-                <LogoutButton />
+                <LogoutButton className={classes.logoutButton} />
               </>
             )}
             {!viewerUsername && isViewingOtherProfile && (

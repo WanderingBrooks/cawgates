@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { logout } from '@/app/actions/auth';
 import Button from '../Button';
 
-const LogoutButton = () => {
+const LogoutButton = ({ className }: { className?: string }) => {
   const t = useTranslations('siteHeader');
 
   const handleLogout = async () => {
@@ -12,7 +12,7 @@ const LogoutButton = () => {
   };
 
   return (
-    <Button onClick={handleLogout} variant="secondary">
+    <Button onClick={handleLogout} variant="secondary" className={className}>
       {t('logout')}
     </Button>
   );
